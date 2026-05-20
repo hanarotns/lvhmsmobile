@@ -22,7 +22,7 @@ export type AttendanceStackParamList = {
 };
 
 export type ApprovalStackParamList = {
-  ApprovalList: undefined;
+  ApprovalMain: undefined;
   ApprovalDetail: {
     apprNo?: string;
   };

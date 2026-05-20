@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-export default function ApprovalListScreen() {
+export default function ApprovalMainScreen() {
   return (
     <View>
-      <Text>ApprovalListScreen</Text>
+      <Text>ApprovalMainScreen</Text>
     </View>
   );
 }
