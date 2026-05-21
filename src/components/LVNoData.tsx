@@ -1,5 +1,5 @@
 import * as icon from '@/src/assets/images';
-import { Text } from '@/src/components'; // 공통컴포넌트
+import Text from '@/src/components/CustomText';
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 
