@@ -2,8 +2,7 @@ import Text from '@/src/components/CustomText'; // 공통컴포넌트
 import Icon from '@/src/components/Icon'; // 공통컴포넌트
 import LVStyles from '@/src/components/LVStyles';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 const LVChip = (props: any) => {
   const { category } = props;
