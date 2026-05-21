@@ -1,0 +1,4 @@
+{
+  "fetchURL": "http://g1dev.htns.com:18080", //URL 주소
+  "listCnt": 200 //리스트 표시
+}
