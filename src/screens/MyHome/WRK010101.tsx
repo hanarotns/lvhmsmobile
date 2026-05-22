@@ -156,7 +156,7 @@ const WRK010101 = () => {
             onPress={handleSearch}
             style={{
               marginLeft: 8,
-              flex: 1,
+              padding: 4,
               aspectRatio: 1,
               borderWidth: 2,
               borderColor: '#27A7FF',
