@@ -19,7 +19,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import * as WLOAction from '../attendance/Action'; // API통신 (공통)
+import * as WLOAction from '../WorkLog/Action'; // API통신 (공통)
 import * as Action from './Action'; // API통신
 
 import { useIsFocused, useNavigation } from '@react-navigation/native';
