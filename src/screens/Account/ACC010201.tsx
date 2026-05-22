@@ -1,5 +1,6 @@
 import {
   Divider,
+  Icon,
   LVLoadingIndicator,
   LVNoData,
   RefreshControl,
@@ -10,7 +11,6 @@ import LVStyles from '@/src/components/LVStyles';
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
-import { Icon } from '@ui-kitten/components';
 import React, { useEffect, useState } from 'react';
 
 import { StyleSheet, View } from 'react-native';
@@ -75,11 +75,7 @@ const ACC010201 = () => {
           setSelectedDate(temp);
         }}
       >
-        <Icon
-          name={'chevron-left-outline'}
-          fill={'#939DAA'}
-          style={[LVStyles.iconS]}
-        />
+        <Icon name={'chevron-left'} color={'#939DAA'} />
       </TouchableOpacity>
       <Text
         style={{
@@ -97,11 +93,7 @@ const ACC010201 = () => {
           setSelectedDate(temp);
         }}
       >
-        <Icon
-          name={'chevron-right-outline'}
-          fill={'#939DAA'}
-          style={[LVStyles.iconS]}
-        />
+        <Icon name={'chevron-right'} color={'#939DAA'} />
       </TouchableOpacity>
     </View>
   );
@@ -171,12 +163,7 @@ const ACC010201 = () => {
             value={Util.formatNumber(totalValue)}
             fontColor={primaryColor}
           />
-          <Icon
-            name={isOpen ? 'chevron-up-outline' : 'chevron-down-outline'}
-            width={24}
-            height={24}
-            fill='#666'
-          />
+          <Icon name={isOpen ? 'chevron-up' : 'chevron-down'} color='#666' />
         </TouchableOpacity>
 
         {isOpen && (

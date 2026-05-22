@@ -1,5 +1,6 @@
 import * as icon from '@/src/assets/images';
 import {
+  Icon,
   Layout,
   LVButton,
   LVChip,
@@ -12,7 +13,7 @@ import LVColors from '@/src/components/LVColors';
 import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { Icon, IndexPath, Select, SelectItem } from '@ui-kitten/components';
+import { IndexPath, Select, SelectItem } from '@ui-kitten/components';
 import React, { useEffect, useState } from 'react';
 
 import {
@@ -164,11 +165,7 @@ const WRK010101 = () => {
               alignItems: 'center',
             }}
           >
-            <Icon
-              name={'search-outline'}
-              fill={'#27A7FF'}
-              style={[LVStyles.iconS]}
-            />
+            <Icon name='file-search-outline' color='#27A7FF' size={24} />
           </TouchableOpacity>
         </View>
       </View>

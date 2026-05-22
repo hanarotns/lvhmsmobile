@@ -15,6 +15,7 @@ import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 import React, {
   forwardRef,
+  Icon,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -24,7 +25,7 @@ import React, {
 import { StyleSheet, View } from 'react-native';
 
 import { Util } from '@/src/lib';
-import { Icon, Input } from '@ui-kitten/components';
+import { Input } from '@ui-kitten/components';
 import 'dayjs/locale/ko';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action'; // API통신
@@ -111,7 +112,7 @@ const PAL010201 = () => {
       const res = await COMAction.getPopup('PP0004', {
         EMP_NAME: name,
         COMPANY_CODE: empInfo?.COMPANY_CODE,
-        USER_LANG: session?.USER_LANG,
+        USER_LANG: sessioninfo?.USER_LANG,
       });
       setUserList(res);
     };
@@ -142,11 +143,7 @@ const PAL010201 = () => {
               alignItems: 'center',
             }}
           >
-            <Icon
-              name={'search-outline'}
-              fill={'#27A7FF'}
-              style={[LVStyles.iconS]}
-            />
+            <Icon name='file-search-outline' color='#27A7FF' />
           </TouchableOpacity>
         </View>
         <View
@@ -277,14 +274,7 @@ const PAL010201 = () => {
                 setIsVisibleApprovalModal(true);
               }}
             >
-              <Icon
-                name={'person-add-outline'}
-                fill={'#373747'}
-                style={{
-                  width: 24,
-                  height: 24,
-                }}
-              />
+              <Icon name='account-plus' color='#373747' />
             </TouchableOpacity>
           </View>
           <View
@@ -432,7 +422,7 @@ const PersonalForm = (props: any) => {
           alignItems: 'center',
         }}
       >
-        <Icon name={'close-outline'} fill={'gray'} style={[LVStyles.iconS]} />
+        <Icon name='close' color='gray' />
       </TouchableOpacity>
     </View>
   );

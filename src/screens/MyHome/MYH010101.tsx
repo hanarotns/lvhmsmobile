@@ -360,9 +360,11 @@ const MYH010101 = ({ navigation }) => {
               getNearOfficeM();
             }}
             source={
-              nearestOffice?.ET_STATUS ? 'refresh-outline' : 'loader-outline'
+              nearestOffice?.ET_STATUS
+                ? 'refresh'
+                : 'dots-horizontal-circle-outline'
             }
-            fill={'#B0B9C1'}
+            color='#B0B9C1'
             style={{
               ...LVStyles.iconS,
             }}

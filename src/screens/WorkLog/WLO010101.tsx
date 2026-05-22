@@ -1,4 +1,5 @@
 import {
+  Icon,
   LVChip,
   LVLoadingIndicator,
   LVModal,
@@ -9,7 +10,7 @@ import {
 import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
 import { useIsFocused } from '@react-navigation/native';
-import { Icon, Input } from '@ui-kitten/components';
+import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import React, { useEffect, useState } from 'react';

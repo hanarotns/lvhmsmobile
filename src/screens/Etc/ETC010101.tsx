@@ -7,7 +7,6 @@ import {
   Text,
 } from '@/src/components';
 import LVColors from '@/src/components/LVColors';
-import LVStyles from '@/src/components/LVStyles';
 import { Fetch, Util } from '@/src/lib';
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -46,7 +45,7 @@ const ETC010101 = () => {
   const logout = async () => {
     Fetch.logout().then((result) => {
       if (result) {
-        setSession(null);
+        setSessionInfo(null);
         Util.toastMsg('정상적으로 로그아웃 되었습니다.');
       }
     });
@@ -88,14 +87,7 @@ const ETC010101 = () => {
               </View>
             </View>
 
-            <Icon
-              name='chevron-right-outline'
-              fill='#8F9BB3'
-              style={{
-                width: 24,
-                height: 24,
-              }}
-            />
+            <Icon name='chevron-right' color='#8F9BB3' />
           </TouchableOpacity>
         </View>
         <View style={styles.section}>
@@ -105,7 +97,7 @@ const ETC010101 = () => {
             }}
             style={styles.menuButton}
           >
-            <Icon name={'grid-outline'} fill='#373747' style={LVStyles.iconS} />
+            <Icon name='view-grid-outline' color='#373747' />
             <Text style={styles.menuText}>비밀번호 변경</Text>
           </TouchableOpacity>
           <Divider />
@@ -115,7 +107,7 @@ const ETC010101 = () => {
             }}
             style={styles.menuButton}
           >
-            <Icon name={'grid-outline'} fill='#373747' style={LVStyles.iconS} />
+            <Icon name='view-grid-outline' color='#373747' />
             <Text style={styles.menuText}>연차촉진제 설정</Text>
           </TouchableOpacity>
           <Divider />
@@ -125,18 +117,14 @@ const ETC010101 = () => {
             }}
             style={styles.menuButton}
           >
-            <Icon name={'grid-outline'} fill='#373747' style={LVStyles.iconS} />
+            <Icon name='view-grid-outline' color='#373747' />
             <Text style={styles.menuText}>결재선 설정</Text>
           </TouchableOpacity>
           <Divider />
         </View>
         <View style={styles.floatingButton}>
           <TouchableOpacity onPress={logout} style={styles.menuButton}>
-            <Icon
-              name={'power-outline'}
-              fill='#373747'
-              style={LVStyles.iconS}
-            />
+            <Icon name='power-standby' color='#373747' />
             <Text style={styles.menuText}>로그아웃</Text>
           </TouchableOpacity>
         </View>

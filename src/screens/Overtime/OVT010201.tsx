@@ -23,10 +23,10 @@ import React, {
   useState,
 } from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { Icon, StyleSheet, View } from 'react-native';
 
 import { Util } from '@/src/lib';
-import { Icon, Input } from '@ui-kitten/components';
+import { Input } from '@ui-kitten/components';
 import 'dayjs/locale/ko';
 
 import * as COMAction from '../Common/Action'; // API통신 (공통)
@@ -277,11 +277,7 @@ const OVT010201 = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <Icon
-                      name={'edit-2-outline'}
-                      fill={'#27A7FF'}
-                      style={[LVStyles.iconS]}
-                    />
+                    <Icon name='text-box-edit-outline' color='#27A7FF' />
                   </TouchableOpacity>
                 </View>
               ) : (

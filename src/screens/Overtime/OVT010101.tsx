@@ -381,8 +381,8 @@ const MovingDateOfArrow = (props: any) => {
   return (
     <View style={[LVStyles.row, { justifyContent: 'center' }]}>
       <Icon
-        name={'chevron-left-outline'}
-        fill={'#939DAA'}
+        name='chevron-left'
+        color='#939DAA'
         onPress={() => {
           const temp = selectedDate.add(-1, gap);
           setSelectedDate(temp);
@@ -399,8 +399,8 @@ const MovingDateOfArrow = (props: any) => {
         {content}
       </Text>
       <Icon
-        name={'chevron-right-outline'}
-        fill={'#939DAA'}
+        name='chevron-right'
+        color='#939DAA'
         onPress={() => {
           const temp = selectedDate.add(+1, gap);
           setSelectedDate(temp);

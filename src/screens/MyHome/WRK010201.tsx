@@ -1,4 +1,5 @@
 import {
+  Icon,
   LVButton,
   LVConfirmIndicator,
   LVDatePicker,
@@ -10,13 +11,7 @@ import LVColors from '@/src/components/LVColors';
 import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import {
-  Icon,
-  IndexPath,
-  Input,
-  Select,
-  SelectItem,
-} from '@ui-kitten/components';
+import { IndexPath, Input, Select, SelectItem } from '@ui-kitten/components';
 import React, { useEffect, useState } from 'react';
 
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -224,11 +219,7 @@ const WRK010201 = () => {
               alignItems: 'center',
             }}
           >
-            <Icon
-              name={'search-outline'}
-              fill={'#27A7FF'}
-              style={[LVStyles.iconS]}
-            />
+            <Icon name='file-search-outline' color='#27A7FF' />
           </TouchableOpacity>
         </View>
       </View>

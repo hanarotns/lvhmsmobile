@@ -22,10 +22,10 @@ import React, {
   useState,
 } from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { Icon, StyleSheet, View } from 'react-native';
 
 import { Util } from '@/src/lib';
-import { Icon, Input } from '@ui-kitten/components';
+import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 
@@ -265,12 +265,9 @@ const OVT010202 = () => {
                     }}
                   >
                     <Icon
-                      name={'edit-2-outline'}
-                      fill={'#27A7FF'}
-                      style={{
-                        width: 30,
-                        height: 30,
-                      }}
+                      name='file-search-outline'
+                      color='#27A7FF'
+                      size={30}
                     />
                   </TouchableOpacity>
                 </View>
@@ -371,8 +368,8 @@ const OVT010202 = () => {
                   {dt?.RA_APPLY_TIME}
                 </Text>
                 <Icon
-                  name={'chevron-right-outline'}
-                  fill={'#373747'}
+                  name='chevron-right'
+                  color='#373747'
                   style={[LVStyles.iconS]}
                 />
                 <Input

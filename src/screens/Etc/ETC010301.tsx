@@ -256,8 +256,8 @@ const ETC010301 = () => {
         return;
       }
       const payload2 = {
-        F_USER_ID: session?.USER_ID,
-        F_COMPANY_CODE: session?.COMPANY_CODE,
+        F_USER_ID: sessioninfo?.USER_ID,
+        F_COMPANY_CODE: sessioninfo?.COMPANY_CODE,
         C_PW: memberInfo.pw,
         N_PW: memberInfo.pwNew,
         N_PW_C: memberInfo.pwChkNew,
@@ -266,7 +266,7 @@ const ETC010301 = () => {
       if (result2.TYPE === 1) {
         Fetch.logout().then((result) => {
           if (result) {
-            setSession(null);
+            setSessionInfo(null);
             Util.toastMsg('비밀번호 변경이 완료되었습니다.', 'info');
           }
         });

@@ -1,4 +1,5 @@
 import {
+  Icon,
   LVApprLine,
   LVButton,
   LVChip,
@@ -27,7 +28,7 @@ import React, {
 import { StyleSheet, View } from 'react-native';
 
 import { Util } from '@/src/lib';
-import { Icon, Input } from '@ui-kitten/components';
+import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 
@@ -686,7 +687,7 @@ const LEA010201 = () => {
           setVisiblePhotoList(!visiblePhotoList);
         }}
       >
-        <Icon name={'save-outline'} fill={'#27A7FF'} style={[LVStyles.iconS]} />
+        <Icon name='content-save-outline' color='#27A7FF' />
       </TouchableOpacity>
     );
   };
@@ -733,11 +734,7 @@ const LEA010201 = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <Icon
-                      name={'edit-2-outline'}
-                      fill={'#27A7FF'}
-                      style={[LVStyles.iconS]}
-                    />
+                    <Icon name='text-box-edit-outline' color='#27A7FF' />
                   </TouchableOpacity>
                 </View>
               ) : (
@@ -812,11 +809,10 @@ const LEA010201 = () => {
                     <Icon
                       name={
                         Util.isEmpty(infoList)
-                          ? 'plus-outline'
-                          : 'edit-2-outline'
+                          ? 'plus'
+                          : 'text-box-edit-outline'
                       }
-                      fill={'#27A7FF'}
-                      style={[LVStyles.iconS]}
+                      color='#27A7FF'
                     />
                   </TouchableOpacity>
                 </View>
@@ -950,11 +946,7 @@ const LEA010201 = () => {
                         alignItems: 'center',
                       }}
                     >
-                      <Icon
-                        name={'save-outline'}
-                        fill={'#27A7FF'}
-                        style={[LVStyles.iconS]}
-                      />
+                      <Icon name='content-save-outline' color='#27A7FF' />
                     </TouchableOpacity>
                   </View>
                 }
