@@ -1,48 +1,249 @@
-import { LVButton, LVStyles } from '@/src/components';
-import React from 'react';
-import { Button, Image, StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import * as icon from '../../assets/images';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import * as Application from 'expo-application';
+import * as Device from 'expo-device';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-export default function LoginScreen({ navigation }) {
-  const signIn = () => {};
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View>
-        <KeyboardAwareScrollView
-          style={{ marginTop: 158, marginHorizontal: 20 }}
-        >
-          <Image
-            source={icon.ico_logo_lvhms}
-            resizeMode={'contain'}
-            style={styles.logobox}
+import { Util } from '@/src/lib';
+
+import {
+  KeyboardAwareScrollView,
+  LVButton,
+  LVCheckBox,
+  LVLoadingIndicator,
+  SafeAreaView,
+  ShowPasswordIcon,
+  Terms,
+  Text,
+  TextField,
+} from '@/src/components';
+
+import * as Action from './Action';
+// import RNRestart from 'react-native-restart'; // Import package from node modules
+import * as icon from '@/src/assets/images';
+import LVStyles from '@/src/components/LVStyles';
+
+/**
+ * 로그인 화면
+ * @param {*} param0
+ * @returns
+ */
+
+const SignIn = ({ navigation }) => {
+  const movingScreen = useNavigation();
+  const [loading, setLoading] = useState(true);
+
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+
+  const [visiblePwd, setVisiblePwd] = useState(false);
+  const [visibleTerms, setVisibleTerms] = useState(false);
+  const [loginError, setLoginError] = useState('');
+
+  // 비동기 실행
+  useEffect(() => {
+    setLoading(false);
+    mount();
+  }, []);
+
+  const mount = async () => {
+    const deviceInfo = {
+      deviceId:
+        Platform.OS === 'android'
+          ? Application.getAndroidId()
+          : await Application.getIosIdForVendorAsync(),
+
+      modelName: Device.modelName,
+      osName: Device.osName,
+      osVersion: Device.osVersion,
+    };
+    const setStorageValue = async (field) => {
+      let value = await AsyncStorage.getItem(field);
+      if (field == 'autoLogin' && value == null) {
+        value = 'true';
+      }
+      return value;
+    };
+    setStorageValue('loginId').then((value) => {
+      const loginId = value;
+      setStorageValue('loginPwd').then((value) => {
+        const loginPwd = value;
+        setStorageValue('autoLogin').then((value) => {
+          const autoLogin = value;
+          setStorageValue('isRememberLogin').then((value) => {
+            console.log('@@ isRememberLogin value', value);
+            const isRememberLogin = JSON.parse(value);
+            setStorageValue('isPreHire').then((value) => {
+              const isPreHire = JSON.parse(value);
+              setLoginInfo({
+                ...loginInfo,
+                ...{ loginId, loginPwd, autoLogin, isRememberLogin, isPreHire },
+              });
+            });
+          });
+        });
+      });
+    });
+    console.log(deviceInfo);
+  };
+
+  // 동기 실행
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+    return () => {};
+  }, [navigation]);
+
+  const signIn = () => {
+    // 비즈니스 체크로직
+    if (!loginInfo.loginId) {
+      Util.toastMsg('아이디를 입력해주세요.', 'info');
+      return;
+    }
+    if (!loginInfo.loginPwd) {
+      Util.toastMsg('비밀번호를 입력해주세요.', 'info');
+      return;
+    }
+
+    setLoading(true);
+
+    Action.signIn(loginInfo).then((data) => {
+      // @todo 임시 코드
+      // RNRestart.Restart();
+      if (data) {
+        setSessionInfo(data.session);
+        // 로그인 id, pwd 지우기
+        if (!loginInfo?.isRememberLogin) {
+          setLoginInfo({ ...loginInfo, ...{ loginId: '', loginPwd: '' } });
+          AsyncStorage.setItem('loginId', '');
+          AsyncStorage.setItem('loginPwd', '');
+        }
+      }
+      if (data?.code !== 200) {
+        setLoginError(data?.serviceResponseCode?.message);
+      }
+      setLoading(false);
+    });
+    return null;
+  };
+
+  const onChangeValue = (value, field) => {
+    setLoginInfo({ ...loginInfo, ...{ [field]: value } });
+  };
+
+  const onConfirm = () => {
+    setVisibleTerms(!visibleTerms);
+  };
+
+  return loading ? (
+    <LVLoadingIndicator />
+  ) : (
+    <SafeAreaView style={styles.safeAreaView}>
+      <KeyboardAwareScrollView>
+        <View style={{ height: 158 }} />
+        <Image
+          source={icon.ico_logo_lvhms}
+          resizeMode={'contain'}
+          style={styles.logobox}
+        />
+        <View style={styles.container}>
+          <TextField
+            placeholder='아이디'
+            placeholderTextColor='#999FA8'
+            style={styles.textFieldSt}
+            autoCapitalize={'none'}
+            onChangeValue={(value) => onChangeValue(value, 'loginId')}
+            value={loginInfo.loginId}
           />
+          <TextField
+            placeholder='비밀번호'
+            placeholderTextColor='#999FA8'
+            style={styles.textFieldSt}
+            autoCapitalize={'none'}
+            onChangeValue={(value) => onChangeValue(value, 'loginPwd')}
+            secureTextEntry={!visiblePwd}
+            value={loginInfo.loginPwd}
+            accessoryRight={
+              <ShowPasswordIcon
+                color={'black'}
+                visiblePwd={visiblePwd}
+                setVisible={setVisiblePwd}
+              />
+            }
+          />
+          <View
+            style={{
+              height: 25,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              marginBottom: 12,
+            }}
+          >
+            <LVCheckBox
+              label='간편로그인'
+              value={loginInfo.isRememberLogin}
+              onChange={(value) => onChangeValue(value, 'isRememberLogin')}
+            />
+            <LVCheckBox
+              label='입사지원'
+              value={loginInfo.isPreHire}
+              onChange={(value) => onChangeValue(value, 'isPreHire')}
+            />
+          </View>
           <LVButton
             title={'로그인'}
             onPress={signIn}
             buttonStyle={{ backgroundColor: '#27A7FF' }}
           />
-
-          <View style={LVStyles.row}>
-            <Button
-              title='비밀번호변경'
+          <View style={[LVStyles.row]}>
+            <LVButton
+              title={'비밀번호 찾기'}
               onPress={() => {
-                navigation.navigate('SignUp');
+                movingScreen.navigate('SGN030101');
+              }}
+              textStyle={{ color: 'gray', fontWeight: '400' }}
+              buttonStyle={{
+                backgroundColor: 'transparent',
+                paddingHorizontal: 0,
               }}
             />
-            <Button
-              title='회원가입'
+            <LVButton
+              title={'회원가입'}
               onPress={() => {
-                navigation.navigate('SignUp');
+                movingScreen.navigate('SGN010101');
+              }}
+              textStyle={{ color: 'gray', fontWeight: '400' }}
+              buttonStyle={{
+                backgroundColor: 'transparent',
+                paddingHorizontal: 0,
               }}
             />
           </View>
-        </KeyboardAwareScrollView>
-      </View>
+          <Text style={[styles.errorText]}>{loginError}</Text>
+          <TouchableOpacity onPress={onConfirm} style={styles.terms}>
+            <Text style={{}}>이용약관/개인정보 확인</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAwareScrollView>
+      {visibleTerms && Terms({ onConfirm })}
     </SafeAreaView>
   );
-}
+};
+export default SignIn;
 
 const styles = StyleSheet.create({
   autoLogin: {
