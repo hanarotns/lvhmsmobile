@@ -1,0 +1,424 @@
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+} from 'react';
+import {View, Image, StyleSheet, Platform} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  RefreshControl,
+  withPreventDoubleClick,
+  LVModal,
+  LVButton,
+  LVFlag,
+  LVRadioButton,
+  LVTwoLine,
+  LVDatePicker,
+  LVSection,
+  LVSelectBox,
+  LVLoadingIndicator,
+  LVConfirmIndicator,
+  Text,
+  LVChip,
+  LVApprLine,
+  DateTimeField,
+  LVDateTimePicker,
+  LVFormOfContents,
+  LVNoData,
+} from '~/component'; // 공통컴포넌트
+import LVStyles from '~/component/LVStyles';
+import * as icon from '~/assets/images';
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+import {Util} from '~/lib';
+import {Icon, Input} from '@ui-kitten/components';
+import * as Action from './Action'; // API통신
+import * as COMAction from '../Common/Action'; // API통신 (공통)
+
+import {AppStore} from '~/store';
+import {useRecoilState} from 'recoil';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useRoute, RouteProp} from '@react-navigation/native';
+
+import {useNavigation} from '@react-navigation/native';
+
+const PAL010201 = () => {
+  const movingScreen = useNavigation();
+  const [session, setSession] = useRecoilState(AppStore.sessionState);
+  const [empInfo, setEmpInfo] = useRecoilState(AppStore.empInfoState);
+
+  const [loading, setLoading] = useState(true);
+  const [confirming, setConfirming] = useState(false);
+  const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
+
+  const [approvalLine, setApprovalLine] = useState({});
+  const [approvalLineDt, setApprovalLineDt] = useState([]);
+  const [apprRoleList, setApprRoleList] = useState([]);
+
+  const [isVisibleApprovalModal, setIsVisibleApprovalModal] = useState(false);
+
+  const approvalLineRef = useRef<any>(null);
+
+  useEffect(() => {
+    mount();
+  }, []);
+
+  const mount = async () => {
+    setLoading(true);
+    // 결재 역할 조회
+    const resOfApprRole = await COMAction.getCode('code', 'PC0001', {
+      GCODE: 'AP_TYPE',
+    });
+    const res = resOfApprRole?.filter(e => ['AP', 'RE'].includes(e.HQCODE)); // @@ 역할 중 결재자만 사용하여 하드코딩 처리
+    console.log('@@ res', res);
+    setApprRoleList(res);
+    setLoading(false);
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      mount();
+      setRefreshing(false);
+    }, 1000);
+  };
+
+  const handleSave = async () => {
+    const result = await Action.saveMobile(
+      {...approvalLine, ...empInfo},
+      approvalLineDt,
+    );
+
+    if (result.TYPE === 1) {
+      setConfirming(true);
+      setTimeout(() => {
+        setConfirming(false);
+        movingScreen.goBack();
+      }, 1200);
+    }
+  };
+
+  const handleDeleteApprovalLine = (index: number) => {
+    setApprovalLineDt(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const ContentsOfApproval = forwardRef((props: any, ref) => {
+    const [name, setName] = useState('');
+    const [userList, setUserList] = useState([]);
+    const [selectedAppr, setSelectedAppr] = useState({});
+    useImperativeHandle(ref, () => ({
+      getSelectedValues: () => ({
+        selectedAppr,
+      }),
+    }));
+
+    const handleSearch = async () => {
+      const res = await COMAction.getPopup('PP0004', {
+        EMP_NAME: name,
+        COMPANY_CODE: empInfo?.COMPANY_CODE,
+        USER_LANG: session?.USER_LANG,
+      });
+      setUserList(res);
+    };
+
+    return (
+      <View>
+        <View style={[LVStyles.row]}>
+          <Input
+            placeholder="이름으로 검색하세요."
+            placeholderTextColor="#939DAA"
+            value={name}
+            onChangeText={value => {
+              setName(value);
+            }}
+            style={{backgroundColor: '#FFF', flex: 1}}
+            textStyle={{color: '#373747', fontSize: 14}}
+          />
+          <TouchableOpacity
+            onPress={handleSearch}
+            style={{
+              marginLeft: 8,
+              flex: 1,
+              aspectRatio: 1,
+              borderWidth: 2,
+              borderColor: '#27A7FF',
+              borderRadius: 4,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Icon
+              name={'search-outline'}
+              fill={'#27A7FF'}
+              style={[LVStyles.iconS]}
+            />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            display: 'flex',
+            marginTop: 10,
+          }}>
+          {!Util.isEmpty(userList) &&
+            userList?.map((e, i) => (
+              <TouchableOpacity
+                onPress={() => {
+                  setSelectedAppr({
+                    ...e,
+                    index: i,
+                    COMPANY_CODE: empInfo?.COMPANY_CODE,
+                    H_COMPANY_CODE: empInfo?.COMPANY_CODE,
+                    LINE_NO: String(i + 1),
+                    AP_DEPT_CODE: e?.DEPT_CODE,
+                    AP_DEPT_NAME: e?.DEPT_NAME,
+                    AP_EMP_ID: e?.EMP_ID,
+                    AP_EMP_NAME: e?.EMP_NAME,
+                    AP_TYPE: 'AP',
+                  });
+                }}
+                style={{
+                  marginBottom: 8,
+                }}>
+                <View
+                  style={{
+                    backgroundColor:
+                      selectedAppr?.index === i ? '#27A7FF17' : 'transparent',
+                    borderColor:
+                      selectedAppr?.index === i ? '#27A7FF' : 'lightgray',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginHorizontal: 8,
+                    paddingVertical: 8,
+                    paddingHorizontal: 16,
+                    borderRadius: 8,
+                    borderWidth: 1,
+                  }}>
+                  <Text style={{fontSize: 16}}>{`${e?.DEPT_NAME}`}</Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: '600',
+                    }}>{`${e?.EMP_NAME} ${e?.POSITION_NAME}`}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          {Util.isEmpty(userList) && <LVNoData />}
+        </View>
+      </View>
+    );
+  });
+
+  return (
+    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+      <View
+        style={{
+          padding: 16,
+          // borderBottomWidth: 1,
+          // borderTopWidth: 1,
+          // borderColor: '#D5DCE5',
+        }}>
+        <Text
+          style={{
+            color: '#6A727B',
+            fontWeight: '600',
+          }}>
+          결재선
+        </Text>
+        <Input
+          placeholder="결재선 이름을 입력하세요."
+          placeholderTextColor="#939DAA"
+          value={approvalLine.AP_NAME}
+          onChangeText={value => {
+            setApprovalLine({
+              ...approvalLine,
+              AP_NAME: value,
+            });
+          }}
+          size="large"
+          style={{backgroundColor: '#FFF', marginTop: 8}}
+          textStyle={{color: '#373747', fontSize: 14}}
+        />
+        {/* <Input
+          placeholder="이 결재선에 대한 메모를 작성하세요."
+          placeholderTextColor="#939DAA"
+          value={approvalLine.APPR_LINE_COMMENT}
+          onChangeText={value => {
+            setApprovalLine({...approvalLine, APPR_LINE_COMMENT: value});
+          }}
+          size="large"
+          style={{backgroundColor: '#FFF', marginTop: 8}}
+          textStyle={{color: '#373747', fontSize: 14}}
+        /> */}
+      </View>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }>
+        {/* Detail */}
+        <View
+          style={{
+            padding: 16,
+          }}>
+          <View style={[LVStyles.row, {paddingRight: 16}]}>
+            <Text
+              style={{
+                color: '#6A727B',
+                fontWeight: '600',
+              }}>
+              결재자 지정
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setIsVisibleApprovalModal(true);
+              }}>
+              <Icon
+                name={'person-add-outline'}
+                fill={'#373747'}
+                style={{
+                  width: 24,
+                  height: 24,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              padding: 8,
+              flex: 1,
+            }}>
+            {approvalLineDt.map((e, i) => (
+              <PersonalForm
+                elem={{...e, index: i + 1}}
+                apprRoleList={apprRoleList}
+                onDelete={() => handleDeleteApprovalLine(i)}
+              />
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+      <View
+        style={[
+          LVStyles.row,
+          {
+            padding: 32,
+            position: 'absolute',
+            width: '100%',
+            bottom: 0,
+          },
+        ]}>
+        <LVButton title={'저장'} onPress={handleSave} buttonStyle={{flex: 1}} />
+      </View>
+      {isVisibleApprovalModal && (
+        <LVModal
+          title={'결재자를 선택하세요'}
+          buttonText={'선택'}
+          contents={<ContentsOfApproval ref={approvalLineRef} />}
+          onVisible={setIsVisibleApprovalModal}
+          onOk={() => {
+            // 1. 자식에서 선택값 가져오기
+            const {selectedAppr} = approvalLineRef.current.getSelectedValues();
+            if (Util.isEmpty(selectedAppr)) {
+              Util.toastMsg('선택된 결재자가 없습니다.', 'info');
+              return;
+            }
+            // 2. approvalLineDt에 추가
+            setApprovalLineDt([...approvalLineDt, selectedAppr]);
+            // 3. 모달 닫기
+            setIsVisibleApprovalModal(false);
+          }}
+        />
+      )}
+      {loading && <LVLoadingIndicator />}
+      {confirming && <LVConfirmIndicator />}
+    </View>
+  );
+};
+export default PAL010201;
+
+const PersonalForm = (props: any) => {
+  const {elem, apprRoleList, onDelete} = props;
+  console.log('@@ elem', elem);
+  return (
+    <View
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 8,
+        paddingHorizontal: 16,
+        alignItems: 'center',
+        minHeight: 64,
+        borderRadius: 8,
+        marginBottom: 8,
+        backgroundColor: '#F0F2F6',
+        flex: 1,
+      }}>
+      <Text
+        style={{
+          flex: 0.1,
+          fontSize: 16,
+          color: '#6A727B',
+        }}>
+        {elem?.index}
+      </Text>
+      <View
+        style={{
+          flex: 0.5,
+        }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text
+            style={{
+              fontWeight: '600',
+              fontSize: 16,
+            }}>
+            {elem?.EMP_NAME}
+          </Text>
+          <Text
+            style={{
+              fontWeight: '600',
+              marginLeft: 4,
+            }}>
+            {elem?.POSITION_NAME}
+          </Text>
+        </View>
+        <View style={{flexDirection: 'row', marginTop: 8}}>
+          <Text
+            style={{
+              color: '#6A727B',
+            }}>
+            {elem?.DEPT_NAME}
+          </Text>
+        </View>
+      </View>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flex: 0.4,
+        }}>
+        <View style={{flex: 1, width: '100%', justifyContent: 'center'}}>
+          <LVSelectBox
+            value={'AP'} //@@ 확인 필요
+            data={apprRoleList}
+            displayField={'HQNAME'}
+            valueField={'HQCODE'}
+          />
+        </View>
+      </View>
+      <TouchableOpacity
+        onPress={onDelete}
+        style={{
+          marginLeft: 8,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Icon name={'close-outline'} fill={'gray'} style={[LVStyles.iconS]} />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({});
