@@ -16,9 +16,7 @@ export const toastConfig = {
       style={toastStyle.toast}
       contentContainerStyle={toastStyle.toastContent}
       text1Style={toastStyle.successText1}
-      renderLeadingIcon={() => (
-        <Icon source='checkmark-outline' color='#6CD588' />
-      )}
+      renderLeadingIcon={() => <Icon name='check' color='#6CD588' />}
     />
   ),
   error: (props: ToastProps) => (
@@ -27,7 +25,9 @@ export const toastConfig = {
       style={toastStyle.toast}
       contentContainerStyle={toastStyle.toastContent}
       text1Style={toastStyle.errorText1}
-      renderLeadingIcon={() => <Icon source='slash-outline' color='#FF9294' />}
+      renderLeadingIcon={() => (
+        <Icon name='circle-off-outline' color='#FF9294' />
+      )}
     />
   ),
   info: (props: ToastProps) => (
@@ -36,7 +36,9 @@ export const toastConfig = {
       style={toastStyle.toast}
       contentContainerStyle={toastStyle.toastContent}
       text1Style={toastStyle.infoText1}
-      renderLeadingIcon={() => <Icon source='info-outline' color='#27A7FF' />}
+      renderLeadingIcon={() => (
+        <Icon name='information-outline' color='#27A7FF' />
+      )}
     />
   ),
 };
