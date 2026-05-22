@@ -1,24 +1,26 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
 import {
-  Text,
-  SafeAreaView,
+  KeyboardAwareScrollView,
   LVButton,
   LVLoadingIndicator,
-  TextField,
-  KeyboardAwareScrollView,
   LVRadioButton,
-} from 'component';
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {Util} from '~/lib';
-import LVStyles from '~/component/LVStyles';
+  SafeAreaView,
+  Text,
+  TextField,
+} from '@/src/components';
+import LVStyles from '@/src/components/LVStyles';
+import { Util } from '@/src/lib';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
 import {
-  useNavigation,
-  useIsFocused,
-  useRoute,
   RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
 } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+
+import { StyleSheet, View } from 'react-native';
 import * as Action from './Action';
 
 type RootStackParamList = {
@@ -47,14 +49,14 @@ const FIELD_LIST: {
   checkId: keyof MemberInfo;
   label: string;
 }[] = [
-  {key: 1, checkId: 'id', label: '아이디'},
-  {key: 2, checkId: 'pw', label: '비밀번호'},
-  {key: 3, checkId: 'pwChk', label: '비밀번호 확인'},
-  {key: 4, checkId: 'name', label: '이름'},
-  {key: 5, checkId: 'birthday', label: '생년월일'},
-  {key: 6, checkId: 'gender', label: '성별'},
-  {key: 7, checkId: 'phoneNumber', label: '휴대폰 번호'},
-  {key: 8, checkId: 'email', label: '개인 이메일'},
+  { key: 1, checkId: 'id', label: '아이디' },
+  { key: 2, checkId: 'pw', label: '비밀번호' },
+  { key: 3, checkId: 'pwChk', label: '비밀번호 확인' },
+  { key: 4, checkId: 'name', label: '이름' },
+  { key: 5, checkId: 'birthday', label: '생년월일' },
+  { key: 6, checkId: 'gender', label: '성별' },
+  { key: 7, checkId: 'phoneNumber', label: '휴대폰 번호' },
+  { key: 8, checkId: 'email', label: '개인 이메일' },
 ];
 
 const idRegex = /^[a-z][a-z0-9]{4,19}$/;
@@ -69,7 +71,12 @@ const SGN010201 = () => {
   const movingScreen = useNavigation();
 
   const [loading, setLoading] = useState(true);
-  const [, setSession] = useRecoilState(AppStore.sessionState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [memberInfo, setMemberInfo] = useState<MemberInfo>({
     id: '',
@@ -234,15 +241,15 @@ const SGN010201 = () => {
       setIsPhoneAuthVerified(false);
     }
 
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
       [key]: true,
     }));
 
     setMemberInfo(nextMemberInfo);
 
-    setErrors(prev => {
-      const nextErrors = {...prev};
+    setErrors((prev) => {
+      const nextErrors = { ...prev };
 
       if (touched[key]) {
         nextErrors[key] = validateField(key, nextValue, nextMemberInfo);
@@ -269,12 +276,12 @@ const SGN010201 = () => {
   };
 
   const handleBlurField = (key: keyof MemberInfo) => {
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
       [key]: true,
     }));
 
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
       [key]: validateField(key, memberInfo[key]),
     }));
@@ -282,21 +289,21 @@ const SGN010201 = () => {
 
   const getLabelMessage = (
     key: keyof MemberInfo,
-  ): {text: string; type: LabelMessageType} => {
+  ): { text: string; type: LabelMessageType } => {
     if (!touched[key]) {
-      return {text: '', type: ''};
+      return { text: '', type: '' };
     }
 
     if (errors[key]) {
-      return {text: errors[key] || '', type: 'error'};
+      return { text: errors[key] || '', type: 'error' };
     }
 
     switch (key) {
       case 'id':
         if (memberInfo.id && isIdChecked && isIdAvailable) {
-          return {text: '사용 가능한 아이디', type: 'success'};
+          return { text: '사용 가능한 아이디', type: 'success' };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       case 'pw':
         if (memberInfo.pw && pwRegex.test(memberInfo.pw)) {
@@ -305,43 +312,43 @@ const SGN010201 = () => {
             type: 'success',
           };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       case 'pwChk':
         if (memberInfo.pwChk && memberInfo.pw === memberInfo.pwChk) {
-          return {text: '비밀번호가 일치합니다.', type: 'success'};
+          return { text: '비밀번호가 일치합니다.', type: 'success' };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       case 'birthday':
         if (memberInfo.birthday && isValidBirthday(memberInfo.birthday)) {
-          return {text: '확인되었습니다.', type: 'success'};
+          return { text: '확인되었습니다.', type: 'success' };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       case 'gender':
         if (memberInfo.gender) {
-          return {text: '확인되었습니다.', type: 'success'};
+          return { text: '확인되었습니다.', type: 'success' };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       case 'phoneNumber':
         if (isPhoneAuthVerified) {
-          return {text: '휴대폰 인증 완료', type: 'success'};
+          return { text: '휴대폰 인증 완료', type: 'success' };
         }
         if (memberInfo.phoneNumber && phoneRegex.test(memberInfo.phoneNumber)) {
-          return {text: '휴대폰 인증이 필요합니다.', type: 'error'};
+          return { text: '휴대폰 인증이 필요합니다.', type: 'error' };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       case 'email':
         if (memberInfo.email && emailRegex.test(memberInfo.email)) {
-          return {text: '확인되었습니다.', type: 'success'};
+          return { text: '확인되었습니다.', type: 'success' };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       default:
-        return {text: '', type: ''};
+        return { text: '', type: '' };
     }
   };
 
@@ -381,7 +388,7 @@ const SGN010201 = () => {
 
     const id = memberInfo.id.trim().toLowerCase();
 
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
       id: true,
     }));
@@ -397,7 +404,7 @@ const SGN010201 = () => {
       if (result?.CNT !== 0) {
         setIsIdChecked(true);
         setIsIdAvailable(false);
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
           id: '이미 사용 중인 아이디입니다.',
         }));
@@ -406,7 +413,7 @@ const SGN010201 = () => {
 
       setIsIdChecked(true);
       setIsIdAvailable(true);
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
         id: '',
       }));
@@ -421,7 +428,7 @@ const SGN010201 = () => {
       return;
     }
 
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
       phoneNumber: true,
     }));
@@ -509,7 +516,8 @@ const SGN010201 = () => {
           message.type === 'error'
             ? styles.labelErrorText
             : styles.labelSuccessText,
-        ]}>
+        ]}
+      >
         {message.text}
       </Text>
     );
@@ -520,22 +528,22 @@ const SGN010201 = () => {
       <View style={styles.phoneAuthWrapper}>
         <View style={[LVStyles.row, styles.phoneAuthRow]}>
           <TextField
-            keyboardType="numeric"
-            placeholder="인증번호 6자리 입력"
+            keyboardType='numeric'
+            placeholder='인증번호 6자리 입력'
             maxLength={6}
-            placeholderTextColor="lightgray"
+            placeholderTextColor='lightgray'
             style={[
               styles.textFieldSt,
-              {marginBottom: 0, flex: 1, marginRight: 8},
+              { marginBottom: 0, flex: 1, marginRight: 8 },
             ]}
-            autoCapitalize="none"
+            autoCapitalize='none'
             onChangeValue={(value: string) =>
               setPhoneAuthCode(value.replace(/[^0-9]/g, ''))
             }
             value={phoneAuthCode}
           />
           <LVButton
-            title="확인"
+            title='확인'
             onPress={
               phoneAuthCode.length === 6 ? confirmPhoneAuthCode : undefined
             }
@@ -563,20 +571,20 @@ const SGN010201 = () => {
     switch (field) {
       case 'id':
         return (
-          <View style={[LVStyles.row, {marginBottom: 10}]}>
+          <View style={[LVStyles.row, { marginBottom: 10 }]}>
             <TextField
-              placeholderTextColor="#999FA8"
+              placeholderTextColor='#999FA8'
               style={[
                 styles.textFieldSt,
-                {marginBottom: 0, flex: 1, marginRight: 8},
+                { marginBottom: 0, flex: 1, marginRight: 8 },
               ]}
-              autoCapitalize="none"
+              autoCapitalize='none'
               onChangeValue={(value: string) => updateMemberInfo('id', value)}
               onBlur={() => handleBlurField('id')}
               value={memberInfo.id}
             />
             <LVButton
-              title="중복확인"
+              title='중복확인'
               disabled={!isIdFormatValid}
               onPress={checkDuplicateId}
               buttonStyle={[
@@ -593,11 +601,11 @@ const SGN010201 = () => {
       case 'pw':
         return (
           <TextField
-            placeholder="대소문자, 특수문자, 숫자 포함하여 8~16자"
+            placeholder='대소문자, 특수문자, 숫자 포함하여 8~16자'
             maxLength={16}
-            placeholderTextColor="lightgray"
+            placeholderTextColor='lightgray'
             style={styles.textFieldSt}
-            autoCapitalize="none"
+            autoCapitalize='none'
             onChangeValue={(value: string) => updateMemberInfo('pw', value)}
             onBlur={() => handleBlurField('pw')}
             value={memberInfo.pw}
@@ -608,11 +616,11 @@ const SGN010201 = () => {
       case 'pwChk':
         return (
           <TextField
-            placeholder="대소문자, 특수문자, 숫자 포함하여 8~16자"
+            placeholder='대소문자, 특수문자, 숫자 포함하여 8~16자'
             maxLength={16}
-            placeholderTextColor="lightgray"
+            placeholderTextColor='lightgray'
             style={styles.textFieldSt}
-            autoCapitalize="none"
+            autoCapitalize='none'
             onChangeValue={(value: string) => updateMemberInfo('pwChk', value)}
             onBlur={() => handleBlurField('pwChk')}
             value={memberInfo.pwChk}
@@ -623,10 +631,10 @@ const SGN010201 = () => {
       case 'name':
         return (
           <TextField
-            placeholderTextColor="#141414"
+            placeholderTextColor='#141414'
             maxLength={20}
             style={styles.textFieldSt}
-            autoCapitalize="none"
+            autoCapitalize='none'
             onChangeValue={(value: string) => updateMemberInfo('name', value)}
             onBlur={() => handleBlurField('name')}
             value={memberInfo.name}
@@ -636,11 +644,11 @@ const SGN010201 = () => {
       case 'birthday':
         return (
           <TextField
-            keyboardType="numeric"
-            placeholder="ex. 900101"
-            placeholderTextColor="lightgray"
+            keyboardType='numeric'
+            placeholder='ex. 900101'
+            placeholderTextColor='lightgray'
             style={styles.textFieldSt}
-            autoCapitalize="none"
+            autoCapitalize='none'
             maxLength={6}
             onChangeValue={(value: string) =>
               updateMemberInfo('birthday', value)
@@ -655,24 +663,25 @@ const SGN010201 = () => {
           <View
             style={[
               LVStyles.row,
-              {justifyContent: 'flex-start', marginBottom: 20},
-            ]}>
+              { justifyContent: 'flex-start', marginBottom: 20 },
+            ]}
+          >
             <LVRadioButton
-              title="남성"
+              title='남성'
               gubun={memberInfo.gender === 'M'}
               onPress={() => {
                 updateMemberInfo('gender', 'M');
-                setTouched(prev => ({...prev, gender: true}));
-                setErrors(prev => ({...prev, gender: ''}));
+                setTouched((prev) => ({ ...prev, gender: true }));
+                setErrors((prev) => ({ ...prev, gender: '' }));
               }}
             />
             <LVRadioButton
-              title="여성"
+              title='여성'
               gubun={memberInfo.gender === 'F'}
               onPress={() => {
                 updateMemberInfo('gender', 'F');
-                setTouched(prev => ({...prev, gender: true}));
-                setErrors(prev => ({...prev, gender: ''}));
+                setTouched((prev) => ({ ...prev, gender: true }));
+                setErrors((prev) => ({ ...prev, gender: '' }));
               }}
             />
           </View>
@@ -681,17 +690,17 @@ const SGN010201 = () => {
       case 'phoneNumber':
         return (
           <>
-            <View style={[LVStyles.row, {marginBottom: 10}]}>
+            <View style={[LVStyles.row, { marginBottom: 10 }]}>
               <TextField
-                keyboardType="numeric"
-                placeholder="ex. 01012345678"
+                keyboardType='numeric'
+                placeholder='ex. 01012345678'
                 maxLength={11}
-                placeholderTextColor="lightgray"
+                placeholderTextColor='lightgray'
                 style={[
                   styles.textFieldSt,
-                  {marginBottom: 0, flex: 1, marginRight: 8},
+                  { marginBottom: 0, flex: 1, marginRight: 8 },
                 ]}
-                autoCapitalize="none"
+                autoCapitalize='none'
                 onChangeValue={(value: string) =>
                   updateMemberInfo('phoneNumber', value)
                 }
@@ -719,11 +728,11 @@ const SGN010201 = () => {
       case 'email':
         return (
           <TextField
-            keyboardType="email-address"
-            placeholder="ex. youremail@gmail.com"
-            placeholderTextColor="lightgray"
+            keyboardType='email-address'
+            placeholder='ex. youremail@gmail.com'
+            placeholderTextColor='lightgray'
             style={styles.textFieldSt}
-            autoCapitalize="none"
+            autoCapitalize='none'
             onChangeValue={(value: string) => updateMemberInfo('email', value)}
             onBlur={() => handleBlurField('email')}
             value={memberInfo.email}
@@ -738,19 +747,20 @@ const SGN010201 = () => {
   const isFormFilled = Object.values(memberInfo).every(Boolean);
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <SafeAreaView
         edges={['bottom']}
         style={{
           flex: 1,
           justifyContent: 'space-between',
           backgroundColor: '#FFF',
-        }}>
+        }}
+      >
         <KeyboardAwareScrollView>
           <View>
             <View style={styles.container}>
-              <View style={{padding: 8}}>
-                {FIELD_LIST.map(field => (
+              <View style={{ padding: 8 }}>
+                {FIELD_LIST.map((field) => (
                   <React.Fragment key={field.key}>
                     <View style={styles.labelRow}>
                       <Text style={styles.label}>{field.label}</Text>
@@ -766,7 +776,7 @@ const SGN010201 = () => {
 
         <View style={[LVStyles.row, styles.bottomButton]}>
           <LVButton
-            title="회원가입 신청"
+            title='회원가입 신청'
             onPress={handleRegister}
             buttonStyle={{
               flex: 1,

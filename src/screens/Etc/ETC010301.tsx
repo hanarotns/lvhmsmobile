@@ -1,23 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
 import {
-  Text,
-  SafeAreaView,
+  KeyboardAwareScrollView,
   LVButton,
   LVLoadingIndicator,
+  SafeAreaView,
+  Text,
   TextField,
-  KeyboardAwareScrollView,
-} from 'component';
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {Fetch, Util} from '~/lib';
-import LVStyles from '~/component/LVStyles';
+} from '@/src/components';
+import LVStyles from '@/src/components/LVStyles';
+import { Fetch, Util } from '@/src/lib';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
 import {
-  useNavigation,
-  useIsFocused,
-  useRoute,
   RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
 } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+
+import { StyleSheet, View } from 'react-native';
 import * as Action from './Action';
 
 type RootStackParamList = {
@@ -41,9 +43,9 @@ const FIELD_LIST: {
   checkId: keyof MemberInfo;
   label: string;
 }[] = [
-  {key: 1, checkId: 'pw', label: '현재 비밀번호'},
-  {key: 2, checkId: 'pwNew', label: '새 비밀번호'},
-  {key: 3, checkId: 'pwChkNew', label: '새 비밀번호 확인'},
+  { key: 1, checkId: 'pw', label: '현재 비밀번호' },
+  { key: 2, checkId: 'pwNew', label: '새 비밀번호' },
+  { key: 3, checkId: 'pwChkNew', label: '새 비밀번호 확인' },
 ];
 
 const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,16}$/;
@@ -54,7 +56,12 @@ const ETC010301 = () => {
   const movingScreen = useNavigation();
 
   const [loading, setLoading] = useState(true);
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [memberInfo, setMemberInfo] = useState<MemberInfo>({
     pw: '',
@@ -133,15 +140,15 @@ const ETC010301 = () => {
       [key]: nextValue,
     };
 
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
       [key]: true,
     }));
 
     setMemberInfo(nextMemberInfo);
 
-    setErrors(prev => {
-      const nextErrors = {...prev};
+    setErrors((prev) => {
+      const nextErrors = { ...prev };
 
       if (touched[key]) {
         nextErrors[key] = validateField(key, nextValue, nextMemberInfo);
@@ -162,12 +169,12 @@ const ETC010301 = () => {
   };
 
   const handleBlurField = (key: keyof MemberInfo) => {
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
       [key]: true,
     }));
 
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
       [key]: validateField(key, memberInfo[key]),
     }));
@@ -175,13 +182,13 @@ const ETC010301 = () => {
 
   const getLabelMessage = (
     key: keyof MemberInfo,
-  ): {text: string; type: LabelMessageType} => {
+  ): { text: string; type: LabelMessageType } => {
     if (!touched[key]) {
-      return {text: '', type: ''};
+      return { text: '', type: '' };
     }
 
     if (errors[key]) {
-      return {text: errors[key] || '', type: 'error'};
+      return { text: errors[key] || '', type: 'error' };
     }
 
     switch (key) {
@@ -192,16 +199,16 @@ const ETC010301 = () => {
             type: 'success',
           };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       case 'pwChkNew':
         if (memberInfo.pwChkNew && memberInfo.pw === memberInfo.pwChkNew) {
-          return {text: '비밀번호가 일치합니다.', type: 'success'};
+          return { text: '비밀번호가 일치합니다.', type: 'success' };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       default:
-        return {text: '', type: ''};
+        return { text: '', type: '' };
     }
   };
 
@@ -257,7 +264,7 @@ const ETC010301 = () => {
       };
       const result2 = await Action.changePw(payload2);
       if (result2.TYPE === 1) {
-        Fetch.logout().then(result => {
+        Fetch.logout().then((result) => {
           if (result) {
             setSession(null);
             Util.toastMsg('비밀번호 변경이 완료되었습니다.', 'info');
@@ -287,7 +294,8 @@ const ETC010301 = () => {
           message.type === 'error'
             ? styles.labelErrorText
             : styles.labelSuccessText,
-        ]}>
+        ]}
+      >
         {message.text}
       </Text>
     );
@@ -298,11 +306,11 @@ const ETC010301 = () => {
       case 'pw':
         return (
           <TextField
-            placeholder="대소문자, 특수문자, 숫자 포함하여 8~16자"
+            placeholder='대소문자, 특수문자, 숫자 포함하여 8~16자'
             maxLength={16}
-            placeholderTextColor="lightgray"
+            placeholderTextColor='lightgray'
             style={styles.textFieldSt}
-            autoCapitalize="none"
+            autoCapitalize='none'
             onChangeValue={(value: string) => updateMemberInfo('pw', value)}
             onBlur={() => handleBlurField('pw')}
             value={memberInfo.pw}
@@ -313,11 +321,11 @@ const ETC010301 = () => {
       case 'pwNew':
         return (
           <TextField
-            placeholder="대소문자, 특수문자, 숫자 포함하여 8~16자"
+            placeholder='대소문자, 특수문자, 숫자 포함하여 8~16자'
             maxLength={16}
-            placeholderTextColor="lightgray"
+            placeholderTextColor='lightgray'
             style={styles.textFieldSt}
-            autoCapitalize="none"
+            autoCapitalize='none'
             onChangeValue={(value: string) => updateMemberInfo('pwNew', value)}
             onBlur={() => handleBlurField('pwNew')}
             value={memberInfo.pwNew}
@@ -328,11 +336,11 @@ const ETC010301 = () => {
       case 'pwChkNew':
         return (
           <TextField
-            placeholder="대소문자, 특수문자, 숫자 포함하여 8~16자"
+            placeholder='대소문자, 특수문자, 숫자 포함하여 8~16자'
             maxLength={16}
-            placeholderTextColor="lightgray"
+            placeholderTextColor='lightgray'
             style={styles.textFieldSt}
-            autoCapitalize="none"
+            autoCapitalize='none'
             onChangeValue={(value: string) =>
               updateMemberInfo('pwChkNew', value)
             }
@@ -350,26 +358,27 @@ const ETC010301 = () => {
   const isFormFilled = Object.values(memberInfo).every(Boolean);
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <SafeAreaView
         edges={['bottom']}
         style={{
           flex: 1,
           justifyContent: 'space-between',
           backgroundColor: '#FFF',
-        }}>
+        }}
+      >
         <KeyboardAwareScrollView>
           <View>
             <View style={styles.container}>
-              <View style={{padding: 8}}>
-                {FIELD_LIST.map(field => (
+              <View style={{ padding: 8 }}>
+                {FIELD_LIST.map((field) => (
                   <React.Fragment key={field.key}>
                     <View style={styles.labelRow}>
                       <Text style={styles.label}>{field.label}</Text>
                     </View>
                     {renderTextField(field.checkId)}
                     {renderLabelMessage(field.checkId)}
-                    <View style={{height: 16}} />
+                    <View style={{ height: 16 }} />
                   </React.Fragment>
                 ))}
               </View>
@@ -379,7 +388,7 @@ const ETC010301 = () => {
 
         <View style={[LVStyles.row, styles.bottomButton]}>
           <LVButton
-            title="변경"
+            title='변경'
             onPress={handleRegister}
             buttonStyle={{
               flex: 1,

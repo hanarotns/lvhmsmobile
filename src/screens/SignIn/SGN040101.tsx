@@ -1,25 +1,28 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Alert} from 'react-native';
 import {
-  Layout,
-  Text,
-  SafeAreaView,
   LVButton,
   LVLoadingIndicator,
-} from 'component';
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {Util} from '~/lib';
-import LVStyles from '~/component/LVStyles';
-import {useIsFocused} from '@react-navigation/native';
-import * as Action from './Action'; // API통신
+  SafeAreaView,
+  Text,
+} from '@/src/components';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import { useIsFocused } from '@react-navigation/native';
+import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import {Input} from '@ui-kitten/components';
+import React, { useEffect, useState } from 'react';
+
+import { Alert, StyleSheet, View } from 'react-native';
 
 const SGN040101 = () => {
   const isFocused = useIsFocused();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
 
@@ -131,7 +134,7 @@ const SGN040101 = () => {
       // 실제 API 예시
       // const res = await Action.sendLoginAuthNo(sParam);
 
-      await new Promise(resolve => setTimeout(resolve, 700));
+      await new Promise((resolve) => setTimeout(resolve, 700));
 
       setIsSmsSent(true);
       setSendDateTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
@@ -169,7 +172,7 @@ const SGN040101 = () => {
       // 실제 API 예시
       // const res = await Action.confirmLoginAuthNo(sParam);
 
-      await new Promise(resolve => setTimeout(resolve, 700));
+      await new Promise((resolve) => setTimeout(resolve, 700));
 
       Alert.alert('인증 완료', '2차 인증이 완료되었습니다.', [
         {
@@ -235,10 +238,10 @@ const SGN040101 = () => {
 
                 <Input
                   value={authNo}
-                  placeholder="인증번호 6자리 입력"
-                  keyboardType="number-pad"
+                  placeholder='인증번호 6자리 입력'
+                  keyboardType='number-pad'
                   maxLength={6}
-                  onChangeText={text => {
+                  onChangeText={(text) => {
                     const onlyNumber = text.replace(/[^0-9]/g, '');
                     setAuthNo(onlyNumber);
                   }}

@@ -1,4 +1,4 @@
-import {Util, Fetch} from '~/lib';
+import { Fetch, Util } from '@/src/lib';
 
 // @@ 신규 정의 필요
 // PORA010101SVC/get 와 유사

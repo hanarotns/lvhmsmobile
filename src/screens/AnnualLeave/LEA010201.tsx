@@ -1,59 +1,56 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useImperativeHandle,
-  forwardRef,
-} from 'react';
-import {View, Image, StyleSheet, Platform} from 'react-native';
 import {
-  SafeAreaView,
-  ScrollView,
-  RefreshControl,
-  withPreventDoubleClick,
-  LVModal,
-  LVButton,
-  LVFlag,
-  LVRadioButton,
-  LVTwoLine,
-  LVDatePicker,
-  LVSection,
-  LVSelectBox,
-  LVLoadingIndicator,
-  LVConfirmIndicator,
-  Text,
-  LVChip,
   LVApprLine,
+  LVButton,
+  LVChip,
+  LVConfirmIndicator,
   LVFormOfContents,
-} from '~/component'; // 공통컴포넌트
-import LVStyles from '~/component/LVStyles';
-import * as icon from '~/assets/images';
-import {useIsFocused} from '@react-navigation/native';
+  LVLoadingIndicator,
+  LVModal,
+  LVSelectBox,
+  RefreshControl,
+  ScrollView,
+  Text,
+} from '@/src/components'; // 공통컴포넌트
+import LVStyles from '@/src/components/LVStyles';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import { useIsFocused } from '@react-navigation/native';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
+import { StyleSheet, View } from 'react-native';
+
+import { Util } from '@/src/lib';
+import { Icon, Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import {Util} from '~/lib';
-import {Icon, Input} from '@ui-kitten/components';
 
-import * as Action from './Action'; // API통신
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as PALAction from '../PersonalApprovalLine/Action'; // API통신 (개인별 결재선 분리)
 import * as WLOAction from '../WorkLog/Action'; // API통신 (달력)
 
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
-import {useRoute, RouteProp} from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
 const LEA010201 = () => {
   const movingScreen = useNavigation();
   const route = useRoute<DetailScreenRouteProp>();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
-  const [empInfo, setEmpInfo] = useRecoilState(AppStore.empInfoState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
@@ -156,9 +153,9 @@ const LEA010201 = () => {
   useEffect(() => {
     if (!Util.isEmpty(selectedOfficialLeaveType)) {
       const targetTypes = ['04', '05', '06'];
-      const updatedInfoList = infoList.map(item =>
+      const updatedInfoList = infoList.map((item) =>
         targetTypes.includes(item.LEAVE_TYPE)
-          ? {...item, OFFICIAL_LEAVE_TYPE: selectedOfficialLeaveType}
+          ? { ...item, OFFICIAL_LEAVE_TYPE: selectedOfficialLeaveType }
           : item,
       );
       setInfoList(updatedInfoList);
@@ -167,14 +164,14 @@ const LEA010201 = () => {
 
   useEffect(() => {
     if (!Util.isEmpty(infoList)) {
-      const getTotalDAY_02 = infoList => {
+      const getTotalDAY_02 = (infoList) => {
         return infoList.reduce((sum, item) => {
           return sum + Number(item.DAY_02 || 0);
         }, 0);
       };
 
       const total = getTotalDAY_02(infoList);
-      setHd({...hd, TOTAL_PERIOD: total});
+      setHd({ ...hd, TOTAL_PERIOD: total });
     }
   }, [infoList]);
 
@@ -259,29 +256,33 @@ const LEA010201 = () => {
               }}
               onPress={() => {
                 setSelectedAppr(e);
-              }}>
+              }}
+            >
               <View
                 style={{
                   flex: 1,
-                }}>
+                }}
+              >
                 <View
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
-                  }}>
-                  <LVChip category="apprLineFlag" title="일반" />
-                  <View style={{width: 8}} />
+                  }}
+                >
+                  <LVChip category='apprLineFlag' title='일반' />
+                  <View style={{ width: 8 }} />
                   <Text
                     style={{
                       fontWeight: '700',
                       fontSize: 16,
                       color: '#373747',
-                    }}>
+                    }}
+                  >
                     {e?.APPR_LINE_NAME}
                   </Text>
                 </View>
-                <View style={{height: 8}} />
+                <View style={{ height: 8 }} />
                 <LVApprLine
                   data={e?.DETAILS}
                   mainColor={'#6A727B'}
@@ -439,8 +440,8 @@ const LEA010201 = () => {
       };
 
       res = res
-        .filter(e => sortedArr.includes(e?.HQCODE))
-        .map(e => ({
+        .filter((e) => sortedArr.includes(e?.HQCODE))
+        .map((e) => ({
           ...e,
           ...(customVaType[e.HQCODE] || {}),
         }));
@@ -458,10 +459,10 @@ const LEA010201 = () => {
       const resOfCal = await WLOAction.getInfoM(payload); // @@ 달력 변경 데이터 넣기
       const obj = {};
       if (!Util.isEmpty(resOfCal)) {
-        resOfCal?.HD?.filter(item =>
+        resOfCal?.HD?.filter((item) =>
           ['HOLIDAY', 'WEEKEND'].includes(item.M_TYPE),
         )
-          .map(item => item.M_DATE)
+          .map((item) => item.M_DATE)
           .forEach(
             (key: string, i: number) =>
               (obj[key] = {
@@ -477,15 +478,15 @@ const LEA010201 = () => {
     };
 
     function toColumnGrid(list, columnCount = 3) {
-      const columns = Array.from({length: columnCount}, () => []);
+      const columns = Array.from({ length: columnCount }, () => []);
       list.forEach((item, i) => {
         columns[i % columnCount].push(item);
       });
       // row 우선 변환 (세로 3줄, 가로로)
-      const maxRowLen = Math.max(...columns.map(col => col.length));
+      const maxRowLen = Math.max(...columns.map((col) => col.length));
       const grid = [];
       for (let r = 0; r < maxRowLen; r++) {
-        grid.push(columns.map(col => col[r] || null));
+        grid.push(columns.map((col) => col[r] || null));
       }
       return grid; // [ [1,4,7], [2,5,8], [3,6,null] ]
     }
@@ -496,12 +497,13 @@ const LEA010201 = () => {
       <View
         style={{
           justifyContent: 'flex-start',
-        }}>
+        }}
+      >
         {/* 신청정보_휴가일자 션택영역 */}
         <View>
           <Calendar
             onDayPress={(day: any) => {
-              const found = leaveInfoList.some(item => {
+              const found = leaveInfoList.some((item) => {
                 return item.date === day.dateString;
               });
               if (found) {
@@ -527,7 +529,7 @@ const LEA010201 = () => {
               const yearMonth = date.replace(/-/g, '').substring(0, 6);
               mount(yearMonth);
             }}
-            markingType="custom"
+            markingType='custom'
             markedDates={{
               ...calDispList,
               [selectedInfo?.date]: {
@@ -536,7 +538,7 @@ const LEA010201 = () => {
                 selectedDotColor: 'orange',
               },
             }}
-            monthFormat="yyyy년 M월"
+            monthFormat='yyyy년 M월'
             renderArrow={(direction: any) => (
               <Icon
                 name={direction === 'left' ? 'chevron-left' : 'chevron-right'}
@@ -553,28 +555,32 @@ const LEA010201 = () => {
             borderTopColor: '#F0F2F6',
             height: '100%',
             padding: 8,
-          }}>
+          }}
+        >
           <ScrollView
             style={{
               width: '100%',
-            }}>
+            }}
+          >
             <View
               style={{
                 alignItems: 'center',
-              }}>
+              }}
+            >
               {leaveInfoList.map((e: any, i: number) => (
                 <View
                   style={{
                     justifyContent: 'center',
                     marginBottom: 8,
-                  }}>
+                  }}
+                >
                   <LVChip
-                    category="info"
+                    category='info'
                     leftText={e?.DISP_VA_DATE}
                     rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
                     i={i}
                     onPress={() => {
-                      setLeaveInfoList(prev =>
+                      setLeaveInfoList((prev) =>
                         prev.filter((_, idx) => idx !== i),
                       );
                     }}
@@ -595,7 +601,8 @@ const LEA010201 = () => {
                   padding: 12,
                   justifyContent: 'center',
                   alignItems: 'center',
-                }}>
+                }}
+              >
                 {grid.map((row, rowIdx) => {
                   return (
                     <View
@@ -603,7 +610,8 @@ const LEA010201 = () => {
                       style={{
                         flexDirection: 'row',
                         marginBottom: 8,
-                      }}>
+                      }}
+                    >
                       {row.map((item, colIdx) =>
                         item ? (
                           <TouchableOpacity
@@ -624,9 +632,10 @@ const LEA010201 = () => {
                             activeOpacity={0.8}
                             style={{
                               marginRight: colIdx < columnCount - 1 ? 8 : 0,
-                            }}>
+                            }}
+                          >
                             <LVChip
-                              category="type"
+                              category='type'
                               content={item?.HQNAME_02}
                               subContent={item?.HQNAME_01}
                               chipStyle={{
@@ -675,30 +684,33 @@ const LEA010201 = () => {
         style={{}}
         onPress={() => {
           setVisiblePhotoList(!visiblePhotoList);
-        }}>
+        }}
+      >
         <Icon name={'save-outline'} fill={'#27A7FF'} style={[LVStyles.iconS]} />
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }>
+        }
+      >
         <View
           style={{
             padding: 16,
             borderBottomWidth: 1,
             borderTopWidth: 1,
             borderColor: '#D5DCE5',
-          }}>
+          }}
+        >
           <LVFormOfContents
             title={'결재선'}
             children={
               !Util.isEmpty(approvalLine) ? (
-                <View style={[LVStyles.row, {width: '100%'}]}>
+                <View style={[LVStyles.row, { width: '100%' }]}>
                   <LVApprLine
                     data={approvalLine}
                     mainColor={'#373747'}
@@ -719,7 +731,8 @@ const LEA010201 = () => {
                       borderRadius: 4,
                       justifyContent: 'center',
                       alignItems: 'center',
-                    }}>
+                    }}
+                  >
                     <Icon
                       name={'edit-2-outline'}
                       fill={'#27A7FF'}
@@ -728,7 +741,7 @@ const LEA010201 = () => {
                   </TouchableOpacity>
                 </View>
               ) : (
-                <View style={[LVStyles.row, {width: '100%'}]}>
+                <View style={[LVStyles.row, { width: '100%' }]}>
                   <Text>등록된 결재선이 없습니다.</Text>
                   <LVButton
                     title={'결재선 등록'}
@@ -748,13 +761,14 @@ const LEA010201 = () => {
             title={'신청정보'}
             children={
               <>
-                <View style={[LVStyles.row, {flex: 1}]}>
+                <View style={[LVStyles.row, { flex: 1 }]}>
                   {Util.isEmpty(infoList) && (
                     <View>
                       <Text
                         style={{
                           color: '#939DAA',
-                        }}>
+                        }}
+                      >
                         우측버튼을 선택하세요.
                       </Text>
                     </View>
@@ -762,15 +776,17 @@ const LEA010201 = () => {
                   <View
                     style={{
                       flex: 1,
-                    }}>
+                    }}
+                  >
                     {infoList?.map((e, i) => (
                       <View
                         style={{
                           height: 48,
                           justifyContent: 'center',
-                        }}>
+                        }}
+                      >
                         <LVChip
-                          category="info"
+                          category='info'
                           leftText={e?.DISP_VA_DATE}
                           rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
                           i={i}
@@ -791,7 +807,8 @@ const LEA010201 = () => {
                       borderRadius: 4,
                       justifyContent: 'center',
                       alignItems: 'center',
-                    }}>
+                    }}
+                  >
                     <Icon
                       name={
                         Util.isEmpty(infoList)
@@ -808,38 +825,40 @@ const LEA010201 = () => {
           />
           <LVFormOfContents
             children={
-              <View style={[LVStyles.row, {flex: 1, marginVertical: 12}]}>
+              <View style={[LVStyles.row, { flex: 1, marginVertical: 12 }]}>
                 <View
                   style={{
                     margin: 4,
                     justifyContent: 'center',
                     alignItems: 'center',
-                  }}>
-                  <Text style={{fontSize: 14, fontWeight: '600'}}>
+                  }}
+                >
+                  <Text style={{ fontSize: 14, fontWeight: '600' }}>
                     잔여 연차
                   </Text>
-                  <Text style={{fontSize: 20, fontWeight: '700'}}>
+                  <Text style={{ fontSize: 20, fontWeight: '700' }}>
                     {route?.params.REM_VC_QTY}
                   </Text>
                 </View>
                 <View>
-                  <Text style={{fontSize: 20, fontWeight: '700'}}>-</Text>
+                  <Text style={{ fontSize: 20, fontWeight: '700' }}>-</Text>
                 </View>
                 <View
                   style={{
                     margin: 4,
                     justifyContent: 'center',
                     alignItems: 'center',
-                  }}>
-                  <Text style={{fontSize: 14, fontWeight: '600'}}>
+                  }}
+                >
+                  <Text style={{ fontSize: 14, fontWeight: '600' }}>
                     신청 연차
                   </Text>
-                  <Text style={{fontSize: 20, fontWeight: '700'}}>
+                  <Text style={{ fontSize: 20, fontWeight: '700' }}>
                     {hd?.TOTAL_PERIOD}
                   </Text>
                 </View>
                 <View>
-                  <Text style={{fontSize: 20, fontWeight: '700'}}>=</Text>
+                  <Text style={{ fontSize: 20, fontWeight: '700' }}>=</Text>
                 </View>
 
                 <View
@@ -847,11 +866,12 @@ const LEA010201 = () => {
                     margin: 4,
                     justifyContent: 'center',
                     alignItems: 'center',
-                  }}>
-                  <Text style={{fontSize: 14, fontWeight: '600'}}>
+                  }}
+                >
+                  <Text style={{ fontSize: 14, fontWeight: '600' }}>
                     이후 연차
                   </Text>
-                  <Text style={{fontSize: 20, fontWeight: '700'}}>
+                  <Text style={{ fontSize: 20, fontWeight: '700' }}>
                     {route?.params.REM_VC_QTY - hd?.TOTAL_PERIOD}
                   </Text>
                 </View>
@@ -861,13 +881,14 @@ const LEA010201 = () => {
 
           {/* @@ 휴가종류에 '공가'가 포함된 경우만 공가 종류 선택 기능 추가*/}
           {!Util.isEmpty(officialLeaveType) &&
-          infoList.find(e => ['04', '05', '06'].includes(e.HQCODE)) ? (
+          infoList.find((e) => ['04', '05', '06'].includes(e.HQCODE)) ? (
             <View>
               <LVFormOfContents
                 title={'공가종류'}
                 children={
                   <View
-                    style={{flex: 1, width: '70%', justifyContent: 'center'}}>
+                    style={{ flex: 1, width: '70%', justifyContent: 'center' }}
+                  >
                     <LVSelectBox
                       onChange={(value: string) => {
                         setSelectedOfficialLeaveType(value);
@@ -882,13 +903,14 @@ const LEA010201 = () => {
               <LVFormOfContents
                 title={'첨부파일'}
                 children={
-                  <View style={[LVStyles.row, {flex: 1}]}>
+                  <View style={[LVStyles.row, { flex: 1 }]}>
                     {Util.isEmpty(attach) && (
                       <View>
                         <Text
                           style={{
                             color: '#939DAA',
-                          }}>
+                          }}
+                        >
                           첨부파일을 선택하세요.
                         </Text>
                       </View>
@@ -896,15 +918,17 @@ const LEA010201 = () => {
                     <View
                       style={{
                         flex: 1,
-                      }}>
+                      }}
+                    >
                       {attach.map((e, i) => (
                         <View
                           style={{
                             height: 48,
                             justifyContent: 'center',
-                          }}>
+                          }}
+                        >
                           <LVChip
-                            category="info"
+                            category='info'
                             leftText={''}
                             rightText={''}
                             i={i}
@@ -924,7 +948,8 @@ const LEA010201 = () => {
                         borderRadius: 4,
                         justifyContent: 'center',
                         alignItems: 'center',
-                      }}>
+                      }}
+                    >
                       <Icon
                         name={'save-outline'}
                         fill={'#27A7FF'}
@@ -942,18 +967,18 @@ const LEA010201 = () => {
             title={'내용'}
             children={
               <Input
-                placeholder="휴가내용을 입력하세요."
-                placeholderTextColor="#939DAA"
+                placeholder='휴가내용을 입력하세요.'
+                placeholderTextColor='#939DAA'
                 value={hd.MEMO}
-                onChangeText={value => {
+                onChangeText={(value) => {
                   setHd({
                     ...hd,
                     MEMO: value,
                   });
                 }}
-                size="large"
-                style={{backgroundColor: '#FFF'}}
-                textStyle={{color: '#373747', minHeight: 64, fontSize: 14}}
+                size='large'
+                style={{ backgroundColor: '#FFF' }}
+                textStyle={{ color: '#373747', minHeight: 64, fontSize: 14 }}
                 multiline={true}
               />
             }
@@ -967,12 +992,12 @@ const LEA010201 = () => {
           buttonStyle={styles.cancelButton}
           textStyle={styles.cancelButtonText}
         />
-        <View style={{width: 8}} />
+        <View style={{ width: 8 }} />
         {/* 최초 상신 */}
         <LVButton
           title={'상신'}
           onPress={handleSubmit}
-          buttonStyle={{flex: 1}}
+          buttonStyle={{ flex: 1 }}
         />
       </View>
       {isVisibleApprovalModal && (
@@ -983,7 +1008,8 @@ const LEA010201 = () => {
           onVisible={setIsVisibleApprovalModal}
           onOk={() => {
             // 1. 자식에서 선택값 가져오기
-            const {selectedAppr} = approvalLineRef.current.getSelectedValues();
+            const { selectedAppr } =
+              approvalLineRef.current.getSelectedValues();
             if (Util.isEmpty(selectedAppr)) {
               Util.toastMsg('선택된 결재선이 없습니다.', 'info');
               return;
@@ -997,14 +1023,14 @@ const LEA010201 = () => {
       )}
       {isVisibleInfoModal && (
         <LVModal
-          category="entire"
+          category='entire'
           title={'휴가일자와 종류를 추가하세요.'}
           buttonText={'선택'}
           contents={<ContentsOfInfo ref={infoRef} />}
           onVisible={setIsVisibleInfoModal}
           onOk={() => {
             // 1. 자식에서 선택값 가져오기
-            const {leaveInfoList} = infoRef.current.getSelectedValues();
+            const { leaveInfoList } = infoRef.current.getSelectedValues();
             if (Util.isEmpty(leaveInfoList)) {
               Util.toastMsg('선택된 신청정보가 없습니다.', 'info');
               return;

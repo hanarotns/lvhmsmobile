@@ -1,3 +1,4 @@
+import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -5,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Application from 'expo-application';
 import * as Device from 'expo-device';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
+
 import {
   Image,
   Platform,
@@ -42,11 +44,12 @@ const SignIn = ({ navigation }) => {
   const movingScreen = useNavigation();
   const [loading, setLoading] = useState(true);
 
-  const sessionInfo = useSessionStore((state) => state.sessionInfo);
-  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
-
   const loginInfo = useLoginStore((state) => state.loginInfo);
   const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [visiblePwd, setVisiblePwd] = useState(false);
   const [visibleTerms, setVisibleTerms] = useState(false);

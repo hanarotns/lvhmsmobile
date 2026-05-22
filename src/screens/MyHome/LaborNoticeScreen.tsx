@@ -1,6 +1,7 @@
 import { LVButton } from '@/src/components';
 import LVStyles from '@/src/components/LVStyles';
 import React from 'react';
+
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const LaborNoticeScreen = ({ type = 'annual', data = {}, onConfirm }) => {

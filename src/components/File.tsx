@@ -1,15 +1,15 @@
-import {Util, _} from '~/lib';
-import {Image} from 'react-native';
+import { Util } from '@/src/lib';
 import CookieManager from '@react-native-cookies/cookies';
+import { Image } from 'react-native';
 //import Cookie from 'react-native-cookie';
+import { Fetch } from '@/src/lib';
 import ImageResizer from 'react-native-image-resizer';
 import env from '../lib/env';
-import {Fetch} from '~/lib';
 
 const envConfig = env();
 const fetchURL = envConfig.fetchURL;
 
-export const getFileList = async item => {
+export const getFileList = async (item) => {
   if (!item.REF_NO) {
     return null;
   }
@@ -78,7 +78,7 @@ export const upload = async ({
     rotation,
     null,
   )
-    .then(response => {
+    .then((response) => {
       finalFile = response;
       const year = new Date().getFullYear(); // Current Year
       let month = new Date().getMonth() + 1; // Current Month
@@ -123,7 +123,7 @@ export const upload = async ({
               Cookie: global.gCookie,
             },
           },
-          progressEvent => {
+          (progressEvent) => {
             const progress = progressEvent.loaded / progressEvent.total;
             onProgress(progress);
           },
@@ -132,7 +132,7 @@ export const upload = async ({
         onError(error);
       }
     })
-    .catch(err => {
+    .catch((err) => {
       // Oops, something went wrong. Check that the filename is correct and
       // inspect err to get more details.
       console.log('ImageResizer.createResizedImage Error', err);

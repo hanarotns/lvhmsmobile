@@ -1,41 +1,32 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {
-  StyleSheet,
-  Image,
-  View,
-  TouchableOpacity,
-  Alert,
-  ImageEditor,
-} from 'react-native';
-import {
-  withPreventDoubleClick,
-  Layout,
-  TopNavigationAction,
-  Icon,
-  Text,
-  SafeAreaView,
-  Terms,
-  TermsOfPiece,
-  LVButton,
-  LVLoadingIndicator,
   KeyboardAwareScrollView,
+  LVButton,
   LVCheckBox,
-} from 'component';
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {Fetch, Util} from '~/lib';
-import LVStyles from '~/component/LVStyles';
-import * as icon from '~/assets/images';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
-import * as Action from './Action'; // API통신
-import dayjs from 'dayjs';
+  LVLoadingIndicator,
+  SafeAreaView,
+  TermsOfPiece,
+  Text,
+} from '@/src/components';
+import LVStyles from '@/src/components/LVStyles';
+import { Util } from '@/src/lib';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import 'dayjs/locale/ko';
-import {onChange} from 'react-native-reanimated';
+import React, { useEffect, useState } from 'react';
+
+import { TouchableOpacity, View } from 'react-native';
 
 const SGN010101 = () => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
 
@@ -56,13 +47,13 @@ const SGN010101 = () => {
     setLoading(false);
   };
 
-  const onConfirm = value => {
+  const onConfirm = (value) => {
     setCategory(value);
     setVisibleTerms(!visibleTerms);
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <SafeAreaView
         edges={['bottom']}
         style={{
@@ -70,7 +61,8 @@ const SGN010101 = () => {
           justifyContent: 'space-between',
           backgroundColor: '#FFF',
           paddingTop: 20,
-        }}>
+        }}
+      >
         <KeyboardAwareScrollView>
           <View>
             {[
@@ -105,11 +97,13 @@ const SGN010101 = () => {
                   alignItems: 'center',
                   paddingVertical: 8,
                   paddingHorizontal: 32,
-                }}>
+                }}
+              >
                 <LVCheckBox value={e?.checked} onChange={e?.setChecked} />
-                <View style={{width: 8}} />
+                <View style={{ width: 8 }} />
                 <Text
-                  style={{fontSize: 20, color: '#373747', fontWeight: '500'}}>
+                  style={{ fontSize: 20, color: '#373747', fontWeight: '500' }}
+                >
                   {e?.label}
                 </Text>
               </TouchableOpacity>
@@ -125,7 +119,8 @@ const SGN010101 = () => {
               width: '100%',
               bottom: 0,
             },
-          ]}>
+          ]}
+        >
           <LVButton
             title={'다음'}
             onPress={() => {
@@ -150,7 +145,8 @@ const SGN010101 = () => {
             style={{
               marginHorizontal: 20,
               marginBottom: 60,
-            }}>
+            }}
+          >
             <TermsOfPiece category={category} onConfirm={onConfirm} />
           </View>
         )}

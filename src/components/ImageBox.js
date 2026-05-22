@@ -10,8 +10,6 @@ import {
 import ImageZoom from '../component/ImageZoom/index';
 
 import Icon from '@/src/components/Icon';
-import { AppStore } from '@/src/store';
-import { useRecoilState } from 'recoil';
 import { Util } from '../lib';
 import env from '../lib/env';
 
@@ -25,7 +23,12 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
  */
 
 const ImageBox = (props) => {
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
   const [state, setState] = React.useState({
     rotation: 0,
     // componentId: props.route.params.componentId,

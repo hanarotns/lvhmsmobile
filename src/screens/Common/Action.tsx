@@ -1,4 +1,4 @@
-import {Util, Fetch} from '~/lib';
+import { Fetch, Util } from '@/src/lib';
 
 const getPopup = async (groupCode: string, SQL: object) => {
   const result = await Fetch.request('COM050101SVC', 'getPopup', {
@@ -28,7 +28,7 @@ const getCode = async (searchType: string, groupCode: string, SQL: object) => {
 };
 
 export {
+  getCode,
   // 공통코드 조회
   getPopup,
-  getCode,
 };

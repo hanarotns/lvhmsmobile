@@ -1,26 +1,28 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
 import {
-  Text,
-  SafeAreaView,
+  KeyboardAwareScrollView,
   LVButton,
   LVLoadingIndicator,
-  TextField,
-  KeyboardAwareScrollView,
   LVRadioButton,
-} from 'component';
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {Util} from '~/lib';
-import LVStyles from '~/component/LVStyles';
+  SafeAreaView,
+  Text,
+  TextField,
+} from '@/src/components';
+import LVStyles from '@/src/components/LVStyles';
+import { Util } from '@/src/lib';
+import util from '@/src/lib/util';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
 import {
-  useNavigation,
-  useIsFocused,
-  useRoute,
   RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
 } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+
+import { StyleSheet, View } from 'react-native';
 import * as Action from './Action';
-import util from '~/lib/util';
 
 type RootStackParamList = {
   DetailScreen: undefined;
@@ -37,7 +39,12 @@ const ETC010201 = () => {
   const route = useRoute<DetailScreenRouteProp>();
   const movingScreen = useNavigation();
   const isFocused = useIsFocused();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
   const [userInfo, setUserInfo] = useState({});
   const [loginHistory, setLoginHistory] = useState([]);
 
@@ -96,59 +103,60 @@ const ETC010201 = () => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <SafeAreaView
         edges={['bottom']}
         style={{
           flex: 1,
           justifyContent: 'space-between',
           backgroundColor: '#FFF',
-        }}>
+        }}
+      >
         <KeyboardAwareScrollView>
           <View>
             <View style={styles.container}>
               <View style={{}}>
-                <Form label="법인명" value={userInfo?.COMPANY_NAME} />
-                <Form label="부서명" value={userInfo?.DEPT_NAME} />
-                <Form label="아이디" value={userInfo?.F_USER_ID} />
-                <Form label="사원번호" value={userInfo?.F_EMP_ID} />
+                <Form label='법인명' value={userInfo?.COMPANY_NAME} />
+                <Form label='부서명' value={userInfo?.DEPT_NAME} />
+                <Form label='아이디' value={userInfo?.F_USER_ID} />
+                <Form label='사원번호' value={userInfo?.F_EMP_ID} />
                 <Form
-                  label="이름"
+                  label='이름'
                   value={`${userInfo?.F_USER_NAME_LOC} ( ${userInfo?.F_USER_NAME_ENG} )`}
                 />
-                <Form label="직급" value={userInfo?.POSITION_NAME} />
-                <Form label="직책" value={userInfo?.DUTY_NAME} />
+                <Form label='직급' value={userInfo?.POSITION_NAME} />
+                <Form label='직책' value={userInfo?.DUTY_NAME} />
                 <Form
-                  label="이메일"
-                  fieldKey="F_EMAIL"
+                  label='이메일'
+                  fieldKey='F_EMAIL'
                   value={userInfo?.F_EMAIL}
                   editType={'input'}
                   onChange={updateUserInfo}
                 />
                 <Form
-                  label="전화번호"
-                  fieldKey="F_TEL_NO"
+                  label='전화번호'
+                  fieldKey='F_TEL_NO'
                   value={userInfo?.F_TEL_NO}
                   editType={'input'}
                   onChange={updateUserInfo}
                 />
                 <Form
-                  label="팩스번호"
-                  fieldKey="F_FAX_NO"
+                  label='팩스번호'
+                  fieldKey='F_FAX_NO'
                   value={userInfo?.F_FAX_NO}
                   editType={'input'}
                   onChange={updateUserInfo}
                 />
                 <Form
-                  label="휴대폰번호"
-                  fieldKey="F_USER_CP"
+                  label='휴대폰번호'
+                  fieldKey='F_USER_CP'
                   value={userInfo?.F_USER_CP}
                   editType={'input'}
                   onChange={updateUserInfo}
                 />
                 <Form
-                  label="언어"
-                  fieldKey="F_USER_LANG"
+                  label='언어'
+                  fieldKey='F_USER_LANG'
                   value={userInfo?.F_USER_LANG}
                   editType={'radio'}
                   onChange={updateUserInfo}
@@ -160,7 +168,7 @@ const ETC010201 = () => {
 
         <View style={[LVStyles.row, styles.bottomButton]}>
           <LVButton
-            title="저장"
+            title='저장'
             onPress={handleSave}
             buttonStyle={{
               flex: 1,
@@ -265,31 +273,34 @@ const styles = StyleSheet.create({
 });
 
 const Form = (props: any) => {
-  const {label, fieldKey, value, editType, onChange} = props;
+  const { label, fieldKey, value, editType, onChange } = props;
   return (
-    <View style={{flexDirection: 'row', alignItems: 'center', height: 48}}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', height: 48 }}>
       <View
         style={{
           width: '20%',
-        }}>
+        }}
+      >
         <Text
           style={{
             fontWeight: '600',
             fontSize: 14,
             color: '#6A727B',
-          }}>
+          }}
+        >
           {label}
         </Text>
       </View>
       <View
         style={{
           width: '80%',
-        }}>
+        }}
+      >
         {editType === 'input' && (
           <TextField
             style={styles.textFieldSt}
-            autoCapitalize="none"
-            onChangeValue={p => {
+            autoCapitalize='none'
+            onChangeValue={(p) => {
               onChange(fieldKey, p);
             }}
             value={value}
@@ -303,16 +314,17 @@ const Form = (props: any) => {
                 justifyContent: 'flex-start',
                 alignItems: 'center',
               },
-            ]}>
+            ]}
+          >
             <LVRadioButton
-              title="KO(한국어)"
+              title='KO(한국어)'
               gubun={value === 'KO'}
               onPress={() => {
                 onChange('F_USER_LANG', 'KO');
               }}
             />
             <LVRadioButton
-              title="EN(영어)"
+              title='EN(영어)'
               gubun={value === 'EN'}
               onPress={() => {
                 onChange('F_USER_LANG', 'EN');
@@ -326,7 +338,8 @@ const Form = (props: any) => {
               fontWeight: '700',
               fontSize: 14,
               color: '#373747',
-            }}>
+            }}
+          >
             {value}
           </Text>
         )}

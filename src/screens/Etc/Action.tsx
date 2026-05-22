@@ -1,4 +1,4 @@
-import {Util, Fetch} from '~/lib';
+import { Fetch, Util } from '@/src/lib';
 
 const getUserInfoNLoginHistory = async (body: object) => {
   // {
@@ -119,12 +119,12 @@ const saveUserInfo = async (body: object) => {
 };
 
 export {
-  // 계정 사용자 정보 조회 & 로그인 히스토리 (로그인 히스토리는 미사용)
-  getUserInfoNLoginHistory,
-  // 계정 비밀번호 동일여부 확인
-  checkPw,
   // 계정 비밀번호 변경
   changePw,
+  // 계정 비밀번호 동일여부 확인
+  checkPw,
+  // 계정 사용자 정보 조회 & 로그인 히스토리 (로그인 히스토리는 미사용)
+  getUserInfoNLoginHistory,
   // 계정 사용자 정보 변경
   saveUserInfo,
 };

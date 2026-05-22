@@ -1,30 +1,37 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {View, Image, StyleSheet, Platform, ImageBackground} from 'react-native';
 import {
-  ScrollView,
-  RefreshControl,
-  LVLoadingIndicator,
-  Text,
   Divider,
+  LVLoadingIndicator,
   LVNoData,
-} from '~/component'; // 공통컴포넌트
-import LVStyles from '~/component/LVStyles';
-import {Icon} from '@ui-kitten/components';
+  RefreshControl,
+  ScrollView,
+  Text,
+} from '@/src/components'; // 공통컴포넌트
+import LVStyles from '@/src/components/LVStyles';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import { Icon } from '@ui-kitten/components';
+import React, { useEffect, useState } from 'react';
 
+import { StyleSheet, View } from 'react-native';
+
+import { Util } from '@/src/lib';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import {Util} from '~/lib';
 import * as Action from './Action'; // API통신
 
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
 
 const ACC010201 = () => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
   const [selectedDate, setSelectedDate] = useState(
     dayjs(new Date()).add(-1, 'month'),
   );
@@ -60,12 +67,14 @@ const ACC010201 = () => {
 
   const MovingMonth = () => (
     <View
-      style={[LVStyles.row, {justifyContent: 'center', paddingVertical: 16}]}>
+      style={[LVStyles.row, { justifyContent: 'center', paddingVertical: 16 }]}
+    >
       <TouchableOpacity
         onPress={() => {
           const temp = selectedDate.add(-1, 'month');
           setSelectedDate(temp);
-        }}>
+        }}
+      >
         <Icon
           name={'chevron-left-outline'}
           fill={'#939DAA'}
@@ -78,14 +87,16 @@ const ACC010201 = () => {
           fontSize: 16,
           color: '#1E2125',
           marginHorizontal: 8,
-        }}>
+        }}
+      >
         {selectedDate.format('YYYY')}년 {selectedDate.format('MM')}월
       </Text>
       <TouchableOpacity
         onPress={() => {
           const temp = selectedDate.add(+1, 'month');
           setSelectedDate(temp);
-        }}>
+        }}
+      >
         <Icon
           name={'chevron-right-outline'}
           fill={'#939DAA'}
@@ -95,7 +106,7 @@ const ACC010201 = () => {
     </View>
   );
 
-  const SubTitle = ({label, value, fontColor}) => (
+  const SubTitle = ({ label, value, fontColor }) => (
     <View
       style={{
         flexDirection: 'row',
@@ -108,12 +119,14 @@ const ACC010201 = () => {
         // borderWidth: 1,
         // padding: 8,
         // borderRadius: 8,
-      }}>
+      }}
+    >
       <Text
         style={{
           fontWeight: '600',
           fontSize: 16,
-        }}>
+        }}
+      >
         {label}
       </Text>
       <Text
@@ -122,14 +135,15 @@ const ACC010201 = () => {
           fontWeight: '800',
           fontSize: 16,
           color: fontColor || '#373747',
-        }}>
+        }}
+      >
         {value ? value + '원' : ''}
       </Text>
     </View>
   );
 
   const SalaryAccordion = (props: any) => {
-    const {title, totalValue, primaryColor, salary, data1, data2} = props;
+    const { title, totalValue, primaryColor, salary, data1, data2 } = props;
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -139,17 +153,19 @@ const ACC010201 = () => {
           marginVertical: 8,
           borderRadius: 8,
           overflow: 'hidden',
-        }}>
+        }}
+      >
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => setIsOpen(prev => !prev)}
+          onPress={() => setIsOpen((prev) => !prev)}
           style={{
             padding: 8,
             paddingHorizontal: 16,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-          }}>
+          }}
+        >
           <SubTitle
             label={title}
             value={Util.formatNumber(totalValue)}
@@ -159,7 +175,7 @@ const ACC010201 = () => {
             name={isOpen ? 'chevron-up-outline' : 'chevron-down-outline'}
             width={24}
             height={24}
-            fill="#666"
+            fill='#666'
           />
         </TouchableOpacity>
 
@@ -170,8 +186,9 @@ const ACC010201 = () => {
               paddingHorizontal: 24,
               borderTopWidth: 1,
               borderTopColor: '#F0F0F0',
-            }}>
-            {data1?.map(e => (
+            }}
+          >
+            {data1?.map((e) => (
               <FormOfContents
                 key={e.value}
                 label={e.label}
@@ -182,7 +199,7 @@ const ACC010201 = () => {
             {data2 ? (
               <>
                 <Divider
-                  style={{marginVertical: 8, backgroundColor: 'lightgray'}}
+                  style={{ marginVertical: 8, backgroundColor: 'lightgray' }}
                 />
                 {data2?.map((e: object) => (
                   <FormOfContents
@@ -353,7 +370,7 @@ const ACC010201 = () => {
   ];
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <MovingMonth />
       <View
         style={[
@@ -365,21 +382,22 @@ const ACC010201 = () => {
             marginHorizontal: 16,
             marginBottom: 16,
           },
-        ]}>
+        ]}
+      >
         <View style={LVStyles.row}>
           <Text style={styles.text}>회사</Text>
           <Text style={styles.text}>
             {!Util.isEmpty(salary) ? salary?.COMPANY_CODE_NAME : '-'}
           </Text>
         </View>
-        <View style={[LVStyles.row, {marginTop: 8}]}>
+        <View style={[LVStyles.row, { marginTop: 8 }]}>
           <Text style={styles.text}>성명</Text>
           <Text style={styles.text}>
             {!Util.isEmpty(salary) ? salary?.EMP_NAME : '-'}
           </Text>
         </View>
         {/* @@ 임의로 10일로 데이터 고정 */}
-        <View style={[LVStyles.row, {marginTop: 8}]}>
+        <View style={[LVStyles.row, { marginTop: 8 }]}>
           <Text style={styles.text}>급여지급(예정)일</Text>
           <Text style={styles.text}>
             {!Util.isEmpty(salary)
@@ -387,13 +405,13 @@ const ACC010201 = () => {
               : '-'}
           </Text>
         </View>
-        <View style={[LVStyles.row, {marginTop: 8}]}>
+        <View style={[LVStyles.row, { marginTop: 8 }]}>
           <Text style={styles.text}>지급합계액</Text>
           <Text style={[styles.text]}>
             {!Util.isEmpty(salary) ? Util.formatNumber(salary?.TOTAL_SAL) : '-'}
           </Text>
         </View>
-        <View style={[LVStyles.row, {marginTop: 8}]}>
+        <View style={[LVStyles.row, { marginTop: 8 }]}>
           <Text style={styles.text}>공제합계액</Text>
           <Text style={[styles.text]}>
             {!Util.isEmpty(salary)
@@ -401,7 +419,7 @@ const ACC010201 = () => {
               : '-'}
           </Text>
         </View>
-        <View style={[LVStyles.row, {marginTop: 8}]}>
+        <View style={[LVStyles.row, { marginTop: 8 }]}>
           <Text style={styles.text}>차인지급액</Text>
           <Text style={[styles.text]}>
             {!Util.isEmpty(salary) ? Util.formatNumber(salary?.SALARY) : '-'}
@@ -415,16 +433,18 @@ const ACC010201 = () => {
           borderTopWidth: 1,
           backgroundColor: '#6A727B17',
           borderColor: '#D5DCE5',
-        }}>
+        }}
+      >
         {!Util.isEmpty(salary) && (
           <ScrollView
-            style={{paddingHorizontal: 12}}
+            style={{ paddingHorizontal: 12 }}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
               />
-            }>
+            }
+          >
             <SalaryAccordion
               title={'지급 내역'}
               totalValue={salary?.TOTAL_SAL}
@@ -459,32 +479,35 @@ const ACC010201 = () => {
 export default ACC010201;
 
 const FormOfContents = (props: any) => {
-  const {label, value, unit, subContent} = props;
+  const { label, value, unit, subContent } = props;
   return (
-    <View style={{paddingVertical: 8}}>
+    <View style={{ paddingVertical: 8 }}>
       <View style={[LVStyles.row]}>
         <Text
           style={{
             color: '#6A727B',
             fontWeight: '600',
-          }}>
+          }}
+        >
           {label}
         </Text>
         <Text
           style={{
             fontWeight: '600',
-          }}>
+          }}
+        >
           {Util.formatNumber(value)}
           {unit || `원`}
         </Text>
       </View>
-      {subContent?.map(e => (
-        <View style={[LVStyles.row, {paddingLeft: 16, paddingTop: 8}]}>
+      {subContent?.map((e) => (
+        <View style={[LVStyles.row, { paddingLeft: 16, paddingTop: 8 }]}>
           <Text
             style={{
               color: '#7A828B',
               fontWeight: '500',
-            }}>
+            }}
+          >
             {e}
           </Text>
         </View>

@@ -1,49 +1,47 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {View, Image, StyleSheet, Platform} from 'react-native';
 import {
-  SafeAreaView,
-  ScrollView,
-  RefreshControl,
-  withPreventDoubleClick,
-  LVModal,
-  LVButton,
-  LVFlag,
-  LVRadioButton,
-  LVTwoLine,
-  LVDatePicker,
-  LVSection,
-  LVSelectBox,
-  LVLoadingIndicator,
-  LVConfirmIndicator,
-  Text,
-  LVChip,
   LVApprLine,
+  LVButton,
+  LVChip,
+  LVConfirmIndicator,
   LVFormOfContents,
-} from '~/component'; // 공통컴포넌트
-import LVStyles from '~/component/LVStyles';
-import * as icon from '~/assets/images';
+  LVLoadingIndicator,
+  LVModal,
+  RefreshControl,
+  ScrollView,
+  Text,
+} from '@/src/components'; // 공통컴포넌트
+import LVStyles from '@/src/components/LVStyles';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import React, { useEffect, useState } from 'react';
 
+import { StyleSheet, View } from 'react-native';
+
+import { Util } from '@/src/lib';
+import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import {Util} from '~/lib';
-import {Icon, Input} from '@ui-kitten/components';
 
 import * as Action from './Action'; // API통신
 
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-
-import {StackActions, useNavigation} from '@react-navigation/native';
-import {useRoute, RouteProp} from '@react-navigation/native';
-import {localeData} from 'moment';
+import {
+  RouteProp,
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
 const LEA010301 = () => {
   const movingScreen = useNavigation();
   const route = useRoute<DetailScreenRouteProp>();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
-  const [empInfo, setEmpInfo] = useRecoilState(AppStore.empInfoState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = React.useState(true);
   const [confirming, setConfirming] = useState(false);
@@ -161,7 +159,7 @@ const LEA010301 = () => {
       },
     };
 
-    detail = detail.map(e => ({
+    detail = detail.map((e) => ({
       ...e,
       ...(customVaType[e.VA_TYPE] || {}),
     }));
@@ -292,30 +290,33 @@ const LEA010301 = () => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }>
+        }
+      >
         <View
           style={{
             borderColor: '#D5DCE5',
             borderBottomWidth: 1,
             borderTopWidth: 1,
             padding: 16,
-          }}>
+          }}
+        >
           <LVFormOfContents
             title={'문서번호'}
             children={
-              <View style={[LVStyles.row, {flex: 1, marginRight: 16}]}>
+              <View style={[LVStyles.row, { flex: 1, marginRight: 16 }]}>
                 <Text
                   style={{
                     fontWeight: '500',
-                  }}>
+                  }}
+                >
                   {dt?.JOB_NO}
                 </Text>
                 <LVChip
-                  category="apprStatus"
+                  category='apprStatus'
                   title={dt?.AP_STATUS_NAME}
                   code={dt?.AP_STATUS}
                 />
@@ -330,16 +331,18 @@ const LEA010301 = () => {
                   flex: 1,
                   flexDirection: 'row',
                   alignItems: 'center',
-                }}>
+                }}
+              >
                 <View>
                   {dt?.DETAIL?.map((e, i) => (
                     <View
                       style={{
                         height: 48,
                         justifyContent: 'center',
-                      }}>
+                      }}
+                    >
                       <LVChip
-                        category="info"
+                        category='info'
                         leftText={`${Util.convertDateTime(e?.VA_DATE)} (${dayjs(
                           e?.VA_DATE,
                           'YYYYMMDD',
@@ -359,13 +362,15 @@ const LEA010301 = () => {
                       height: 48,
                       paddingLeft: 16,
                       justifyContent: 'center',
-                    }}>
+                    }}
+                  >
                     <Text
                       style={{
                         color: '#39CCCC',
                         fontWeight: '700',
                         fontSize: 14,
-                      }}>
+                      }}
+                    >
                       {dt?.VA_PERIOD ? `총 ${dt?.VA_PERIOD} 일` : `-`}
                     </Text>
                   </View>
@@ -379,7 +384,8 @@ const LEA010301 = () => {
               <Text
                 style={{
                   fontWeight: '700',
-                }}>
+                }}
+              >
                 {dt?.REASON}
               </Text>
             }
@@ -404,9 +410,10 @@ const LEA010301 = () => {
                   <View
                     style={[
                       LVStyles.row,
-                      {justifyContent: 'flex-start', flexWrap: 'wrap'},
-                    ]}>
-                    <LVApprLine data={dt?.APPR_LINE} mainColor="#ABBACD" />
+                      { justifyContent: 'flex-start', flexWrap: 'wrap' },
+                    ]}
+                  >
+                    <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
                   </View>
                 ) : (
                   <Text>내 결재선관리에서 결재선을 생성하세요.</Text>
@@ -427,7 +434,8 @@ const LEA010301 = () => {
               width: '100%',
               bottom: 0,
             },
-          ]}>
+          ]}
+        >
           <LVButton
             title={'회수'}
             onPress={handleRecall}
@@ -441,17 +449,17 @@ const LEA010301 = () => {
               color: '#373747',
             }}
           />
-          <View style={{width: 8}} />
+          <View style={{ width: 8 }} />
           <LVButton
             title={'삭제'}
             onPress={handleCancel}
-            buttonStyle={{flex: 1, backgroundColor: '#939DAA'}}
+            buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
           />
-          <View style={{width: 8}} />
+          <View style={{ width: 8 }} />
           <LVButton
             title={'상신'}
             onPress={handleReApprove}
-            buttonStyle={{flex: 1, backgroundColor: '#27A7FF'}}
+            buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
           />
         </View>
       )}
@@ -466,11 +474,12 @@ const LEA010301 = () => {
               width: '100%',
               bottom: 0,
             },
-          ]}>
+          ]}
+        >
           <LVButton
             title={'변경'}
             onPress={handleAgain}
-            buttonStyle={{flex: 1, backgroundColor: '#27A7FF'}}
+            buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
           />
         </View>
       )}
@@ -485,7 +494,8 @@ const LEA010301 = () => {
               width: '100%',
               bottom: 0,
             },
-          ]}>
+          ]}
+        >
           <LVButton
             title={'회수'}
             onPress={handleRecallForApprover}
@@ -499,19 +509,19 @@ const LEA010301 = () => {
               color: '#373747',
             }}
           />
-          <View style={{width: 8}} />
+          <View style={{ width: 8 }} />
           <LVButton
             title={'반려'}
             onPress={() => {
               setIsVisibleModal(true);
             }}
-            buttonStyle={{flex: 1, backgroundColor: '#939DAA'}}
+            buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
           />
-          <View style={{width: 8}} />
+          <View style={{ width: 8 }} />
           <LVButton
             title={'결재'}
             onPress={handleApproveForApprover}
-            buttonStyle={{flex: 1, backgroundColor: '#27A7FF'}}
+            buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
           />
         </View>
       )}
@@ -538,18 +548,18 @@ const LEA010301 = () => {
 export default LEA010301;
 
 const ContentsOfRefusal = (props: any) => {
-  const {refusalReason, setRefusalReason} = props;
+  const { refusalReason, setRefusalReason } = props;
   return (
     <View>
       <Input
-        placeholder="반려내용을 입력하세요"
+        placeholder='반려내용을 입력하세요'
         value={refusalReason}
-        onChangeText={p => {
+        onChangeText={(p) => {
           setRefusalReason(p);
         }}
-        size="large"
-        style={{backgroundColor: '#FFF'}}
-        textStyle={{color: '#373747', minHeight: 100}}
+        size='large'
+        style={{ backgroundColor: '#FFF' }}
+        textStyle={{ color: '#373747', minHeight: 100 }}
         multiline={true}
       />
     </View>

@@ -1,53 +1,46 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useImperativeHandle,
-  forwardRef,
-} from 'react';
-import {View, Image, StyleSheet, Platform} from 'react-native';
+import * as icon from '@/src/assets/images';
 import {
-  SafeAreaView,
-  ScrollView,
-  RefreshControl,
-  withPreventDoubleClick,
-  LVModal,
-  LVButton,
-  LVFlag,
-  LVRadioButton,
-  LVTwoLine,
-  LVDatePicker,
-  LVSection,
-  LVSelectBox,
-  LVLoadingIndicator,
-  Text,
-  LVChip,
   LVApprLine,
-  DateTimeField,
-  LVDateTimePicker,
-  LVFormOfContents,
+  LVChip,
+  LVLoadingIndicator,
+  LVModal,
   LVNoData,
-} from '~/component'; // 공통컴포넌트
-import LVStyles from '~/component/LVStyles';
-import * as icon from '~/assets/images';
+  RefreshControl,
+  ScrollView,
+  Text,
+} from '@/src/components'; // 공통컴포넌트
+import LVStyles from '@/src/components/LVStyles';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
-import dayjs from 'dayjs';
+import { Image, StyleSheet, View } from 'react-native';
+
+import { Util } from '@/src/lib';
 import 'dayjs/locale/ko';
-import {Util} from '~/lib';
 
 import * as Action from './Action'; // API통신
 
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 
-import {useNavigation, useIsFocused} from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 const PAL010101 = () => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
-  const [empInfo, setEmpInfo] = useRecoilState(AppStore.empInfoState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
@@ -154,14 +147,16 @@ const PAL010101 = () => {
                 setSelectedAppr(e);
                 // @@ 화면 만들기
                 // movingScreen.navigate('PAL010301');
-              }}>
+              }}
+            >
               <View
                 style={{
                   flex: 1,
-                }}>
+                }}
+              >
                 <View style={LVStyles.row}>
                   <View style={styles.apprLineView}>
-                    <LVChip category="apprLineFlag" title="일반" />
+                    <LVChip category='apprLineFlag' title='일반' />
                     <Text style={styles.apprLineNameText}>{e?.AP_NAME}</Text>
                   </View>
                   <TouchableOpacity
@@ -169,14 +164,15 @@ const PAL010101 = () => {
                       setSelectedAppr(e);
                       setIsVisibleDelete(true);
                     }}
-                    hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}>
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
                     <Image
-                      style={{...LVStyles.iconS, tintColor: '#373747'}}
+                      style={{ ...LVStyles.iconS, tintColor: '#373747' }}
                       source={icon.ico_delete}
                     />
                   </TouchableOpacity>
                 </View>
-                <View style={{height: 8}} />
+                <View style={{ height: 8 }} />
                 <LVApprLine
                   data={e?.DETAILS}
                   mainColor={'#6A727B'}
@@ -191,17 +187,19 @@ const PAL010101 = () => {
   });
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1}}
+        contentContainerStyle={{ flexGrow: 1 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }>
+        }
+      >
         {!Util.isEmpty(myApprList) && (
           <View
             style={{
               marginHorizontal: 24,
-            }}>
+            }}
+          >
             <ContentsOfApproval ref={approvalLineRef} />
           </View>
         )}
@@ -213,7 +211,8 @@ const PAL010101 = () => {
           style={styles.addIconButton}
           onPress={() => {
             movingScreen.navigate('PAL010201');
-          }}>
+          }}
+        >
           <Image source={icon.ico_add} style={LVStyles.iconS} />
         </TouchableOpacity>
       </View>
@@ -239,14 +238,16 @@ const ContentsOfDelete = (props: any) => {
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 16,
-      }}>
+      }}
+    >
       <Text
         style={{
           marginTop: 8,
           fontSize: 16,
           fontWeight: '600',
           color: '#373747',
-        }}>
+        }}
+      >
         이 결재선을 정말 삭제하시겠어요?
       </Text>
     </View>

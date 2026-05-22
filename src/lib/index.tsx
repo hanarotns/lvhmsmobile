@@ -6,7 +6,7 @@ import _ from 'lodash';
 import moment from 'moment';
 
 import Download from './download';
-// import env from './env';
+import env from './env';
 import Fetch from './fetch';
 // import Futch from './futch';
 import Util from './util';
@@ -32,7 +32,7 @@ export {
   //   AsyncStorage,
   //   connectPushNotificationListeners,
   Download,
-  //   env,
+  env,
   Fetch,
   //   Futch,
   //   initPushNotification,

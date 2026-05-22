@@ -1,23 +1,28 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, ScrollView, Image} from 'react-native';
+import * as icon from '@/src/assets/images';
 import {
+  Layout,
+  LVButton,
+  LVChip,
+  LVLoadingIndicator,
+  LVNoData,
   SafeAreaView,
   Text,
-  LVButton,
-  LVLoadingIndicator,
-  Layout,
-  LVNoData,
-  LVChip,
-} from 'component';
-import LVStyles from '~/component/LVStyles';
-import LVColors from '~/component/LVColors';
-import {Select, SelectItem, IndexPath} from '@ui-kitten/components';
-import * as icon from '~/assets/images';
-import {Icon, Input} from '@ui-kitten/components';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
+} from '@/src/components';
+import LVColors from '@/src/components/LVColors';
+import LVStyles from '@/src/components/LVStyles';
+import { Util } from '@/src/lib';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { Icon, IndexPath, Select, SelectItem } from '@ui-kitten/components';
+import React, { useEffect, useState } from 'react';
+
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import * as Action from './Action'; // API통신
-import {Util} from '~/lib';
 
 const WRK010101 = () => {
   const isFocused = useIsFocused();
@@ -26,10 +31,10 @@ const WRK010101 = () => {
   const [loading, setLoading] = useState(true);
 
   const [statusList, setStatusList] = useState([
-    {code: 'ALL', name: '전체'},
-    {code: 'R', name: '대기'},
-    {code: 'Y', name: '승인'},
-    {code: 'N', name: '반려'},
+    { code: 'ALL', name: '전체' },
+    { code: 'R', name: '대기' },
+    { code: 'Y', name: '승인' },
+    { code: 'N', name: '반려' },
   ]);
 
   const [selectedStatusIndex, setSelectedStatusIndex] = useState(
@@ -60,7 +65,7 @@ const WRK010101 = () => {
     }
   };
 
-  const onSelectStatus = index => {
+  const onSelectStatus = (index) => {
     setSelectedStatusIndex(index);
     setSelectedStatus(statusList[index.row].name);
   };
@@ -85,7 +90,8 @@ const WRK010101 = () => {
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: 'transparent',
-      }}>
+      }}
+    >
       <Image
         source={icon.ico_logo_htns}
         style={{
@@ -98,7 +104,8 @@ const WRK010101 = () => {
       <TouchableOpacity
         onPress={() => {
           movingScreen.navigate('ETC010101');
-        }}>
+        }}
+      >
         <Image
           source={icon.ico_account}
           style={{
@@ -136,8 +143,9 @@ const WRK010101 = () => {
                 value={selectedStatus}
                 onSelect={onSelectStatus}
                 style={styles.select}
-                placeholder="상태 선택">
-                {statusList.map(item => (
+                placeholder='상태 선택'
+              >
+                {statusList.map((item) => (
                   <SelectItem key={item.code} title={item.name} />
                 ))}
               </Select>
@@ -154,7 +162,8 @@ const WRK010101 = () => {
               borderRadius: 4,
               justifyContent: 'center',
               alignItems: 'center',
-            }}>
+            }}
+          >
             <Icon
               name={'search-outline'}
               fill={'#27A7FF'}
@@ -171,11 +180,11 @@ const WRK010101 = () => {
       <View style={styles.card}>
         <View style={styles.infoRow}>
           <LVChip
-            category="confirmStatus"
+            category='confirmStatus'
             title={p?.CONFIRM_STATUS_NM}
             code={p?.CONFIRM_STATUS}
           />
-          <View style={{width: 12}} />
+          <View style={{ width: 12 }} />
           <View style={styles.infoCol}>
             <Text style={styles.infoTitleText}>{p?.POST_NAME}</Text>
           </View>
@@ -201,19 +210,20 @@ const WRK010101 = () => {
           </View>
         </View>
         <View
-          style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+          style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}
+        >
           <LVButton
-            title="수정하기"
+            title='수정하기'
             onPress={onPressEdit}
             buttonStyle={styles.button}
-            textStyle={{color: '#27A7FF'}}
+            textStyle={{ color: '#27A7FF' }}
           />
-          <View style={{width: 12}} />
+          <View style={{ width: 12 }} />
           <LVButton
-            title="삭제하기"
+            title='삭제하기'
             onPress={onPressDelete}
-            buttonStyle={[styles.button, {borderColor: 'gray'}]}
-            textStyle={{color: 'gray'}}
+            buttonStyle={[styles.button, { borderColor: 'gray' }]}
+            textStyle={{ color: 'gray' }}
           />
         </View>
       </View>
@@ -226,17 +236,18 @@ const WRK010101 = () => {
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+        >
           {renderHeader()}
-          <View style={{height: 20}} />
+          <View style={{ height: 20 }} />
           {renderDesc()}
           <Text style={styles.blockTitle}>지원내역</Text>
           {isSearched && !Util.isEmpty(applyList) ? (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               {applyList?.map((e, i) => renderApplyForm(e, i))}
             </View>
           ) : (
-            <View style={{height: '100%'}}>
+            <View style={{ height: '100%' }}>
               <LVNoData />
             </View>
           )}
@@ -244,7 +255,7 @@ const WRK010101 = () => {
 
         <View style={[LVStyles.row, styles.bottomButton]}>
           <LVButton
-            title="입사지원으로 이동"
+            title='입사지원으로 이동'
             onPress={onPressApply}
             buttonStyle={styles.fullApplyButton}
             textStyle={styles.fullApplyButtonText}

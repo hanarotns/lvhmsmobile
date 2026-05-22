@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity, View, Image} from 'react-native';
-import {moment, Util} from '~/lib';
-import {Layout, Text, useNavigation} from 'component';
+import { Layout, Text, useNavigation } from '@/src/components';
+import { Util } from '@/src/lib';
+import React, { useState } from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
-import * as icon from '~/assets/images';
-import {format} from 'date-fns';
-import ko from 'date-fns/esm/locale/ko/index.js';
+import * as icon from '@/src/assets/images';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { format } from 'date-fns';
+import ko from 'date-fns/esm/locale/ko/index.js';
 
 const now = new Date();
 
@@ -18,7 +18,7 @@ const time = {
   CUR_DAY: now.getDate(),
 };
 
-const DateTimeField = props => {
+const DateTimeField = (props) => {
   const navigation = useNavigation();
   // dateTime Picker
   const [date, setDate] = useState(
@@ -75,7 +75,7 @@ const DateTimeField = props => {
         console.log('beforeTimeValue', selectedDate);
         props.onChangeValue(
           'time',
-          format(new Date(selectedDate), 'HHmm', {locale: ko}),
+          format(new Date(selectedDate), 'HHmm', { locale: ko }),
         );
 
         if (!Util.isEmpty(showPreData) && showPreData === 'Y') {
@@ -89,7 +89,7 @@ const DateTimeField = props => {
     }
   };
 
-  const showMode = currentMode => {
+  const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
   };
@@ -138,7 +138,7 @@ const DateTimeField = props => {
         // );
         return (
           <Text style={styles.buttonTextStyle}>
-            {format(new Date(date), 'PPP', {locale: ko})}{' '}
+            {format(new Date(date), 'PPP', { locale: ko })}{' '}
           </Text>
         );
       } else if (preData === 'exEnd') {
@@ -147,7 +147,7 @@ const DateTimeField = props => {
         // );
         return (
           <Text style={styles.buttonTextStyle}>
-            {format(new Date(date), 'PPP', {locale: ko})}{' '}
+            {format(new Date(date), 'PPP', { locale: ko })}{' '}
           </Text>
         );
       }
@@ -158,7 +158,7 @@ const DateTimeField = props => {
     ) {
       return (
         <Text style={styles.buttonTextStyle}>
-          {format(new Date(date), 'PPP', {locale: ko})}{' '}
+          {format(new Date(date), 'PPP', { locale: ko })}{' '}
         </Text>
       );
     } else {
@@ -168,10 +168,11 @@ const DateTimeField = props => {
             flexDirection: 'row',
             alignItems: 'center',
             padding: 4,
-          }}>
+          }}
+        >
           <Image source={icon.ico_calendar02} style={[LVStyles.iconS]} />
           <Text style={styles.buttonTextStyle}>
-            {format(new Date(date), 'P', {locale: ko})}{' '}
+            {format(new Date(date), 'P', { locale: ko })}{' '}
           </Text>
         </View>
       );
@@ -220,21 +221,21 @@ const DateTimeField = props => {
         // return (
         //   <Text style={styles.buttonTextStyle}>{formatStartTime}</Text>
         // );
-        return <Text>{format(new Date(date), 'p', {locale: ko})}</Text>;
+        return <Text>{format(new Date(date), 'p', { locale: ko })}</Text>;
       } else if (preData === 'exEnd') {
         // return (
         //   <Text style={styles.buttonTextStyle}>{formatEndTime}</Text>
         // );
-        return <Text>{format(new Date(date), 'p', {locale: ko})}</Text>;
+        return <Text>{format(new Date(date), 'p', { locale: ko })}</Text>;
       }
     } else if (
       showPreData === 'P' &&
       !Util.isEmpty(changeDataType) &&
       changeDataType === 'Time'
     ) {
-      return <Text>{format(new Date(date), 'p', {locale: ko})}</Text>;
+      return <Text>{format(new Date(date), 'p', { locale: ko })}</Text>;
     } else {
-      return <Text>{format(new Date(date), 'p', {locale: ko})}</Text>;
+      return <Text>{format(new Date(date), 'p', { locale: ko })}</Text>;
     }
   };
 
@@ -249,7 +250,7 @@ const DateTimeField = props => {
       </View>
       {show && (
         <DateTimePicker
-          testID="dateTimePicker"
+          testID='dateTimePicker'
           value={date}
           mode={mode}
           is24Hour

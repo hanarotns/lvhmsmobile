@@ -1,4 +1,4 @@
-import {Util, Fetch} from '~/lib';
+import { Fetch, Util } from '@/src/lib';
 
 const getInfoM = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'getInfoM', {
@@ -76,8 +76,8 @@ const save = async (body1: object, body2: object, body3: object) => {
   const result = await Fetch.request('PORU010302SVC', 'save', {
     body: JSON.stringify({
       PORU010302F236: body1, // 휴가원HD
-      PORU010302G35: {data: body3}, // 휴가원DT
-      PORU010302G33: {data: body2}, // 결재라인
+      PORU010302G35: { data: body3 }, // 휴가원DT
+      PORU010302G33: { data: body2 }, // 결재라인
     }),
   });
   if (result.TYPE === -1) {
@@ -90,8 +90,8 @@ const saveApproval = async (body1: object, body2: object, body3: object) => {
   const result = await Fetch.request('PORU010302SVC', 'saveApproval', {
     body: JSON.stringify({
       PORU010302F236: body1, // 휴가원HD
-      PORU010302G35: {data: body3}, // 휴가원DT
-      PORU010302G33: {data: body2}, // 결재라인
+      PORU010302G35: { data: body3 }, // 휴가원DT
+      PORU010302G33: { data: body2 }, // 결재라인
     }),
   });
   if (result.TYPE === -1) {
@@ -103,7 +103,7 @@ const saveApproval = async (body1: object, body2: object, body3: object) => {
 const deleteMobile = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'delete', {
     body: JSON.stringify({
-      PORU010302F236: {data: body},
+      PORU010302F236: { data: body },
     }),
   });
   if (result.TYPE === -1) {
@@ -137,15 +137,15 @@ const collect = async (body: object) => {
 };
 
 export {
-  getInfoM,
-  getPTHR_DGMD,
-  getListM,
-  getDetailM,
-  getDt,
-  getApprLine,
-  save,
-  saveApproval,
+  collect,
   deleteMobile,
   deleteRow,
-  collect,
+  getApprLine,
+  getDetailM,
+  getDt,
+  getInfoM,
+  getListM,
+  getPTHR_DGMD,
+  save,
+  saveApproval,
 };

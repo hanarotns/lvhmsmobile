@@ -1,18 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
 import {
-  Text,
-  SafeAreaView,
+  KeyboardAwareScrollView,
   LVButton,
   LVLoadingIndicator,
+  SafeAreaView,
+  Text,
   TextField,
-  KeyboardAwareScrollView,
-} from 'component';
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {Util} from '~/lib';
-import LVStyles from '~/component/LVStyles';
-import {useIsFocused} from '@react-navigation/native';
+} from '@/src/components';
+import LVStyles from '@/src/components/LVStyles';
+import { Util } from '@/src/lib';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import { useIsFocused } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+
+import { StyleSheet, View } from 'react-native';
 import * as Action from './Action';
 
 type MemberInfo = {
@@ -31,9 +33,14 @@ const idRegex = /^[a-z][a-z0-9]{4,19}$/;
 const phoneRegex = /^01[0-9]\d{7,8}$/;
 const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,16}$/;
 
-const SGN030101 = ({navigation}) => {
+const SGN030101 = ({ navigation }) => {
   const isFocused = useIsFocused();
-  const [, setSession] = useRecoilState(AppStore.sessionState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
   const [visiblePwd, setVisiblePwd] = useState(false);
@@ -184,15 +191,15 @@ const SGN030101 = ({navigation}) => {
       setPhoneAuthMessage('');
     }
 
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
       [key]: true,
     }));
 
     setMemberInfo(nextMemberInfo);
 
-    setErrors(prev => {
-      const nextErrors = {...prev};
+    setErrors((prev) => {
+      const nextErrors = { ...prev };
 
       if (touched[key]) {
         nextErrors[key] = validateField(key, nextValue, nextMemberInfo);
@@ -213,12 +220,12 @@ const SGN030101 = ({navigation}) => {
   };
 
   const handleBlurField = (key: keyof MemberInfo) => {
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
       [key]: true,
     }));
 
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
       [key]: validateField(key, memberInfo[key]),
     }));
@@ -230,7 +237,7 @@ const SGN030101 = ({navigation}) => {
       return;
     }
 
-    setTouched(prev => ({
+    setTouched((prev) => ({
       ...prev,
       phoneNumber: true,
     }));
@@ -317,33 +324,33 @@ const SGN030101 = ({navigation}) => {
 
   const getLabelMessage = (
     key: keyof MemberInfo,
-  ): {text: string; type: 'error' | 'success' | ''} => {
+  ): { text: string; type: 'error' | 'success' | '' } => {
     if (!touched[key]) {
-      return {text: '', type: ''};
+      return { text: '', type: '' };
     }
 
     if (errors[key]) {
-      return {text: errors[key] || '', type: 'error'};
+      return { text: errors[key] || '', type: 'error' };
     }
 
     switch (key) {
       case 'phoneNumber':
         if (isPhoneAuthVerified) {
-          return {text: '휴대폰 인증 완료', type: 'success'};
+          return { text: '휴대폰 인증 완료', type: 'success' };
         }
         if (memberInfo.phoneNumber && phoneRegex.test(memberInfo.phoneNumber)) {
-          return {text: '휴대폰 인증이 필요합니다.', type: 'error'};
+          return { text: '휴대폰 인증이 필요합니다.', type: 'error' };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       case 'authCode':
         if (isPhoneAuthVerified) {
-          return {text: '확인되었습니다.', type: 'success'};
+          return { text: '확인되었습니다.', type: 'success' };
         }
         if (memberInfo.authCode.length === 6) {
-          return {text: '확인 버튼을 눌러주세요.', type: 'success'};
+          return { text: '확인 버튼을 눌러주세요.', type: 'success' };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       case 'pw':
         if (memberInfo.pw && pwRegex.test(memberInfo.pw)) {
@@ -352,16 +359,16 @@ const SGN030101 = ({navigation}) => {
             type: 'success',
           };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       case 'pwChk':
         if (memberInfo.pwChk && memberInfo.pw === memberInfo.pwChk) {
-          return {text: '새 비밀번호가 일치합니다.', type: 'success'};
+          return { text: '새 비밀번호가 일치합니다.', type: 'success' };
         }
-        return {text: '', type: ''};
+        return { text: '', type: '' };
 
       default:
-        return {text: '', type: ''};
+        return { text: '', type: '' };
     }
   };
 
@@ -379,7 +386,8 @@ const SGN030101 = ({navigation}) => {
           message.type === 'error'
             ? styles.labelErrorText
             : styles.labelSuccessText,
-        ]}>
+        ]}
+      >
         {message.text}
       </Text>
     );
@@ -417,9 +425,9 @@ const SGN030101 = ({navigation}) => {
                 {renderLabelMessage('id')}
               </View>
               <TextField
-                placeholderTextColor="lightgray"
+                placeholderTextColor='lightgray'
                 style={styles.textFieldSt}
-                autoCapitalize="none"
+                autoCapitalize='none'
                 onChangeValue={(value: string) => updateMemberInfo('id', value)}
                 onBlur={() => handleBlurField('id')}
                 value={memberInfo.id}
@@ -430,9 +438,9 @@ const SGN030101 = ({navigation}) => {
                 {renderLabelMessage('name')}
               </View>
               <TextField
-                placeholderTextColor="lightgray"
+                placeholderTextColor='lightgray'
                 style={styles.textFieldSt}
-                autoCapitalize="none"
+                autoCapitalize='none'
                 onChangeValue={(value: string) =>
                   updateMemberInfo('name', value)
                 }
@@ -446,12 +454,12 @@ const SGN030101 = ({navigation}) => {
               </View>
               <View style={[LVStyles.row, styles.inlineRow]}>
                 <TextField
-                  keyboardType="numeric"
-                  placeholder="ex. 01012345678"
+                  keyboardType='numeric'
+                  placeholder='ex. 01012345678'
                   maxLength={11}
-                  placeholderTextColor="lightgray"
+                  placeholderTextColor='lightgray'
                   style={[styles.textFieldSt, styles.inlineInput]}
-                  autoCapitalize="none"
+                  autoCapitalize='none'
                   onChangeValue={(value: string) =>
                     updateMemberInfo('phoneNumber', value)
                   }
@@ -482,12 +490,12 @@ const SGN030101 = ({navigation}) => {
                   <View style={styles.authBox}>
                     <View style={[LVStyles.row, styles.inlineRow]}>
                       <TextField
-                        keyboardType="numeric"
-                        placeholder="인증번호 6자리 입력"
+                        keyboardType='numeric'
+                        placeholder='인증번호 6자리 입력'
                         maxLength={6}
-                        placeholderTextColor="lightgray"
+                        placeholderTextColor='lightgray'
                         style={[styles.textFieldSt, styles.inlineInput]}
-                        autoCapitalize="none"
+                        autoCapitalize='none'
                         onChangeValue={(value: string) =>
                           updateMemberInfo('authCode', value)
                         }
@@ -495,7 +503,7 @@ const SGN030101 = ({navigation}) => {
                         value={memberInfo.authCode}
                       />
                       <LVButton
-                        title="확인"
+                        title='확인'
                         onPress={
                           phoneAuthCode.length === 6
                             ? confirmPhoneAuthCode
@@ -517,7 +525,8 @@ const SGN030101 = ({navigation}) => {
                         style={[
                           styles.authInfoText,
                           isPhoneAuthVerified && styles.authSuccessText,
-                        ]}>
+                        ]}
+                      >
                         {phoneAuthMessage ||
                           '인증번호를 입력한 뒤 확인 버튼을 눌러주세요.'}
                       </Text>
@@ -534,11 +543,11 @@ const SGN030101 = ({navigation}) => {
                   {renderLabelMessage('pw')}
                 </View>
                 <TextField
-                  placeholder="대소문자, 특수문자, 숫자 포함하여 8~16자"
+                  placeholder='대소문자, 특수문자, 숫자 포함하여 8~16자'
                   maxLength={16}
-                  placeholderTextColor="lightgray"
+                  placeholderTextColor='lightgray'
                   style={styles.textFieldSt}
-                  autoCapitalize="none"
+                  autoCapitalize='none'
                   onChangeValue={(value: string) =>
                     updateMemberInfo('pw', value)
                   }
@@ -552,11 +561,11 @@ const SGN030101 = ({navigation}) => {
                   {renderLabelMessage('pwChk')}
                 </View>
                 <TextField
-                  placeholder="새 비밀번호를 다시 입력하세요"
+                  placeholder='새 비밀번호를 다시 입력하세요'
                   maxLength={16}
-                  placeholderTextColor="lightgray"
+                  placeholderTextColor='lightgray'
                   style={styles.textFieldSt}
-                  autoCapitalize="none"
+                  autoCapitalize='none'
                   onChangeValue={(value: string) =>
                     updateMemberInfo('pwChk', value)
                   }
@@ -576,7 +585,7 @@ const SGN030101 = ({navigation}) => {
 
         <View style={[LVStyles.row, styles.bottomButton]}>
           <LVButton
-            title="비밀번호 재설정"
+            title='비밀번호 재설정'
             disabled={!isResetEnabled}
             onPress={handleResetPassword}
             buttonStyle={styles.submitButton}

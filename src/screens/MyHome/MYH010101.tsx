@@ -18,26 +18,30 @@ import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import React, { useEffect, useState } from 'react';
+
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as WLOAction from '../WorkLog/Action'; // API통신 (공통)
 import * as Action from './Action'; // API통신
 
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 
+import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 import * as Location from 'expo-location';
 import LaborNoticeScreen from './LaborNoticeScreen';
 
-const MYH010101 = () => {
+const MYH010101 = ({ navigation }) => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-  const sessionInfo = useSessionStore((state) => state.sessionInfo);
-  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const TopNavigationActionEx = withPreventDoubleClick(TopNavigationAction);
 
   const loginInfo = useLoginStore((state) => state.loginInfo);
-  const setEmpInfo = useLoginStore((state) => state.setLoginInfo);
-  const TopNavigationActionEx = withPreventDoubleClick(TopNavigationAction);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
@@ -202,7 +206,7 @@ const MYH010101 = () => {
 
   const saveM = async (checkType: string) => {
     const payload = {
-      EMP_ID: loginInfo?.EMP_ID,
+      EMP_ID: empInfo?.EMP_ID,
       WA_LOG_DATETIME: dayjs(new Date()).format('YYYYMMDDHHmmss'),
       WA_LOG_DATE: dayjs(new Date()).format('YYYYMMDD'),
       WA_LOG_TIME: dayjs(new Date()).format('HHmm'),
@@ -265,14 +269,14 @@ const MYH010101 = () => {
           }}
         >
           <Text style={styles.greetingText}>
-            {`${loginInfo?.EMP_NAME_LC}님\n안녕하세요.`}
+            {`${empInfo?.EMP_NAME_LC}님\n안녕하세요.`}
           </Text>
           <Image
             style={styles.profileImg}
             source={
-              loginInfo?.PICTURE_PATH
+              empInfo?.PICTURE_PATH
                 ? {
-                    uri: `http://lv1.htns.com/api/apicall/getDownload/${loginInfo?.PICTURE_PATH}`,
+                    uri: `http://lv1.htns.com/api/apicall/getDownload/${empInfo?.PICTURE_PATH}`,
                     headers: {
                       'X-CSRF-TOKEN': global.gToken,
                       Cookie: global.gCookie,
@@ -399,7 +403,9 @@ const MYH010101 = () => {
             img={icon.img_annualleave}
             imgStyle={{ width: 30, height: 86 }}
             onPress={() => {
-              movingScreen.navigate('LEA010101');
+              navigation.navigate('AnnualLeave', {
+                screen: 'LEA010101',
+              });
             }}
             touchable
           />
@@ -409,7 +415,9 @@ const MYH010101 = () => {
             img={icon.img_overtime}
             imgStyle={{ width: 29, height: 40 }}
             onPress={() => {
-              movingScreen.navigate('OVT010101');
+              navigation.navigate('Overtime', {
+                screen: 'OVT010101',
+              });
             }}
             touchable
           />
@@ -424,7 +432,9 @@ const MYH010101 = () => {
             img={icon.img_approval}
             imgStyle={{ width: 96, height: 52 }}
             onPress={() => {
-              movingScreen.navigate('APR010101');
+              navigation.navigate('Approval', {
+                screen: 'APR010101',
+              });
             }}
             touchable
           />
@@ -434,7 +444,9 @@ const MYH010101 = () => {
             touchable={false}
             title={'캘린더'}
             onClick={() => {
-              movingScreen.navigate('WLO010101');
+              navigation.navigate('WorkLog', {
+                screen: 'WLO010101',
+              });
             }}
             cardStyle={{ minHeight: 272, backgroundColor: '#AADDFF' }}
             moreView={icon.ico_arrow_right}
@@ -527,7 +539,9 @@ const MYH010101 = () => {
             img={icon.img_pay}
             imgStyle={{ width: 68, height: 40 }}
             onPress={() => {
-              movingScreen.navigate('ACC010101');
+              navigation.navigate('Account', {
+                screen: 'ACC010101',
+              });
             }}
             touchable
           />
@@ -687,7 +701,9 @@ const MYH010101 = () => {
         />
         <TouchableOpacity
           onPress={() => {
-            movingScreen.navigate('ETC010101');
+            navigation.navigate('Etc', {
+              screen: 'ETC010101',
+            });
           }}
         >
           <Image

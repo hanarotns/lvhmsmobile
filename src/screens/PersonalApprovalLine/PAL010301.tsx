@@ -1,53 +1,24 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useImperativeHandle,
-  forwardRef,
-} from 'react';
-import {View, Image, StyleSheet, Platform} from 'react-native';
-import {
-  SafeAreaView,
-  ScrollView,
-  RefreshControl,
-  withPreventDoubleClick,
-  LVModal,
-  LVButton,
-  LVFlag,
-  LVRadioButton,
-  LVTwoLine,
-  LVDatePicker,
-  LVSection,
-  LVSelectBox,
-  LVLoadingIndicator,
-  Text,
-  LVChip,
-  LVApprLine,
-  DateTimeField,
-  LVDateTimePicker,
-  LVFormOfContents,
-} from '~/component'; // 공통컴포넌트
-import LVStyles from '~/component/LVStyles';
-import * as icon from '~/assets/images';
+import { RefreshControl, ScrollView, Text } from '@/src/components'; // 공통컴포넌트
 
-import dayjs from 'dayjs';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { StyleSheet, View } from 'react-native';
+
 import 'dayjs/locale/ko';
-import {Util} from '~/lib';
-import {Icon, Input} from '@ui-kitten/components';
-import * as Action from './Action'; // API통신
 
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useRoute, RouteProp} from '@react-navigation/native';
-
-import {useNavigation} from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import CheckBox from '~/component/CheckBox';
+import { useNavigation } from '@react-navigation/native';
 
 const PAL010301 = () => {
   const movingScreen = useNavigation();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
 
@@ -73,11 +44,12 @@ const PAL010301 = () => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }>
+        }
+      >
         <View>
           <Text>PAL010301</Text>
         </View>

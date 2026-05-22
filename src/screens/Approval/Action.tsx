@@ -1,4 +1,4 @@
-import {Util, Fetch} from '~/lib';
+import { Fetch, Util } from '@/src/lib';
 
 const getInfoM = async (body: object) => {
   const result = await Fetch.request('PORU010104SVC', 'getInfoM', {

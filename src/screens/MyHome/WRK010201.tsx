@@ -1,29 +1,26 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
 import {
-  SafeAreaView,
-  Text,
   LVButton,
-  LVLoadingIndicator,
-  LVDatePicker,
-  LVNoData,
   LVConfirmIndicator,
+  LVDatePicker,
+  LVLoadingIndicator,
   LVModal,
-} from 'component';
-import LVStyles from '~/component/LVStyles';
-import LVColors from '~/component/LVColors';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+  Text,
+} from '@/src/components';
+import LVColors from '@/src/components/LVColors';
+import LVStyles from '@/src/components/LVStyles';
+import { Util } from '@/src/lib';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import {
+  Icon,
+  IndexPath,
+  Input,
   Select,
   SelectItem,
-  IndexPath,
-  Datepicker,
-  Input,
-  Icon,
 } from '@ui-kitten/components';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, { useEffect, useState } from 'react';
+
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as Action from './Action'; // API통신
-import {Util} from '~/lib';
 
 const WRK010201 = () => {
   const isFocused = useIsFocused();
@@ -38,7 +35,7 @@ const WRK010201 = () => {
   const [isFileModal, setIsFileModal] = useState(false);
 
   const [companyList, setCompanyList] = useState([
-    {code: 'C001', name: '하나로에이'},
+    { code: 'C001', name: '하나로에이' },
     // {code: 'C002', name: '두번째회사'},
   ]);
 
@@ -90,7 +87,7 @@ const WRK010201 = () => {
     }
   };
 
-  const formatDate = value => {
+  const formatDate = (value) => {
     if (!value) {
       return '';
     }
@@ -102,18 +99,18 @@ const WRK010201 = () => {
     return `${year}-${month}-${date}`;
   };
 
-  const onSelectCompany = index => {
+  const onSelectCompany = (index) => {
     const selected = companyList[index.row];
 
     setSelectedCompanyIndex(index);
     setSelectedCompany(selected.name);
 
-    setPostList(prev => ({
+    setPostList((prev) => ({
       ...prev,
       companyName: selected.name,
     }));
 
-    setApplyForm(prev => ({
+    setApplyForm((prev) => ({
       ...prev,
       companyName: selected.name,
     }));
@@ -130,12 +127,12 @@ const WRK010201 = () => {
       return;
     }
 
-    setPostList(prev => ({
+    setPostList((prev) => ({
       ...prev,
       companyName: selectedCompany,
     }));
 
-    setApplyForm(prev => ({
+    setApplyForm((prev) => ({
       ...prev,
       companyName: selectedCompany,
     }));
@@ -150,7 +147,7 @@ const WRK010201 = () => {
   };
 
   const onPressPostSelect = (p: object, i: number) => {
-    setSelectedPostInfo({...p, key: i});
+    setSelectedPostInfo({ ...p, key: i });
   };
 
   const onPressFileAdd = () => {};
@@ -187,7 +184,7 @@ const WRK010201 = () => {
   };
 
   const handleSavePost = () => {
-    setApplyForm(postList[selectedPostInfo?.key]), setIsPostModal(false);
+    (setApplyForm(postList[selectedPostInfo?.key]), setIsPostModal(false));
   };
 
   const handleSaveFile = () => {};
@@ -205,8 +202,9 @@ const WRK010201 = () => {
                 value={selectedCompany}
                 onSelect={onSelectCompany}
                 style={styles.select}
-                placeholder="법인 선택">
-                {companyList.map(item => (
+                placeholder='법인 선택'
+              >
+                {companyList.map((item) => (
                   <SelectItem key={item.code} title={item.name} />
                 ))}
               </Select>
@@ -224,7 +222,8 @@ const WRK010201 = () => {
               borderRadius: 4,
               justifyContent: 'center',
               alignItems: 'center',
-            }}>
+            }}
+          >
             <Icon
               name={'search-outline'}
               fill={'#27A7FF'}
@@ -246,9 +245,10 @@ const WRK010201 = () => {
         style={i === selectedPostInfo?.key ? styles.selectedCard : styles.card}
         onPress={() => {
           onPressPostSelect(p, i);
-        }}>
+        }}
+      >
         <View style={styles.infoRow}>
-          <View style={[styles.infoCol, {justifyContent: 'center'}]}>
+          <View style={[styles.infoCol, { justifyContent: 'center' }]}>
             <Text style={styles.infoTitleText}>{p?.POST_NAME}</Text>
           </View>
         </View>
@@ -259,11 +259,12 @@ const WRK010201 = () => {
                 fontSize: 16,
                 fontWeight: '600',
               },
-            ]}>
+            ]}
+          >
             {p?.POST_SUMMARY}
           </Text>
         </View>
-        <View style={{height: 12}} />
+        <View style={{ height: 12 }} />
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel1}>주요업무</Text>
           <Text style={{}}>{p?.JOBS}</Text>
@@ -295,16 +296,17 @@ const WRK010201 = () => {
         <View
           style={[
             styles.infoRow,
-            {alignItems: 'flex-end', justifyContent: 'space-between'},
-          ]}>
-          <View style={{flex: 1}}>
+            { alignItems: 'flex-end', justifyContent: 'space-between' },
+          ]}
+        >
+          <View style={{ flex: 1 }}>
             <Text style={styles.infoLabel1}>공고명</Text>
-            <Text style={{fontWeight: '700', fontSize: 16}}>
+            <Text style={{ fontWeight: '700', fontSize: 16 }}>
               {applyForm?.POST_NAME || '-'}
             </Text>
           </View>
           <LVButton
-            title="선택"
+            title='선택'
             onPress={() => {
               setIsPostModal(true);
             }}
@@ -338,11 +340,11 @@ const WRK010201 = () => {
             <Text style={styles.infoLabel2}>학력</Text>
             <Input
               value={applyForm?.EDU}
-              placeholder="학력을 입력해주세요."
+              placeholder='학력을 입력해주세요.'
               multiline={true}
               textStyle={styles.inputText}
               style={styles.input}
-              onChangeText={text => setApplyForm({...applyForm, EDU: text})}
+              onChangeText={(text) => setApplyForm({ ...applyForm, EDU: text })}
             />
           </View>
         </View>
@@ -351,11 +353,13 @@ const WRK010201 = () => {
             <Text style={styles.infoLabel2}>경력</Text>
             <Input
               value={applyForm?.CAREER}
-              placeholder="경력을 입력해주세요."
+              placeholder='경력을 입력해주세요.'
               multiline={true}
               textStyle={styles.inputText}
               style={styles.input}
-              onChangeText={text => setApplyForm({...applyForm, CAREER: text})}
+              onChangeText={(text) =>
+                setApplyForm({ ...applyForm, CAREER: text })
+              }
             />
           </View>
         </View>
@@ -364,11 +368,13 @@ const WRK010201 = () => {
             <Text style={styles.infoLabel2}>스킬</Text>
             <Input
               value={applyForm?.SKILLS}
-              placeholder="스킬을 입력해주세요."
+              placeholder='스킬을 입력해주세요.'
               multiline={true}
               textStyle={styles.inputText}
               style={styles.input}
-              onChangeText={text => setApplyForm({...applyForm, SKILLS: text})}
+              onChangeText={(text) =>
+                setApplyForm({ ...applyForm, SKILLS: text })
+              }
             />
           </View>
         </View>
@@ -377,25 +383,28 @@ const WRK010201 = () => {
             <Text style={styles.infoLabel2}>비고</Text>
             <Input
               value={applyForm?.MEMO}
-              placeholder="비고를 입력해주세요."
+              placeholder='비고를 입력해주세요.'
               multiline={true}
               textStyle={styles.remarkInputText}
               style={styles.input}
-              onChangeText={text => setApplyForm({...applyForm, MEMO: text})}
+              onChangeText={(text) =>
+                setApplyForm({ ...applyForm, MEMO: text })
+              }
             />
           </View>
         </View>
-        <View style={{height: 12}} />
+        <View style={{ height: 12 }} />
         <View style={styles.infoRowNoMargin}>
           <View style={styles.infoCol}>
             <View
               style={[
                 styles.infoRow,
-                {alignItems: 'flex-end', justifyContent: 'space-between'},
-              ]}>
+                { alignItems: 'flex-end', justifyContent: 'space-between' },
+              ]}
+            >
               <Text style={styles.infoLabel2}>첨부파일</Text>
               <LVButton
-                title="추가"
+                title='추가'
                 onPress={() => {
                   setIsFileModal(true);
                 }}
@@ -404,12 +413,12 @@ const WRK010201 = () => {
               />
             </View>
             {fileList?.map((elem, i) => (
-              <View style={[styles.infoRow, {alignItems: 'center'}]}>
+              <View style={[styles.infoRow, { alignItems: 'center' }]}>
                 <View style={styles.infoValueBox}>
                   <Text style={[styles.infoValueText]}>{elem?.seq}</Text>
                 </View>
-                <View style={{width: 8}} />
-                <View style={[styles.infoValueBox, {flex: 1}]}>
+                <View style={{ width: 8 }} />
+                <View style={[styles.infoValueBox, { flex: 1 }]}>
                   <Text style={styles.infoValueText}>
                     {elem?.fileName} ({elem?.fileSize})
                   </Text>
@@ -428,21 +437,22 @@ const WRK010201 = () => {
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+        >
           {renderApplyForm()}
         </ScrollView>
 
         <View style={[LVStyles.row, styles.bottomButton]}>
           <View style={styles.bottomRightWrap}>
             <LVButton
-              title="지원하기"
+              title='지원하기'
               onPress={onPressSubmit}
               buttonStyle={styles.bottomMainButton}
               textStyle={styles.bottomMainButtonText}
             />
 
             <LVButton
-              title="취소하기"
+              title='취소하기'
               onPress={onPressCancel}
               buttonStyle={styles.bottomSubButton}
               textStyle={styles.bottomSubButtonText}
@@ -451,12 +461,12 @@ const WRK010201 = () => {
         </View>
         {isPostModal && (
           <LVModal
-            title="공고 선택"
+            title='공고 선택'
             contents={
               <>
                 {renderSearchRow()}
                 {isSearched && !Util.isEmpty(postList) ? (
-                  <View style={{flex: 1}}>
+                  <View style={{ flex: 1 }}>
                     {postList?.map((e, i) => renderSearchResult(e, i))}
                   </View>
                 ) : (
@@ -470,16 +480,16 @@ const WRK010201 = () => {
         )}
         {isFileModal && (
           <LVModal
-            title="첨부파일 추가"
+            title='첨부파일 추가'
             contents={
               <>
                 {fileList?.map((elem, i) => (
-                  <View style={[styles.infoRow, {alignItems: 'center'}]}>
+                  <View style={[styles.infoRow, { alignItems: 'center' }]}>
                     <View style={styles.infoValueBox}>
                       <Text style={[styles.infoValueText]}>{elem?.seq}</Text>
                     </View>
-                    <View style={{width: 8}} />
-                    <View style={[styles.infoValueBox, {flex: 1}]}>
+                    <View style={{ width: 8 }} />
+                    <View style={[styles.infoValueBox, { flex: 1 }]}>
                       <Text style={styles.infoValueText}>
                         {elem?.fileName} ({elem?.fileSize})
                       </Text>

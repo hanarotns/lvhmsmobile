@@ -1,4 +1,4 @@
-import {Util, Fetch} from '~/lib';
+import { Fetch, Util } from '@/src/lib';
 
 const getMyApprLine = async (body: object) => {
   const result = await Fetch.request('PORX010700SVC', 'getInfoM', {
@@ -16,7 +16,7 @@ const saveMobile = async (body1: object, body2: object) => {
   const result = await Fetch.request('PORX010700SVC', 'saveMobile', {
     body: JSON.stringify({
       PORX010700F1: body1,
-      PORX010700G1: {data: body2},
+      PORX010700G1: { data: body2 },
     }),
   });
   if (result.TYPE === -1) {
@@ -38,6 +38,8 @@ const deleteM = async (body: object) => {
 };
 
 export {
+  // 개인별 결재선 삭제
+  deleteM,
   // (개인별 결재선 추가를 위한) 멤버 리스트 조회
   // getUserList,
   // 개인별 결재선 리스트 조회
@@ -46,6 +48,4 @@ export {
   // save,
   // saveDetail,
   saveMobile,
-  // 개인별 결재선 삭제
-  deleteM,
 };

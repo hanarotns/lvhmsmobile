@@ -1,55 +1,46 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useImperativeHandle,
-  forwardRef,
-} from 'react';
-import {View, Image, StyleSheet, Platform} from 'react-native';
 import {
-  SafeAreaView,
-  ScrollView,
-  RefreshControl,
-  withPreventDoubleClick,
-  LVModal,
   LVButton,
-  LVFlag,
-  LVRadioButton,
-  LVTwoLine,
-  LVDatePicker,
-  LVSection,
-  LVSelectBox,
-  LVLoadingIndicator,
   LVConfirmIndicator,
-  Text,
-  LVChip,
-  LVApprLine,
-  DateTimeField,
-  LVDateTimePicker,
-  LVFormOfContents,
+  LVLoadingIndicator,
+  LVModal,
   LVNoData,
-} from '~/component'; // 공통컴포넌트
-import LVStyles from '~/component/LVStyles';
-import * as icon from '~/assets/images';
+  LVSelectBox,
+  RefreshControl,
+  ScrollView,
+  Text,
+} from '@/src/components'; // 공통컴포넌트
+import LVStyles from '@/src/components/LVStyles';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
-import dayjs from 'dayjs';
+import { StyleSheet, View } from 'react-native';
+
+import { Util } from '@/src/lib';
+import { Icon, Input } from '@ui-kitten/components';
 import 'dayjs/locale/ko';
-import {Util} from '~/lib';
-import {Icon, Input} from '@ui-kitten/components';
-import * as Action from './Action'; // API통신
 import * as COMAction from '../Common/Action'; // API통신 (공통)
+import * as Action from './Action'; // API통신
 
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useRoute, RouteProp} from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const PAL010201 = () => {
   const movingScreen = useNavigation();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
-  const [empInfo, setEmpInfo] = useRecoilState(AppStore.empInfoState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
@@ -73,7 +64,7 @@ const PAL010201 = () => {
     const resOfApprRole = await COMAction.getCode('code', 'PC0001', {
       GCODE: 'AP_TYPE',
     });
-    const res = resOfApprRole?.filter(e => ['AP', 'RE'].includes(e.HQCODE)); // @@ 역할 중 결재자만 사용하여 하드코딩 처리
+    const res = resOfApprRole?.filter((e) => ['AP', 'RE'].includes(e.HQCODE)); // @@ 역할 중 결재자만 사용하여 하드코딩 처리
     console.log('@@ res', res);
     setApprRoleList(res);
     setLoading(false);
@@ -89,7 +80,7 @@ const PAL010201 = () => {
 
   const handleSave = async () => {
     const result = await Action.saveMobile(
-      {...approvalLine, ...empInfo},
+      { ...approvalLine, ...empInfo },
       approvalLineDt,
     );
 
@@ -103,7 +94,7 @@ const PAL010201 = () => {
   };
 
   const handleDeleteApprovalLine = (index: number) => {
-    setApprovalLineDt(prev => prev.filter((_, i) => i !== index));
+    setApprovalLineDt((prev) => prev.filter((_, i) => i !== index));
   };
 
   const ContentsOfApproval = forwardRef((props: any, ref) => {
@@ -129,14 +120,14 @@ const PAL010201 = () => {
       <View>
         <View style={[LVStyles.row]}>
           <Input
-            placeholder="이름으로 검색하세요."
-            placeholderTextColor="#939DAA"
+            placeholder='이름으로 검색하세요.'
+            placeholderTextColor='#939DAA'
             value={name}
-            onChangeText={value => {
+            onChangeText={(value) => {
               setName(value);
             }}
-            style={{backgroundColor: '#FFF', flex: 1}}
-            textStyle={{color: '#373747', fontSize: 14}}
+            style={{ backgroundColor: '#FFF', flex: 1 }}
+            textStyle={{ color: '#373747', fontSize: 14 }}
           />
           <TouchableOpacity
             onPress={handleSearch}
@@ -149,7 +140,8 @@ const PAL010201 = () => {
               borderRadius: 4,
               justifyContent: 'center',
               alignItems: 'center',
-            }}>
+            }}
+          >
             <Icon
               name={'search-outline'}
               fill={'#27A7FF'}
@@ -161,7 +153,8 @@ const PAL010201 = () => {
           style={{
             display: 'flex',
             marginTop: 10,
-          }}>
+          }}
+        >
           {!Util.isEmpty(userList) &&
             userList?.map((e, i) => (
               <TouchableOpacity
@@ -181,7 +174,8 @@ const PAL010201 = () => {
                 }}
                 style={{
                   marginBottom: 8,
-                }}>
+                }}
+              >
                 <View
                   style={{
                     backgroundColor:
@@ -196,13 +190,15 @@ const PAL010201 = () => {
                     paddingHorizontal: 16,
                     borderRadius: 8,
                     borderWidth: 1,
-                  }}>
-                  <Text style={{fontSize: 16}}>{`${e?.DEPT_NAME}`}</Text>
+                  }}
+                >
+                  <Text style={{ fontSize: 16 }}>{`${e?.DEPT_NAME}`}</Text>
                   <Text
                     style={{
                       fontSize: 16,
                       fontWeight: '600',
-                    }}>{`${e?.EMP_NAME} ${e?.POSITION_NAME}`}</Text>
+                    }}
+                  >{`${e?.EMP_NAME} ${e?.POSITION_NAME}`}</Text>
                 </View>
               </TouchableOpacity>
             ))}
@@ -213,34 +209,36 @@ const PAL010201 = () => {
   });
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <View
         style={{
           padding: 16,
           // borderBottomWidth: 1,
           // borderTopWidth: 1,
           // borderColor: '#D5DCE5',
-        }}>
+        }}
+      >
         <Text
           style={{
             color: '#6A727B',
             fontWeight: '600',
-          }}>
+          }}
+        >
           결재선
         </Text>
         <Input
-          placeholder="결재선 이름을 입력하세요."
-          placeholderTextColor="#939DAA"
+          placeholder='결재선 이름을 입력하세요.'
+          placeholderTextColor='#939DAA'
           value={approvalLine.AP_NAME}
-          onChangeText={value => {
+          onChangeText={(value) => {
             setApprovalLine({
               ...approvalLine,
               AP_NAME: value,
             });
           }}
-          size="large"
-          style={{backgroundColor: '#FFF', marginTop: 8}}
-          textStyle={{color: '#373747', fontSize: 14}}
+          size='large'
+          style={{ backgroundColor: '#FFF', marginTop: 8 }}
+          textStyle={{ color: '#373747', fontSize: 14 }}
         />
         {/* <Input
           placeholder="이 결재선에 대한 메모를 작성하세요."
@@ -257,24 +255,28 @@ const PAL010201 = () => {
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }>
+        }
+      >
         {/* Detail */}
         <View
           style={{
             padding: 16,
-          }}>
-          <View style={[LVStyles.row, {paddingRight: 16}]}>
+          }}
+        >
+          <View style={[LVStyles.row, { paddingRight: 16 }]}>
             <Text
               style={{
                 color: '#6A727B',
                 fontWeight: '600',
-              }}>
+              }}
+            >
               결재자 지정
             </Text>
             <TouchableOpacity
               onPress={() => {
                 setIsVisibleApprovalModal(true);
-              }}>
+              }}
+            >
               <Icon
                 name={'person-add-outline'}
                 fill={'#373747'}
@@ -289,10 +291,11 @@ const PAL010201 = () => {
             style={{
               padding: 8,
               flex: 1,
-            }}>
+            }}
+          >
             {approvalLineDt.map((e, i) => (
               <PersonalForm
-                elem={{...e, index: i + 1}}
+                elem={{ ...e, index: i + 1 }}
                 apprRoleList={apprRoleList}
                 onDelete={() => handleDeleteApprovalLine(i)}
               />
@@ -309,8 +312,13 @@ const PAL010201 = () => {
             width: '100%',
             bottom: 0,
           },
-        ]}>
-        <LVButton title={'저장'} onPress={handleSave} buttonStyle={{flex: 1}} />
+        ]}
+      >
+        <LVButton
+          title={'저장'}
+          onPress={handleSave}
+          buttonStyle={{ flex: 1 }}
+        />
       </View>
       {isVisibleApprovalModal && (
         <LVModal
@@ -320,7 +328,8 @@ const PAL010201 = () => {
           onVisible={setIsVisibleApprovalModal}
           onOk={() => {
             // 1. 자식에서 선택값 가져오기
-            const {selectedAppr} = approvalLineRef.current.getSelectedValues();
+            const { selectedAppr } =
+              approvalLineRef.current.getSelectedValues();
             if (Util.isEmpty(selectedAppr)) {
               Util.toastMsg('선택된 결재자가 없습니다.', 'info');
               return;
@@ -340,7 +349,7 @@ const PAL010201 = () => {
 export default PAL010201;
 
 const PersonalForm = (props: any) => {
-  const {elem, apprRoleList, onDelete} = props;
+  const { elem, apprRoleList, onDelete } = props;
   console.log('@@ elem', elem);
   return (
     <View
@@ -355,40 +364,46 @@ const PersonalForm = (props: any) => {
         marginBottom: 8,
         backgroundColor: '#F0F2F6',
         flex: 1,
-      }}>
+      }}
+    >
       <Text
         style={{
           flex: 0.1,
           fontSize: 16,
           color: '#6A727B',
-        }}>
+        }}
+      >
         {elem?.index}
       </Text>
       <View
         style={{
           flex: 0.5,
-        }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        }}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text
             style={{
               fontWeight: '600',
               fontSize: 16,
-            }}>
+            }}
+          >
             {elem?.EMP_NAME}
           </Text>
           <Text
             style={{
               fontWeight: '600',
               marginLeft: 4,
-            }}>
+            }}
+          >
             {elem?.POSITION_NAME}
           </Text>
         </View>
-        <View style={{flexDirection: 'row', marginTop: 8}}>
+        <View style={{ flexDirection: 'row', marginTop: 8 }}>
           <Text
             style={{
               color: '#6A727B',
-            }}>
+            }}
+          >
             {elem?.DEPT_NAME}
           </Text>
         </View>
@@ -398,8 +413,9 @@ const PersonalForm = (props: any) => {
           display: 'flex',
           flexDirection: 'row',
           flex: 0.4,
-        }}>
-        <View style={{flex: 1, width: '100%', justifyContent: 'center'}}>
+        }}
+      >
+        <View style={{ flex: 1, width: '100%', justifyContent: 'center' }}>
           <LVSelectBox
             value={'AP'} //@@ 확인 필요
             data={apprRoleList}
@@ -414,7 +430,8 @@ const PersonalForm = (props: any) => {
           marginLeft: 8,
           justifyContent: 'center',
           alignItems: 'center',
-        }}>
+        }}
+      >
         <Icon name={'close-outline'} fill={'gray'} style={[LVStyles.iconS]} />
       </TouchableOpacity>
     </View>

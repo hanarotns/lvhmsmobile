@@ -1,4 +1,4 @@
-import {Util, Fetch} from '~/lib';
+import { Fetch, Util } from '@/src/lib';
 
 const getInfoM = async (body: object) => {
   const result = await Fetch.request('PORU010301SVC', 'getInfoM', {
@@ -80,15 +80,15 @@ const save = async (body: object) => {
 };
 
 export {
-  // 통계, 리스트 조회
-  getInfoM,
-  getListM,
-  // 상세 조회
-  getDetailM,
   // 문서 기준의 주, 월 누적시간 조회
   getAccumulatedHours,
   // 결재라인 조회
   getApprLine,
+  // 상세 조회
+  getDetailM,
+  // 통계, 리스트 조회
+  getInfoM,
+  getListM,
   // 신청: 상신 / 상세: 회수, 삭제, 재상신
   save,
 };

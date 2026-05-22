@@ -1,42 +1,37 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {View, Image, StyleSheet, Platform, ImageBackground} from 'react-native';
+import * as icon from '@/src/assets/images';
 import {
-  SafeAreaView,
-  ScrollView,
-  RefreshControl,
-  withPreventDoubleClick,
-  LVModal,
-  LVButton,
-  LVFlag,
-  LVRadioButton,
-  LVTwoLine,
-  LVDatePicker,
-  LVSection,
-  LVSelectBox,
-  LVLoadingIndicator,
-  Text,
   LVChip,
+  LVLoadingIndicator,
   LVNoData,
-} from '~/component'; // 공통컴포넌트
-import LVStyles from '~/component/LVStyles';
-import * as icon from '~/assets/images';
+  RefreshControl,
+  ScrollView,
+  Text,
+} from '@/src/components'; // 공통컴포넌트
+import LVStyles from '@/src/components/LVStyles';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import React, { useEffect, useState } from 'react';
 
-import dayjs from 'dayjs';
+import { Image, StyleSheet, View } from 'react-native';
+
 import 'dayjs/locale/ko';
-import * as Action from './Action'; // API통신
 import * as COMAction from '../Common/Action'; // API통신 (공통)
+import * as Action from './Action'; // API통신
 
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
-import {Util} from '~/lib';
+import { Util } from '@/src/lib';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
 
 const APR010101 = () => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
-  const [empInfo, setEmpInfo] = useRecoilState(AppStore.empInfoState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
@@ -54,7 +49,7 @@ const APR010101 = () => {
   }, [isFocused]);
 
   useEffect(() => {
-    const res = list?.filter(e => {
+    const res = list?.filter((e) => {
       if (selectedApprType === 'ALL') {
         return true;
       } else {
@@ -76,7 +71,7 @@ const APR010101 = () => {
     };
     setSelectedApprType('ALL');
     const sortedArr = ['VA', 'ND', 'NC'];
-    resOfApprType = resOfApprType.filter(e => {
+    resOfApprType = resOfApprType.filter((e) => {
       return sortedArr.includes(e?.HQCODE); // @@ 연차, 연장 관련만 하드코딩
     });
 
@@ -113,19 +108,23 @@ const APR010101 = () => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1}}
+        contentContainerStyle={{ flexGrow: 1 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }>
+        }
+      >
         {/* 현황판 Section */}
-        <View style={{padding: 32, paddingBottom: 10, backgroundColor: '#FFF'}}>
+        <View
+          style={{ padding: 32, paddingBottom: 10, backgroundColor: '#FFF' }}
+        >
           <Text
             style={{
               fontWeight: '700',
               fontSize: 24,
-            }}>
+            }}
+          >
             {empInfo?.EMP_NAME_LC}님 결재 현황입니다.
           </Text>
           <Board stats={stats} />
@@ -168,35 +167,35 @@ const APR010101 = () => {
 export default APR010101;
 
 const Board = (props: any) => {
-  const {stats} = props;
+  const { stats } = props;
   return (
-    <View style={[LVStyles.row, {marginTop: 32}]}>
+    <View style={[LVStyles.row, { marginTop: 32 }]}>
       <CardOfStats
         title={'완료 문서'}
         days={stats?.COMPLETE_APPR_CNT}
-        textColor="#939DAA"
-        bgColor="#F7F8FB"
+        textColor='#939DAA'
+        bgColor='#F7F8FB'
       />
-      <View style={{width: 8}} />
+      <View style={{ width: 8 }} />
       <CardOfStats
         title={'결재할 문서'}
         days={stats?.PENDING_APPR_CNT}
-        textColor="#27A7FF"
-        bgColor="#EEF8FF"
+        textColor='#27A7FF'
+        bgColor='#EEF8FF'
       />
-      <View style={{width: 8}} />
+      <View style={{ width: 8 }} />
       <CardOfStats
         title={'진행 문서'}
         days={stats?.PROGRESS_APPR_CNT}
-        textColor="#003282"
-        bgColor="#EBEFF5"
+        textColor='#003282'
+        bgColor='#EBEFF5'
       />
     </View>
   );
 };
 
 const CardOfStats = (props: any) => {
-  const {title, days, textColor, bgColor} = props;
+  const { title, days, textColor, bgColor } = props;
   return (
     <View
       style={{
@@ -206,17 +205,19 @@ const CardOfStats = (props: any) => {
         alignItems: 'center',
         backgroundColor: bgColor,
         borderRadius: 8,
-      }}>
+      }}
+    >
       <Text
         style={{
           color: '#6A727B',
           fontSize: 14,
           fontWeight: '500',
           marginBottom: 16,
-        }}>
+        }}
+      >
         {title}
       </Text>
-      <Text style={{color: textColor, fontSize: 32, fontWeight: '800'}}>
+      <Text style={{ color: textColor, fontSize: 32, fontWeight: '800' }}>
         {days != undefined ? String(days) : '-'}
       </Text>
     </View>
@@ -224,7 +225,7 @@ const CardOfStats = (props: any) => {
 };
 
 const ContentOfPreview = (props: any) => {
-  const {elem, onPress, code} = props;
+  const { elem, onPress, code } = props;
   // @@ elem 대체 안된 항목 확인
   return (
     <TouchableOpacity
@@ -236,18 +237,20 @@ const ContentOfPreview = (props: any) => {
           borderBottomWidth: 1,
           borderBottomColor: '#F1F1F1',
         },
-      ]}>
-      <View style={[LVStyles.row, {display: 'flex', marginBottom: 16}]}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      ]}
+    >
+      <View style={[LVStyles.row, { display: 'flex', marginBottom: 16 }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text
             style={{
               fontWeight: '700',
               fontSize: 16,
-            }}>
+            }}
+          >
             {elem?.RQ_TYPE_NAME}
           </Text>
           {!!elem?.M_APPR_SUB_TITLE && (
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View
                 style={{
                   marginLeft: 4,
@@ -261,7 +264,8 @@ const ContentOfPreview = (props: any) => {
                   marginLeft: 4,
                   fontWeight: '700',
                   fontSize: 16,
-                }}>
+                }}
+              >
                 {elem?.M_APPR_SUB_TITLE}
               </Text>
             </View>
@@ -271,18 +275,20 @@ const ContentOfPreview = (props: any) => {
           style={{
             fontWeight: '600',
             color: '#939DAA',
-          }}>
+          }}
+        >
           {elem?.JOB_NO}
         </Text>
       </View>
       <View
         style={{
           flex: 1,
-        }}>
+        }}
+      >
         <View style={[LVStyles.row]}>
-          <View style={[LVStyles.row, {alignItems: 'center', width: '50%'}]}>
+          <View style={[LVStyles.row, { alignItems: 'center', width: '50%' }]}>
             <LVChip
-              category="apprStatus"
+              category='apprStatus'
               title={elem?.AP_STATUS_NAME}
               code={elem?.AP_STATUS}
             />
@@ -293,7 +299,8 @@ const ContentOfPreview = (props: any) => {
                   marginLeft: 8,
                   fontWeight: '600',
                   color: '#939DAA',
-                }}>
+                }}
+              >
                 {elem?.REASON}
               </Text>
               {elem?.M_APPR_SUB_CONTENTS ? (
@@ -304,7 +311,8 @@ const ContentOfPreview = (props: any) => {
                     marginLeft: 8,
                     fontWeight: '600',
                     color: '#939DAA',
-                  }}>
+                  }}
+                >
                   {elem?.M_APPR_SUB_CONTENTS}{' '}
                   {elem?.M_CAL_RESULT ? `| ${elem?.M_CAL_RESULT}` : ''}
                 </Text>
@@ -342,7 +350,8 @@ const ContentOfPreview = (props: any) => {
               style={{
                 fontWeight: '700',
                 fontSize: 16,
-              }}>
+              }}
+            >
               {elem?.RQ_EMP_NAME} {elem?.M_APPR_MEMBER_RANK_NAME}
             </Text>
           </View>
@@ -353,18 +362,19 @@ const ContentOfPreview = (props: any) => {
 };
 
 const Filter = (props: any) => {
-  const {apprFilter, selectedApprType, setSelectedApprType, filteredList} =
+  const { apprFilter, selectedApprType, setSelectedApprType, filteredList } =
     props;
   return (
-    <View style={[LVStyles.row, {marginTop: 16}]}>
-      <View style={{flexDirection: 'row'}}>
-        {apprFilter.map(e => (
+    <View style={[LVStyles.row, { marginTop: 16 }]}>
+      <View style={{ flexDirection: 'row' }}>
+        {apprFilter.map((e) => (
           <TouchableOpacity
             onPress={() => {
               setSelectedApprType(e.HQCODE);
-            }}>
+            }}
+          >
             <LVChip
-              category="type"
+              category='type'
               content={e.HQNAME}
               chipStyle={{
                 paddingVertical: 6,
@@ -383,7 +393,8 @@ const Filter = (props: any) => {
           color: '#1E2125',
           fontSize: 14,
           fontWeight: '800',
-        }}>
+        }}
+      >
         {filteredList?.length} 건
       </Text>
     </View>

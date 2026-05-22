@@ -1,31 +1,37 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {View, Image, StyleSheet, Platform, ImageBackground} from 'react-native';
 import {
-  ScrollView,
-  RefreshControl,
   LVButton,
+  RefreshControl,
+  ScrollView,
+  ShowPasswordIcon,
   Text,
   TextField,
-  ShowPasswordIcon,
-} from '~/component'; // 공통컴포넌트
+} from '@/src/components'; // 공통컴포넌트
+import { Util } from '@/src/lib';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
 import 'dayjs/locale/ko';
-import {Util} from '~/lib';
+import React, { useEffect, useState } from 'react';
 
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
+import { StyleSheet, View } from 'react-native';
+
 import {
   StackActions,
-  useNavigation,
   useIsFocused,
+  useNavigation,
 } from '@react-navigation/native';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ACC010101 = () => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
-  const [empInfo, setEmpInfo] = useRecoilState(AppStore.empInfoState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
@@ -56,7 +62,7 @@ const ACC010101 = () => {
   };
 
   const handleSubmit = () => {
-    AsyncStorage.getItem('loginPwd').then(p => {
+    AsyncStorage.getItem('loginPwd').then((p) => {
       if (password === p) {
         movingScreen.dispatch(StackActions.replace('ACC010201'));
       } else {
@@ -66,11 +72,12 @@ const ACC010101 = () => {
   };
 
   return isCertify ? (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }></ScrollView>
+        }
+      ></ScrollView>
     </View>
   ) : (
     <View style={styles.basicView}>
@@ -78,14 +85,14 @@ const ACC010101 = () => {
         <Text style={styles.hdText}>
           {`급여리스트 확인을 위한 \n${empInfo?.EMP_NAME_LC}님의 비밀번호를 인증하세요`}
         </Text>
-        <View style={{height: 16}} />
+        <View style={{ height: 16 }} />
         <TextField
-          placeholder="비밀번호를 입력하세요"
-          placeholderTextColor="#999FA8"
+          placeholder='비밀번호를 입력하세요'
+          placeholderTextColor='#999FA8'
           style={styles.textFieldSt}
           autoCapitalize={'none'}
           secureTextEntry={!visiblePwd}
-          onChangeValue={value => setPassword(value)}
+          onChangeValue={(value) => setPassword(value)}
           accessoryRight={
             <ShowPasswordIcon
               fill={'black'}

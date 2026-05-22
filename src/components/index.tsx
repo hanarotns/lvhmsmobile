@@ -17,7 +17,7 @@ import LVModal from './LVModal';
 import LVNoData from './LVNoData';
 import LVRadioButton from './LVRadioButton';
 import LVSection from './LVSection';
-// import LVSelectBox from './LVSelectBox';
+import LVSelectBox from './LVSelectBox';
 import LVTwoLine from './LVTwoLine';
 import Terms from './Terms';
 import TermsOfPiece from './TermsOfPiece';
@@ -99,7 +99,7 @@ export {
   LVNoData,
   LVRadioButton,
   LVSection,
-  // LVSelectBox,
+  LVSelectBox,
   LVStyles,
   LVTwoLine,
   Menu,

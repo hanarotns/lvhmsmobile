@@ -1,24 +1,34 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
-import {StyleSheet, Image, View, TouchableOpacity} from 'react-native';
-import {Icon, Text, LVLoadingIndicator, Divider} from 'component';
-import LVStyles from '~/component/LVStyles';
-import LVColors from '~/component/LVColors';
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {Fetch, Util} from '~/lib';
-import * as icon from '~/assets/images';
-import {useIsFocused} from '@react-navigation/native';
-import * as Action from './Action'; // API통신
-import dayjs from 'dayjs';
+import * as icon from '@/src/assets/images';
+import {
+  Divider,
+  Icon,
+  LVLoadingIndicator,
+  SafeAreaView,
+  Text,
+} from '@/src/components';
+import LVColors from '@/src/components/LVColors';
+import LVStyles from '@/src/components/LVStyles';
+import { Fetch, Util } from '@/src/lib';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import { useIsFocused } from '@react-navigation/native';
 import 'dayjs/locale/ko';
+import React, { useEffect, useState } from 'react';
 
-import {useNavigation} from '@react-navigation/native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
 
 const ETC010101 = () => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
-  const [empInfo, setEmpInfo] = useRecoilState(AppStore.empInfoState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
 
@@ -34,7 +44,7 @@ const ETC010101 = () => {
   };
 
   const logout = async () => {
-    Fetch.logout().then(result => {
+    Fetch.logout().then((result) => {
       if (result) {
         setSession(null);
         Util.toastMsg('정상적으로 로그아웃 되었습니다.');
@@ -44,13 +54,14 @@ const ETC010101 = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.safeArea}>
+      <SafeAreaView style={styles.safeArea}>
         <View style={styles.section}>
           <TouchableOpacity
             onPress={() => {
               movingScreen.navigate('ETC010201');
             }}
-            style={styles.profileCard}>
+            style={styles.profileCard}
+          >
             <View style={styles.profileLeft}>
               <Image
                 style={styles.profileImg}
@@ -78,8 +89,8 @@ const ETC010101 = () => {
             </View>
 
             <Icon
-              name="chevron-right-outline"
-              fill="#8F9BB3"
+              name='chevron-right-outline'
+              fill='#8F9BB3'
               style={{
                 width: 24,
                 height: 24,
@@ -92,8 +103,9 @@ const ETC010101 = () => {
             onPress={() => {
               movingScreen.navigate('ETC010301');
             }}
-            style={styles.menuButton}>
-            <Icon name={'grid-outline'} fill="#373747" style={LVStyles.iconS} />
+            style={styles.menuButton}
+          >
+            <Icon name={'grid-outline'} fill='#373747' style={LVStyles.iconS} />
             <Text style={styles.menuText}>비밀번호 변경</Text>
           </TouchableOpacity>
           <Divider />
@@ -101,8 +113,9 @@ const ETC010101 = () => {
             onPress={() => {
               movingScreen.navigate('LEA010101');
             }}
-            style={styles.menuButton}>
-            <Icon name={'grid-outline'} fill="#373747" style={LVStyles.iconS} />
+            style={styles.menuButton}
+          >
+            <Icon name={'grid-outline'} fill='#373747' style={LVStyles.iconS} />
             <Text style={styles.menuText}>연차촉진제 설정</Text>
           </TouchableOpacity>
           <Divider />
@@ -110,8 +123,9 @@ const ETC010101 = () => {
             onPress={() => {
               movingScreen.navigate('PAL010101');
             }}
-            style={styles.menuButton}>
-            <Icon name={'grid-outline'} fill="#373747" style={LVStyles.iconS} />
+            style={styles.menuButton}
+          >
+            <Icon name={'grid-outline'} fill='#373747' style={LVStyles.iconS} />
             <Text style={styles.menuText}>결재선 설정</Text>
           </TouchableOpacity>
           <Divider />
@@ -120,13 +134,13 @@ const ETC010101 = () => {
           <TouchableOpacity onPress={logout} style={styles.menuButton}>
             <Icon
               name={'power-outline'}
-              fill="#373747"
+              fill='#373747'
               style={LVStyles.iconS}
             />
             <Text style={styles.menuText}>로그아웃</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
       {loading && <LVLoadingIndicator />}
     </View>
   );

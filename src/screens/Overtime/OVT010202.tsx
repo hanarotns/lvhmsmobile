@@ -1,58 +1,51 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useImperativeHandle,
-  forwardRef,
-} from 'react';
-import {View, Image, StyleSheet, Platform} from 'react-native';
 import {
-  SafeAreaView,
-  ScrollView,
-  RefreshControl,
-  withPreventDoubleClick,
-  LVModal,
-  LVButton,
-  LVFlag,
-  LVRadioButton,
-  LVTwoLine,
-  LVDatePicker,
-  LVSection,
-  LVSelectBox,
-  LVLoadingIndicator,
-  LVConfirmIndicator,
-  Text,
-  LVChip,
   LVApprLine,
-  DateTimeField,
-  LVDateTimePicker,
+  LVButton,
+  LVChip,
+  LVConfirmIndicator,
   LVFormOfContents,
-} from '~/component'; // 공통컴포넌트
-import LVStyles from '~/component/LVStyles';
-import * as icon from '~/assets/images';
+  LVLoadingIndicator,
+  LVModal,
+  RefreshControl,
+  ScrollView,
+  Text,
+} from '@/src/components'; // 공통컴포넌트
+import LVStyles from '@/src/components/LVStyles';
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
+import { StyleSheet, View } from 'react-native';
+
+import { Util } from '@/src/lib';
+import { Icon, Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import {Util} from '~/lib';
-import {Icon, Input} from '@ui-kitten/components';
 
-import * as Action from './Action'; // API통신
 import * as PALAction from '../PersonalApprovalLine/Action'; // API통신 (개인별 결재선 분리)
+import * as Action from './Action'; // API통신
 
-import {AppStore} from '~/store';
-import {useRecoilState} from 'recoil';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useRoute, RouteProp} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
 
-import {useNavigation} from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import CheckBox from '~/component/CheckBox';
+import { useNavigation } from '@react-navigation/native';
 
 const OVT010202 = () => {
   const movingScreen = useNavigation();
   const route = useRoute<DetailScreenRouteProp>();
-  const [session, setSession] = useRecoilState(AppStore.sessionState);
-  const [empInfo, setEmpInfo] = useRecoilState(AppStore.empInfoState);
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = React.useState(true);
   const [confirming, setConfirming] = useState(false);
@@ -105,7 +98,7 @@ const OVT010202 = () => {
     // 기존 결재선에 상신자 정보를 할당
     const res01 = await PALAction.getMyApprLine();
     const updatedRes =
-      res01?.map(item => ({
+      res01?.map((item) => ({
         ...item,
         DETAILS: [reqMemberInfo, ...(item.DETAILS || [])],
       })) || [];
@@ -189,29 +182,33 @@ const OVT010202 = () => {
               }}
               onPress={() => {
                 setSelectedAppr(e);
-              }}>
+              }}
+            >
               <View
                 style={{
                   flex: 1,
-                }}>
+                }}
+              >
                 <View
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
-                  }}>
-                  <LVChip category="apprLineFlag" title="일반" />
-                  <View style={{width: 8}} />
+                  }}
+                >
+                  <LVChip category='apprLineFlag' title='일반' />
+                  <View style={{ width: 8 }} />
                   <Text
                     style={{
                       fontWeight: '700',
                       fontSize: 16,
                       color: '#373747',
-                    }}>
+                    }}
+                  >
                     {e?.APPR_LINE_NAME}
                   </Text>
                 </View>
-                <View style={{height: 8}} />
+                <View style={{ height: 8 }} />
                 <LVApprLine
                   data={e?.DETAILS}
                   mainColor={'#6A727B'}
@@ -226,23 +223,25 @@ const OVT010202 = () => {
   });
 
   return (
-    <View style={{flex: 1, backgroundColor: '#FFF'}}>
+    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }>
+        }
+      >
         <View
           style={{
             padding: 16,
             borderBottomWidth: 1,
             borderTopWidth: 1,
             borderColor: '#D5DCE5',
-          }}>
+          }}
+        >
           <LVFormOfContents
             title={'결재선'}
             children={
               !Util.isEmpty(approvalLine) ? (
-                <View style={[LVStyles.row, {width: '100%'}]}>
+                <View style={[LVStyles.row, { width: '100%' }]}>
                   <LVApprLine
                     data={approvalLine}
                     mainColor={'#373747'}
@@ -263,7 +262,8 @@ const OVT010202 = () => {
                       borderRadius: 4,
                       justifyContent: 'center',
                       alignItems: 'center',
-                    }}>
+                    }}
+                  >
                     <Icon
                       name={'edit-2-outline'}
                       fill={'#27A7FF'}
@@ -287,7 +287,8 @@ const OVT010202 = () => {
                 style={{
                   fontWeight: '700',
                   color: '#ABBACD',
-                }}>
+                }}
+              >
                 {dt?.M_ES_DATETIME}
               </Text>
             }
@@ -306,13 +307,15 @@ const OVT010202 = () => {
                   // @@ 크기 유동적으로 수정할 것.
                   width: 100,
                   alignItems: 'center',
-                }}>
+                }}
+              >
                 <Text
                   style={{
                     color: '#FF9E3C',
                     fontSize: 14,
                     fontWeight: '700',
-                  }}>
+                  }}
+                >
                   {dt?.M_TYPE_NAME}
                 </Text>
               </View>
@@ -324,7 +327,8 @@ const OVT010202 = () => {
               <Text
                 style={{
                   fontWeight: '700',
-                }}>
+                }}
+              >
                 {dt?.M_MEMO}
               </Text>
             }
@@ -336,7 +340,8 @@ const OVT010202 = () => {
                 style={{
                   fontWeight: '700',
                   color: '#ABBACD',
-                }}>
+                }}
+              >
                 {Util.convertDateTime('', dt?.RA_START_TIME) || '-'}
               </Text>
             }
@@ -348,7 +353,8 @@ const OVT010202 = () => {
                 style={{
                   fontWeight: '700',
                   color: '#ABBACD',
-                }}>
+                }}
+              >
                 {Util.convertDateTime('', dt?.RA_END_TIME) || '-'}
               </Text>
             }
@@ -388,9 +394,9 @@ const OVT010202 = () => {
                 <Input
                   value={changeReason}
                   onChangeText={setChangeReason}
-                  size="large"
-                  style={{backgroundColor: '#FFF'}}
-                  textStyle={{color: '#373747', minHeight: 100}}
+                  size='large'
+                  style={{ backgroundColor: '#FFF' }}
+                  textStyle={{ color: '#373747', minHeight: 100 }}
                   multiline={true}
                 />
               }
@@ -407,12 +413,12 @@ const OVT010202 = () => {
           buttonStyle={styles.cancelButton}
           textStyle={styles.cancelButtonText}
         />
-        <View style={{width: 8}} />
+        <View style={{ width: 8 }} />
         {/* 최초 상신 */}
         <LVButton
           title={'상신'}
           onPress={handleSubmit}
-          buttonStyle={{flex: 1}}
+          buttonStyle={{ flex: 1 }}
         />
       </View>
       {isVisibleApprovalModal && (
@@ -423,7 +429,8 @@ const OVT010202 = () => {
           onVisible={setIsVisibleApprovalModal}
           onOk={() => {
             // 1. 자식에서 선택값 가져오기
-            const {selectedAppr} = approvalLineRef.current.getSelectedValues();
+            const { selectedAppr } =
+              approvalLineRef.current.getSelectedValues();
             if (Util.isEmpty(selectedAppr)) {
               Util.toastMsg('선택된 결재선이 없습니다.', 'info');
               return;
