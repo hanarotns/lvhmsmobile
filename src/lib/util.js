@@ -63,8 +63,31 @@ const convertDateTime = (date, time) => {
   return result;
 };
 
+// 문자열 바꾸기
+const replaceAll = (str, searchStr, replaceStr) =>
+  str.split(searchStr).join(replaceStr);
+
+// 숫자 포맷팅
+const formatNumber = (num) => {
+  let Tnum = num;
+  if (num) {
+    Tnum = replaceAll(num.toString(), ',', '');
+    if (Tnum.indexOf('.') > -1) {
+      const Pnum = Tnum.split('.')[1];
+      if (Pnum.length > 2) {
+        Tnum = String(Math.round(Number(Tnum) * 100) / 100);
+      }
+    }
+
+    Tnum = Tnum.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+
+    return Tnum;
+  }
+  return Tnum;
+};
 export default {
   isEmpty,
   toastMsg,
   convertDateTime,
+  formatNumber,
 };
