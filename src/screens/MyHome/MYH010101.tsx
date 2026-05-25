@@ -14,12 +14,17 @@ import {
 } from '@/src/components'; // 공통컴포넌트
 import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
-import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import React, { useEffect, useState } from 'react';
 
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import * as WLOAction from '../WorkLog/Action'; // API통신 (공통)
 import * as Action from './Action'; // API통신
 
@@ -354,21 +359,21 @@ const MYH010101 = ({ navigation }) => {
               </Text>
             </View>
           )}
-          <Icon
-            onPress={() => {
-              setNearestOffice({});
-              getNearOfficeM();
-            }}
-            source={
-              nearestOffice?.ET_STATUS
-                ? 'refresh'
-                : 'dots-horizontal-circle-outline'
-            }
-            color='#B0B9C1'
-            style={{
-              ...LVStyles.iconS,
-            }}
-          />
+          {nearestOffice?.ET_STATUS ? (
+            <Icon
+              onPress={() => {
+                setNearestOffice({});
+                getNearOfficeM();
+              }}
+              name='refresh'
+              color='#B0B9C1'
+              style={{
+                ...LVStyles.iconS,
+              }}
+            />
+          ) : (
+            <ActivityIndicator size='large' color='gray' />
+          )}
         </View>
         <View
           style={{
@@ -942,4 +947,15 @@ const styles = StyleSheet.create({
     color: '#939DAA',
   },
   cardArea: { width: '48%' },
+  indicator: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#454D585F',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loading: {
+    borderColor: '#fff',
+  },
 });
