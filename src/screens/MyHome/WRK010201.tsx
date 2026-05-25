@@ -5,29 +5,36 @@ import {
   LVDatePicker,
   LVLoadingIndicator,
   LVModal,
+  LVStyles,
   Text,
 } from '@/src/components';
-import LVColors from '@/src/components/LVColors';
-import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
+import { useSessionStore } from '@/src/stores/sessionStore';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { IndexPath, Input, Select, SelectItem } from '@ui-kitten/components';
 import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
+
 import * as Action from './Action'; // API통신
 
-const WRK010201 = () => {
+const WRK010201 = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
-
   const [isSearched, setIsSearched] = useState(false);
   const [isSelectedCompany, setIsSelectedCompany] = useState(false);
   const [isPostModal, setIsPostModal] = useState(false);
   const [isFileModal, setIsFileModal] = useState(false);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
 
   const [companyList, setCompanyList] = useState([
     { code: 'C001', name: '하나로에이' },
@@ -48,13 +55,10 @@ const WRK010201 = () => {
   const [remark, setRemark] = useState('');
   const [applyForm, setApplyForm] = useState({});
 
-  const [fileList, setFileList] = useState([
-    {
-      seq: '01',
-      fileName: '이력서',
-      fileSize: '256KB',
-    },
-  ]);
+  const [fileList, setFileList] = useState([]);
+
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
   const [isVisibleInfoModal, setIsVisibleInfoModal] = useState(false);
 
@@ -145,13 +149,87 @@ const WRK010201 = () => {
     setSelectedPostInfo({ ...p, key: i });
   };
 
-  const onPressFileAdd = () => {};
+  const generateRefNo = () => {
+    const timestamp = Date.now().toString(16);
+    const randomPart = Math.random().toString(16).substring(2, 18);
+    return `${timestamp}${randomPart}`.substring(0, 32);
+  };
+
+  const onPressFileAdd = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: '*/*',
+        copyToCacheDirectory: true,
+        multiple: false,
+      });
+
+      if (result.canceled) {
+        return;
+      }
+
+      const pickedFile = result.assets?.[0];
+
+      if (!pickedFile) {
+        return;
+      }
+
+      if ((pickedFile.size ?? 0) > 5242880) {
+        Util.toastMsg('파일 크기는 5MB 이하여야 합니다.', 'error');
+        return;
+      }
+
+      setFileList((prev) => [
+        ...prev,
+        {
+          seq: String(prev.length + 1).padStart(2, '0'),
+          fileName: pickedFile.name,
+          fileSize: `${Math.round((pickedFile.size ?? 0) / 1024)}KB`,
+          uri: pickedFile.uri,
+          type: pickedFile.mimeType || 'application/octet-stream',
+          size: pickedFile.size ?? 0,
+          uploaded: false,
+        },
+      ]);
+    } catch (err) {
+      console.log('@@ document picker error', err);
+      Util.toastMsg('파일을 선택하는 중 오류가 발생했습니다.', 'error');
+    }
+  };
+
+  const handleDeleteFile = async (fileSeq: string) => {
+    try {
+      const file = fileList.find((f) => f.seq === fileSeq);
+      if (!file) return;
+
+      if (file.uploaded && file.FILE_MGT_CODE) {
+        await Action.deleteFile(
+          file.FILE_MGT_CODE,
+          file.YYMMDD,
+          file.REF_NO,
+          file.FILE_NAME,
+          file.COMPANY_CODE,
+        );
+      }
+
+      setFileList((prev) => prev.filter((f) => f.seq !== fileSeq));
+      Util.toastMsg('파일이 삭제되었습니다.', 'success');
+    } catch (error) {
+      Util.toastMsg('파일 삭제 중 오류가 발생했습니다.', 'error');
+    }
+  };
 
   const onPressSubmit = async () => {
     if (!applyForm?.POST_ID) {
       Util.toastMsg('공고를 선택하세요', 'error');
       return;
     }
+
+    const pendingFiles = fileList.filter((f) => !f.uploaded);
+    if (pendingFiles.length > 0) {
+      Util.toastMsg('파일 업로드를 먼저 완료해주세요.', 'warning');
+      return;
+    }
+
     const result = await Action.save({
       ...applyForm,
       SUBMIT_YN: 'Y',
@@ -164,6 +242,11 @@ const WRK010201 = () => {
         .toISOString()
         .substring(0, 10)
         .replace(/-/g, ''),
+      ATTACHED_FILES: uploadedFiles.map((f) => ({
+        FILE_MGT_CODE: f.FILE_MGT_CODE,
+        FILE_NAME: f.fileName,
+        YYMMDD: f.YYMMDD,
+      })),
     });
     if (result?.TYPE === 1) {
       setConfirming(true);
@@ -182,7 +265,52 @@ const WRK010201 = () => {
     (setApplyForm(postList[selectedPostInfo?.key]), setIsPostModal(false));
   };
 
-  const handleSaveFile = () => {};
+  const handleSaveFile = async () => {
+    try {
+      setUploading(true);
+
+      const refNo = applyForm?.REF_NO || generateRefNo();
+      const pendingFiles = fileList.filter((f) => !f.uploaded);
+
+      if (pendingFiles.length === 0) {
+        Util.toastMsg('업로드할 파일이 없습니다.', 'info');
+        setIsFileModal(false);
+        return;
+      }
+
+      const companyCode = sessionInfo?.COMPANY_CODE || 'HTNS';
+      const results = await Promise.all(
+        pendingFiles.map(async (file) => {
+          try {
+            const uploaded = await Action.uploadFile(file, refNo, companyCode);
+            return {
+              ...file,
+              uploaded: true,
+              FILE_MGT_CODE: uploaded.FILE_MGT_CODE,
+              YYMMDD: uploaded.YYMMDD,
+              REF_NO: uploaded.REF_NO,
+              FILE_NAME: uploaded.FILE_NAME,
+              COMPANY_CODE: uploaded.COMPANY_CODE || companyCode,
+            };
+          } catch (error) {
+            Util.toastMsg(`${file.fileName} 업로드 실패`, 'error');
+            throw error;
+          }
+        }),
+      );
+
+      setFileList((prev) =>
+        prev.map((f) => results.find((r) => r.seq === f.seq) || f),
+      );
+      setUploadedFiles((prev) => [...prev, ...results]);
+      Util.toastMsg('파일 업로드가 완료되었습니다.', 'success');
+      setIsFileModal(false);
+    } catch (error) {
+      console.error('파일 업로드 에러:', error);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const renderSearchRow = () => {
     return (
@@ -210,7 +338,7 @@ const WRK010201 = () => {
             onPress={handleSearch}
             style={{
               marginLeft: 8,
-              flex: 1,
+              padding: 4,
               aspectRatio: 1,
               borderWidth: 2,
               borderColor: '#27A7FF',
@@ -219,7 +347,7 @@ const WRK010201 = () => {
               alignItems: 'center',
             }}
           >
-            <Icon name='file-search-outline' color='#27A7FF' />
+            <Icon name='file-search-outline' color='#27A7FF' size={24} />
           </TouchableOpacity>
         </View>
       </View>
@@ -404,16 +532,34 @@ const WRK010201 = () => {
               />
             </View>
             {fileList?.map((elem, i) => (
-              <View style={[styles.infoRow, { alignItems: 'center' }]}>
+              <View
+                style={[styles.infoRow, { alignItems: 'center' }]}
+                key={elem.seq}
+              >
                 <View style={styles.infoValueBox}>
                   <Text style={[styles.infoValueText]}>{elem?.seq}</Text>
                 </View>
                 <View style={{ width: 8 }} />
                 <View style={[styles.infoValueBox, { flex: 1 }]}>
                   <Text style={styles.infoValueText}>
-                    {elem?.fileName} ({elem?.fileSize})
+                    {elem?.fileName} ({elem?.fileSize}){elem?.uploaded && ' ✅'}
                   </Text>
                 </View>
+                <View style={{ width: 8 }} />
+                <TouchableOpacity
+                  onPress={() => handleDeleteFile(elem.seq)}
+                  style={{
+                    padding: 8,
+                    borderRadius: 4,
+                    backgroundColor: '#FF3D71',
+                  }}
+                >
+                  <Icon
+                    name='trash-can-outline'
+                    color='#FFFFFF'
+                    style={{ width: 20, height: 20 }}
+                  />
+                </TouchableOpacity>
               </View>
             ))}
           </View>
@@ -474,8 +620,18 @@ const WRK010201 = () => {
             title='첨부파일 추가'
             contents={
               <>
+                <LVButton
+                  title='파일 선택'
+                  onPress={onPressFileAdd}
+                  buttonStyle={styles.smallOutlineButton}
+                  textStyle={styles.smallOutlineButtonText}
+                />
+                <View style={{ height: 12 }} />
                 {fileList?.map((elem, i) => (
-                  <View style={[styles.infoRow, { alignItems: 'center' }]}>
+                  <View
+                    style={[styles.infoRow, { alignItems: 'center' }]}
+                    key={elem.seq}
+                  >
                     <View style={styles.infoValueBox}>
                       <Text style={[styles.infoValueText]}>{elem?.seq}</Text>
                     </View>
@@ -483,14 +639,39 @@ const WRK010201 = () => {
                     <View style={[styles.infoValueBox, { flex: 1 }]}>
                       <Text style={styles.infoValueText}>
                         {elem?.fileName} ({elem?.fileSize})
+                        {elem?.uploaded && ' ✅'}
                       </Text>
                     </View>
+                    <View style={{ width: 8 }} />
+                    <TouchableOpacity
+                      onPress={() => handleDeleteFile(elem.seq)}
+                      style={{
+                        padding: 8,
+                        borderRadius: 4,
+                        backgroundColor: '#FF3D71',
+                      }}
+                    >
+                      <Icon
+                        name='trash-can-outline'
+                        fill='#FFFFFF'
+                        style={{ width: 20, height: 20 }}
+                      />
+                    </TouchableOpacity>
                   </View>
                 ))}
+                {uploading && (
+                  <View style={{ marginTop: 12, alignItems: 'center' }}>
+                    <ActivityIndicator size='small' color='#27A7FF' />
+                    <Text style={{ color: '#8F9BB3', marginTop: 4 }}>
+                      파일 업로드 중...
+                    </Text>
+                  </View>
+                )}
               </>
             }
             onVisible={setIsFileModal}
             onOk={handleSaveFile}
+            okDisabled={uploading}
           />
         )}
       </View>
@@ -500,20 +681,29 @@ const WRK010201 = () => {
     </View>
   );
 };
+
 export default WRK010201;
+
+const COLORS = {
+  screen: '#F6F7FB',
+  white: '#FFFFFF',
+  border: '#E5E9F0',
+  text: '#222B45',
+  subText: '#8F9BB3',
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: LVColors.screen,
+    backgroundColor: COLORS.screen,
   },
   safeArea: {
     flex: 1,
-    backgroundColor: LVColors.screen,
+    backgroundColor: COLORS.screen,
   },
   scrollView: {
     flex: 1,
-    backgroundColor: LVColors.screen,
+    backgroundColor: COLORS.screen,
   },
   scrollContent: {
     padding: 16,
@@ -536,15 +726,15 @@ const styles = StyleSheet.create({
     width: 52,
     fontSize: 14,
     fontWeight: '700',
-    color: LVColors.subText,
+    color: COLORS.subText,
     marginRight: 10,
   },
   selectWrap: {
     flex: 1,
   },
   select: {
-    backgroundColor: LVColors.white,
-    borderColor: LVColors.border,
+    backgroundColor: COLORS.white,
+    borderColor: COLORS.border,
     borderRadius: 8,
   },
   searchButton: {
@@ -563,11 +753,11 @@ const styles = StyleSheet.create({
     color: '#27A7FF',
   },
   card: {
-    backgroundColor: LVColors.white,
+    backgroundColor: COLORS.white,
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: LVColors.border,
+    borderColor: COLORS.border,
     marginBottom: 14,
   },
   selectedCard: {
@@ -593,13 +783,13 @@ const styles = StyleSheet.create({
   blockTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: LVColors.text,
+    color: COLORS.text,
     marginBottom: 14,
   },
   blockTitleNoMargin: {
     fontSize: 16,
     fontWeight: '700',
-    color: LVColors.text,
+    color: COLORS.text,
   },
   smallOutlineButton: {
     borderRadius: 8,
@@ -636,45 +826,45 @@ const styles = StyleSheet.create({
   infoLabel1: {
     fontSize: 13,
     fontWeight: '700',
-    color: LVColors.subText,
+    color: COLORS.subText,
     marginBottom: 6,
     width: '30%',
   },
   infoLabel2: {
     fontSize: 13,
     fontWeight: '700',
-    color: LVColors.subText,
+    color: COLORS.subText,
     marginBottom: 6,
   },
   infoValueBox: {
     minHeight: 48,
     borderWidth: 1,
-    borderColor: LVColors.border,
+    borderColor: COLORS.border,
     borderRadius: 8,
-    backgroundColor: LVColors.white,
+    backgroundColor: COLORS.white,
     justifyContent: 'center',
     paddingHorizontal: 12,
   },
   infoTitleText: {
     fontSize: 18,
     fontWeight: '700',
-    color: LVColors.text,
+    color: COLORS.text,
   },
   infoValueText: {
     fontSize: 14,
-    color: LVColors.text,
+    color: COLORS.text,
   },
   datepicker: {
     height: 48,
-    backgroundColor: LVColors.white,
-    borderColor: LVColors.border,
+    backgroundColor: COLORS.white,
+    borderColor: COLORS.border,
     borderRadius: 8,
     justifyContent: 'center',
   },
   input: {
     minHeight: 58,
-    backgroundColor: LVColors.white,
-    borderColor: LVColors.border,
+    backgroundColor: COLORS.white,
+    borderColor: COLORS.border,
     borderRadius: 12,
   },
   inputText: {
@@ -683,8 +873,8 @@ const styles = StyleSheet.create({
   },
   remarkInput: {
     minHeight: 92,
-    backgroundColor: LVColors.white,
-    borderColor: LVColors.border,
+    backgroundColor: COLORS.white,
+    borderColor: COLORS.border,
     borderRadius: 12,
   },
   remarkInputText: {
@@ -700,7 +890,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: LVColors.screen,
+    backgroundColor: COLORS.screen,
   },
   bottomRightWrap: {
     flexDirection: 'row',
