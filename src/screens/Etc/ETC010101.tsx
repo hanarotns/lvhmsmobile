@@ -1,11 +1,5 @@
 import * as icon from '@/src/assets/images';
-import {
-  Divider,
-  Icon,
-  LVLoadingIndicator,
-  SafeAreaView,
-  Text,
-} from '@/src/components';
+import { Divider, Icon, LVLoadingIndicator, Text } from '@/src/components';
 import LVColors from '@/src/components/LVColors';
 import { Fetch, Util } from '@/src/lib';
 import { useEmpStore } from '@/src/stores/empStore';
@@ -14,6 +8,10 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 import { useIsFocused } from '@react-navigation/native';
 import 'dayjs/locale/ko';
 import React, { useEffect, useState } from 'react';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
@@ -50,83 +48,86 @@ const ETC010101 = () => {
       }
     });
   };
+  const insets = useSafeAreaInsets();
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.section}>
-          <TouchableOpacity
-            onPress={() => {
-              movingScreen.navigate('ETC010201');
-            }}
-            style={styles.profileCard}
-          >
-            <View style={styles.profileLeft}>
-              <Image
-                style={styles.profileImg}
-                source={
-                  empInfo?.PICTURE_PATH
-                    ? {
-                        uri: `http://lv1.htns.com/api/apicall/getDownload/${empInfo?.PICTURE_PATH}`,
-                        headers: {
-                          'X-CSRF-TOKEN': global.gToken,
-                          Cookie: global.gCookie,
-                          // withCredentials: true,
-                        },
-                      }
-                    : icon.ico_profile
-                }
-              />
+      <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+        <View style={{ flex: 1, paddingBottom: insets.bottom }}>
+          <View style={styles.section}>
+            <TouchableOpacity
+              onPress={() => {
+                movingScreen.navigate('ETC010201');
+              }}
+              style={styles.profileCard}
+            >
+              <View style={styles.profileLeft}>
+                <Image
+                  style={styles.profileImg}
+                  source={
+                    empInfo?.PICTURE_PATH
+                      ? {
+                          uri: `http://lv1.htns.com/api/apicall/getDownload/${empInfo?.PICTURE_PATH}`,
+                          headers: {
+                            'X-CSRF-TOKEN': global.gToken,
+                            Cookie: global.gCookie,
+                            // withCredentials: true,
+                          },
+                        }
+                      : icon.ico_profile
+                  }
+                />
 
-              <View style={styles.profileContent}>
-                <Text style={styles.profileTitleText}>
-                  {`${empInfo?.EMP_NAME_LC} ${empInfo?.POSITION_CODE}`}
-                </Text>
+                <View style={styles.profileContent}>
+                  <Text style={styles.profileTitleText}>
+                    {`${empInfo?.EMP_NAME_LC} ${empInfo?.POSITION_CODE}`}
+                  </Text>
 
-                <Text style={styles.profileSubText}>{empInfo?.EMP_ID}</Text>
+                  <Text style={styles.profileSubText}>{empInfo?.EMP_ID}</Text>
+                </View>
               </View>
-            </View>
 
-            <Icon name='chevron-right' color='#8F9BB3' />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.section}>
-          <TouchableOpacity
-            onPress={() => {
-              movingScreen.navigate('ETC010301');
-            }}
-            style={styles.menuButton}
-          >
-            <Icon name='view-grid-outline' color='#373747' />
-            <Text style={styles.menuText}>비밀번호 변경</Text>
-          </TouchableOpacity>
-          <Divider />
-          <TouchableOpacity
-            onPress={() => {
-              movingScreen.navigate('LEA010101');
-            }}
-            style={styles.menuButton}
-          >
-            <Icon name='view-grid-outline' color='#373747' />
-            <Text style={styles.menuText}>연차촉진제 설정</Text>
-          </TouchableOpacity>
-          <Divider />
-          <TouchableOpacity
-            onPress={() => {
-              movingScreen.navigate('PAL010101');
-            }}
-            style={styles.menuButton}
-          >
-            <Icon name='view-grid-outline' color='#373747' />
-            <Text style={styles.menuText}>결재선 설정</Text>
-          </TouchableOpacity>
-          <Divider />
-        </View>
-        <View style={styles.floatingButton}>
-          <TouchableOpacity onPress={logout} style={styles.menuButton}>
-            <Icon name='power-standby' color='#373747' />
-            <Text style={styles.menuText}>로그아웃</Text>
-          </TouchableOpacity>
+              <Icon name='chevron-right' color='#8F9BB3' />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.section}>
+            <TouchableOpacity
+              onPress={() => {
+                movingScreen.navigate('ETC010301');
+              }}
+              style={styles.menuButton}
+            >
+              <Icon name='view-grid-outline' color='#373747' />
+              <Text style={styles.menuText}>비밀번호 변경</Text>
+            </TouchableOpacity>
+            <Divider />
+            <TouchableOpacity
+              onPress={() => {
+                movingScreen.navigate('LEA010101');
+              }}
+              style={styles.menuButton}
+            >
+              <Icon name='view-grid-outline' color='#373747' />
+              <Text style={styles.menuText}>연차촉진제 설정</Text>
+            </TouchableOpacity>
+            <Divider />
+            <TouchableOpacity
+              onPress={() => {
+                movingScreen.navigate('PAL010101');
+              }}
+              style={styles.menuButton}
+            >
+              <Icon name='view-grid-outline' color='#373747' />
+              <Text style={styles.menuText}>결재선 설정</Text>
+            </TouchableOpacity>
+            <Divider />
+          </View>
+          <View style={styles.floatingButton}>
+            <TouchableOpacity onPress={logout} style={styles.menuButton}>
+              <Icon name='power-standby' color='#373747' />
+              <Text style={styles.menuText}>로그아웃</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
       {loading && <LVLoadingIndicator />}
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
   },
   floatingButton: {
     position: 'absolute',
-    bottom: 32,
+    bottom: 0,
     right: 32,
   },
   profileLeft: {
