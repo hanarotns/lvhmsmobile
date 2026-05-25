@@ -1,7 +1,7 @@
 import Text from '@/src/components/CustomText';
+import Icon from '@/src/components/Icon';
 import LVButton from '@/src/components/LVButton';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
-import { Icon } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import {
@@ -50,7 +50,8 @@ const LVDateTimePicker: React.FC = (props) => {
         <Text style={styles.buttonText}>
           {dayjs(date).format('YYYY-MM-DD')}
         </Text>
-        <Icon name='calendar-outline' fill='#6A727B' style={[LVStyles.iconS]} />
+        <Icon name='calendar' color='#6A727B' />
+        <Icon name='calendar' fill='#6A727B' style={[LVStyles.iconS]} />
       </TouchableOpacity>
       <View
         style={{
@@ -62,7 +63,7 @@ const LVDateTimePicker: React.FC = (props) => {
         onPress={() => openModal('time')}
       >
         <Text style={styles.buttonText}>{dayjs(date).format('HH:mm')}</Text>
-        <Icon name='clock-outline' fill='#6A727B' style={[LVStyles.iconS]} />
+        <Icon name='clock-outline' color='#6A727B' />
       </TouchableOpacity>
       <Modal
         transparent
