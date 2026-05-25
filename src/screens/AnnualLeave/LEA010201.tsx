@@ -543,7 +543,7 @@ const LEA010201 = () => {
             renderArrow={(direction: any) => (
               <Icon
                 name={direction === 'left' ? 'chevron-left' : 'chevron-right'}
-                style={styles.iconOfarrow}
+                color='gray'
               />
             )}
             theme={themeOfCalendar}
