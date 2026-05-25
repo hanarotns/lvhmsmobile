@@ -405,9 +405,10 @@ const MYH010101 = ({ navigation }) => {
             img={icon.img_annualleave}
             imgStyle={{ width: 30, height: 86 }}
             onPress={() => {
-              navigation.navigate('AnnualLeave', {
-                screen: 'LEA010101',
-              });
+              movingScreen.navigate('LEA010101');
+              // navigation.navigate('AnnualLeave', {
+              //   screen: 'LEA010101',
+              // });
             }}
             touchable
           />
@@ -417,9 +418,10 @@ const MYH010101 = ({ navigation }) => {
             img={icon.img_overtime}
             imgStyle={{ width: 29, height: 40 }}
             onPress={() => {
-              navigation.navigate('Overtime', {
-                screen: 'OVT010101',
-              });
+              movingScreen.navigate('OVT010101');
+              // navigation.navigate('Overtime', {
+              //   screen: 'OVT010101',
+              // });
             }}
             touchable
           />
@@ -434,9 +436,10 @@ const MYH010101 = ({ navigation }) => {
             img={icon.img_approval}
             imgStyle={{ width: 96, height: 52 }}
             onPress={() => {
-              navigation.navigate('Approval', {
-                screen: 'APR010101',
-              });
+              movingScreen.navigate('APR010101');
+              // navigation.navigate('Approval', {
+              //   screen: 'APR010101',
+              // });
             }}
             touchable
           />
@@ -446,9 +449,10 @@ const MYH010101 = ({ navigation }) => {
             touchable={false}
             title={'캘린더'}
             onClick={() => {
-              navigation.navigate('WorkLog', {
-                screen: 'WLO010101',
-              });
+              movingScreen.navigate('WLO010101');
+              // navigation.navigate('WorkLog', {
+              //   screen: 'WLO010101',
+              // });
             }}
             cardStyle={{ minHeight: 272, backgroundColor: '#AADDFF' }}
             moreView={icon.ico_arrow_right}
@@ -541,9 +545,10 @@ const MYH010101 = ({ navigation }) => {
             img={icon.img_pay}
             imgStyle={{ width: 68, height: 40 }}
             onPress={() => {
-              navigation.navigate('Account', {
-                screen: 'ACC010101',
-              });
+              movingScreen.navigate('ACC010101');
+              // navigation.navigate('Account', {
+              //   screen: 'ACC010101',
+              // });
             }}
             touchable
           />
@@ -703,9 +708,10 @@ const MYH010101 = ({ navigation }) => {
         />
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Etc', {
-              screen: 'ETC010101',
-            });
+            movingScreen.navigate('ETC010101');
+            // navigation.navigate('Etc', {
+            //   screen: 'ETC010101',
+            // });
           }}
         >
           <Image
