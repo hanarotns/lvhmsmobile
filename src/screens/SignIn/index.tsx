@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   Platform,
@@ -92,14 +92,6 @@ const SignIn = ({ navigation }) => {
     });
     console.log(deviceInfo);
   };
-
-  // 동기 실행
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-    return () => {};
-  }, [navigation]);
 
   const signIn = () => {
     // 비즈니스 체크로직
