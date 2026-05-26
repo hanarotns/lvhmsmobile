@@ -15,14 +15,11 @@ import { Util } from '@/src/lib';
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import React, { useEffect, useState } from 'react';
-
 import { StyleSheet, View } from 'react-native';
-
 import * as Action from './Action'; // API통신
-
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
 const OVT010301 = () => {

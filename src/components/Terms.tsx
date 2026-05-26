@@ -1,12 +1,10 @@
-import React from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
-
-import termContent from './termContent';
-// import RNRestart from 'react-native-restart'; // Import package from node modules
 import * as icon from '@/src/assets/images';
 import Text from '@/src/components/CustomText';
 import { Divider } from '@ui-kitten/components';
+import React from 'react';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import termContent from './termContent';
 
 const CheckNText = ({ label, checked }) => {
   return (

@@ -1,3 +1,17 @@
+import * as icon from '@/src/assets/images';
+import {
+  KeyboardAwareScrollView,
+  LVButton,
+  LVCheckBox,
+  LVLoadingIndicator,
+  LVStyles,
+  SafeAreaView,
+  ShowPasswordIcon,
+  Terms,
+  Text,
+  TextField,
+} from '@/src/components';
+import { Util } from '@/src/lib';
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
@@ -6,7 +20,6 @@ import { useNavigation } from '@react-navigation/native';
 import * as Application from 'expo-application';
 import * as Device from 'expo-device';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-
 import {
   Image,
   Platform,
@@ -14,31 +27,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
-import { Util } from '@/src/lib';
-
-import {
-  KeyboardAwareScrollView,
-  LVButton,
-  LVCheckBox,
-  LVLoadingIndicator,
-  SafeAreaView,
-  ShowPasswordIcon,
-  Terms,
-  Text,
-  TextField,
-} from '@/src/components';
-
 import * as Action from './Action';
-// import RNRestart from 'react-native-restart'; // Import package from node modules
-import * as icon from '@/src/assets/images';
-import LVStyles from '@/src/components/LVStyles';
-
-/**
- * 로그인 화면
- * @param {*} param0
- * @returns
- */
 
 const SignIn = ({ navigation }) => {
   const movingScreen = useNavigation();
@@ -124,8 +113,6 @@ const SignIn = ({ navigation }) => {
     setLoading(true);
 
     Action.signIn(loginInfo).then((data) => {
-      // @todo 임시 코드
-      // RNRestart.Restart();
       if (data) {
         setSessionInfo(data.session);
         // 로그인 id, pwd 지우기
@@ -187,15 +174,7 @@ const SignIn = ({ navigation }) => {
               />
             }
           />
-          <View
-            style={{
-              height: 25,
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-              marginBottom: 12,
-            }}
-          >
+          <View style={styles.subContainer}>
             <LVCheckBox
               label='간편로그인'
               value={loginInfo.isRememberLogin}
@@ -249,6 +228,10 @@ const SignIn = ({ navigation }) => {
 export default SignIn;
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+    backgroundColor: '#F0F2F6',
+  },
   autoLogin: {
     marginRight: 20,
     alignSelf: 'flex-end',
@@ -287,9 +270,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: '#F0F2F6',
+  subContainer: {
+    height: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   textFieldSt: {
     width: '100%',

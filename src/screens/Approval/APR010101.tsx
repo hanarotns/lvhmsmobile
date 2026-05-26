@@ -8,20 +8,16 @@ import {
   Text,
 } from '@/src/components'; // 공통컴포넌트
 import LVStyles from '@/src/components/LVStyles';
+import { Util } from '@/src/lib';
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
-import React, { useEffect, useState } from 'react';
-
-import { Image, StyleSheet, View } from 'react-native';
-
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import 'dayjs/locale/ko';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action'; // API통신
-
-import { Util } from '@/src/lib';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native';
 
 const APR010101 = () => {
   const isFocused = useIsFocused();

@@ -15,7 +15,6 @@ import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { IndexPath, Select, SelectItem } from '@ui-kitten/components';
 import React, { useEffect, useState } from 'react';
-
 import {
   Image,
   ScrollView,

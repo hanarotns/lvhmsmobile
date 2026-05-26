@@ -1,4 +1,5 @@
 import {
+  Icon,
   LVButton,
   LVConfirmIndicator,
   LVLoadingIndicator,
@@ -10,29 +11,23 @@ import {
   Text,
 } from '@/src/components'; // 공통컴포넌트
 import LVStyles from '@/src/components/LVStyles';
+import { Util } from '@/src/lib';
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
+import { useNavigation } from '@react-navigation/native';
+import { Input } from '@ui-kitten/components';
+import 'dayjs/locale/ko';
 import React, {
   forwardRef,
-  Icon,
   useEffect,
   useImperativeHandle,
   useRef,
   useState,
 } from 'react';
-
-import { StyleSheet, View } from 'react-native';
-
-import { Util } from '@/src/lib';
-import { Input } from '@ui-kitten/components';
-import 'dayjs/locale/ko';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action'; // API통신
-
-import { TouchableOpacity } from 'react-native';
-
-import { useNavigation } from '@react-navigation/native';
 
 const PAL010201 = () => {
   const movingScreen = useNavigation();

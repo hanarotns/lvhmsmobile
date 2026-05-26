@@ -18,7 +18,6 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-
 import { StyleSheet, View } from 'react-native';
 import * as Action from './Action';
 

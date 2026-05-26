@@ -15,7 +15,6 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import 'dayjs/locale/ko';
 import React, { useEffect, useState } from 'react';
-
 import { TouchableOpacity, View } from 'react-native';
 
 const SGN010101 = () => {

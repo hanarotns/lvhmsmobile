@@ -5,17 +5,14 @@ import { Fetch, Util } from '@/src/lib';
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import 'dayjs/locale/ko';
 import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-
-import { useNavigation } from '@react-navigation/native';
 
 const ETC010101 = () => {
   const isFocused = useIsFocused();

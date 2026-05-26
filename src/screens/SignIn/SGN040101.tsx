@@ -12,7 +12,6 @@ import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import React, { useEffect, useState } from 'react';
-
 import { Alert, StyleSheet, View } from 'react-native';
 
 const SGN040101 = () => {

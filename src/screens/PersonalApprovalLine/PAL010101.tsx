@@ -10,9 +10,12 @@ import {
   Text,
 } from '@/src/components'; // 공통컴포넌트
 import LVStyles from '@/src/components/LVStyles';
+import { Util } from '@/src/lib';
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import 'dayjs/locale/ko';
 import React, {
   forwardRef,
   useEffect,
@@ -20,17 +23,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-
-import { Image, StyleSheet, View } from 'react-native';
-
-import { Util } from '@/src/lib';
-import 'dayjs/locale/ko';
-
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as Action from './Action'; // API통신
-
-import { TouchableOpacity } from 'react-native';
-
-import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 const PAL010101 = () => {
   const isFocused = useIsFocused();

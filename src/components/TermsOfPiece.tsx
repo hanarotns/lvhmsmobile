@@ -1,11 +1,9 @@
+import Text from '@/src/components/CustomText';
+import { Divider } from '@ui-kitten/components';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-
-import Text from '@/src/components/CustomText';
-import termContent from './termContent';
-// import RNRestart from 'react-native-restart'; // Import package from node modules
-import { Divider } from '@ui-kitten/components';
 import { ScrollView } from 'react-native-gesture-handler';
+import termContent from './termContent';
 
 const TermsPiece = ({ category, onConfirm }) => {
   return (
