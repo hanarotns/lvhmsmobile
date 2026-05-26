@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import LVStyles from './LVStyles';
 
 const LVDateTimePicker: React.FC = (props) => {
   const { date, setDate } = props;
@@ -51,7 +50,6 @@ const LVDateTimePicker: React.FC = (props) => {
           {dayjs(date).format('YYYY-MM-DD')}
         </Text>
         <Icon name='calendar' color='#6A727B' />
-        <Icon name='calendar' fill='#6A727B' style={[LVStyles.iconS]} />
       </TouchableOpacity>
       <View
         style={{

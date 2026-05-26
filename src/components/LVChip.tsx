@@ -144,11 +144,7 @@ const LVChip = (props: any) => {
         </Text>
         {onPress && (
           <TouchableOpacity onPress={onPress}>
-            <Icon
-              name={'close-outline'}
-              fill={'#39CCCC'}
-              style={[LVStyles.iconS]}
-            />
+            <Icon name='close' color='#39CCCC' />
           </TouchableOpacity>
         )}
       </View>

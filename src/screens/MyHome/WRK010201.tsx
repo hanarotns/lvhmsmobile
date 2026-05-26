@@ -651,11 +651,7 @@ const WRK010201 = ({ navigation, route }) => {
                         backgroundColor: '#FF3D71',
                       }}
                     >
-                      <Icon
-                        name='trash-can-outline'
-                        fill='#FFFFFF'
-                        style={{ width: 20, height: 20 }}
-                      />
+                      <Icon name='trash-can-outline' color='#FFFFFF' />
                     </TouchableOpacity>
                   </View>
                 ))}
