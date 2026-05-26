@@ -14,7 +14,6 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 import * as icon from '@/src/assets/images';
 import {
   Icon,
-  Input,
   Layout,
   LVButton,
   LVLoadingIndicator,
@@ -29,6 +28,7 @@ import {
 } from '@/src/components'; // 공통컴포넌트
 import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as Location from 'expo-location';
