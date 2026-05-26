@@ -1,4 +1,5 @@
 import {
+  Icon,
   LVApprLine,
   LVButton,
   LVChip,
@@ -26,7 +27,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Icon, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as PALAction from '../PersonalApprovalLine/Action'; // API통신 (개인별 결재선 분리)
 import * as Action from './Action'; // API통신
