@@ -12,11 +12,11 @@ import {
   LVChip,
   LVLoadingIndicator,
   LVNoData,
+  LVStyles,
   RefreshControl,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
-import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';

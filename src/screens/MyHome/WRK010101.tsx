@@ -13,13 +13,13 @@ import {
   Layout,
   LVButton,
   LVChip,
+  LVColors,
   LVLoadingIndicator,
   LVNoData,
+  LVStyles,
   SafeAreaView,
   Text,
 } from '@/src/components';
-import LVColors from '@/src/components/LVColors';
-import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { IndexPath, Select, SelectItem } from '@ui-kitten/components';

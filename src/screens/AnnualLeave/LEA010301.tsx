@@ -13,11 +13,11 @@ import {
   LVFormOfContents,
   LVLoadingIndicator,
   LVModal,
+  LVStyles,
   RefreshControl,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
-import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
 import {
   RouteProp,

@@ -10,11 +10,11 @@ import {
   LVButton,
   LVCheckBox,
   LVLoadingIndicator,
+  LVStyles,
   SafeAreaView,
   TermsOfPiece,
   Text,
 } from '@/src/components';
-import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import 'dayjs/locale/ko';

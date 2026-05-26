@@ -9,11 +9,11 @@ import {
   KeyboardAwareScrollView,
   LVButton,
   LVLoadingIndicator,
+  LVStyles,
   SafeAreaView,
   Text,
   TextField,
 } from '@/src/components';
-import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
 import { useIsFocused } from '@react-navigation/native';
 import * as Action from './Action';

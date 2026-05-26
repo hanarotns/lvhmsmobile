@@ -10,11 +10,11 @@ import {
   LVButton,
   LVLoadingIndicator,
   LVRadioButton,
+  LVStyles,
   SafeAreaView,
   Text,
   TextField,
 } from '@/src/components';
-import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
 import util from '@/src/lib/util';
 import {

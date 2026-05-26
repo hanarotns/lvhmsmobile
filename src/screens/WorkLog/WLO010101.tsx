@@ -7,10 +7,10 @@ import {
   LVLoadingIndicator,
   LVModal,
   LVNoData,
+  LVStyles,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
-import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
 import { useIsFocused } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';

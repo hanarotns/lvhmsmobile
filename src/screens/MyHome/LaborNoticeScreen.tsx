@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { LVButton } from '@/src/components';
-import LVStyles from '@/src/components/LVStyles';
+import { LVButton, LVStyles } from '@/src/components';
 
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
