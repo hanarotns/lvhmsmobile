@@ -7,6 +7,8 @@ import {
   View,
 } from 'react-native';
 
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
@@ -28,13 +30,20 @@ import * as Action from './Action'; // API통신
 const WRK010201 = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
+
+  const loginInfo = useLoginStore((state) => state.loginInfo);
+  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
+  const sessionInfo = useSessionStore((state) => state.sessionInfo);
+  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const empInfo = useEmpStore((state) => state.empInfo);
+  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
+
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
   const [isSelectedCompany, setIsSelectedCompany] = useState(false);
   const [isPostModal, setIsPostModal] = useState(false);
   const [isFileModal, setIsFileModal] = useState(false);
-  const sessionInfo = useSessionStore((state) => state.sessionInfo);
 
   const [companyList, setCompanyList] = useState([
     { code: 'C001', name: '하나로에이' },
