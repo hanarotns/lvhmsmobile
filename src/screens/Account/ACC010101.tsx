@@ -71,7 +71,7 @@ const ACC010101 = () => {
   };
 
   return isCertify ? (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
+    <View style={styles.basicView}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
