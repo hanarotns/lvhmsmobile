@@ -1,3 +1,10 @@
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+
 import {
   LVApprLine,
   LVButton,
@@ -12,9 +19,6 @@ import {
 } from '@/src/components'; // 공통컴포넌트
 import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
-import { useEmpStore } from '@/src/stores/empStore';
-import { useLoginStore } from '@/src/stores/loginStore';
-import { useSessionStore } from '@/src/stores/sessionStore';
 import {
   RouteProp,
   StackActions,
@@ -24,8 +28,6 @@ import {
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
 import * as Action from './Action'; // API통신
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;

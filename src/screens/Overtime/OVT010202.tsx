@@ -1,3 +1,16 @@
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+
 import {
   Icon,
   LVApprLine,
@@ -13,21 +26,10 @@ import {
 } from '@/src/components'; // 공통컴포넌트
 import LVStyles from '@/src/components/LVStyles';
 import { Util } from '@/src/lib';
-import { useEmpStore } from '@/src/stores/empStore';
-import { useLoginStore } from '@/src/stores/loginStore';
-import { useSessionStore } from '@/src/stores/sessionStore';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as PALAction from '../PersonalApprovalLine/Action'; // API통신 (개인별 결재선 분리)
 import * as Action from './Action'; // API통신
 

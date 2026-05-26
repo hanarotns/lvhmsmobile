@@ -1,3 +1,17 @@
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
+import { useEmpStore } from '@/src/stores/empStore';
+import { useLoginStore } from '@/src/stores/loginStore';
+import { useSessionStore } from '@/src/stores/sessionStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import * as icon from '@/src/assets/images';
 import {
   KeyboardAwareScrollView,
@@ -12,21 +26,9 @@ import {
   TextField,
 } from '@/src/components';
 import { Util } from '@/src/lib';
-import { useEmpStore } from '@/src/stores/empStore';
-import { useLoginStore } from '@/src/stores/loginStore';
-import { useSessionStore } from '@/src/stores/sessionStore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as Application from 'expo-application';
 import * as Device from 'expo-device';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
 import * as Action from './Action';
 
 const SignIn = ({ navigation }) => {
