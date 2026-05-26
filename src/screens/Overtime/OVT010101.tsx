@@ -7,10 +7,10 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 
 import * as icon from '@/src/assets/images';
 import {
-  Icon,
   LVButton,
   LVChip,
   LVLoadingIndicator,
+  LVMovingDateOfArrow,
   LVNoData,
   LVStyles,
   RefreshControl,
@@ -104,7 +104,7 @@ const OVT010101 = () => {
           >
             {empInfo?.EMP_NAME_LC}님 시간외 현황입니다.
           </Text>
-          <MovingDateOfArrow
+          <LVMovingDateOfArrow
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             gap='month'
@@ -372,40 +372,6 @@ const ContentOfPreview = (props: any) => {
         )}
       </View>
     </TouchableOpacity>
-  );
-};
-
-const MovingDateOfArrow = (props: any) => {
-  const { selectedDate, setSelectedDate, gap, content } = props;
-  return (
-    <View style={[LVStyles.row, { justifyContent: 'center' }]}>
-      <Icon
-        name='chevron-left'
-        color='#939DAA'
-        onPress={() => {
-          const temp = selectedDate.add(-1, gap);
-          setSelectedDate(temp);
-        }}
-      />
-      <Text
-        style={{
-          fontWeight: '800',
-          fontSize: 14,
-          color: '#1E2125',
-          marginHorizontal: 4,
-        }}
-      >
-        {content}
-      </Text>
-      <Icon
-        name='chevron-right'
-        color='#939DAA'
-        onPress={() => {
-          const temp = selectedDate.add(+1, gap);
-          setSelectedDate(temp);
-        }}
-      />
-    </View>
   );
 };
 

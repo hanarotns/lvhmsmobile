@@ -13,6 +13,7 @@ import LVFlag from './LVFlag';
 import LVFormOfContents from './LVFormOfContents';
 import LVLoadingIndicator from './LVLoadingIndicator';
 import LVModal from './LVModal';
+import LVMovingDateOfArrow from './LVMovingDateOfArrow';
 import LVNoData from './LVNoData';
 import LVRadioButton from './LVRadioButton';
 import LVSection from './LVSection';
@@ -93,6 +94,7 @@ export {
   LVFormOfContents,
   LVLoadingIndicator,
   LVModal,
+  LVMovingDateOfArrow,
   LVNoData,
   LVRadioButton,
   LVSection,

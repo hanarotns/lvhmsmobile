@@ -9,6 +9,7 @@ import {
   Divider,
   Icon,
   LVLoadingIndicator,
+  LVMovingDateOfArrow,
   LVNoData,
   LVStyles,
   RefreshControl,
@@ -62,39 +63,6 @@ const ACC010201 = () => {
       setRefreshing(false);
     }, 1000);
   };
-
-  const MovingMonth = () => (
-    <View
-      style={[LVStyles.row, { justifyContent: 'center', paddingVertical: 16 }]}
-    >
-      <TouchableOpacity
-        onPress={() => {
-          const temp = selectedDate.add(-1, 'month');
-          setSelectedDate(temp);
-        }}
-      >
-        <Icon name={'chevron-left'} color={'#939DAA'} />
-      </TouchableOpacity>
-      <Text
-        style={{
-          fontWeight: '800',
-          fontSize: 16,
-          color: '#1E2125',
-          marginHorizontal: 8,
-        }}
-      >
-        {selectedDate.format('YYYY')}년 {selectedDate.format('MM')}월
-      </Text>
-      <TouchableOpacity
-        onPress={() => {
-          const temp = selectedDate.add(+1, 'month');
-          setSelectedDate(temp);
-        }}
-      >
-        <Icon name={'chevron-right'} color={'#939DAA'} />
-      </TouchableOpacity>
-    </View>
-  );
 
   const SubTitle = ({ label, value, fontColor }) => (
     <View
@@ -356,7 +324,17 @@ const ACC010201 = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <MovingMonth />
+      <View style={{ paddingVertical: 16 }}>
+        <LVMovingDateOfArrow
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          gap='month'
+          content={
+            `${selectedDate.format('YYYY')}년 ${selectedDate.format('MM')}월` ||
+            '-'
+          }
+        />
+      </View>
       <View
         style={[
           {
