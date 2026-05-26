@@ -1,7 +1,3 @@
-// component의 공통 라이브러리
-/* *
- * fucntions
- * */
 import LVApprLine from './LVApprLine';
 import LVButton from './LVButton';
 import LVCardView from './LVCardView';
