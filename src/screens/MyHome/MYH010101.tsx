@@ -411,9 +411,6 @@ const MYH010101 = ({ navigation }) => {
             imgStyle={{ width: 30, height: 86 }}
             onPress={() => {
               movingScreen.navigate('LEA010101');
-              // navigation.navigate('AnnualLeave', {
-              //   screen: 'LEA010101',
-              // });
             }}
             touchable
           />
@@ -424,9 +421,6 @@ const MYH010101 = ({ navigation }) => {
             imgStyle={{ width: 29, height: 40 }}
             onPress={() => {
               movingScreen.navigate('OVT010101');
-              // navigation.navigate('Overtime', {
-              //   screen: 'OVT010101',
-              // });
             }}
             touchable
           />
@@ -442,9 +436,6 @@ const MYH010101 = ({ navigation }) => {
             imgStyle={{ width: 96, height: 52 }}
             onPress={() => {
               movingScreen.navigate('APR010101');
-              // navigation.navigate('Approval', {
-              //   screen: 'APR010101',
-              // });
             }}
             touchable
           />
@@ -455,9 +446,6 @@ const MYH010101 = ({ navigation }) => {
             title={'캘린더'}
             onClick={() => {
               movingScreen.navigate('WLO010101');
-              // navigation.navigate('WorkLog', {
-              //   screen: 'WLO010101',
-              // });
             }}
             cardStyle={{ minHeight: 272, backgroundColor: '#AADDFF' }}
             moreView={icon.ico_arrow_right}
@@ -551,9 +539,6 @@ const MYH010101 = ({ navigation }) => {
             imgStyle={{ width: 68, height: 40 }}
             onPress={() => {
               movingScreen.navigate('ACC010101');
-              // navigation.navigate('Account', {
-              //   screen: 'ACC010101',
-              // });
             }}
             touchable
           />
@@ -714,9 +699,6 @@ const MYH010101 = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => {
             movingScreen.navigate('ETC010101');
-            // navigation.navigate('Etc', {
-            //   screen: 'ETC010101',
-            // });
           }}
         >
           <Image

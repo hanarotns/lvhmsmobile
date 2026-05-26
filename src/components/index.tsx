@@ -1,3 +1,6 @@
+import LVColors from './LVColors';
+import LVStyles from './LVStyles';
+
 import LVApprLine from './LVApprLine';
 import LVButton from './LVButton';
 import LVCardView from './LVCardView';
@@ -15,11 +18,11 @@ import LVRadioButton from './LVRadioButton';
 import LVSection from './LVSection';
 import LVSelectBox from './LVSelectBox';
 import LVTwoLine from './LVTwoLine';
-import Terms from './Terms';
-import TermsOfPiece from './TermsOfPiece';
 
 import Text from './CustomText';
 import ShowPasswordIcon from './ShowPasswordIcon';
+import Terms from './Terms';
+import TermsOfPiece from './TermsOfPiece';
 
 import {
   NavigationContainer,
@@ -60,8 +63,6 @@ import {
   TopNavigationAction,
 } from '@ui-kitten/components';
 import Icon from './Icon';
-import LVColors from './LVColors';
-import LVStyles from './LVStyles';
 
 export {
   ApplicationProvider,

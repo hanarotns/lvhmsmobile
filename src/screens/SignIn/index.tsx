@@ -211,7 +211,7 @@ const SignIn = ({ navigation }) => {
           </View>
           <Text style={[styles.errorText]}>{loginError}</Text>
           <TouchableOpacity onPress={onConfirm} style={styles.terms}>
-            <Text style={{}}>이용약관/개인정보 확인</Text>
+            <Text>이용약관/개인정보 확인</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>
