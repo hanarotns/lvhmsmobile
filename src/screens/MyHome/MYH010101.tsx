@@ -53,9 +53,8 @@ const MYH010101 = ({ navigation }) => {
 
   const [todayInfo, setTodayInfo] = useState({});
   const [nearestOffice, setNearestOffice] = useState({});
-  const [mobile, setMobile] = useState({});
   const [position, setPosition] = useState({});
-  const [adress, setAdress] = useState({});
+  const [address, setAdress] = useState({});
   const [checkType, setCheckType] = useState('');
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [laborNotice1, setLaborNotice1] = useState([]);
@@ -82,23 +81,6 @@ const MYH010101 = ({ navigation }) => {
     if (!Util.isEmpty(position)) {
       setNearestOffice({});
       getNearOfficeM();
-      // @@ API key 신규생성 필요함
-      // fetch(
-      //   `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position?.lat},${position?.lon}&location_type=ROOFTOP&result_type=street_address&key=AIzaSyDMpeLY-bGH5XbZ6YbCXNW0jaIjITuJxDE` +
-      //     '&language=ko',
-      // )
-      //   .then(response => response.json())
-      //   .then(responseJson => {
-      //     console.log(
-      //       'reverse geo responseJson: \n' + JSON.stringify(responseJson),
-      //     );
-      //     setAdress(responseJson?.plus_code?.compound_code);
-      //     setOffsiteInfo({
-      //       ...offsiteInfo,
-      //       adressOfGPS: responseJson?.plus_code?.compound_code,
-      //     });
-      //   })
-      //   .catch(err => console.log('reverse geo error : \n' + err));
     }
   }, [position]);
 
@@ -200,11 +182,18 @@ const MYH010101 = ({ navigation }) => {
       WA_LAT: position?.lat,
       WA_LON: position?.lon,
     };
-    // const address = await Location.reverseGeocodeAsync({
-    //   latitude: position?.lat,
-    //   longitude: position?.lon,
-    // });
-    // console.log('@@ address', address);
+    const reverseGeoInfo = await Location.reverseGeocodeAsync({
+      latitude: position?.lat,
+      longitude: position?.lon,
+    });
+    const tempAddress = [
+      reverseGeoInfo?.[0]?.region,
+      reverseGeoInfo?.[0]?.city,
+      reverseGeoInfo?.[0]?.district,
+    ]
+      .filter(Boolean)
+      .join(' ');
+    setAdress(tempAddress);
     const result = await WLOAction.getNearOfficeM(payload);
     setTimeout(() => setNearestOffice(result), 300);
   };
@@ -246,7 +235,7 @@ const MYH010101 = ({ navigation }) => {
 
   const handleSave = async () => {
     if (checkType === 'O') {
-      if (!(offsiteInfo?.adress && offsiteInfo?.name && offsiteInfo?.memo)) {
+      if (!(offsiteInfo?.address && offsiteInfo?.name && offsiteInfo?.memo)) {
         Util.toastMsg('입력란을 모두 작성하세요.', 'info');
         return false;
       }
@@ -329,10 +318,7 @@ const MYH010101 = ({ navigation }) => {
                   color: '#FF9294',
                 }}
               >
-                {
-                  // adress?.substring(adress?.indexOf(' '), adress?.length) ||
-                  `근무지에서 벗어나 있어요.`
-                }
+                {!Util.isEmpty(address) ? address : `근무지에서 벗어나 있어요.`}
               </Text>
             </View>
           )}
@@ -813,7 +799,7 @@ const ContentsOfOffsite = (props: any) => {
         onChangeText={(p) => {
           setOffsiteInfo({
             ...offsiteInfo,
-            adress: p,
+            address: p,
           });
         }}
         size='large'
@@ -895,13 +881,6 @@ const ContentsOfNotInside = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-  textFieldSt: {
-    width: '100%',
-    marginBottom: 12,
-    backgroundColor: '#27A7FF17',
-    borderColor: '#27A7FF',
-    borderRadius: 8,
-  },
   profileImg: {
     width: 100,
     height: 100,
@@ -933,15 +912,4 @@ const styles = StyleSheet.create({
     color: '#939DAA',
   },
   cardArea: { width: '48%' },
-  indicator: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#454D585F',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loading: {
-    borderColor: '#fff',
-  },
 });
