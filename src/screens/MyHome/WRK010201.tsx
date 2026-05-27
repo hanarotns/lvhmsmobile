@@ -599,16 +599,16 @@ const WRK010201 = ({ navigation, route }) => {
         </KeyboardAwareScrollView>
         <View style={LVStyles.bottomButtonView}>
           <LVButton
-            title='지원하기'
-            onPress={onPressSubmit}
-            buttonStyle={styles.bottomMainButton}
-            textStyle={styles.bottomMainButtonText}
-          />
-          <LVButton
-            title='취소하기'
+            title='취소'
             onPress={onPressCancel}
-            buttonStyle={styles.bottomSubButton}
-            textStyle={styles.bottomSubButtonText}
+            buttonStyle={styles.cancelButton}
+            textStyle={styles.cancelButtonText}
+          />
+          <View style={{ width: 8 }} />
+          <LVButton
+            title='지원'
+            onPress={onPressSubmit}
+            buttonStyle={{ flex: 1 }}
           />
         </View>
       </View>
@@ -895,7 +895,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 48,
     borderRadius: 8,
-    marginRight: 8,
   },
   bottomMainButtonText: {
     fontSize: 15,
@@ -915,5 +914,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: '#27A7FF',
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  cancelButtonText: {
+    color: '#373747',
   },
 });
