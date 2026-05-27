@@ -748,15 +748,8 @@ const SGN010201 = () => {
   const isFormFilled = Object.values(memberInfo).every(Boolean);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <SafeAreaView
-        edges={['bottom']}
-        style={{
-          flex: 1,
-          justifyContent: 'space-between',
-          backgroundColor: '#FFF',
-        }}
-      >
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1 }}>
         <KeyboardAwareScrollView>
           <View>
             <View style={styles.container}>
@@ -775,7 +768,7 @@ const SGN010201 = () => {
           </View>
         </KeyboardAwareScrollView>
 
-        <View style={[LVStyles.row, styles.bottomButton]}>
+        <View style={[LVStyles.bottomButtonView]}>
           <LVButton
             title='회원가입 신청'
             onPress={handleRegister}
@@ -785,10 +778,9 @@ const SGN010201 = () => {
             }}
           />
         </View>
-      </SafeAreaView>
-
+      </View>
       {loading && <LVLoadingIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default SGN010201;
@@ -870,11 +862,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#27A7FF',
     fontWeight: '600',
-  },
-  bottomButton: {
-    padding: 32,
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
   },
 });

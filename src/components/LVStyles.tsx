@@ -8,6 +8,15 @@ const LVStyles = StyleSheet.create({
   container: {
     padding: 16,
   },
+  bottomButtonView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 32,
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
+  },
   iconXS: {
     width: 18,
     height: 18,

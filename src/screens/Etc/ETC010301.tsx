@@ -359,15 +359,15 @@ const ETC010301 = () => {
   const isFormFilled = Object.values(memberInfo).every(Boolean);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <SafeAreaView
-        edges={['bottom']}
-        style={{
-          flex: 1,
-          justifyContent: 'space-between',
-          backgroundColor: '#FFF',
-        }}
-      >
+    <SafeAreaView
+      edges={['bottom']}
+      style={{
+        flex: 1,
+        justifyContent: 'space-between',
+        backgroundColor: '#FFF',
+      }}
+    >
+      <View style={{ flex: 1 }}>
         <KeyboardAwareScrollView>
           <View>
             <View style={styles.container}>
@@ -386,8 +386,7 @@ const ETC010301 = () => {
             </View>
           </View>
         </KeyboardAwareScrollView>
-
-        <View style={[LVStyles.row, styles.bottomButton]}>
+        <View style={[LVStyles.bottomButtonView]}>
           <LVButton
             title='변경'
             onPress={handleRegister}
@@ -397,10 +396,9 @@ const ETC010301 = () => {
             }}
           />
         </View>
-      </SafeAreaView>
-
+      </View>
       {loading && <LVLoadingIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default ETC010301;
@@ -482,11 +480,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#27A7FF',
     fontWeight: '600',
-  },
-  bottomButton: {
-    padding: 32,
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
   },
 });

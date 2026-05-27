@@ -23,6 +23,7 @@ import {
   LVModal,
   LVStyles,
   RefreshControl,
+  SafeAreaView,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
@@ -233,150 +234,155 @@ const OVT010201 = () => {
   });
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
-        <View
-          style={{
-            padding: 16,
-            borderBottomWidth: 1,
-            borderTopWidth: 1,
-            borderColor: '#D5DCE5',
-          }}
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         >
-          <LVFormOfContents
-            title={'결재선'}
-            children={
-              !Util.isEmpty(approvalLine) ? (
-                <View style={[LVStyles.row, { width: '100%' }]}>
-                  <LVApprLine
-                    data={approvalLine}
-                    mainColor={'#373747'}
-                    style={{
-                      width: '80%',
-                    }}
-                  />
-                  <TouchableOpacity
-                    onPress={() => {
-                      setIsVisibleApprovalModal(true);
-                    }}
-                    style={{
-                      marginLeft: 8,
-                      width: 32,
-                      height: 32,
-                      borderWidth: 2,
-                      borderColor: '#27A7FF',
-                      borderRadius: 4,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Icon name='text-box-edit-outline' color='#27A7FF' />
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View style={[LVStyles.row, { width: '100%' }]}>
-                  <Text>등록된 결재선이 없습니다.</Text>
-                  <LVButton
-                    title={'결재선 등록'}
-                    onPress={() => {
-                      movingScreen.navigate('PAL010201');
-                    }}
-                    buttonStyle={styles.button}
-                    textStyle={{
-                      color: '#27A7FF',
-                    }}
-                  />
-                </View>
-              )
-            }
-          />
-          <LVFormOfContents
-            title={'종류'}
-            children={
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                }}
-              >
-                {overtimeTypeList?.map((e: any) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setSelectedType(e);
-                    }}
-                  >
-                    <LVChip
-                      category='type'
-                      content={e.HQNAME}
-                      chipStyle={{
-                        borderColor:
-                          selectedType?.HQCODE === e?.HQCODE
-                            ? '#FF9E3C'
-                            : '#6A727B',
-                      }}
-                      textStyle={{
-                        color:
-                          selectedType?.HQCODE === e?.HQCODE
-                            ? '#FF9E3C'
-                            : '#6A727B',
+          <View
+            style={{
+              padding: 16,
+              borderBottomWidth: 1,
+              borderTopWidth: 1,
+              borderColor: '#D5DCE5',
+            }}
+          >
+            <LVFormOfContents
+              title={'결재선'}
+              children={
+                !Util.isEmpty(approvalLine) ? (
+                  <View style={[LVStyles.row, { width: '100%' }]}>
+                    <LVApprLine
+                      data={approvalLine}
+                      mainColor={'#373747'}
+                      style={{
+                        width: '80%',
                       }}
                     />
-                  </TouchableOpacity>
-                ))}
-              </View>
-            }
+                    <TouchableOpacity
+                      onPress={() => {
+                        setIsVisibleApprovalModal(true);
+                      }}
+                      style={{
+                        marginLeft: 8,
+                        width: 32,
+                        height: 32,
+                        borderWidth: 2,
+                        borderColor: '#27A7FF',
+                        borderRadius: 4,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Icon name='text-box-edit-outline' color='#27A7FF' />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View style={[LVStyles.row, { width: '100%' }]}>
+                    <Text>등록된 결재선이 없습니다.</Text>
+                    <LVButton
+                      title={'결재선 등록'}
+                      onPress={() => {
+                        movingScreen.navigate('PAL010201');
+                      }}
+                      buttonStyle={styles.button}
+                      textStyle={{
+                        color: '#27A7FF',
+                      }}
+                    />
+                  </View>
+                )
+              }
+            />
+            <LVFormOfContents
+              title={'종류'}
+              children={
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {overtimeTypeList?.map((e: any) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setSelectedType(e);
+                      }}
+                    >
+                      <LVChip
+                        category='type'
+                        content={e.HQNAME}
+                        chipStyle={{
+                          borderColor:
+                            selectedType?.HQCODE === e?.HQCODE
+                              ? '#FF9E3C'
+                              : '#6A727B',
+                        }}
+                        textStyle={{
+                          color:
+                            selectedType?.HQCODE === e?.HQCODE
+                              ? '#FF9E3C'
+                              : '#6A727B',
+                        }}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              }
+            />
+            <LVFormOfContents
+              title={'시작일시'}
+              children={
+                <LVDateTimePicker
+                  date={fromDateTime}
+                  setDate={setFromDateTime}
+                />
+              }
+            />
+            <LVFormOfContents
+              title={'종료일시'}
+              children={
+                <LVDateTimePicker date={toDateTime} setDate={setToDateTime} />
+              }
+            />
+            <LVFormOfContents
+              title={'내용'}
+              children={
+                <Input
+                  value={overtimeInfo?.MEMO}
+                  onChangeText={(p) => {
+                    setOvertimeInfo({
+                      ...overtimeInfo,
+                      MEMO: p,
+                    });
+                  }}
+                  size='large'
+                  style={{ backgroundColor: '#FFF' }}
+                  textStyle={{ color: '#373747', minHeight: 100 }}
+                  multiline={true}
+                />
+              }
+            />
+          </View>
+        </ScrollView>
+        <View style={LVStyles.bottomButtonView}>
+          <LVButton
+            title={'취소'}
+            onPress={movingScreen.goBack}
+            buttonStyle={styles.cancelButton}
+            textStyle={styles.cancelButtonText}
           />
-          <LVFormOfContents
-            title={'시작일시'}
-            children={
-              <LVDateTimePicker date={fromDateTime} setDate={setFromDateTime} />
-            }
-          />
-          <LVFormOfContents
-            title={'종료일시'}
-            children={
-              <LVDateTimePicker date={toDateTime} setDate={setToDateTime} />
-            }
-          />
-          <LVFormOfContents
-            title={'내용'}
-            children={
-              <Input
-                value={overtimeInfo?.MEMO}
-                onChangeText={(p) => {
-                  setOvertimeInfo({
-                    ...overtimeInfo,
-                    MEMO: p,
-                  });
-                }}
-                size='large'
-                style={{ backgroundColor: '#FFF' }}
-                textStyle={{ color: '#373747', minHeight: 100 }}
-                multiline={true}
-              />
-            }
+          <View style={{ width: 8 }} />
+          {/* 최초 상신 */}
+          <LVButton
+            title={'상신'}
+            onPress={handleSubmit}
+            buttonStyle={{ flex: 1 }}
           />
         </View>
-      </ScrollView>
-      <View style={styles.bottomButtonView}>
-        <LVButton
-          title={'취소'}
-          onPress={movingScreen.goBack}
-          buttonStyle={styles.cancelButton}
-          textStyle={styles.cancelButtonText}
-        />
-        <View style={{ width: 8 }} />
-        {/* 최초 상신 */}
-        <LVButton
-          title={'상신'}
-          onPress={handleSubmit}
-          buttonStyle={{ flex: 1 }}
-        />
       </View>
       {isVisibleApprovalModal && (
         <LVModal
@@ -401,7 +407,7 @@ const OVT010201 = () => {
       )}
       {loading && <LVLoadingIndicator />}
       {confirming && <LVConfirmIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default OVT010201;
@@ -412,13 +418,6 @@ const styles = StyleSheet.create({
     borderColor: '#27A7FF',
     borderWidth: 1,
     padding: 10,
-  },
-  bottomButtonView: {
-    ...LVStyles.row,
-    padding: 32,
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
   },
   cancelButton: {
     flex: 1,

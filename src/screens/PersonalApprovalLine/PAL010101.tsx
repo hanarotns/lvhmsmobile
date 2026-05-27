@@ -20,6 +20,7 @@ import {
   LVNoData,
   LVStyles,
   RefreshControl,
+  SafeAreaView,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
@@ -183,34 +184,36 @@ const PAL010101 = () => {
   });
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
-        {!Util.isEmpty(myApprList) && (
-          <View
-            style={{
-              marginHorizontal: 24,
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+        >
+          {!Util.isEmpty(myApprList) && (
+            <View
+              style={{
+                marginHorizontal: 24,
+              }}
+            >
+              <ContentsOfApproval ref={approvalLineRef} />
+            </View>
+          )}
+          {Util.isEmpty(myApprList) && <LVNoData />}
+        </ScrollView>
+        {/* 생성 버튼 (플로팅) */}
+        <View style={styles.floatingButton}>
+          <TouchableOpacity
+            style={styles.addIconButton}
+            onPress={() => {
+              movingScreen.navigate('PAL010201');
             }}
           >
-            <ContentsOfApproval ref={approvalLineRef} />
-          </View>
-        )}
-        {Util.isEmpty(myApprList) && <LVNoData />}
-      </ScrollView>
-      {/* 생성 버튼 (플로팅) */}
-      <View style={styles.floatingButton}>
-        <TouchableOpacity
-          style={styles.addIconButton}
-          onPress={() => {
-            movingScreen.navigate('PAL010201');
-          }}
-        >
-          <Image source={icon.ico_add} style={LVStyles.iconS} />
-        </TouchableOpacity>
+            <Image source={icon.ico_add} style={LVStyles.iconS} />
+          </TouchableOpacity>
+        </View>
       </View>
       {/* 모달 */}
       {isVisibleDelete && (
@@ -222,7 +225,7 @@ const PAL010101 = () => {
         />
       )}
       {loading && <LVLoadingIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default PAL010101;

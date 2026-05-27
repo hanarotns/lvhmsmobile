@@ -15,6 +15,7 @@ import {
   LVModal,
   LVStyles,
   RefreshControl,
+  SafeAreaView,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
@@ -188,42 +189,23 @@ const OVT010301 = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
-        <View
-          style={{
-            borderColor: '#D5DCE5',
-            borderBottomWidth: 1,
-            borderTopWidth: 1,
-            padding: 16,
-          }}
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         >
-          <LVFormOfContents
-            title={'예정번호'}
-            children={
-              <View style={[LVStyles.row, { flex: 1 }]}>
-                <Text
-                  style={{
-                    fontWeight: '500',
-                  }}
-                >
-                  {dt?.JOB_NO}
-                </Text>
-                <LVChip
-                  category='apprStatus'
-                  title={dt?.AP_STATUS_NAME}
-                  code={dt?.AP_STATUS}
-                />
-              </View>
-            }
-          />
-          {!Util.isEmpty(dt?.CONFIRM_JOB_NO) && (
+          <View
+            style={{
+              borderColor: '#D5DCE5',
+              borderBottomWidth: 1,
+              borderTopWidth: 1,
+              padding: 16,
+            }}
+          >
             <LVFormOfContents
-              title={'확정번호'}
+              title={'예정번호'}
               children={
                 <View style={[LVStyles.row, { flex: 1 }]}>
                   <Text
@@ -231,268 +213,269 @@ const OVT010301 = () => {
                       fontWeight: '500',
                     }}
                   >
-                    {dt?.CONFIRM_JOB_NO}
+                    {dt?.JOB_NO}
                   </Text>
                   <LVChip
                     category='apprStatus'
-                    title={dt?.CONFIRM_P_STATUS_NAME}
-                    code={dt?.CONFIRM_P_STATUS}
+                    title={dt?.AP_STATUS_NAME}
+                    code={dt?.AP_STATUS}
                   />
                 </View>
               }
             />
-          )}
-          <LVFormOfContents
-            title={'예정시간'}
-            children={
-              <Text
-                style={{
-                  fontWeight: '700',
-                  color: '#ABBACD',
-                }}
-              >
-                {Util.convertDateTime(
-                  dt?.ND_DATE,
-                  dt?.ND_TYPE !== 'OT' ? dt?.START_TIME : dt?.NORMAL_OFF_TIME,
-                  //@@ ND_TYPE = 'OT' 인 경우 연장시작시간 가져오는 로직으로 수정 필요!!!
-                )}
-                {'~'}
-                {Util.convertDateTime(dt?.CLOSING_DATE, dt?.CLOSING_TIME)}
-              </Text>
-            }
-          />
-          {!Util.isEmpty(dt?.CONFIRM_JOB_NO) && (
-            <LVFormOfContents
-              title={'확정시간'}
-              children={
-                <View>
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      paddingVertical: 16,
-                    }}
-                  >
+            {!Util.isEmpty(dt?.CONFIRM_JOB_NO) && (
+              <LVFormOfContents
+                title={'확정번호'}
+                children={
+                  <View style={[LVStyles.row, { flex: 1 }]}>
                     <Text
                       style={{
-                        fontWeight: '700',
+                        fontWeight: '500',
                       }}
                     >
-                      {Util.convertDateTime(
-                        dt?.CONFIRM_NDS_DATE,
-                        dt?.CONFIRM_NDS_TIME,
-                      )}
-                      {'~'}
-                      {Util.convertDateTime(
-                        dt?.CONFIRM_NDE_DATE,
-                        dt?.CONFIRM_NDE_TIME,
-                      )}
+                      {dt?.CONFIRM_JOB_NO}
                     </Text>
+                    <LVChip
+                      category='apprStatus'
+                      title={dt?.CONFIRM_P_STATUS_NAME}
+                      code={dt?.CONFIRM_P_STATUS}
+                    />
                   </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      paddingVertical: 16,
-                    }}
-                  >
-                    <Text
+                }
+              />
+            )}
+            <LVFormOfContents
+              title={'예정시간'}
+              children={
+                <Text
+                  style={{
+                    fontWeight: '700',
+                    color: '#ABBACD',
+                  }}
+                >
+                  {Util.convertDateTime(
+                    dt?.ND_DATE,
+                    dt?.ND_TYPE !== 'OT' ? dt?.START_TIME : dt?.NORMAL_OFF_TIME,
+                    //@@ ND_TYPE = 'OT' 인 경우 연장시작시간 가져오는 로직으로 수정 필요!!!
+                  )}
+                  {'~'}
+                  {Util.convertDateTime(dt?.CLOSING_DATE, dt?.CLOSING_TIME)}
+                </Text>
+              }
+            />
+            {!Util.isEmpty(dt?.CONFIRM_JOB_NO) && (
+              <LVFormOfContents
+                title={'확정시간'}
+                children={
+                  <View>
+                    <View
                       style={{
-                        fontWeight: '700',
-                        color: '#FF9E3C',
+                        justifyContent: 'center',
+                        paddingVertical: 16,
                       }}
                     >
-                      {dt?.NC_HOUR ? `총 ${dt?.NC_HOUR} 시간` : `-`}
-                    </Text>
-                    {!Util.isEmpty(dt?.NC_CHANGE_REASON) && (
-                      <View style={LVStyles.row}>
-                        <View
-                          style={{
-                            marginLeft: 16,
-                            borderColor: '#ABBACD',
-                            borderWidth: 1,
-                            borderRadius: 4,
-                            padding: 6,
-                            paddingHorizontal: 12,
-                          }}
-                        >
-                          <Text
+                      <Text
+                        style={{
+                          fontWeight: '700',
+                        }}
+                      >
+                        {Util.convertDateTime(
+                          dt?.CONFIRM_NDS_DATE,
+                          dt?.CONFIRM_NDS_TIME,
+                        )}
+                        {'~'}
+                        {Util.convertDateTime(
+                          dt?.CONFIRM_NDE_DATE,
+                          dt?.CONFIRM_NDE_TIME,
+                        )}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 16,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontWeight: '700',
+                          color: '#FF9E3C',
+                        }}
+                      >
+                        {dt?.NC_HOUR ? `총 ${dt?.NC_HOUR} 시간` : `-`}
+                      </Text>
+                      {!Util.isEmpty(dt?.NC_CHANGE_REASON) && (
+                        <View style={LVStyles.row}>
+                          <View
                             style={{
-                              color: '#ABBACD',
-                              fontSize: 12,
-                              fontWeight: '600',
+                              marginLeft: 16,
+                              borderColor: '#ABBACD',
+                              borderWidth: 1,
+                              borderRadius: 4,
+                              padding: 6,
+                              paddingHorizontal: 12,
                             }}
                           >
-                            수정됨
-                          </Text>
+                            <Text
+                              style={{
+                                color: '#ABBACD',
+                                fontSize: 12,
+                                fontWeight: '600',
+                              }}
+                            >
+                              수정됨
+                            </Text>
+                          </View>
+                          <View style={{ width: 8 }} />
+                          <Text>{dt?.NC_CHANGE_REASON}</Text>
                         </View>
-                        <View style={{ width: 8 }} />
-                        <Text>{dt?.NC_CHANGE_REASON}</Text>
-                      </View>
-                    )}
+                      )}
+                    </View>
                   </View>
+                }
+              />
+            )}
+            <LVFormOfContents
+              title={'종류'}
+              children={
+                <LVChip
+                  category='type'
+                  content={dt?.ND_TYPE_NM}
+                  chipStyle={{
+                    borderColor: '#FF9E3C',
+                    backgroundColor: '#FFF7EF',
+                    maxWidth: 100,
+                  }}
+                  textStyle={{
+                    color: '#FF9E3C',
+                  }}
+                />
+              }
+            />
+            <LVFormOfContents
+              title={'주누적'}
+              children={
+                <Text
+                  style={{
+                    fontWeight: '700',
+                  }}
+                >
+                  {dt?.NC_WEEK_HOUR
+                    ? `총 ${dt?.NC_WEEK_HOUR} 시간`
+                    : `총 ${accumulatedHours?.NC_WEEK_HOUR} 시간`}
+                </Text>
+              }
+            />
+            <LVFormOfContents
+              title={'월누적'}
+              children={
+                <Text
+                  style={{
+                    fontWeight: '700',
+                  }}
+                >
+                  {dt?.NC_MONTH_HOUR
+                    ? `총 ${dt?.NC_MONTH_HOUR} 시간`
+                    : `총 ${accumulatedHours?.NC_MONTH_HOUR} 시간`}
+                </Text>
+              }
+            />
+            <LVFormOfContents
+              title={'내용'}
+              children={
+                <Text
+                  style={{
+                    fontWeight: '700',
+                  }}
+                >
+                  {dt?.REASON}
+                </Text>
+              }
+            />
+            <LVFormOfContents
+              title={'결재선'}
+              children={
+                <View style={[LVStyles.row]}>
+                  {!Util.isEmpty(dt?.APPR_LINE) ? (
+                    <View
+                      style={[
+                        LVStyles.row,
+                        { justifyContent: 'flex-start', flexWrap: 'wrap' },
+                      ]}
+                    >
+                      <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
+                    </View>
+                  ) : (
+                    <Text>내 결재선관리에서 결재선을 생성하세요.</Text>
+                  )}
                 </View>
               }
             />
-          )}
-          <LVFormOfContents
-            title={'종류'}
-            children={
-              <LVChip
-                category='type'
-                content={dt?.ND_TYPE_NM}
-                chipStyle={{
-                  borderColor: '#FF9E3C',
-                  backgroundColor: '#FFF7EF',
-                  maxWidth: 100,
-                }}
-                textStyle={{
-                  color: '#FF9E3C',
-                }}
-              />
-            }
-          />
-          <LVFormOfContents
-            title={'주누적'}
-            children={
-              <Text
-                style={{
-                  fontWeight: '700',
-                }}
-              >
-                {dt?.NC_WEEK_HOUR
-                  ? `총 ${dt?.NC_WEEK_HOUR} 시간`
-                  : `총 ${accumulatedHours?.NC_WEEK_HOUR} 시간`}
-              </Text>
-            }
-          />
-          <LVFormOfContents
-            title={'월누적'}
-            children={
-              <Text
-                style={{
-                  fontWeight: '700',
-                }}
-              >
-                {dt?.NC_MONTH_HOUR
-                  ? `총 ${dt?.NC_MONTH_HOUR} 시간`
-                  : `총 ${accumulatedHours?.NC_MONTH_HOUR} 시간`}
-              </Text>
-            }
-          />
-          <LVFormOfContents
-            title={'내용'}
-            children={
-              <Text
-                style={{
-                  fontWeight: '700',
-                }}
-              >
-                {dt?.REASON}
-              </Text>
-            }
-          />
-          <LVFormOfContents
-            title={'결재선'}
-            children={
-              <View style={[LVStyles.row]}>
-                {!Util.isEmpty(dt?.APPR_LINE) ? (
-                  <View
-                    style={[
-                      LVStyles.row,
-                      { justifyContent: 'flex-start', flexWrap: 'wrap' },
-                    ]}
-                  >
-                    <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
-                  </View>
-                ) : (
-                  <Text>내 결재선관리에서 결재선을 생성하세요.</Text>
-                )}
-              </View>
-            }
-          />
-        </View>
-      </ScrollView>
-      {!route.params.M_APPR_MEMBER_RANK_NAME ? (
-        // 상신자 사용
-        <View
-          style={[
-            LVStyles.row,
-            {
-              padding: 32,
-              position: 'absolute',
-              width: '100%',
-              bottom: 0,
-            },
-          ]}
-        >
-          <LVButton
-            title={'회수'}
-            onPress={handleRecall}
-            buttonStyle={{
-              flex: 1,
-              backgroundColor: '#FFF',
-              borderWidth: 1,
-              borderColor: '#D5DCE5',
-            }}
-            textStyle={{
-              color: '#373747',
-            }}
-          />
-          <View style={{ width: 8 }} />
-          <LVButton
-            title={'삭제'}
-            onPress={handleCancel}
-            buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
-          />
-          <View style={{ width: 8 }} />
-          <LVButton
-            title={'상신'}
-            onPress={handleReApprove}
-            buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
-          />
-        </View>
-      ) : (
-        // 결재자 사용
-        <View
-          style={[
-            LVStyles.row,
-            {
-              padding: 32,
-              position: 'absolute',
-              width: '100%',
-              bottom: 0,
-            },
-          ]}
-        >
-          <LVButton
-            title={'회수'}
-            onPress={handleRecallForApprover}
-            buttonStyle={{
-              flex: 1,
-              backgroundColor: '#FFF',
-              borderWidth: 1,
-              borderColor: '#D5DCE5',
-            }}
-            textStyle={{
-              color: '#373747',
-            }}
-          />
-          <View style={{ width: 8 }} />
-          <LVButton
-            title={'반려'}
-            onPress={() => {
-              setIsVisibleModal(true);
-            }}
-            buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
-          />
-          <View style={{ width: 8 }} />
-          <LVButton
-            title={'결재'}
-            onPress={handleApproveForApprover}
-            buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
-          />
-        </View>
-      )}
+          </View>
+        </ScrollView>
+        {!route.params.M_APPR_MEMBER_RANK_NAME ? (
+          // 상신자 사용
+          <View style={LVStyles.bottomButtonView}>
+            <LVButton
+              title={'회수'}
+              onPress={handleRecall}
+              buttonStyle={{
+                flex: 1,
+                backgroundColor: '#FFF',
+                borderWidth: 1,
+                borderColor: '#D5DCE5',
+              }}
+              textStyle={{
+                color: '#373747',
+              }}
+            />
+            <View style={{ width: 8 }} />
+            <LVButton
+              title={'삭제'}
+              onPress={handleCancel}
+              buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
+            />
+            <View style={{ width: 8 }} />
+            <LVButton
+              title={'상신'}
+              onPress={handleReApprove}
+              buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
+            />
+          </View>
+        ) : (
+          // 결재자 사용
+          <View style={LVStyles.bottomButtonView}>
+            <LVButton
+              title={'회수'}
+              onPress={handleRecallForApprover}
+              buttonStyle={{
+                flex: 1,
+                backgroundColor: '#FFF',
+                borderWidth: 1,
+                borderColor: '#D5DCE5',
+              }}
+              textStyle={{
+                color: '#373747',
+              }}
+            />
+            <View style={{ width: 8 }} />
+            <LVButton
+              title={'반려'}
+              onPress={() => {
+                setIsVisibleModal(true);
+              }}
+              buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
+            />
+            <View style={{ width: 8 }} />
+            <LVButton
+              title={'결재'}
+              onPress={handleApproveForApprover}
+              buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
+            />
+          </View>
+        )}
+      </View>
       {isVisibleModal && (
         <LVModal
           title={'반려'}
@@ -510,7 +493,7 @@ const OVT010301 = () => {
       )}
       {loading && <LVLoadingIndicator />}
       {confirming && <LVConfirmIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default OVT010301;

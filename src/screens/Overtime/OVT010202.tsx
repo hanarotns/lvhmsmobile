@@ -22,6 +22,7 @@ import {
   LVModal,
   LVStyles,
   RefreshControl,
+  SafeAreaView,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
@@ -219,141 +220,142 @@ const OVT010202 = () => {
   });
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
-        <View
-          style={{
-            padding: 16,
-            borderBottomWidth: 1,
-            borderTopWidth: 1,
-            borderColor: '#D5DCE5',
-          }}
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         >
-          <LVFormOfContents
-            title={'결재선'}
-            children={
-              !Util.isEmpty(approvalLine) ? (
-                <View style={[LVStyles.row, { width: '100%' }]}>
-                  <LVApprLine
-                    data={approvalLine}
-                    mainColor={'#373747'}
-                    style={{
-                      width: '80%',
-                    }}
-                    reqApproval={true}
-                  />
-                  <TouchableOpacity
-                    onPress={() => {
-                      setIsVisibleApprovalModal(true);
-                    }}
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderWidth: 2,
-                      borderColor: '#27A7FF',
-                      borderRadius: 4,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Icon
-                      name='file-search-outline'
-                      color='#27A7FF'
-                      size={30}
+          <View
+            style={{
+              padding: 16,
+              borderBottomWidth: 1,
+              borderTopWidth: 1,
+              borderColor: '#D5DCE5',
+            }}
+          >
+            <LVFormOfContents
+              title={'결재선'}
+              children={
+                !Util.isEmpty(approvalLine) ? (
+                  <View style={[LVStyles.row, { width: '100%' }]}>
+                    <LVApprLine
+                      data={approvalLine}
+                      mainColor={'#373747'}
+                      style={{
+                        width: '80%',
+                      }}
+                      reqApproval={true}
                     />
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <Text>내 결재선관리에서 결재선을 생성하세요.</Text>
-              )
-            }
-          />
+                    <TouchableOpacity
+                      onPress={() => {
+                        setIsVisibleApprovalModal(true);
+                      }}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderWidth: 2,
+                        borderColor: '#27A7FF',
+                        borderRadius: 4,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Icon
+                        name='file-search-outline'
+                        color='#27A7FF'
+                        size={30}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <Text>내 결재선관리에서 결재선을 생성하세요.</Text>
+                )
+              }
+            />
 
-          <LVFormOfContents
-            title={'예정시간'}
-            children={
-              <Text
-                style={{
-                  fontWeight: '700',
-                  color: '#ABBACD',
-                }}
-              >
-                {dt?.M_ES_DATETIME}
-              </Text>
-            }
-          />
-          <LVFormOfContents
-            title={'종류'}
-            children={
-              <View
-                style={{
-                  borderColor: '#FF9E3C',
-                  backgroundColor: '#FFF7EF',
-                  borderWidth: 1,
-                  borderRadius: 16,
-                  padding: 6,
-                  paddingHorizontal: 12,
-                  // @@ 크기 유동적으로 수정할 것.
-                  width: 100,
-                  alignItems: 'center',
-                }}
-              >
+            <LVFormOfContents
+              title={'예정시간'}
+              children={
                 <Text
                   style={{
-                    color: '#FF9E3C',
-                    fontSize: 14,
+                    fontWeight: '700',
+                    color: '#ABBACD',
+                  }}
+                >
+                  {dt?.M_ES_DATETIME}
+                </Text>
+              }
+            />
+            <LVFormOfContents
+              title={'종류'}
+              children={
+                <View
+                  style={{
+                    borderColor: '#FF9E3C',
+                    backgroundColor: '#FFF7EF',
+                    borderWidth: 1,
+                    borderRadius: 16,
+                    padding: 6,
+                    paddingHorizontal: 12,
+                    // @@ 크기 유동적으로 수정할 것.
+                    width: 100,
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: '#FF9E3C',
+                      fontSize: 14,
+                      fontWeight: '700',
+                    }}
+                  >
+                    {dt?.M_TYPE_NAME}
+                  </Text>
+                </View>
+              }
+            />
+            <LVFormOfContents
+              title={'내용'}
+              children={
+                <Text
+                  style={{
                     fontWeight: '700',
                   }}
                 >
-                  {dt?.M_TYPE_NAME}
+                  {dt?.M_MEMO}
                 </Text>
-              </View>
-            }
-          />
-          <LVFormOfContents
-            title={'내용'}
-            children={
-              <Text
-                style={{
-                  fontWeight: '700',
-                }}
-              >
-                {dt?.M_MEMO}
-              </Text>
-            }
-          />
-          <LVFormOfContents
-            title={'시작일시'}
-            children={
-              <Text
-                style={{
-                  fontWeight: '700',
-                  color: '#ABBACD',
-                }}
-              >
-                {Util.convertDateTime('', dt?.RA_START_TIME) || '-'}
-              </Text>
-            }
-          />
-          <LVFormOfContents
-            title={'종료일시'}
-            children={
-              <Text
-                style={{
-                  fontWeight: '700',
-                  color: '#ABBACD',
-                }}
-              >
-                {Util.convertDateTime('', dt?.RA_END_TIME) || '-'}
-              </Text>
-            }
-          />
-          {/*  @@ 로직확인 */}
-          {/* <LVFormOfContents
+              }
+            />
+            <LVFormOfContents
+              title={'시작일시'}
+              children={
+                <Text
+                  style={{
+                    fontWeight: '700',
+                    color: '#ABBACD',
+                  }}
+                >
+                  {Util.convertDateTime('', dt?.RA_START_TIME) || '-'}
+                </Text>
+              }
+            />
+            <LVFormOfContents
+              title={'종료일시'}
+              children={
+                <Text
+                  style={{
+                    fontWeight: '700',
+                    color: '#ABBACD',
+                  }}
+                >
+                  {Util.convertDateTime('', dt?.RA_END_TIME) || '-'}
+                </Text>
+              }
+            />
+            {/*  @@ 로직확인 */}
+            {/* <LVFormOfContents
             title={'시간변경'}
             children={
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -380,39 +382,40 @@ const OVT010202 = () => {
               </View>
             }
           /> */}
-          {isCheckOfDate ? (
-            <LVFormOfContents
-              title={'변경내용'}
-              children={
-                <Input
-                  value={changeReason}
-                  onChangeText={setChangeReason}
-                  size='large'
-                  style={{ backgroundColor: '#FFF' }}
-                  textStyle={{ color: '#373747', minHeight: 100 }}
-                  multiline={true}
-                />
-              }
-            />
-          ) : (
-            <></>
-          )}
+            {isCheckOfDate ? (
+              <LVFormOfContents
+                title={'변경내용'}
+                children={
+                  <Input
+                    value={changeReason}
+                    onChangeText={setChangeReason}
+                    size='large'
+                    style={{ backgroundColor: '#FFF' }}
+                    textStyle={{ color: '#373747', minHeight: 100 }}
+                    multiline={true}
+                  />
+                }
+              />
+            ) : (
+              <></>
+            )}
+          </View>
+        </ScrollView>
+        <View style={LVStyles.bottomButtonView}>
+          <LVButton
+            title={'취소'}
+            onPress={movingScreen.goBack}
+            buttonStyle={styles.cancelButton}
+            textStyle={styles.cancelButtonText}
+          />
+          <View style={{ width: 8 }} />
+          {/* 최초 상신 */}
+          <LVButton
+            title={'상신'}
+            onPress={handleSubmit}
+            buttonStyle={{ flex: 1 }}
+          />
         </View>
-      </ScrollView>
-      <View style={styles.bottomButtonView}>
-        <LVButton
-          title={'취소'}
-          onPress={movingScreen.goBack}
-          buttonStyle={styles.cancelButton}
-          textStyle={styles.cancelButtonText}
-        />
-        <View style={{ width: 8 }} />
-        {/* 최초 상신 */}
-        <LVButton
-          title={'상신'}
-          onPress={handleSubmit}
-          buttonStyle={{ flex: 1 }}
-        />
       </View>
       {isVisibleApprovalModal && (
         <LVModal
@@ -437,7 +440,7 @@ const OVT010202 = () => {
       )}
       {loading && <LVLoadingIndicator />}
       {confirming && <LVConfirmIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default OVT010202;
@@ -448,13 +451,6 @@ const styles = StyleSheet.create({
     borderColor: '#27A7FF',
     borderWidth: 1,
     padding: 10,
-  },
-  bottomButtonView: {
-    ...LVStyles.row,
-    padding: 32,
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
   },
   cancelButton: {
     flex: 1,

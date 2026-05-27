@@ -21,6 +21,7 @@ import {
   LVSelectBox,
   LVStyles,
   RefreshControl,
+  SafeAreaView,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
@@ -203,38 +204,39 @@ const PAL010201 = () => {
   });
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <View
-        style={{
-          padding: 16,
-          // borderBottomWidth: 1,
-          // borderTopWidth: 1,
-          // borderColor: '#D5DCE5',
-        }}
-      >
-        <Text
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1 }}>
+        <View
           style={{
-            color: '#6A727B',
-            fontWeight: '600',
+            padding: 16,
+            // borderBottomWidth: 1,
+            // borderTopWidth: 1,
+            // borderColor: '#D5DCE5',
           }}
         >
-          결재선
-        </Text>
-        <Input
-          placeholder='결재선 이름을 입력하세요.'
-          placeholderTextColor='#939DAA'
-          value={approvalLine.AP_NAME}
-          onChangeText={(value) => {
-            setApprovalLine({
-              ...approvalLine,
-              AP_NAME: value,
-            });
-          }}
-          size='large'
-          style={{ backgroundColor: '#FFF', marginTop: 8 }}
-          textStyle={{ color: '#373747', fontSize: 14 }}
-        />
-        {/* <Input
+          <Text
+            style={{
+              color: '#6A727B',
+              fontWeight: '600',
+            }}
+          >
+            결재선
+          </Text>
+          <Input
+            placeholder='결재선 이름을 입력하세요.'
+            placeholderTextColor='#939DAA'
+            value={approvalLine.AP_NAME}
+            onChangeText={(value) => {
+              setApprovalLine({
+                ...approvalLine,
+                AP_NAME: value,
+              });
+            }}
+            size='large'
+            style={{ backgroundColor: '#FFF', marginTop: 8 }}
+            textStyle={{ color: '#373747', fontSize: 14 }}
+          />
+          {/* <Input
           placeholder="이 결재선에 대한 메모를 작성하세요."
           placeholderTextColor="#939DAA"
           value={approvalLine.APPR_LINE_COMMENT}
@@ -245,67 +247,58 @@ const PAL010201 = () => {
           style={{backgroundColor: '#FFF', marginTop: 8}}
           textStyle={{color: '#373747', fontSize: 14}}
         /> */}
-      </View>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
-        {/* Detail */}
-        <View
-          style={{
-            padding: 16,
-          }}
+        </View>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         >
-          <View style={[LVStyles.row, { paddingRight: 16 }]}>
-            <Text
-              style={{
-                color: '#6A727B',
-                fontWeight: '600',
-              }}
-            >
-              결재자 지정
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setIsVisibleApprovalModal(true);
-              }}
-            >
-              <Icon name='account-plus' color='#373747' />
-            </TouchableOpacity>
-          </View>
+          {/* Detail */}
           <View
             style={{
-              padding: 8,
-              flex: 1,
+              padding: 16,
             }}
           >
-            {approvalLineDt.map((e, i) => (
-              <PersonalForm
-                elem={{ ...e, index: i + 1 }}
-                apprRoleList={apprRoleList}
-                onDelete={() => handleDeleteApprovalLine(i)}
-              />
-            ))}
+            <View style={[LVStyles.row, { paddingRight: 16 }]}>
+              <Text
+                style={{
+                  color: '#6A727B',
+                  fontWeight: '600',
+                }}
+              >
+                결재자 지정
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setIsVisibleApprovalModal(true);
+                }}
+              >
+                <Icon name='account-plus' color='#373747' />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                padding: 8,
+                flex: 1,
+              }}
+            >
+              {approvalLineDt.map((e, i) => (
+                <PersonalForm
+                  elem={{ ...e, index: i + 1 }}
+                  apprRoleList={apprRoleList}
+                  onDelete={() => handleDeleteApprovalLine(i)}
+                />
+              ))}
+            </View>
           </View>
+        </ScrollView>
+        <View style={LVStyles.bottomButtonView}>
+          <LVButton
+            title={'저장'}
+            onPress={handleSave}
+            buttonStyle={{ flex: 1 }}
+          />
         </View>
-      </ScrollView>
-      <View
-        style={[
-          LVStyles.row,
-          {
-            padding: 32,
-            position: 'absolute',
-            width: '100%',
-            bottom: 0,
-          },
-        ]}
-      >
-        <LVButton
-          title={'저장'}
-          onPress={handleSave}
-          buttonStyle={{ flex: 1 }}
-        />
       </View>
       {isVisibleApprovalModal && (
         <LVModal
@@ -330,7 +323,7 @@ const PAL010201 = () => {
       )}
       {loading && <LVLoadingIndicator />}
       {confirming && <LVConfirmIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default PAL010201;

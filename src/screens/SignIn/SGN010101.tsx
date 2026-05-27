@@ -54,16 +54,8 @@ const SGN010101 = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <SafeAreaView
-        edges={['bottom']}
-        style={{
-          flex: 1,
-          justifyContent: 'space-between',
-          backgroundColor: '#FFF',
-          paddingTop: 20,
-        }}
-      >
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1, paddingTop: 20 }}>
         <KeyboardAwareScrollView>
           <View>
             {[
@@ -111,17 +103,7 @@ const SGN010101 = () => {
             ))}
           </View>
         </KeyboardAwareScrollView>
-        <View
-          style={[
-            LVStyles.row,
-            {
-              padding: 32,
-              position: 'absolute',
-              width: '100%',
-              bottom: 0,
-            },
-          ]}
-        >
+        <View style={LVStyles.bottomButtonView}>
           <LVButton
             title={'다음'}
             onPress={() => {
@@ -141,19 +123,19 @@ const SGN010101 = () => {
             }}
           />
         </View>
-        {visibleTerms && (
-          <View
-            style={{
-              marginHorizontal: 20,
-              marginBottom: 60,
-            }}
-          >
-            <TermsOfPiece category={category} onConfirm={onConfirm} />
-          </View>
-        )}
-      </SafeAreaView>
+      </View>
+      {visibleTerms && (
+        <View
+          style={{
+            marginHorizontal: 20,
+            marginBottom: 60,
+          }}
+        >
+          <TermsOfPiece category={category} onConfirm={onConfirm} />
+        </View>
+      )}
       {loading && <LVLoadingIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default SGN010101;

@@ -23,6 +23,7 @@ import {
   LVSelectBox,
   LVStyles,
   RefreshControl,
+  SafeAreaView,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
@@ -692,250 +693,39 @@ const LEA010201 = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
-        <View
-          style={{
-            padding: 16,
-            borderBottomWidth: 1,
-            borderTopWidth: 1,
-            borderColor: '#D5DCE5',
-          }}
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         >
-          <LVFormOfContents
-            title={'결재선'}
-            children={
-              !Util.isEmpty(approvalLine) ? (
-                <View style={[LVStyles.row, { width: '100%' }]}>
-                  <LVApprLine
-                    data={approvalLine}
-                    mainColor={'#373747'}
-                    style={{
-                      width: '80%',
-                    }}
-                  />
-                  <TouchableOpacity
-                    onPress={() => {
-                      setIsVisibleApprovalModal(true);
-                    }}
-                    style={{
-                      marginLeft: 8,
-                      width: 32,
-                      height: 32,
-                      borderWidth: 2,
-                      borderColor: '#27A7FF',
-                      borderRadius: 4,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Icon name='text-box-edit-outline' color='#27A7FF' />
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View style={[LVStyles.row, { width: '100%' }]}>
-                  <Text>등록된 결재선이 없습니다.</Text>
-                  <LVButton
-                    title={'결재선 등록'}
-                    onPress={() => {
-                      movingScreen.navigate('PAL010201');
-                    }}
-                    buttonStyle={styles.button}
-                    textStyle={{
-                      color: '#27A7FF',
-                    }}
-                  />
-                </View>
-              )
-            }
-          />
-          <LVFormOfContents
-            title={'신청정보'}
-            children={
-              <>
-                <View style={[LVStyles.row, { flex: 1 }]}>
-                  {Util.isEmpty(infoList) && (
-                    <View>
-                      <Text
-                        style={{
-                          color: '#939DAA',
-                        }}
-                      >
-                        우측버튼을 선택하세요.
-                      </Text>
-                    </View>
-                  )}
-                  <View
-                    style={{
-                      flex: 1,
-                    }}
-                  >
-                    {infoList?.map((e, i) => (
-                      <View
-                        style={{
-                          height: 48,
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <LVChip
-                          category='info'
-                          leftText={e?.DISP_VA_DATE}
-                          rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
-                          i={i}
-                        />
-                      </View>
-                    ))}
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setIsVisibleInfoModal(true);
-                    }}
-                    style={{
-                      marginLeft: 8,
-                      width: 32,
-                      height: 32,
-                      borderWidth: 2,
-                      borderColor: '#27A7FF',
-                      borderRadius: 4,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Icon
-                      name={
-                        Util.isEmpty(infoList)
-                          ? 'plus'
-                          : 'text-box-edit-outline'
-                      }
-                      color='#27A7FF'
-                    />
-                  </TouchableOpacity>
-                </View>
-              </>
-            }
-          />
-          <LVFormOfContents
-            children={
-              <View style={[LVStyles.row, { flex: 1, marginVertical: 12 }]}>
-                <View
-                  style={{
-                    margin: 4,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text style={{ fontSize: 14, fontWeight: '600' }}>
-                    잔여 연차
-                  </Text>
-                  <Text style={{ fontSize: 20, fontWeight: '700' }}>
-                    {route?.params.REM_VC_QTY}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={{ fontSize: 20, fontWeight: '700' }}>-</Text>
-                </View>
-                <View
-                  style={{
-                    margin: 4,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text style={{ fontSize: 14, fontWeight: '600' }}>
-                    신청 연차
-                  </Text>
-                  <Text style={{ fontSize: 20, fontWeight: '700' }}>
-                    {hd?.TOTAL_PERIOD}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={{ fontSize: 20, fontWeight: '700' }}>=</Text>
-                </View>
-
-                <View
-                  style={{
-                    margin: 4,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text style={{ fontSize: 14, fontWeight: '600' }}>
-                    이후 연차
-                  </Text>
-                  <Text style={{ fontSize: 20, fontWeight: '700' }}>
-                    {route?.params.REM_VC_QTY - hd?.TOTAL_PERIOD}
-                  </Text>
-                </View>
-              </View>
-            }
-          />
-
-          {/* @@ 휴가종류에 '공가'가 포함된 경우만 공가 종류 선택 기능 추가*/}
-          {!Util.isEmpty(officialLeaveType) &&
-          infoList.find((e) => ['04', '05', '06'].includes(e.HQCODE)) ? (
-            <View>
-              <LVFormOfContents
-                title={'공가종류'}
-                children={
-                  <View
-                    style={{ flex: 1, width: '70%', justifyContent: 'center' }}
-                  >
-                    <LVSelectBox
-                      onChange={(value: string) => {
-                        setSelectedOfficialLeaveType(value);
-                      }}
-                      data={officialLeaveType}
-                      displayField={'HQNAME'}
-                      valueField={'HQCODE'}
-                    />
-                  </View>
-                }
-              />
-              <LVFormOfContents
-                title={'첨부파일'}
-                children={
-                  <View style={[LVStyles.row, { flex: 1 }]}>
-                    {Util.isEmpty(attach) && (
-                      <View>
-                        <Text
-                          style={{
-                            color: '#939DAA',
-                          }}
-                        >
-                          첨부파일을 선택하세요.
-                        </Text>
-                      </View>
-                    )}
-                    <View
+          <View
+            style={{
+              padding: 16,
+              borderBottomWidth: 1,
+              borderTopWidth: 1,
+              borderColor: '#D5DCE5',
+            }}
+          >
+            <LVFormOfContents
+              title={'결재선'}
+              children={
+                !Util.isEmpty(approvalLine) ? (
+                  <View style={[LVStyles.row, { width: '100%' }]}>
+                    <LVApprLine
+                      data={approvalLine}
+                      mainColor={'#373747'}
                       style={{
-                        flex: 1,
+                        width: '80%',
                       }}
-                    >
-                      {attach.map((e, i) => (
-                        <View
-                          style={{
-                            height: 48,
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <LVChip
-                            category='info'
-                            leftText={''}
-                            rightText={''}
-                            i={i}
-                          />
-                        </View>
-                      ))}
-                    </View>
+                    />
                     <TouchableOpacity
                       onPress={() => {
-                        setIsVisibleAttachModal(true);
+                        setIsVisibleApprovalModal(true);
                       }}
                       style={{
+                        marginLeft: 8,
                         width: 32,
                         height: 32,
                         borderWidth: 2,
@@ -945,51 +735,268 @@ const LEA010201 = () => {
                         alignItems: 'center',
                       }}
                     >
-                      <Icon name='content-save-outline' color='#27A7FF' />
+                      <Icon name='text-box-edit-outline' color='#27A7FF' />
                     </TouchableOpacity>
                   </View>
-                }
-              />
-            </View>
-          ) : (
-            <></>
-          )}
-          <LVFormOfContents
-            title={'내용'}
-            children={
-              <Input
-                placeholder='휴가내용을 입력하세요.'
-                placeholderTextColor='#939DAA'
-                value={hd.MEMO}
-                onChangeText={(value) => {
-                  setHd({
-                    ...hd,
-                    MEMO: value,
-                  });
-                }}
-                size='large'
-                style={{ backgroundColor: '#FFF' }}
-                textStyle={{ color: '#373747', minHeight: 64, fontSize: 14 }}
-                multiline={true}
-              />
-            }
+                ) : (
+                  <View style={[LVStyles.row, { width: '100%' }]}>
+                    <Text>등록된 결재선이 없습니다.</Text>
+                    <LVButton
+                      title={'결재선 등록'}
+                      onPress={() => {
+                        movingScreen.navigate('PAL010201');
+                      }}
+                      buttonStyle={styles.button}
+                      textStyle={{
+                        color: '#27A7FF',
+                      }}
+                    />
+                  </View>
+                )
+              }
+            />
+            <LVFormOfContents
+              title={'신청정보'}
+              children={
+                <>
+                  <View style={[LVStyles.row, { flex: 1 }]}>
+                    {Util.isEmpty(infoList) && (
+                      <View>
+                        <Text
+                          style={{
+                            color: '#939DAA',
+                          }}
+                        >
+                          우측버튼을 선택하세요.
+                        </Text>
+                      </View>
+                    )}
+                    <View
+                      style={{
+                        flex: 1,
+                      }}
+                    >
+                      {infoList?.map((e, i) => (
+                        <View
+                          style={{
+                            height: 48,
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <LVChip
+                            category='info'
+                            leftText={e?.DISP_VA_DATE}
+                            rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
+                            i={i}
+                          />
+                        </View>
+                      ))}
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setIsVisibleInfoModal(true);
+                      }}
+                      style={{
+                        marginLeft: 8,
+                        width: 32,
+                        height: 32,
+                        borderWidth: 2,
+                        borderColor: '#27A7FF',
+                        borderRadius: 4,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Icon
+                        name={
+                          Util.isEmpty(infoList)
+                            ? 'plus'
+                            : 'text-box-edit-outline'
+                        }
+                        color='#27A7FF'
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </>
+              }
+            />
+            <LVFormOfContents
+              children={
+                <View style={[LVStyles.row, { flex: 1, marginVertical: 12 }]}>
+                  <View
+                    style={{
+                      margin: 4,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text style={{ fontSize: 14, fontWeight: '600' }}>
+                      잔여 연차
+                    </Text>
+                    <Text style={{ fontSize: 20, fontWeight: '700' }}>
+                      {route?.params.REM_VC_QTY}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={{ fontSize: 20, fontWeight: '700' }}>-</Text>
+                  </View>
+                  <View
+                    style={{
+                      margin: 4,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text style={{ fontSize: 14, fontWeight: '600' }}>
+                      신청 연차
+                    </Text>
+                    <Text style={{ fontSize: 20, fontWeight: '700' }}>
+                      {hd?.TOTAL_PERIOD}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={{ fontSize: 20, fontWeight: '700' }}>=</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      margin: 4,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text style={{ fontSize: 14, fontWeight: '600' }}>
+                      이후 연차
+                    </Text>
+                    <Text style={{ fontSize: 20, fontWeight: '700' }}>
+                      {route?.params.REM_VC_QTY - hd?.TOTAL_PERIOD}
+                    </Text>
+                  </View>
+                </View>
+              }
+            />
+
+            {/* @@ 휴가종류에 '공가'가 포함된 경우만 공가 종류 선택 기능 추가*/}
+            {!Util.isEmpty(officialLeaveType) &&
+            infoList.find((e) => ['04', '05', '06'].includes(e.HQCODE)) ? (
+              <View>
+                <LVFormOfContents
+                  title={'공가종류'}
+                  children={
+                    <View
+                      style={{
+                        flex: 1,
+                        width: '70%',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <LVSelectBox
+                        onChange={(value: string) => {
+                          setSelectedOfficialLeaveType(value);
+                        }}
+                        data={officialLeaveType}
+                        displayField={'HQNAME'}
+                        valueField={'HQCODE'}
+                      />
+                    </View>
+                  }
+                />
+                <LVFormOfContents
+                  title={'첨부파일'}
+                  children={
+                    <View style={[LVStyles.row, { flex: 1 }]}>
+                      {Util.isEmpty(attach) && (
+                        <View>
+                          <Text
+                            style={{
+                              color: '#939DAA',
+                            }}
+                          >
+                            첨부파일을 선택하세요.
+                          </Text>
+                        </View>
+                      )}
+                      <View
+                        style={{
+                          flex: 1,
+                        }}
+                      >
+                        {attach.map((e, i) => (
+                          <View
+                            style={{
+                              height: 48,
+                              justifyContent: 'center',
+                            }}
+                          >
+                            <LVChip
+                              category='info'
+                              leftText={''}
+                              rightText={''}
+                              i={i}
+                            />
+                          </View>
+                        ))}
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setIsVisibleAttachModal(true);
+                        }}
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderWidth: 2,
+                          borderColor: '#27A7FF',
+                          borderRadius: 4,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Icon name='content-save-outline' color='#27A7FF' />
+                      </TouchableOpacity>
+                    </View>
+                  }
+                />
+              </View>
+            ) : (
+              <></>
+            )}
+            <LVFormOfContents
+              title={'내용'}
+              children={
+                <Input
+                  placeholder='휴가내용을 입력하세요.'
+                  placeholderTextColor='#939DAA'
+                  value={hd.MEMO}
+                  onChangeText={(value) => {
+                    setHd({
+                      ...hd,
+                      MEMO: value,
+                    });
+                  }}
+                  size='large'
+                  style={{ backgroundColor: '#FFF' }}
+                  textStyle={{ color: '#373747', minHeight: 64, fontSize: 14 }}
+                  multiline={true}
+                />
+              }
+            />
+          </View>
+        </ScrollView>
+        <View style={LVStyles.bottomButtonView}>
+          <LVButton
+            title={'취소'}
+            onPress={movingScreen.goBack}
+            buttonStyle={styles.cancelButton}
+            textStyle={styles.cancelButtonText}
+          />
+          <View style={{ width: 8 }} />
+          {/* 최초 상신 */}
+          <LVButton
+            title={'상신'}
+            onPress={handleSubmit}
+            buttonStyle={{ flex: 1 }}
           />
         </View>
-      </ScrollView>
-      <View style={styles.bottomButtonView}>
-        <LVButton
-          title={'취소'}
-          onPress={movingScreen.goBack}
-          buttonStyle={styles.cancelButton}
-          textStyle={styles.cancelButtonText}
-        />
-        <View style={{ width: 8 }} />
-        {/* 최초 상신 */}
-        <LVButton
-          title={'상신'}
-          onPress={handleSubmit}
-          buttonStyle={{ flex: 1 }}
-        />
       </View>
       {isVisibleApprovalModal && (
         <LVModal
@@ -1051,7 +1058,7 @@ const LEA010201 = () => {
       )}
       {loading && <LVLoadingIndicator />}
       {confirming && <LVConfirmIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default LEA010201;
@@ -1090,13 +1097,6 @@ const styles = StyleSheet.create({
     borderColor: '#27A7FF',
     borderWidth: 1,
     padding: 10,
-  },
-  bottomButtonView: {
-    ...LVStyles.row,
-    padding: 32,
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
   },
   cancelButton: {
     flex: 1,

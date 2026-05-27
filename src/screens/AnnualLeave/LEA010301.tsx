@@ -15,6 +15,7 @@ import {
   LVModal,
   LVStyles,
   RefreshControl,
+  SafeAreaView,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
@@ -288,108 +289,109 @@ const LEA010301 = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
-        <View
-          style={{
-            borderColor: '#D5DCE5',
-            borderBottomWidth: 1,
-            borderTopWidth: 1,
-            padding: 16,
-          }}
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         >
-          <LVFormOfContents
-            title={'문서번호'}
-            children={
-              <View style={[LVStyles.row, { flex: 1, marginRight: 16 }]}>
-                <Text
+          <View
+            style={{
+              borderColor: '#D5DCE5',
+              borderBottomWidth: 1,
+              borderTopWidth: 1,
+              padding: 16,
+            }}
+          >
+            <LVFormOfContents
+              title={'문서번호'}
+              children={
+                <View style={[LVStyles.row, { flex: 1, marginRight: 16 }]}>
+                  <Text
+                    style={{
+                      fontWeight: '500',
+                    }}
+                  >
+                    {dt?.JOB_NO}
+                  </Text>
+                  <LVChip
+                    category='apprStatus'
+                    title={dt?.AP_STATUS_NAME}
+                    code={dt?.AP_STATUS}
+                  />
+                </View>
+              }
+            />
+            <LVFormOfContents
+              title={'신청정보'}
+              children={
+                <View
                   style={{
-                    fontWeight: '500',
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
                   }}
                 >
-                  {dt?.JOB_NO}
-                </Text>
-                <LVChip
-                  category='apprStatus'
-                  title={dt?.AP_STATUS_NAME}
-                  code={dt?.AP_STATUS}
-                />
-              </View>
-            }
-          />
-          <LVFormOfContents
-            title={'신청정보'}
-            children={
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}
-              >
-                <View>
-                  {dt?.DETAIL?.map((e, i) => (
+                  <View>
+                    {dt?.DETAIL?.map((e, i) => (
+                      <View
+                        style={{
+                          height: 48,
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <LVChip
+                          category='info'
+                          leftText={`${Util.convertDateTime(e?.VA_DATE)} (${dayjs(
+                            e?.VA_DATE,
+                            'YYYYMMDD',
+                          )
+                            .locale('ko')
+                            .format('ddd')})`}
+                          rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
+                          i={i}
+                          chipStyle={{
+                            marginBottom: 0,
+                          }}
+                        />
+                      </View>
+                    ))}
                     <View
                       style={{
                         height: 48,
+                        paddingLeft: 16,
                         justifyContent: 'center',
                       }}
                     >
-                      <LVChip
-                        category='info'
-                        leftText={`${Util.convertDateTime(e?.VA_DATE)} (${dayjs(
-                          e?.VA_DATE,
-                          'YYYYMMDD',
-                        )
-                          .locale('ko')
-                          .format('ddd')})`}
-                        rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
-                        i={i}
-                        chipStyle={{
-                          marginBottom: 0,
+                      <Text
+                        style={{
+                          color: '#39CCCC',
+                          fontWeight: '700',
+                          fontSize: 14,
                         }}
-                      />
+                      >
+                        {dt?.VA_PERIOD ? `총 ${dt?.VA_PERIOD} 일` : `-`}
+                      </Text>
                     </View>
-                  ))}
-                  <View
-                    style={{
-                      height: 48,
-                      paddingLeft: 16,
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: '#39CCCC',
-                        fontWeight: '700',
-                        fontSize: 14,
-                      }}
-                    >
-                      {dt?.VA_PERIOD ? `총 ${dt?.VA_PERIOD} 일` : `-`}
-                    </Text>
                   </View>
                 </View>
-              </View>
-            }
-          />
-          <LVFormOfContents
-            title={'내용'}
-            children={
-              <Text
-                style={{
-                  fontWeight: '700',
-                }}
-              >
-                {dt?.REASON}
-              </Text>
-            }
-          />
-          {/* @@ 상신 일시 신청 전 기준이라는 것을 명시하는게 좋을 것 같음. (사용자가 혼란을 겪을 수 있음.) */}
-          {/* <LVFormOfContents
+              }
+            />
+            <LVFormOfContents
+              title={'내용'}
+              children={
+                <Text
+                  style={{
+                    fontWeight: '700',
+                  }}
+                >
+                  {dt?.REASON}
+                </Text>
+              }
+            />
+            {/* @@ 상신 일시 신청 전 기준이라는 것을 명시하는게 좋을 것 같음. (사용자가 혼란을 겪을 수 있음.) */}
+            {/* <LVFormOfContents
             title={'잔여연차'}
             children={
               <Text
@@ -400,129 +402,100 @@ const LEA010301 = () => {
               </Text>
             }
           /> */}
-          <LVFormOfContents
-            title={'결재선'}
-            children={
-              <View style={[LVStyles.row]}>
-                {!Util.isEmpty(dt?.APPR_LINE) ? (
-                  <View
-                    style={[
-                      LVStyles.row,
-                      { justifyContent: 'flex-start', flexWrap: 'wrap' },
-                    ]}
-                  >
-                    <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
-                  </View>
-                ) : (
-                  <Text>내 결재선관리에서 결재선을 생성하세요.</Text>
-                )}
-              </View>
-            }
-          />
-        </View>
-      </ScrollView>
-      {!route.params.M_APPR_MEMBER_RANK_NAME && dt?.APPR_STATUS !== '02' && (
-        // 상신자 사용
-        <View
-          style={[
-            LVStyles.row,
-            {
-              padding: 32,
-              position: 'absolute',
-              width: '100%',
-              bottom: 0,
-            },
-          ]}
-        >
-          <LVButton
-            title={'회수'}
-            onPress={handleRecall}
-            buttonStyle={{
-              flex: 1,
-              backgroundColor: '#FFF',
-              borderWidth: 1,
-              borderColor: '#D5DCE5',
-            }}
-            textStyle={{
-              color: '#373747',
-            }}
-          />
-          <View style={{ width: 8 }} />
-          <LVButton
-            title={'삭제'}
-            onPress={handleCancel}
-            buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
-          />
-          <View style={{ width: 8 }} />
-          <LVButton
-            title={'상신'}
-            onPress={handleReApprove}
-            buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
-          />
-        </View>
-      )}
-      {!route.params.M_APPR_MEMBER_RANK_NAME && dt?.APPR_STATUS === '02' && (
-        // 상신자 사용, 결재완료 상태에서 변경 / 취소 가능함 추가
-        <View
-          style={[
-            LVStyles.row,
-            {
-              padding: 32,
-              position: 'absolute',
-              width: '100%',
-              bottom: 0,
-            },
-          ]}
-        >
-          <LVButton
-            title={'변경'}
-            onPress={handleAgain}
-            buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
-          />
-        </View>
-      )}
-      {route.params.M_APPR_MEMBER_RANK_NAME && (
-        // 결재자 사용
-        <View
-          style={[
-            LVStyles.row,
-            {
-              padding: 32,
-              position: 'absolute',
-              width: '100%',
-              bottom: 0,
-            },
-          ]}
-        >
-          <LVButton
-            title={'회수'}
-            onPress={handleRecallForApprover}
-            buttonStyle={{
-              flex: 1,
-              backgroundColor: '#FFF',
-              borderWidth: 1,
-              borderColor: '#D5DCE5',
-            }}
-            textStyle={{
-              color: '#373747',
-            }}
-          />
-          <View style={{ width: 8 }} />
-          <LVButton
-            title={'반려'}
-            onPress={() => {
-              setIsVisibleModal(true);
-            }}
-            buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
-          />
-          <View style={{ width: 8 }} />
-          <LVButton
-            title={'결재'}
-            onPress={handleApproveForApprover}
-            buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
-          />
-        </View>
-      )}
+            <LVFormOfContents
+              title={'결재선'}
+              children={
+                <View style={[LVStyles.row]}>
+                  {!Util.isEmpty(dt?.APPR_LINE) ? (
+                    <View
+                      style={[
+                        LVStyles.row,
+                        { justifyContent: 'flex-start', flexWrap: 'wrap' },
+                      ]}
+                    >
+                      <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
+                    </View>
+                  ) : (
+                    <Text>내 결재선관리에서 결재선을 생성하세요.</Text>
+                  )}
+                </View>
+              }
+            />
+          </View>
+        </ScrollView>
+        {!route.params.M_APPR_MEMBER_RANK_NAME && dt?.APPR_STATUS !== '02' && (
+          // 상신자 사용
+          <View style={LVStyles.bottomButtonView}>
+            <LVButton
+              title={'회수'}
+              onPress={handleRecall}
+              buttonStyle={{
+                flex: 1,
+                backgroundColor: '#FFF',
+                borderWidth: 1,
+                borderColor: '#D5DCE5',
+              }}
+              textStyle={{
+                color: '#373747',
+              }}
+            />
+            <View style={{ width: 8 }} />
+            <LVButton
+              title={'삭제'}
+              onPress={handleCancel}
+              buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
+            />
+            <View style={{ width: 8 }} />
+            <LVButton
+              title={'상신'}
+              onPress={handleReApprove}
+              buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
+            />
+          </View>
+        )}
+        {!route.params.M_APPR_MEMBER_RANK_NAME && dt?.APPR_STATUS === '02' && (
+          // 상신자 사용, 결재완료 상태에서 변경 / 취소 가능함 추가
+          <View style={LVStyles.bottomButtonView}>
+            <LVButton
+              title={'변경'}
+              onPress={handleAgain}
+              buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
+            />
+          </View>
+        )}
+        {route.params.M_APPR_MEMBER_RANK_NAME && (
+          // 결재자 사용
+          <View style={LVStyles.bottomButtonView}>
+            <LVButton
+              title={'회수'}
+              onPress={handleRecallForApprover}
+              buttonStyle={{
+                flex: 1,
+                backgroundColor: '#FFF',
+                borderWidth: 1,
+                borderColor: '#D5DCE5',
+              }}
+              textStyle={{
+                color: '#373747',
+              }}
+            />
+            <View style={{ width: 8 }} />
+            <LVButton
+              title={'반려'}
+              onPress={() => {
+                setIsVisibleModal(true);
+              }}
+              buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
+            />
+            <View style={{ width: 8 }} />
+            <LVButton
+              title={'결재'}
+              onPress={handleApproveForApprover}
+              buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
+            />
+          </View>
+        )}
+      </View>
       {isVisibleModal && (
         <LVModal
           title={'반려'}
@@ -540,7 +513,7 @@ const LEA010301 = () => {
       )}
       {loading && <LVLoadingIndicator />}
       {confirming && <LVConfirmIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default LEA010301;

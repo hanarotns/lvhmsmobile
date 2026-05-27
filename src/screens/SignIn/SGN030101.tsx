@@ -409,8 +409,8 @@ const SGN030101 = ({ navigation }) => {
     memberInfo.pw === memberInfo.pwChk;
 
   return (
-    <View style={styles.root}>
-      <SafeAreaView edges={['bottom']} style={styles.safeArea}>
+    <SafeAreaView edges={['bottom']} style={styles.safeArea}>
+      <View style={{ flex: 1 }}>
         <KeyboardAwareScrollView>
           <View style={styles.container}>
             <View style={styles.titleBox}>
@@ -584,7 +584,7 @@ const SGN030101 = ({ navigation }) => {
           </View>
         </KeyboardAwareScrollView>
 
-        <View style={[LVStyles.row, styles.bottomButton]}>
+        <View style={[LVStyles.bottomButtonView]}>
           <LVButton
             title='비밀번호 재설정'
             disabled={!isResetEnabled}
@@ -592,10 +592,9 @@ const SGN030101 = ({ navigation }) => {
             buttonStyle={styles.submitButton}
           />
         </View>
-      </SafeAreaView>
-
+      </View>
       {loading && <LVLoadingIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default SGN030101;
@@ -610,10 +609,6 @@ const styles = StyleSheet.create({
   buttonDisabled: {
     backgroundColor: '#F3F5F7',
     borderColor: '#D5DADF',
-  },
-  root: {
-    flex: 1,
-    backgroundColor: '#FFF',
   },
   safeArea: {
     flex: 1,
@@ -722,12 +717,6 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     lineHeight: 18,
     marginTop: 4,
-  },
-  bottomButton: {
-    padding: 32,
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
   },
   submitButton: {
     flex: 1,

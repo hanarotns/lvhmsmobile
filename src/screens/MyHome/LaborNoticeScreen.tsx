@@ -25,7 +25,7 @@ const LaborNoticeScreen = ({ type = 'annual', data = {}, onConfirm }) => {
           )}
         </ScrollView>
       </View>
-      <View style={styles.bottomButtonView}>
+      <View style={LVStyles.bottomButtonView}>
         <LVButton
           title={'확인'}
           onPress={onConfirm}
@@ -319,13 +319,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     lineHeight: 25,
-  },
-  bottomButtonView: {
-    ...LVStyles.row,
-    padding: 32,
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
   },
 });
 
