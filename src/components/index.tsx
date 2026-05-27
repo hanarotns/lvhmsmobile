@@ -3,7 +3,6 @@ import LVStyles from './LVStyles';
 
 import LVApprLine from './LVApprLine';
 import LVButton from './LVButton';
-import LVCardView from './LVCardView';
 import LVCheckBox from './LVCheckBox';
 import LVChip from './LVChip';
 import LVConfirmIndicator from './LVConfirmIndicator';
@@ -18,7 +17,6 @@ import LVNoData from './LVNoData';
 import LVRadioButton from './LVRadioButton';
 import LVSection from './LVSection';
 import LVSelectBox from './LVSelectBox';
-import LVTwoLine from './LVTwoLine';
 
 import Text from './CustomText';
 import ShowPasswordIcon from './ShowPasswordIcon';
@@ -83,7 +81,6 @@ export {
   List,
   LVApprLine,
   LVButton,
-  LVCardView,
   LVCheckBox,
   LVChip,
   LVColors,
@@ -100,7 +97,6 @@ export {
   LVSection,
   LVSelectBox,
   LVStyles,
-  LVTwoLine,
   Menu,
   MenuItem,
   NavigationContainer,
