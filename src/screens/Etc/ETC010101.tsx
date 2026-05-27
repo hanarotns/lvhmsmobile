@@ -66,7 +66,7 @@ const ETC010101 = () => {
                   source={
                     empInfo?.PICTURE_PATH
                       ? {
-                          uri: `http://lv1.htns.com/api/apicall/getDownload/${empInfo?.PICTURE_PATH}`,
+                          uri: `https://lv1.htns.com/api/apicall/getDownload/${empInfo?.PICTURE_PATH}`,
                           headers: {
                             'X-CSRF-TOKEN': global.gToken,
                             Cookie: global.gCookie,
