@@ -750,24 +750,28 @@ const SGN010201 = () => {
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
-        <KeyboardAwareScrollView>
-          <View>
-            <View style={styles.container}>
-              <View style={{ padding: 8 }}>
-                {FIELD_LIST.map((field) => (
-                  <React.Fragment key={field.key}>
-                    <View style={styles.labelRow}>
-                      <Text style={styles.label}>{field.label}</Text>
-                      {renderLabelMessage(field.checkId)}
-                    </View>
-                    {renderTextField(field.checkId)}
-                  </React.Fragment>
-                ))}
-              </View>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}
+          keyboardShouldPersistTaps='handled'
+          enableOnAndroid
+          extraScrollHeight={20}
+        >
+          <View style={styles.container}>
+            <View style={{ padding: 8 }}>
+              {FIELD_LIST.map((field) => (
+                <React.Fragment key={field.key}>
+                  <View style={styles.labelRow}>
+                    <Text style={styles.label}>{field.label}</Text>
+                    {renderLabelMessage(field.checkId)}
+                  </View>
+                  {renderTextField(field.checkId)}
+                </React.Fragment>
+              ))}
             </View>
           </View>
         </KeyboardAwareScrollView>
-
         <View style={[LVStyles.bottomButtonView]}>
           <LVButton
             title='회원가입 신청'

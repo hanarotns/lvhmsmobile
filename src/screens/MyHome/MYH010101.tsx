@@ -14,6 +14,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 import * as icon from '@/src/assets/images';
 import {
   Icon,
+  KeyboardAwareScrollView,
   Layout,
   LVButton,
   LVLoadingIndicator,
@@ -21,7 +22,6 @@ import {
   LVStyles,
   RefreshControl,
   SafeAreaView,
-  ScrollView,
   Text,
   TopNavigationAction,
   withPreventDoubleClick,
@@ -713,7 +713,13 @@ const MYH010101 = ({ navigation }) => {
       </Layout>
       {/* 본문 */}
       <Layout>
-        <ScrollView
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}
+          keyboardShouldPersistTaps='handled'
+          enableOnAndroid
+          extraScrollHeight={20}
           style={{
             backgroundColor: '#F0F2F6',
           }}
@@ -792,7 +798,7 @@ const MYH010101 = ({ navigation }) => {
               </>
             )}
           <View style={{ height: 100 }} />
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </Layout>
     </SafeAreaView>
   );

@@ -368,7 +368,14 @@ const ETC010301 = () => {
       }}
     >
       <View style={{ flex: 1 }}>
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}
+          keyboardShouldPersistTaps='handled'
+          enableOnAndroid
+          extraScrollHeight={20}
+        >
           <View>
             <View style={styles.container}>
               <View style={{ padding: 8 }}>

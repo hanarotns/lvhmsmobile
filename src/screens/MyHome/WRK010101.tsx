@@ -228,8 +228,8 @@ const WRK010101 = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1 }}>
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
@@ -249,8 +249,7 @@ const WRK010101 = () => {
             </View>
           )}
         </ScrollView>
-
-        <View style={[LVStyles.row, styles.bottomButton]}>
+        <View style={LVStyles.bottomButtonView}>
           <LVButton
             title='입사지원으로 이동'
             onPress={onPressApply}
@@ -258,10 +257,9 @@ const WRK010101 = () => {
             textStyle={styles.fullApplyButtonText}
           />
         </View>
-      </SafeAreaView>
-
+      </View>
       {loading && <LVLoadingIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default WRK010101;

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -13,12 +12,14 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
   Icon,
+  KeyboardAwareScrollView,
   LVButton,
   LVConfirmIndicator,
   LVDatePicker,
   LVLoadingIndicator,
   LVModal,
   LVStyles,
+  SafeAreaView,
   Text,
 } from '@/src/components';
 import { Util } from '@/src/lib';
@@ -578,112 +579,116 @@ const WRK010201 = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.safeArea}>
-        <ScrollView
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
+      <View style={{ flex: 1 }}>
+        <KeyboardAwareScrollView
+          contentContainerStyle={[
+            styles.scrollContent,
+            ,
+            {
+              flexGrow: 1,
+            },
+          ]}
+          keyboardShouldPersistTaps='handled'
+          enableOnAndroid
+          extraScrollHeight={20}
           style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
           {renderApplyForm()}
-        </ScrollView>
-
-        <View style={[LVStyles.row, styles.bottomButton]}>
-          <View style={styles.bottomRightWrap}>
-            <LVButton
-              title='지원하기'
-              onPress={onPressSubmit}
-              buttonStyle={styles.bottomMainButton}
-              textStyle={styles.bottomMainButtonText}
-            />
-
-            <LVButton
-              title='취소하기'
-              onPress={onPressCancel}
-              buttonStyle={styles.bottomSubButton}
-              textStyle={styles.bottomSubButtonText}
-            />
-          </View>
-        </View>
-        {isPostModal && (
-          <LVModal
-            title='공고 선택'
-            contents={
-              <>
-                {renderSearchRow()}
-                {isSearched && !Util.isEmpty(postList) ? (
-                  <View style={{ flex: 1 }}>
-                    {postList?.map((e, i) => renderSearchResult(e, i))}
-                  </View>
-                ) : (
-                  <></>
-                )}
-              </>
-            }
-            onVisible={setIsPostModal}
-            onOk={handleSavePost}
+        </KeyboardAwareScrollView>
+        <View style={LVStyles.bottomButtonView}>
+          <LVButton
+            title='지원하기'
+            onPress={onPressSubmit}
+            buttonStyle={styles.bottomMainButton}
+            textStyle={styles.bottomMainButtonText}
           />
-        )}
-        {isFileModal && (
-          <LVModal
-            title='첨부파일 추가'
-            contents={
-              <>
-                <LVButton
-                  title='파일 선택'
-                  onPress={onPressFileAdd}
-                  buttonStyle={styles.smallOutlineButton}
-                  textStyle={styles.smallOutlineButtonText}
-                />
-                <View style={{ height: 12 }} />
-                {fileList?.map((elem, i) => (
-                  <View
-                    style={[styles.infoRow, { alignItems: 'center' }]}
-                    key={elem.seq}
-                  >
-                    <View style={styles.infoValueBox}>
-                      <Text style={[styles.infoValueText]}>{elem?.seq}</Text>
-                    </View>
-                    <View style={{ width: 8 }} />
-                    <View style={[styles.infoValueBox, { flex: 1 }]}>
-                      <Text style={styles.infoValueText}>
-                        {elem?.fileName} ({elem?.fileSize})
-                        {elem?.uploaded && ' ✅'}
-                      </Text>
-                    </View>
-                    <View style={{ width: 8 }} />
-                    <TouchableOpacity
-                      onPress={() => handleDeleteFile(elem.seq)}
-                      style={{
-                        padding: 8,
-                        borderRadius: 4,
-                        backgroundColor: '#FF3D71',
-                      }}
-                    >
-                      <Icon name='trash-can-outline' color='#FFFFFF' />
-                    </TouchableOpacity>
+          <LVButton
+            title='취소하기'
+            onPress={onPressCancel}
+            buttonStyle={styles.bottomSubButton}
+            textStyle={styles.bottomSubButtonText}
+          />
+        </View>
+      </View>
+      {isPostModal && (
+        <LVModal
+          title='공고 선택'
+          contents={
+            <>
+              {renderSearchRow()}
+              {isSearched && !Util.isEmpty(postList) ? (
+                <View style={{ flex: 1 }}>
+                  {postList?.map((e, i) => renderSearchResult(e, i))}
+                </View>
+              ) : (
+                <></>
+              )}
+            </>
+          }
+          onVisible={setIsPostModal}
+          onOk={handleSavePost}
+        />
+      )}
+      {isFileModal && (
+        <LVModal
+          title='첨부파일 추가'
+          contents={
+            <>
+              <LVButton
+                title='파일 선택'
+                onPress={onPressFileAdd}
+                buttonStyle={styles.smallOutlineButton}
+                textStyle={styles.smallOutlineButtonText}
+              />
+              <View style={{ height: 12 }} />
+              {fileList?.map((elem, i) => (
+                <View
+                  style={[styles.infoRow, { alignItems: 'center' }]}
+                  key={elem.seq}
+                >
+                  <View style={styles.infoValueBox}>
+                    <Text style={[styles.infoValueText]}>{elem?.seq}</Text>
                   </View>
-                ))}
-                {uploading && (
-                  <View style={{ marginTop: 12, alignItems: 'center' }}>
-                    <ActivityIndicator size='small' color='#27A7FF' />
-                    <Text style={{ color: '#8F9BB3', marginTop: 4 }}>
-                      파일 업로드 중...
+                  <View style={{ width: 8 }} />
+                  <View style={[styles.infoValueBox, { flex: 1 }]}>
+                    <Text style={styles.infoValueText}>
+                      {elem?.fileName} ({elem?.fileSize})
+                      {elem?.uploaded && ' ✅'}
                     </Text>
                   </View>
-                )}
-              </>
-            }
-            onVisible={setIsFileModal}
-            onOk={handleSaveFile}
-            okDisabled={uploading}
-          />
-        )}
-      </View>
-
+                  <View style={{ width: 8 }} />
+                  <TouchableOpacity
+                    onPress={() => handleDeleteFile(elem.seq)}
+                    style={{
+                      padding: 8,
+                      borderRadius: 4,
+                      backgroundColor: '#FF3D71',
+                    }}
+                  >
+                    <Icon name='trash-can-outline' color='#FFFFFF' />
+                  </TouchableOpacity>
+                </View>
+              ))}
+              {uploading && (
+                <View style={{ marginTop: 12, alignItems: 'center' }}>
+                  <ActivityIndicator size='small' color='#27A7FF' />
+                  <Text style={{ color: '#8F9BB3', marginTop: 4 }}>
+                    파일 업로드 중...
+                  </Text>
+                </View>
+              )}
+            </>
+          }
+          onVisible={setIsFileModal}
+          onOk={handleSaveFile}
+          okDisabled={uploading}
+        />
+      )}
       {loading && <LVLoadingIndicator />}
       {confirming && <LVConfirmIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -885,21 +890,6 @@ const styles = StyleSheet.create({
   remarkInputText: {
     minHeight: 68,
     textAlignVertical: 'top',
-  },
-  bottomButton: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 20,
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: COLORS.screen,
-  },
-  bottomRightWrap: {
-    flexDirection: 'row',
-    width: '100%',
   },
   bottomMainButton: {
     flex: 1,

@@ -136,7 +136,14 @@ const SignIn = ({ navigation }) => {
     <LVLoadingIndicator />
   ) : (
     <SafeAreaView style={styles.safeAreaView}>
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
+        keyboardShouldPersistTaps='handled'
+        enableOnAndroid
+        extraScrollHeight={20}
+      >
         <View style={{ height: 158 }} />
         <Image
           source={icon.ico_logo_lvhms}

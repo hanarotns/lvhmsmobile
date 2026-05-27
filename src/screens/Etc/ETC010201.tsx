@@ -106,7 +106,14 @@ const ETC010201 = () => {
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}
+          keyboardShouldPersistTaps='handled'
+          enableOnAndroid
+          extraScrollHeight={20}
+        >
           <View>
             <View style={styles.container}>
               <View style={{}}>
@@ -159,7 +166,6 @@ const ETC010201 = () => {
             </View>
           </View>
         </KeyboardAwareScrollView>
-
         <View style={[LVStyles.row, LVStyles.bottomButtonView]}>
           <LVButton
             title='저장'

@@ -411,7 +411,14 @@ const SGN030101 = ({ navigation }) => {
   return (
     <SafeAreaView edges={['bottom']} style={styles.safeArea}>
       <View style={{ flex: 1 }}>
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}
+          keyboardShouldPersistTaps='handled'
+          enableOnAndroid
+          extraScrollHeight={20}
+        >
           <View style={styles.container}>
             <View style={styles.titleBox}>
               <Text style={styles.title}>비밀번호 찾기</Text>
