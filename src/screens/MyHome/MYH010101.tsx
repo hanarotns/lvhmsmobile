@@ -489,8 +489,10 @@ const MYH010101 = ({ navigation }) => {
             />
             <LVButton
               title={'외근등록'}
-              subtitle={'-'}
               img={icon.ico_out}
+              subtitle={
+                Util.convertDateTime('', todayInfo?.OFFSITE_TIME) || '-'
+              }
               textStyle={{
                 color: '#373747',
                 fontWeight: '700',
@@ -513,10 +515,6 @@ const MYH010101 = ({ navigation }) => {
                 padding: 4,
                 justifyContent: 'center',
                 alignItems: 'center',
-                // @@ 외근 건수 border 표기할지 고민할 것.
-                // borderRadius: 20,
-                // borderColor: '#999FA8',
-                // borderWidth: 2,
               }}
             >
               <Text
