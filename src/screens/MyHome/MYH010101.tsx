@@ -491,27 +491,6 @@ const MYH010101 = ({ navigation }) => {
                 setCheckType('O');
               }}
             />
-            <View
-              style={{
-                position: 'absolute',
-                bottom: 20,
-                right: 30,
-                padding: 4,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: '600',
-                  color: '#999FA8',
-                }}
-              >
-                {todayInfo?.OFFSITE_CNT > 1
-                  ? `+ ${todayInfo?.OFFSITE_CNT}`
-                  : ``}
-              </Text>
-            </View>
           </Card>
           <View style={{ height: 12 }} />
           <Card
