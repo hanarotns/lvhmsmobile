@@ -386,7 +386,7 @@ const LEA010301 = () => {
                     fontWeight: '700',
                   }}
                 >
-                  {dt?.REASON}
+                  {dt?.REASON || `-`}
                 </Text>
               }
             />
