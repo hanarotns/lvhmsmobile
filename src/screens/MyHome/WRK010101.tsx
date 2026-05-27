@@ -231,7 +231,6 @@ const WRK010101 = () => {
     <SafeAreaView style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
         <ScrollView
-          style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
@@ -270,18 +269,6 @@ const styles = StyleSheet.create({
     borderColor: '#27A7FF',
     borderWidth: 1,
     padding: 10,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: LVColors.screen,
-  },
-  safeArea: {
-    flex: 1,
-    backgroundColor: LVColors.screen,
-  },
-  scrollView: {
-    flex: 1,
-    backgroundColor: LVColors.screen,
   },
   scrollContent: {
     padding: 16,

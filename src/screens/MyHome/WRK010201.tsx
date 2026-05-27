@@ -582,17 +582,10 @@ const WRK010201 = ({ navigation, route }) => {
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
         <KeyboardAwareScrollView
-          contentContainerStyle={[
-            styles.scrollContent,
-            ,
-            {
-              flexGrow: 1,
-            },
-          ]}
+          contentContainerStyle={[styles.scrollContent, { flexGrow: 1 }]}
           keyboardShouldPersistTaps='handled'
           enableOnAndroid
           extraScrollHeight={20}
-          style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
           {renderApplyForm()}
@@ -703,18 +696,6 @@ const COLORS = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.screen,
-  },
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.screen,
-  },
-  scrollView: {
-    flex: 1,
-    backgroundColor: COLORS.screen,
-  },
   scrollContent: {
     padding: 16,
     paddingBottom: 140,
