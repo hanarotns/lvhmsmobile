@@ -196,7 +196,7 @@ const Board = (props: any) => {
 const CardOfStats = (props: any) => {
   const { title, days, textColor, bgColor } = props;
   return (
-    <View
+    <TouchableOpacity
       style={{
         flex: 1,
         height: 112,
@@ -219,7 +219,7 @@ const CardOfStats = (props: any) => {
       <Text style={{ color: textColor, fontSize: 32, fontWeight: '800' }}>
         {days != undefined ? String(days) : '-'}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
