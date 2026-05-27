@@ -88,11 +88,8 @@ const LEA010201 = () => {
   const mount = async () => {
     setLoading(true);
     // 공가 타입 가져오기
-    const resOfOfficialLeaveType = await COMAction.getPopup('PC0008T', {
-      WEB_YN: 'N',
-      GCODE: 'VA_TYPE',
-      VA_TYPE_CODE: '연차',
-      USER_LANG: 'KO',
+    const resOfOfficialLeaveType = await COMAction.getPopup('PC0001', {
+      GCODE: 'OFFICIAL_VACATION_REASON',
     });
     setOfficialLeaveType(resOfOfficialLeaveType);
     const payload1 = {
@@ -878,7 +875,7 @@ const LEA010201 = () => {
 
             {/* @@ 휴가종류에 '공가'가 포함된 경우만 공가 종류 선택 기능 추가*/}
             {!Util.isEmpty(officialLeaveType) &&
-            infoList.find((e) => ['04', '05', '06'].includes(e.HQCODE)) ? (
+            infoList.find((e) => ['OD', 'OM', 'OA'].includes(e.HQCODE)) ? (
               <View>
                 <LVFormOfContents
                   title={'공가종류'}
