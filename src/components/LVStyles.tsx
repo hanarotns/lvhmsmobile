@@ -1,10 +1,9 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const LVStyles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
     backgroundColor: '#ffffff',
-    padding: 16,
   },
   container: {
     padding: 16,

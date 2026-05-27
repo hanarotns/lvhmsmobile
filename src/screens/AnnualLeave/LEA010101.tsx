@@ -15,6 +15,7 @@ import {
   LVNoData,
   LVStyles,
   RefreshControl,
+  SafeAreaView,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
@@ -103,7 +104,7 @@ const LEA010101 = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         refreshControl={
@@ -174,7 +175,7 @@ const LEA010101 = () => {
           buttonText={'확인'}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 export default LEA010101;

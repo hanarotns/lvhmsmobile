@@ -12,6 +12,7 @@ import {
   LVNoData,
   LVStyles,
   RefreshControl,
+  SafeAreaView,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
@@ -106,7 +107,7 @@ const APR010101 = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         refreshControl={
@@ -159,7 +160,7 @@ const APR010101 = () => {
         </View>
       </ScrollView>
       {loading && <LVLoadingIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default APR010101;
