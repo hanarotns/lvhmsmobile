@@ -118,12 +118,7 @@ const APR010101 = () => {
         <View
           style={{ padding: 32, paddingBottom: 10, backgroundColor: '#FFF' }}
         >
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 24,
-            }}
-          >
+          <Text style={styles.headerText}>
             {empInfo?.EMP_NAME_LC}님 결재 현황입니다.
           </Text>
           <Board stats={stats} />
@@ -168,7 +163,7 @@ export default APR010101;
 const Board = (props: any) => {
   const { stats } = props;
   return (
-    <View style={[LVStyles.row, { marginTop: 32 }]}>
+    <View style={[LVStyles.row, { marginTop: 8 }]}>
       <CardOfStats
         title={'완료 문서'}
         days={stats?.COMPLETE_APPR_CNT}
@@ -401,6 +396,11 @@ const Filter = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  headerText: {
+    fontWeight: '700',
+    fontSize: 24,
+    marginBottom: 24,
+  },
   docuListSection: {
     flex: 1,
     borderTopWidth: 1,

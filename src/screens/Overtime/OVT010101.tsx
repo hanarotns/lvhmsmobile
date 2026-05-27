@@ -96,13 +96,7 @@ const OVT010101 = () => {
         <View
           style={{ padding: 32, paddingBottom: 24, backgroundColor: '#FFF' }}
         >
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 24,
-              marginBottom: 24,
-            }}
-          >
+          <Text style={styles.headerText}>
             {empInfo?.EMP_NAME_LC}님 시간외 현황입니다.
           </Text>
           <LVMovingDateOfArrow
@@ -377,6 +371,11 @@ const ContentOfPreview = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  headerText: {
+    fontWeight: '700',
+    fontSize: 24,
+    marginBottom: 24,
+  },
   docuListSection: {
     flex: 1,
     borderTopWidth: 1,
