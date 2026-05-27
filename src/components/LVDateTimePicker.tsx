@@ -35,13 +35,7 @@ const LVDateTimePicker: React.FC = (props) => {
   const closeModal = () => setShowModal(false);
 
   return (
-    <View
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-      }}
-    >
+    <View style={styles.container}>
       <TouchableOpacity
         style={styles.selectButton}
         onPress={() => openModal('date')}
@@ -51,11 +45,7 @@ const LVDateTimePicker: React.FC = (props) => {
         </Text>
         <Icon name='calendar' color='#6A727B' />
       </TouchableOpacity>
-      <View
-        style={{
-          width: 8,
-        }}
-      />
+      <View style={{ width: 8 }} />
       <TouchableOpacity
         style={styles.selectButton}
         onPress={() => openModal('time')}
@@ -103,6 +93,11 @@ const LVDateTimePicker: React.FC = (props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
   selectButton: {
     borderColor: '#D3D6DD',
     borderRadius: 8,
@@ -117,12 +112,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     marginRight: 8,
-  },
-  modalBg: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.35)',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   modalBox: {
     backgroundColor: '#fff',
