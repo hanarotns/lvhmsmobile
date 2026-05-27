@@ -63,10 +63,8 @@ const MYH010101 = ({ navigation }) => {
   const [offsiteInfo, setOffsiteInfo] = useState({});
 
   useEffect(() => {
-    if (isFocused) {
-      mount();
-    }
-  }, [isFocused]);
+    mount();
+  }, []);
 
   useEffect(() => {
     // 외근등록 모달 껐을 때 외근정보 초기화
