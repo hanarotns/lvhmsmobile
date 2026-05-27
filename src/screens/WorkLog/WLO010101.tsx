@@ -5,15 +5,14 @@ import {
   Icon,
   LVChip,
   LVLoadingIndicator,
-  LVModal,
   LVNoData,
   LVStyles,
+  SafeAreaView,
   ScrollView,
   Text,
 } from '@/src/components'; // 공통컴포넌트
 import { Util } from '@/src/lib';
 import { useIsFocused } from '@react-navigation/native';
-import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { Calendar } from 'react-native-calendars';
@@ -170,7 +169,7 @@ const WLO010101 = () => {
   // };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF' }}>
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       {/* 캘린더 */}
       <View
         style={{
@@ -247,37 +246,8 @@ const WLO010101 = () => {
         </ScrollView>
       </View>
       {/* 모달 */}
-      {isVisibleEdit && (
-        <LVModal
-          onVisible={setIsVisibleEdit}
-          title={'외근 수정'}
-          contents={
-            <ContentsOfEdit
-              offsiteInfo={offsiteInfo}
-              setOffsiteInfo={setOffsiteInfo}
-            />
-          }
-          onOk={handleEdit}
-        />
-      )}
-      {isVisibleDelete && (
-        <LVModal
-          onVisible={setIsVisibleDelete}
-          title={'외근 삭제'}
-          contents={<ContentsOfDelete />}
-          onOk={handleDelete}
-        />
-      )}
-      {isVisibleOff && (
-        <LVModal
-          onVisible={setIsVisibleOff}
-          title={'외근 종료'}
-          contents={<ContentsOfOff />}
-          onOk={() => {}}
-        />
-      )}
       {loading && <LVLoadingIndicator />}
-    </View>
+    </SafeAreaView>
   );
 };
 export default WLO010101;
@@ -466,100 +436,6 @@ const Filter = (props: any) => {
           />
         </TouchableOpacity>
       ))}
-    </View>
-  );
-};
-
-const ContentsOfEdit = (props: any) => {
-  const { offsiteInfo, setOffsiteInfo } = props;
-  return (
-    <View>
-      <Input
-        placeholder='외근 지역을 입력하세요.'
-        value={offsiteInfo?.OFFSITE_IN_INPUT}
-        onChangeText={(p) => {
-          setOffsiteInfo({
-            ...offsiteInfo,
-            OFFSITE_IN_INPUT: p,
-          });
-        }}
-        size='large'
-        style={{ backgroundColor: '#FFF' }}
-        textStyle={{ color: '#373747' }}
-      />
-      <Input
-        placeholder='외근 업체명을 입력하세요.'
-        value={offsiteInfo?.OFFSITE_NAME}
-        onChangeText={(p) => {
-          setOffsiteInfo({
-            ...offsiteInfo,
-            OFFSITE_NAME: p,
-          });
-        }}
-        size='large'
-        style={{ backgroundColor: '#FFF', marginTop: 8 }}
-        textStyle={{ color: '#373747' }}
-      />
-      <Input
-        placeholder='외근 내용을 입력하세요.'
-        value={offsiteInfo?.OFFSITE_MEMO}
-        onChangeText={(p) => {
-          setOffsiteInfo({
-            ...offsiteInfo,
-            OFFSITE_MEMO: p,
-          });
-        }}
-        size='large'
-        style={{ backgroundColor: '#FFF', marginTop: 8 }}
-        textStyle={{ color: '#373747', minHeight: 100 }}
-        multiline={true}
-      />
-    </View>
-  );
-};
-
-const ContentsOfDelete = (props: any) => {
-  return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 16,
-      }}
-    >
-      <Text
-        style={{
-          marginTop: 8,
-          fontSize: 16,
-          fontWeight: '600',
-          color: '#373747',
-        }}
-      >
-        이 외근 기록을 정말 삭제하시겠어요?
-      </Text>
-    </View>
-  );
-};
-
-const ContentsOfOff = (props: any) => {
-  return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 16,
-      }}
-    >
-      <Text
-        style={{
-          marginTop: 8,
-          fontSize: 16,
-          fontWeight: '600',
-          color: '#373747',
-        }}
-      >
-        이 외근을 종료하시겠어요?
-      </Text>
     </View>
   );
 };
