@@ -201,37 +201,14 @@ const ContentOfPreview = (props: any) => {
       }}
     >
       <View style={LVStyles.row}>
-        <View style={{ ...LVStyles.row, justifyContent: 'flex-start' }}>
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 16,
-            }}
-          >
-            {elem?.RQ_TYPE_NAME}
-          </Text>
-          {!!elem?.M_APPR_SUB_TITLE && (
-            <View style={{ ...LVStyles.row, justifyContent: 'flex-start' }}>
-              <View
-                style={{
-                  marginLeft: 4,
-                  height: 16,
-                  width: 2,
-                  backgroundColor: '#373747',
-                }}
-              />
-              <Text
-                style={{
-                  marginLeft: 4,
-                  fontWeight: '700',
-                  fontSize: 16,
-                }}
-              >
-                {elem?.M_APPR_SUB_TITLE}
-              </Text>
-            </View>
-          )}
-        </View>
+        <Text
+          style={{
+            fontWeight: '700',
+            fontSize: 16,
+          }}
+        >
+          {elem?.RQ_TYPE_NAME}
+        </Text>
         <Text
           style={{
             fontWeight: '600',
@@ -250,34 +227,16 @@ const ContentOfPreview = (props: any) => {
               title={elem?.AP_STATUS_NAME}
               code={elem?.AP_STATUS}
             />
-            <View>
-              <Text
-                numberOfLines={1}
-                style={{
-                  marginLeft: 8,
-                  fontWeight: '600',
-                  color: '#939DAA',
-                }}
-              >
-                {elem?.REASON}
-              </Text>
-              {elem?.M_APPR_SUB_CONTENTS ? (
-                <Text
-                  numberOfLines={1}
-                  style={{
-                    marginTop: 4,
-                    marginLeft: 8,
-                    fontWeight: '600',
-                    color: '#939DAA',
-                  }}
-                >
-                  {elem?.M_APPR_SUB_CONTENTS}{' '}
-                  {elem?.M_CAL_RESULT ? `| ${elem?.M_CAL_RESULT}` : ''}
-                </Text>
-              ) : (
-                <></>
-              )}
-            </View>
+            <Text
+              numberOfLines={1}
+              style={{
+                marginLeft: 8,
+                fontWeight: '600',
+                color: '#939DAA',
+              }}
+            >
+              {elem?.REASON}
+            </Text>
           </View>
           <View style={LVStyles.row}>
             <LVProfileImage
