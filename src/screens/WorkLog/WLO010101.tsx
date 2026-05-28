@@ -121,53 +121,6 @@ const WLO010101 = () => {
     setLoading(false);
   };
 
-  const handleEdit = async () => {
-    await Action.updateM(offsiteInfo);
-    await mount(selectedInfo.date.replace(/-/g, '').substring(0, 6));
-    setIsVisibleEdit(false);
-  };
-  const handleDelete = async () => {
-    await Action.updateM({
-      ...offsiteInfo,
-      DELETE_YN: 'Y',
-    });
-    await mount(selectedInfo.date.replace(/-/g, '').substring(0, 6));
-    setIsVisibleDelete(false);
-  };
-  // const handleOff = async () => {
-  //   Geolocation.getCurrentPosition(
-  //     async (param) => {
-  //       const position = {
-  //         lat: param?.coords?.latitude,
-  //         lon: param?.coords?.longitude,
-  //       };
-
-  //       await fetch(
-  //         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position?.lat},${position?.lon}&location_type=ROOFTOP&result_type=street_address&key=AIzaSyDMpeLY-bGH5XbZ6YbCXNW0jaIjITuJxDE` +
-  //           '&language=ko',
-  //       )
-  //         .then((response) => response.json())
-  //         .then((responseJson) => {
-  //           console.log(
-  //             'reverse geo responseJson: \n' + JSON.stringify(responseJson),
-  //           );
-  //           Action.updateM({
-  //             ...offsiteInfo,
-  //             OFFSITE_OUT_GPS: responseJson?.plus_code?.compound_code,
-  //             OFFSITE_OUT_TIME: dayjs(new Date()).format('HHmmss'),
-  //           });
-  //           setIsVisibleOff(false);
-  //         })
-  //         .catch((err) => console.log('reverse geo error : \n' + err));
-  //       await mount(selectedInfo.date.replace(/-/g, '').substring(0, 6));
-  //     },
-  //     (error) => {
-  //       Util.toastMsg(error, 'error');
-  //     },
-  //     { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-  //   );
-  // };
-
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       {/* 캘린더 */}
