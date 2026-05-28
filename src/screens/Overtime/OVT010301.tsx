@@ -223,6 +223,25 @@ const OVT010301 = () => {
                 </View>
               }
             />
+            <LVFormOfContents
+              title={'예정시간'}
+              children={
+                <Text
+                  style={{
+                    fontWeight: '700',
+                    color: '#ABBACD',
+                  }}
+                >
+                  {Util.convertDateTime(
+                    dt?.ND_DATE,
+                    dt?.ND_TYPE !== 'OT' ? dt?.START_TIME : dt?.NORMAL_OFF_TIME,
+                    //@@ ND_TYPE = 'OT' 인 경우 연장시작시간 가져오는 로직으로 수정 필요!!!
+                  )}
+                  {'~'}
+                  {Util.convertDateTime(dt?.CLOSING_DATE, dt?.CLOSING_TIME)}
+                </Text>
+              }
+            />
             {!Util.isEmpty(dt?.CONFIRM_JOB_NO) && (
               <LVFormOfContents
                 title={'확정번호'}
@@ -244,25 +263,6 @@ const OVT010301 = () => {
                 }
               />
             )}
-            <LVFormOfContents
-              title={'예정시간'}
-              children={
-                <Text
-                  style={{
-                    fontWeight: '700',
-                    color: '#ABBACD',
-                  }}
-                >
-                  {Util.convertDateTime(
-                    dt?.ND_DATE,
-                    dt?.ND_TYPE !== 'OT' ? dt?.START_TIME : dt?.NORMAL_OFF_TIME,
-                    //@@ ND_TYPE = 'OT' 인 경우 연장시작시간 가져오는 로직으로 수정 필요!!!
-                  )}
-                  {'~'}
-                  {Util.convertDateTime(dt?.CLOSING_DATE, dt?.CLOSING_TIME)}
-                </Text>
-              }
-            />
             {!Util.isEmpty(dt?.CONFIRM_JOB_NO) && (
               <LVFormOfContents
                 title={'확정시간'}
