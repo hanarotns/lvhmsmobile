@@ -154,13 +154,14 @@ const ETC010201 = () => {
                   editType={'input'}
                   onChange={updateUserInfo}
                 />
-                <Form
+                {/* 모바일에서 다국어 기능 지원하지 않으므로 주석처리 */}
+                {/* <Form
                   label='언어'
                   fieldKey='F_USER_LANG'
                   value={userInfo?.F_USER_LANG}
                   editType={'radio'}
                   onChange={updateUserInfo}
-                />
+                /> */}
               </View>
             </View>
           </View>
