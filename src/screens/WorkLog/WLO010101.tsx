@@ -144,9 +144,6 @@ const WLO010101 = () => {
             });
             const yearMonth = date.replace(/-/g, '').substring(0, 6);
             mount(yearMonth);
-            if (month.year === 2025 && month.month === 10) {
-              Util.toastMsg('※ 2025-11-01 부터 확인 가능합니다', 'info');
-            }
           }}
           markingType='custom'
           markedDates={{
