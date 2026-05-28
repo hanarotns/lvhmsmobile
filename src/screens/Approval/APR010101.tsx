@@ -189,22 +189,19 @@ const LayoutOfStats = (props: any) => {
 };
 
 const ContentOfPreview = (props: any) => {
-  const { elem, onPress, code } = props;
-  // @@ elem 대체 안된 항목 확인
+  const { elem, onPress } = props;
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[
-        {
-          backgroundColor: '#FFF',
-          padding: 16,
-          borderBottomWidth: 1,
-          borderBottomColor: '#F1F1F1',
-        },
-      ]}
+      style={{
+        backgroundColor: '#FFF',
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F1F1F1',
+      }}
     >
-      <View style={[LVStyles.row, { display: 'flex', marginBottom: 16 }]}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={LVStyles.row}>
+        <View style={{ ...LVStyles.row, justifyContent: 'flex-start' }}>
           <Text
             style={{
               fontWeight: '700',
@@ -214,7 +211,7 @@ const ContentOfPreview = (props: any) => {
             {elem?.RQ_TYPE_NAME}
           </Text>
           {!!elem?.M_APPR_SUB_TITLE && (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ ...LVStyles.row, justifyContent: 'flex-start' }}>
               <View
                 style={{
                   marginLeft: 4,
@@ -244,13 +241,10 @@ const ContentOfPreview = (props: any) => {
           {elem?.JOB_NO}
         </Text>
       </View>
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
-        <View style={[LVStyles.row]}>
-          <View style={[LVStyles.row, { alignItems: 'center', width: '50%' }]}>
+      <View style={{ height: 16 }} />
+      <View style={{ flex: 1 }}>
+        <View style={LVStyles.row}>
+          <View style={{ ...LVStyles.row, width: '50%' }}>
             <LVChip
               category='apprStatus'
               title={elem?.AP_STATUS_NAME}
@@ -285,16 +279,12 @@ const ContentOfPreview = (props: any) => {
               )}
             </View>
           </View>
-          <View style={[LVStyles.row]}>
+          <View style={LVStyles.row}>
             <LVProfileImage
               imgStyle={styles.profileImg}
               path={elem?.PICTURE_PATH}
             />
-            <View
-              style={{
-                width: 8,
-              }}
-            />
+            <View style={{ width: 8 }} />
             <Text
               style={{
                 fontWeight: '700',

@@ -224,7 +224,7 @@ const ContentOfPreview = (props: any) => {
         borderBottomColor: '#F1F1F1',
       }}
     >
-      <View style={[LVStyles.row]}>
+      <View style={LVStyles.row}>
         <Text
           style={{
             fontWeight: '600',
@@ -243,10 +243,9 @@ const ContentOfPreview = (props: any) => {
         </Text>
       </View>
       <View style={{ height: 16 }} />
-      <View style={[LVStyles.row]}>
+      <View style={LVStyles.row}>
         <View
           style={{
-            display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
             flex: 1,
@@ -257,13 +256,13 @@ const ContentOfPreview = (props: any) => {
             title={elem?.AP_STATUS_NAME}
             code={elem?.AP_STATUS}
           />
+          <View style={{ width: 8 }} />
           <Text
             numberOfLines={1}
             style={{
               flex: 1,
-              marginHorizontal: 8,
-              fontSize: 14,
               fontWeight: '700',
+              fontSize: 14,
             }}
           >
             {elem?.VAC_START === elem?.VAC_END

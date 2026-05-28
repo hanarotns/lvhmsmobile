@@ -200,28 +200,20 @@ const LayoutOfStats = (props: any) => {
 };
 
 const ContentOfPreview = (props: any) => {
-  const { elem, onPress, code } = props;
+  const { elem, onPress } = props;
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[
-        LVStyles.row,
-        {
-          backgroundColor: '#FFF',
-          padding: 16,
-          borderBottomWidth: 1,
-          borderBottomColor: '#F1F1F1',
-        },
-      ]}
+      style={{
+        ...LVStyles.row,
+        backgroundColor: '#FFF',
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F1F1F1',
+      }}
     >
-      {/* 콘텐츠 */}
-      <View
-        style={{
-          flex: 1,
-          // marginLeft: 24,
-        }}
-      >
-        <View style={[LVStyles.row, { marginBottom: 8 }]}>
+      <View style={{ flex: 1 }}>
+        <View style={LVStyles.row}>
           <Text
             style={{
               fontWeight: '600',
@@ -240,12 +232,8 @@ const ContentOfPreview = (props: any) => {
             {elem?.CONFIRM_JOB_NO ? '/ ' + elem?.CONFIRM_JOB_NO : ''}
           </Text>
         </View>
-        <View
-          style={[
-            LVStyles.row,
-            { justifyContent: 'flex-start', marginBottom: 8 },
-          ]}
-        >
+        <View style={{ height: 8 }} />
+        <View style={{ ...LVStyles.row, justifyContent: 'flex-start' }}>
           {/* @@ 예/확정 APPR_STATUS 따로 받는 방식으로 수정 */}
           <LVChip
             category='apprStatus'
@@ -268,8 +256,9 @@ const ContentOfPreview = (props: any) => {
             {Util.convertDateTime('', elem?.CLOSING_TIME)}
           </Text>
         </View>
+        <View style={{ height: 8 }} />
         {elem?.CONFIRM_JOB_NO ? (
-          <View style={[LVStyles.row, { justifyContent: 'flex-start' }]}>
+          <View style={{ ...LVStyles.row, justifyContent: 'flex-start' }}>
             <LVChip
               category='apprStatus'
               title={`확정 ${elem?.CONFIRM_P_STATUS_NAME}`}
