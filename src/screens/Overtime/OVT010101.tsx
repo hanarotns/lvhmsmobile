@@ -8,6 +8,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 import * as icon from '@/src/assets/images';
 import {
   LVButton,
+  LVCard,
   LVChip,
   LVLoadingIndicator,
   LVMovingDateOfArrow,
@@ -149,87 +150,56 @@ const Board = (props: any) => {
   return (
     <View style={{ marginTop: 16 }}>
       <View style={LVStyles.row}>
-        <CardOfStats
-          title={'연장'}
-          time={stats?.OT_HOURS}
-          textColor='#FF9E3C'
-          bgColor='#FFF7EF'
+        <LVCard
+          category='stat'
+          label={'연장'}
+          value={!Util.isEmpty(stats?.OT_HOURS) ? stats?.OT_HOURS + `h` : `0h`}
+          cardStyle={{ backgroundColor: '#FFF7EF', height: 60 }}
+          valueStyle={{ color: '#FF9E3C', marginBottom: 4, fontSize: 24 }}
         />
         <View style={{ width: 8 }} />
-        <CardOfStats
-          title={'추가연장'}
-          time={stats?.BO_HOURS}
-          textColor='#FF9E99'
-          bgColor='#FFF7FF'
+        <LVCard
+          category='stat'
+          label={'추가연장'}
+          value={!Util.isEmpty(stats?.BO_HOURS) ? stats?.BO_HOURS + `h` : `0h`}
+          cardStyle={{ backgroundColor: '#FFF7FF', height: 60 }}
+          valueStyle={{ color: '#FF9E99', marginBottom: 4, fontSize: 24 }}
         />
         <View style={{ width: 8 }} />
-        <CardOfStats
-          title={'조출'}
-          time={stats?.XX_HOURS}
-          textColor='#BCAF7F'
-          bgColor='#FAF9F5'
+        <LVCard
+          category='stat'
+          label={'조출'}
+          value={!Util.isEmpty(stats?.XX_HOURS) ? stats?.XX_HOURS + `h` : `0h`}
+          cardStyle={{ backgroundColor: '#FAF9F5', height: 60 }}
+          valueStyle={{ color: '#BCAF7F', marginBottom: 4, fontSize: 24 }}
         />
       </View>
       <View style={[LVStyles.row, { marginTop: 8 }]}>
-        <CardOfStats
-          title={'휴일'}
-          time={stats?.HO_HOURS}
-          textColor='#00B25F'
-          bgColor='#EBF9F2'
+        <LVCard
+          category='stat'
+          label={'휴일'}
+          value={!Util.isEmpty(stats?.HO_HOURS) ? stats?.HO_HOURS + `h` : `0h`}
+          cardStyle={{ backgroundColor: '#EBF9F2', height: 60 }}
+          valueStyle={{ color: '#00B25F', marginBottom: 4, fontSize: 24 }}
         />
         <View style={{ width: 8 }} />
-        <CardOfStats
-          title={'재택'}
-          time={stats?.HM_HOURS}
-          textColor='#924529'
-          bgColor='#F6F0EE'
+        <LVCard
+          category='stat'
+          label={'재택'}
+          value={!Util.isEmpty(stats?.HM_HOURS) ? stats?.HM_HOURS + `h` : `0h`}
+          cardStyle={{ backgroundColor: '#F6F0EE', height: 60 }}
+          valueStyle={{ color: '#924529', marginBottom: 4, fontSize: 24 }}
         />
         <View style={{ width: 8 }} />
-        <CardOfStats
-          title={'당직'}
-          time={stats?.DU_HOURS}
-          textColor='#008066'
-          bgColor='#EBF5F3'
+        <LVCard
+          category='stat'
+          label={'당직'}
+          value={!Util.isEmpty(stats?.DU_HOURS) ? stats?.DU_HOURS + `h` : `0h`}
+          cardStyle={{ backgroundColor: '#EBF5F3', height: 60 }}
+          valueStyle={{ color: '#008066', marginBottom: 4, fontSize: 24 }}
         />
       </View>
     </View>
-  );
-};
-
-const CardOfStats = (props: any) => {
-  const { title, sum, time, textColor, bgColor } = props;
-  return (
-    <TouchableOpacity
-      style={{
-        flex: 1,
-        height: 60,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: bgColor,
-        borderRadius: 8,
-      }}
-    >
-      <Text
-        style={{
-          color: '#6A727B',
-          fontSize: 14,
-          fontWeight: '500',
-          marginBottom: 4,
-        }}
-      >
-        {title}
-      </Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-        }}
-      >
-        <Text style={{ color: textColor, fontSize: 24, fontWeight: '800' }}>
-          {time != undefined ? String(time) + `h` : '-'}
-        </Text>
-      </View>
-    </TouchableOpacity>
   );
 };
 

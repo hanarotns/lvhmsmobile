@@ -13,7 +13,7 @@ const LVCard = (props: any) => {
         style={{
           flex: 1,
           height: 100,
-          justifyContent: 'center',
+          justifyContent: 'space-around',
           alignItems: 'center',
           borderRadius: 8,
           backgroundColor: '#F7F8FB',
@@ -25,7 +25,6 @@ const LVCard = (props: any) => {
             fontSize: 14,
             fontWeight: '500',
             color: '#6A727B',
-            marginBottom: 16,
           }}
         >
           {label}

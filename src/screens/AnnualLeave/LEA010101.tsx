@@ -8,6 +8,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 import * as icon from '@/src/assets/images';
 import {
   LVButton,
+  LVCard,
   LVChip,
   LVLoadingIndicator,
   LVModal,
@@ -179,65 +180,39 @@ const Board = (props: any) => {
   return (
     <View style={{ marginTop: 16 }}>
       <View style={LVStyles.row}>
-        <CardOfStats
-          title={'적용 일수'}
-          days={stats?.VC_QTY}
-          textColor='#6A727B'
-          bgColor='#F7F8FB'
+        <LVCard
+          category='stat'
+          label={'적용 일수'}
+          value={stats?.VC_QTY}
+          cardStyle={{ backgroundColor: '#F7F8FB' }}
+          valueStyle={{ color: '#6A727B' }}
         />
         <View style={{ width: 8 }} />
-        <CardOfStats
-          title={'사용 일수'}
-          days={stats?.VC_QTY - stats?.REM_VC_QTY || 0}
-          textColor='#39CCCC'
-          bgColor='#EFFBFB'
+        <LVCard
+          category='stat'
+          label={'사용 일수'}
+          value={stats?.VC_QTY - stats?.REM_VC_QTY || 0}
+          cardStyle={{ backgroundColor: '#EFFBFB' }}
+          valueStyle={{ color: '#39CCCC' }}
         />
         <View style={{ width: 8 }} />
-        <CardOfStats
-          title={'잔여 일수'}
-          days={stats?.REM_VC_QTY - stats?.VALID_VA_QTY || 0}
-          textColor='#27A7FF'
-          bgColor='#EEF8FF'
+        <LVCard
+          category='stat'
+          label={'잔여 일수'}
+          value={stats?.REM_VC_QTY - stats?.VALID_VA_QTY || 0}
+          cardStyle={{ backgroundColor: '#EEF8FF' }}
+          valueStyle={{ color: '#27A7FF' }}
         />
         <View style={{ width: 8 }} />
-        <CardOfStats
-          title={'신청 일수'}
-          days={stats?.VALID_VA_QTY}
-          textColor='#939DAA'
-          bgColor='#F4F6F8'
+        <LVCard
+          category='stat'
+          label={'신청 일수'}
+          value={stats?.VALID_VA_QTY}
+          cardStyle={{ backgroundColor: '#F4F6F8' }}
+          valueStyle={{ color: '#939DAA' }}
         />
       </View>
     </View>
-  );
-};
-
-const CardOfStats = (props: any) => {
-  const { title, days, textColor, bgColor } = props;
-  return (
-    <TouchableOpacity
-      style={{
-        flex: 1,
-        height: 100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: bgColor,
-        borderRadius: 8,
-      }}
-    >
-      <Text
-        style={{
-          color: '#6A727B',
-          fontSize: 14,
-          fontWeight: '500',
-          marginBottom: 16,
-        }}
-      >
-        {title}
-      </Text>
-      <Text style={{ color: textColor, fontSize: 32, fontWeight: '800' }}>
-        {days != undefined ? String(days) : '-'}
-      </Text>
-    </TouchableOpacity>
   );
 };
 

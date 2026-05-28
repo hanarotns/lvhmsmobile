@@ -7,6 +7,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 
 import * as icon from '@/src/assets/images';
 import {
+  LVCard,
   LVChip,
   LVLoadingIndicator,
   LVNoData,
@@ -164,57 +165,30 @@ const Board = (props: any) => {
   const { stats } = props;
   return (
     <View style={[LVStyles.row, { marginTop: 8 }]}>
-      <CardOfStats
-        title={'완료 문서'}
-        days={stats?.COMPLETE_APPR_CNT}
-        textColor='#939DAA'
-        bgColor='#F7F8FB'
+      <LVCard
+        category='stat'
+        label={'완료 문서'}
+        value={stats?.COMPLETE_APPR_CNT}
+        cardStyle={{ backgroundColor: '#F7F8FB', height: 112 }}
+        valueStyle={{ color: '#939DAA' }}
       />
       <View style={{ width: 8 }} />
-      <CardOfStats
-        title={'결재할 문서'}
-        days={stats?.PENDING_APPR_CNT}
-        textColor='#27A7FF'
-        bgColor='#EEF8FF'
+      <LVCard
+        category='stat'
+        label={'결재할 문서'}
+        value={stats?.PENDING_APPR_CNT}
+        cardStyle={{ backgroundColor: '#EEF8FF', height: 112 }}
+        valueStyle={{ color: '#27A7FF' }}
       />
       <View style={{ width: 8 }} />
-      <CardOfStats
-        title={'진행 문서'}
-        days={stats?.PROGRESS_APPR_CNT}
-        textColor='#003282'
-        bgColor='#EBEFF5'
+      <LVCard
+        category='stat'
+        label={'진행 문서'}
+        value={stats?.PROGRESS_APPR_CNT}
+        cardStyle={{ backgroundColor: '#EBEFF5', height: 112 }}
+        valueStyle={{ color: '#003282' }}
       />
     </View>
-  );
-};
-
-const CardOfStats = (props: any) => {
-  const { title, days, textColor, bgColor } = props;
-  return (
-    <TouchableOpacity
-      style={{
-        flex: 1,
-        height: 112,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: bgColor,
-        borderRadius: 8,
-      }}
-    >
-      <Text
-        style={{
-          color: '#6A727B',
-          fontSize: 14,
-          fontWeight: '500',
-          marginBottom: 16,
-        }}
-      >
-        {title}
-      </Text>
-      <Text style={{ color: textColor, fontSize: 32, fontWeight: '800' }}>
-        {days != undefined ? String(days) : '-'}
-      </Text>
-    </TouchableOpacity>
   );
 };
 
