@@ -22,6 +22,7 @@ import ico_inProgress from './ico_inProgress.png';
 import ico_location from './ico_location.png';
 import ico_logo_htns from './ico_logo_htns.png';
 import ico_logo_lvhms from './ico_logo_lvhms.png';
+import ico_logo_lvhms_beta from './ico_logo_lvhms_beta.png';
 import ico_menu from './ico_menu.png';
 import ico_more from './ico_more.png';
 import ico_nodata from './ico_nodata.png';
@@ -73,6 +74,7 @@ export {
   ico_location,
   ico_logo_htns,
   ico_logo_lvhms,
+  ico_logo_lvhms_beta,
   ico_menu,
   ico_more,
   ico_nodata,
