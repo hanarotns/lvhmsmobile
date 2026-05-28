@@ -206,7 +206,7 @@ const DocuPreviewContent = (props: any) => {
       <View style={{ height: 16 }} />
       <View style={{ flex: 1 }}>
         <View style={LVStyles.row}>
-          <View style={{ ...LVStyles.row, width: '50%' }}>
+          <View style={{ ...LVStyles.row, justifyContent: 'flex-start' }}>
             <LVChip
               category='apprStatus'
               title={elem?.AP_STATUS_NAME}
