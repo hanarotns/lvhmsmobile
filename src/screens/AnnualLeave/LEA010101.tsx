@@ -129,7 +129,7 @@ const LEA010101 = () => {
               )} ~ ${Util.convertDateTime(stats?.APPLY_E_DATE)}` || '-'
             }
           />
-          <Board stats={stats} />
+          <LayoutOfStats stats={stats} />
           <LVButton
             title='휴가 신청하기'
             onPress={() => {
@@ -175,7 +175,7 @@ const LEA010101 = () => {
 };
 export default LEA010101;
 
-const Board = (props: any) => {
+const LayoutOfStats = (props: any) => {
   const { stats } = props;
   return (
     <View style={{ marginTop: 16 }}>

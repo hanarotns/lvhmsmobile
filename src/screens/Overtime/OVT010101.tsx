@@ -110,7 +110,7 @@ const OVT010101 = () => {
               )}월` || '-'
             }
           />
-          <Board stats={stats} />
+          <LayoutOfStats stats={stats} />
           <LVButton
             title='시간외 예정 신청하기'
             onPress={() => {
@@ -145,7 +145,7 @@ const OVT010101 = () => {
 };
 export default OVT010101;
 
-const Board = (props: any) => {
+const LayoutOfStats = (props: any) => {
   const { stats } = props;
   return (
     <View style={{ marginTop: 16 }}>

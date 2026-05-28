@@ -122,7 +122,7 @@ const APR010101 = () => {
           <Text style={styles.headerText}>
             {empInfo?.EMP_NAME_LC}님 결재 현황입니다.
           </Text>
-          <Board stats={stats} />
+          <LayoutOfStats stats={stats} />
           <Filter
             apprFilter={apprFilter}
             selectedApprType={selectedApprType}
@@ -161,7 +161,7 @@ const APR010101 = () => {
 };
 export default APR010101;
 
-const Board = (props: any) => {
+const LayoutOfStats = (props: any) => {
   const { stats } = props;
   return (
     <View style={[LVStyles.row, { marginTop: 8 }]}>
