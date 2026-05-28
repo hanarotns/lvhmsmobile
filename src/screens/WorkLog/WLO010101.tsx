@@ -89,7 +89,11 @@ const WLO010101 = () => {
       .map((item) => item.M_DATE)
       .forEach(
         (key: string, i: number) =>
-          (obj[key] = { marked: true, borderWidth: 1 }),
+          (obj[key] = {
+            customStyles: {
+              container: { borderWidth: 1, borderColor: 'blue' },
+            },
+          }),
       );
     res?.HD?.filter((item) => ['HOLIDAY', 'WEEKEND'].includes(item.M_TYPE))
       .map((item) => item.M_DATE)
