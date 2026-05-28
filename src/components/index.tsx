@@ -15,6 +15,7 @@ import LVLoadingIndicator from './LVLoadingIndicator';
 import LVModal from './LVModal';
 import LVMovingDateOfArrow from './LVMovingDateOfArrow';
 import LVNoData from './LVNoData';
+import LVProfileImage from './LVProfileImage';
 import LVRadioButton from './LVRadioButton';
 import LVSection from './LVSection'; // @@ 사용하는 곳 없음.
 import LVSelectBox from './LVSelectBox';
@@ -95,6 +96,7 @@ export {
   LVModal,
   LVMovingDateOfArrow,
   LVNoData,
+  LVProfileImage,
   LVRadioButton,
   LVSection,
   LVSelectBox,
