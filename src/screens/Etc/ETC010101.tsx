@@ -107,7 +107,7 @@ const ETC010101 = () => {
               style={styles.menuButton}
             >
               <Icon name='view-grid-outline' color='#373747' />
-              <Text style={styles.menuText}>연차촉진제 설정</Text>
+              <Text style={styles.menuText}>연차촉진제</Text>
             </TouchableOpacity>
             <Divider />
             <TouchableOpacity
