@@ -19,6 +19,7 @@ import {
   LVButton,
   LVLoadingIndicator,
   LVModal,
+  LVProfileImage,
   LVStyles,
   RefreshControl,
   SafeAreaView,
@@ -264,20 +265,9 @@ const MYH010101 = ({ navigation }) => {
           <Text style={styles.greetingText}>
             {`${empInfo?.EMP_NAME_LC}님\n안녕하세요.`}
           </Text>
-          <Image
-            style={styles.profileImg}
-            source={
-              empInfo?.PICTURE_PATH
-                ? {
-                    uri: `https://lv1.htns.com/api/apicall/getDownload/${empInfo?.PICTURE_PATH}`,
-                    headers: {
-                      'X-CSRF-TOKEN': global.gToken,
-                      Cookie: global.gCookie,
-                      // withCredentials: true,
-                    },
-                  }
-                : icon.ico_profile
-            }
+          <LVProfileImage
+            imgStyle={styles.profileImg}
+            path={empInfo?.PICTURE_PATH}
           />
         </View>
         <Text style={styles.greetingSubText}>오늘은 {nowOfKo}</Text>

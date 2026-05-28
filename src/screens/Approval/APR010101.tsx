@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
-import * as icon from '@/src/assets/images';
 import {
   LVCard,
   LVChip,
   LVLoadingIndicator,
   LVNoData,
+  LVProfileImage,
   LVStyles,
   RefreshControl,
   SafeAreaView,
@@ -290,24 +290,9 @@ const ContentOfPreview = (props: any) => {
             </View>
           </View>
           <View style={[LVStyles.row]}>
-            <Image
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: 16,
-              }}
-              source={
-                elem?.PICTURE_PATH
-                  ? {
-                      uri: `https://lv1.htns.com/api/apicall/getDownload/${elem?.PICTURE_PATH}`,
-                      headers: {
-                        'X-CSRF-TOKEN': global.gToken,
-                        Cookie: global.gCookie,
-                        // withCredentials: true,
-                      },
-                    }
-                  : icon.ico_profile
-              }
+            <LVProfileImage
+              imgStyle={styles.profileImg}
+              path={elem?.PICTURE_PATH}
             />
             <View
               style={{
@@ -379,5 +364,10 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopWidth: 1,
     borderTopColor: '#F1F1F1',
+  },
+  profileImg: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
   },
 });

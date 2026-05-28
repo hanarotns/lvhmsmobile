@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
-import * as icon from '@/src/assets/images';
-import { Divider, Icon, LVLoadingIndicator, Text } from '@/src/components';
+import {
+  Divider,
+  Icon,
+  LVLoadingIndicator,
+  LVProfileImage,
+  Text,
+} from '@/src/components';
 import LVColors from '@/src/components/LVColors';
 import { Fetch, Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -61,20 +66,9 @@ const ETC010101 = () => {
               style={styles.profileCard}
             >
               <View style={styles.profileLeft}>
-                <Image
-                  style={styles.profileImg}
-                  source={
-                    empInfo?.PICTURE_PATH
-                      ? {
-                          uri: `https://lv1.htns.com/api/apicall/getDownload/${empInfo?.PICTURE_PATH}`,
-                          headers: {
-                            'X-CSRF-TOKEN': global.gToken,
-                            Cookie: global.gCookie,
-                            // withCredentials: true,
-                          },
-                        }
-                      : icon.ico_profile
-                  }
+                <LVProfileImage
+                  imgStyle={styles.profileImg}
+                  path={empInfo?.PICTURE_PATH}
                 />
 
                 <View style={styles.profileContent}>
