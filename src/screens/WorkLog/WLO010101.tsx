@@ -96,11 +96,8 @@ const WLO010101 = () => {
       .forEach(
         (key: string, i: number) =>
           (obj[key] = {
-            customStyles: {
-              text: {
-                color: '#FF585B',
-              },
-            },
+            ...obj[key],
+            customStyles: { text: { color: '#FF585B' } },
           }),
       );
     setCalDispList(obj);
