@@ -1,5 +1,5 @@
-import Text from '@/src/components/CustomText'; // 공통컴포넌트
-import Icon from '@/src/components/Icon'; // 공통컴포넌트
+import Text from '@/src/components/CustomText';
+import Icon from '@/src/components/Icon';
 import LVStyles from '@/src/components/LVStyles';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';

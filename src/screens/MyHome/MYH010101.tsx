@@ -175,6 +175,7 @@ const MYH010101 = ({ navigation }) => {
       console.log('위치 조회 에러:', e);
     }
   };
+
   const getNearOfficeM = async () => {
     const payload = {
       WA_LAT: position?.lat,

@@ -16,7 +16,6 @@ import {
   TextField,
 } from '@/src/components';
 import { Util } from '@/src/lib';
-import util from '@/src/lib/util';
 import {
   RouteProp,
   useIsFocused,
@@ -84,7 +83,7 @@ const ETC010201 = () => {
    * * @returns {Boolean}
    */
   const checkLogic = async () => {
-    if (util.isEmpty(userInfo)) {
+    if (Util.isEmpty(userInfo)) {
       return false;
     }
     return true;
