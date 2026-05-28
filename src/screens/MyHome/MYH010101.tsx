@@ -713,12 +713,7 @@ const MYH010101 = ({ navigation }) => {
             Util.isEmpty(laborNotice2) &&
             Util.isEmpty(laborRefusal) && (
               <>
-                <View
-                  style={{
-                    paddingVertical: 24,
-                    paddingHorizontal: 32,
-                  }}
-                >
+                <View style={styles.entireView}>
                   <LayoutOfGreeting />
                   <LayoutOfTracker />
                   <LayoutOfCards />
@@ -849,6 +844,10 @@ const ContentsOfNotInside = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  entireView: {
+    paddingVertical: 24,
+    paddingHorizontal: 32,
+  },
   profileImg: {
     width: 100,
     height: 100,

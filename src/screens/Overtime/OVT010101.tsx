@@ -93,10 +93,7 @@ const OVT010101 = () => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        {/* 현황판 Section */}
-        <View
-          style={{ padding: 32, paddingBottom: 24, backgroundColor: '#FFF' }}
-        >
+        <View style={styles.header}>
           <Text style={styles.headerText}>
             {empInfo?.EMP_NAME_LC}님 시간외 현황입니다.
           </Text>
@@ -120,8 +117,7 @@ const OVT010101 = () => {
             buttonStyle={{ marginTop: 24, borderRadius: 28 }}
           />
         </View>
-        {/* 문서내역 Section */}
-        <View style={styles.docuListSection}>
+        <View style={styles.body}>
           {!Util.isEmpty(list) ? (
             <View>
               {list?.map((e, i) => (
@@ -341,12 +337,17 @@ const ContentOfPreview = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    padding: 32,
+    paddingBottom: 24,
+    backgroundColor: '#FFF',
+  },
   headerText: {
     fontWeight: '700',
     fontSize: 24,
     marginBottom: 24,
   },
-  docuListSection: {
+  body: {
     flex: 1,
     borderTopWidth: 1,
     borderTopColor: '#F1F1F1',

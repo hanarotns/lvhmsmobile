@@ -296,12 +296,6 @@ const styles = StyleSheet.create({
   conditionWrap: {
     marginTop: 14,
   },
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: LVColors.text,
-    marginBottom: 10,
-  },
   conditionRow: {
     flexDirection: 'row',
     alignItems: 'center',

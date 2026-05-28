@@ -115,10 +115,7 @@ const APR010101 = () => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        {/* 현황판 Section */}
-        <View
-          style={{ padding: 32, paddingBottom: 10, backgroundColor: '#FFF' }}
-        >
+        <View style={styles.header}>
           <Text style={styles.headerText}>
             {empInfo?.EMP_NAME_LC}님 결재 현황입니다.
           </Text>
@@ -130,8 +127,7 @@ const APR010101 = () => {
             filteredList={filteredList}
           />
         </View>
-        {/* 문서내역 Section */}
-        <View style={styles.docuListSection}>
+        <View style={styles.body}>
           {!Util.isEmpty(filteredList) ? (
             <View>
               {filteredList?.map((e, i) => (
@@ -355,12 +351,17 @@ const Filter = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    padding: 32,
+    paddingBottom: 10,
+    backgroundColor: '#FFF',
+  },
   headerText: {
     fontWeight: '700',
     fontSize: 24,
     marginBottom: 24,
   },
-  docuListSection: {
+  body: {
     flex: 1,
     borderTopWidth: 1,
     borderTopColor: '#F1F1F1',
