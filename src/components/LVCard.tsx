@@ -41,10 +41,31 @@ const LVCard = (props: any) => {
         </Text>
       </TouchableOpacity>
     );
-  } else if (category === 'preview') {
+  } else if (category === 'docuPreview') {
+    const { onPress, contents } = props;
+    return (
+      <TouchableOpacity onPress={onPress} style={styles.entire}>
+        {contents}
+      </TouchableOpacity>
+    );
   } else {
   }
 };
 export default LVCard;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  entire: {
+    backgroundColor: '#FFF',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F1F1',
+  },
+  labelText: {
+    fontWeight: '600',
+    color: '#939DAA',
+  },
+  mainText: {
+    fontWeight: '700',
+    fontSize: 14,
+  },
+});

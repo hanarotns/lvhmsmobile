@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -121,12 +121,27 @@ const OVT010101 = () => {
           {!Util.isEmpty(list) ? (
             <View>
               {list?.map((e, i) => (
-                <ContentOfPreview
-                  elem={e}
-                  key={i}
+                <LVCard
+                  category='docuPreview'
                   onPress={() => {
                     movingScreen.navigate('OVT010301', e);
                   }}
+                  contents={
+                    <DocuPreviewContent
+                      elem={e}
+                      key={i}
+                      onConfReq={() => {
+                        if (e?.M_APPR_STATUS === '02') {
+                          movingScreen.navigate('OVT010202', elem);
+                        } else {
+                          Util.toastMsg(
+                            '예정 결재가 완료되어야 신청가능합니다.',
+                            'info',
+                          );
+                        }
+                      }}
+                    />
+                  }
                 />
               ))}
             </View>
@@ -199,35 +214,14 @@ const LayoutOfStats = (props: any) => {
   );
 };
 
-const ContentOfPreview = (props: any) => {
-  const { elem, onPress } = props;
+const DocuPreviewContent = (props: any) => {
+  const { elem, onConfReq } = props;
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        ...LVStyles.row,
-        backgroundColor: '#FFF',
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F1F1F1',
-      }}
-    >
+    <>
       <View style={{ flex: 1 }}>
         <View style={LVStyles.row}>
-          <Text
-            style={{
-              fontWeight: '600',
-              color: '#939DAA',
-            }}
-          >
-            {elem?.ND_TYPE_NM}
-          </Text>
-          <Text
-            style={{
-              fontWeight: '600',
-              color: '#939DAA',
-            }}
-          >
+          <Text style={styles.labelText}>{elem?.ND_TYPE_NM}</Text>
+          <Text style={styles.labelText}>
             {elem?.JOB_NO}{' '}
             {elem?.CONFIRM_JOB_NO ? '/ ' + elem?.CONFIRM_JOB_NO : ''}
           </Text>
@@ -264,13 +258,8 @@ const ContentOfPreview = (props: any) => {
               title={`확정 ${elem?.CONFIRM_P_STATUS_NAME}`}
               code={elem?.CONFIRM_P_STATUS}
             />
-            <Text
-              style={{
-                marginLeft: 8,
-                fontWeight: '700',
-                color: '#373747',
-              }}
-            >
+            <View style={{ width: 8 }} />
+            <Text style={{ fontWeight: '700' }}>
               {Util.convertDateTime(
                 elem?.CONFIRM_NDS_DATE,
                 elem?.ND_TYPE === 'OT'
@@ -291,37 +280,15 @@ const ContentOfPreview = (props: any) => {
             </Text> */}
           </View>
         ) : (
-          <TouchableOpacity
-            onPress={() => {
-              if (elem?.M_APPR_STATUS === '02') {
-                movingScreen.navigate('OVT010202', elem);
-              } else {
-                Util.toastMsg('예정 결재가 완료되어야 신청가능합니다.', 'info');
-              }
-            }}
-            style={{
-              borderColor: '#ABBACD',
-              borderWidth: 1,
-              padding: 9,
-              borderRadius: 8,
-              backgroundColor: '#FFF',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 14,
-                color: '#27A7FF',
-                fontWeight: '700',
-              }}
-            >
-              확정신청
-            </Text>
-          </TouchableOpacity>
+          <LVButton
+            title='확정신청'
+            onPress={onConfReq}
+            buttonStyle={styles.confReqButton}
+            textStyle={styles.confReqButtonText}
+          />
         )}
       </View>
-    </TouchableOpacity>
+    </>
   );
 };
 
@@ -341,4 +308,19 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#F1F1F1',
   },
+  labelText: {
+    fontWeight: '600',
+    color: '#939DAA',
+  },
+  mainText: { fontWeight: '700', fontSize: 14 },
+  confReqButton: {
+    borderColor: '#ABBACD',
+    borderWidth: 1,
+    padding: 9,
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confReqButtonText: { color: '#27A7FF', fontSize: 14 },
 });

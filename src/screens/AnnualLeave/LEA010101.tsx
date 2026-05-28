@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -140,12 +140,12 @@ const LEA010101 = () => {
           {!Util.isEmpty(list) ? (
             <View>
               {list?.map((e, i) => (
-                <ContentOfPreview
-                  elem={e}
-                  key={i}
+                <LVCard
+                  category='docuPreview'
                   onPress={() => {
                     movingScreen.navigate('LEA010301', e);
                   }}
+                  contents={<DocuPreviewContent elem={e} key={i} />}
                 />
               ))}
             </View>
@@ -212,44 +212,18 @@ const LayoutOfStats = (props: any) => {
   );
 };
 
-const ContentOfPreview = (props: any) => {
-  const { elem, onPress } = props;
+const DocuPreviewContent = (props: any) => {
+  const { elem } = props;
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        backgroundColor: '#FFF',
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F1F1F1',
-      }}
-    >
+    <>
       <View style={LVStyles.row}>
-        <Text
-          style={{
-            fontWeight: '600',
-            color: '#939DAA',
-          }}
-        >
-          {elem?.VA_TYPE_NAME}
-        </Text>
-        <Text
-          style={{
-            fontWeight: '600',
-            color: '#939DAA',
-          }}
-        >
-          {elem?.JOB_NO}
-        </Text>
+        <Text style={styles.labelText}>{elem?.VA_TYPE_NAME}</Text>
+        <Text style={styles.labelText}>{elem?.JOB_NO}</Text>
       </View>
       <View style={{ height: 16 }} />
       <View style={LVStyles.row}>
         <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            flex: 1,
-          }}
+          style={{ ...LVStyles.row, justifyContent: 'flex-start', flex: 1 }}
         >
           <LVChip
             category='apprStatus'
@@ -257,14 +231,7 @@ const ContentOfPreview = (props: any) => {
             code={elem?.AP_STATUS}
           />
           <View style={{ width: 8 }} />
-          <Text
-            numberOfLines={1}
-            style={{
-              flex: 1,
-              fontWeight: '700',
-              fontSize: 14,
-            }}
-          >
+          <Text numberOfLines={1} style={styles.mainText}>
             {elem?.VAC_START === elem?.VAC_END
               ? Util.convertDateTime(elem?.VAC_START)
               : Util.convertDateTime(elem?.VAC_START) +
@@ -273,17 +240,13 @@ const ContentOfPreview = (props: any) => {
           </Text>
         </View>
         <Text
-          style={{
-            fontWeight: '700',
-            fontSize: 14,
-            color: '#27A7FF',
-          }}
+          numberOfLines={1}
+          style={{ ...styles.mainText, color: '#27A7FF' }}
         >
-          {/* 휴가 일수 */}
           {elem?.PERIOD} 일
         </Text>
       </View>
-    </TouchableOpacity>
+    </>
   );
 };
 
@@ -326,4 +289,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#F1F1F1',
   },
+  labelText: {
+    fontWeight: '600',
+    color: '#939DAA',
+  },
+  mainText: { fontWeight: '700', fontSize: 14 },
 });

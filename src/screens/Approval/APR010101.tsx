@@ -131,9 +131,8 @@ const APR010101 = () => {
           {!Util.isEmpty(filteredList) ? (
             <View>
               {filteredList?.map((e, i) => (
-                <ContentOfPreview
-                  elem={e}
-                  key={i}
+                <LVCard
+                  category='docuPreview'
                   onPress={() => {
                     if (['ND', 'NC'].includes(e.RQ_TYPE)) {
                       movingScreen.navigate('OVT010301', e);
@@ -143,6 +142,7 @@ const APR010101 = () => {
                       //@@
                     }
                   }}
+                  contents={<DocuPreviewContent elem={e} key={i} />}
                 />
               ))}
             </View>
@@ -188,27 +188,12 @@ const LayoutOfStats = (props: any) => {
   );
 };
 
-const ContentOfPreview = (props: any) => {
+const DocuPreviewContent = (props: any) => {
   const { elem, onPress } = props;
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        backgroundColor: '#FFF',
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F1F1F1',
-      }}
-    >
+    <>
       <View style={LVStyles.row}>
-        <Text
-          style={{
-            fontWeight: '700',
-            fontSize: 16,
-          }}
-        >
-          {elem?.RQ_TYPE_NAME}
-        </Text>
+        <Text style={styles.mainText}>{elem?.RQ_TYPE_NAME}</Text>
         <Text
           style={{
             fontWeight: '600',
@@ -227,16 +212,12 @@ const ContentOfPreview = (props: any) => {
               title={elem?.AP_STATUS_NAME}
               code={elem?.AP_STATUS}
             />
-            <Text
-              numberOfLines={1}
-              style={{
-                marginLeft: 8,
-                fontWeight: '600',
-                color: '#939DAA',
-              }}
-            >
-              {elem?.REASON}
-            </Text>
+            <View style={{ width: 8 }} />
+            <View>
+              <Text numberOfLines={1} style={styles.labelText}>
+                {elem?.REASON}
+              </Text>
+            </View>
           </View>
           <View style={LVStyles.row}>
             <LVProfileImage
@@ -244,18 +225,13 @@ const ContentOfPreview = (props: any) => {
               path={elem?.PICTURE_PATH}
             />
             <View style={{ width: 8 }} />
-            <Text
-              style={{
-                fontWeight: '700',
-                fontSize: 16,
-              }}
-            >
+            <Text style={styles.mainText}>
               {elem?.RQ_EMP_NAME} {elem?.M_APPR_MEMBER_RANK_NAME}
             </Text>
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </>
   );
 };
 
@@ -319,5 +295,13 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
+  },
+  labelText: {
+    fontWeight: '600',
+    color: '#939DAA',
+  },
+  mainText: {
+    fontWeight: '700',
+    fontSize: 16,
   },
 });
