@@ -17,6 +17,7 @@ import {
   KeyboardAwareScrollView,
   Layout,
   LVButton,
+  LVColors,
   LVLoadingIndicator,
   LVModal,
   LVProfileImage,
@@ -251,17 +252,8 @@ const MYH010101 = ({ navigation }) => {
     const now = dayjs(new Date()).locale('ko');
     const nowOfKo = now.format('MM월 DD일 ddd요일');
     return (
-      <View
-        style={{
-          marginBottom: 12,
-        }}
-      >
-        <View
-          style={{
-            ...LVStyles.row,
-            marginBottom: 12,
-          }}
-        >
+      <View>
+        <View style={LVStyles.row}>
           <Text style={styles.greetingText}>
             {`${empInfo?.EMP_NAME_LC}님\n안녕하세요.`}
           </Text>
@@ -270,66 +262,34 @@ const MYH010101 = ({ navigation }) => {
             path={empInfo?.PICTURE_PATH}
           />
         </View>
+        <View style={{ height: 12 }} />
         <Text style={styles.greetingSubText}>오늘은 {nowOfKo}</Text>
+        <View style={{ height: 12 }} />
       </View>
     );
   };
 
   const LayoutOfTracker = () => {
     return (
-      <View
-        style={{
-          marginBottom: 24,
-        }}
-      >
-        <View
-          style={{
-            ...LVStyles.row,
-            ...styles.tracker,
-          }}
-        >
+      <View>
+        <View style={styles.tracker}>
           {nearestOffice?.ET_STATUS === 'N' && (
             <View style={LVStyles.row}>
               <Image
                 source={icon.ico_nolocation}
-                style={[
-                  LVStyles.iconS,
-                  {
-                    tintColor: '#FF9294',
-                    marginRight: 8,
-                  },
-                ]}
+                style={styles.noLocatedIcon}
               />
-              <Text
-                style={{
-                  fontWeight: '700',
-                  fontSize: 16,
-                  color: '#FF9294',
-                }}
-              >
+              <View style={{ width: 8 }} />
+              <Text style={styles.noLocatedText}>
                 {!Util.isEmpty(address) ? address : `근무지에서 벗어나 있어요.`}
               </Text>
             </View>
           )}
           {nearestOffice?.ET_STATUS === 'Y' && (
             <View style={LVStyles.row}>
-              <Image
-                source={icon.ico_location}
-                style={[
-                  LVStyles.iconS,
-                  {
-                    tintColor: '#14D46A',
-                    marginRight: 8,
-                  },
-                ]}
-              />
-              <Text
-                style={{
-                  fontWeight: '700',
-                  fontSize: 16,
-                  color: '#14D46A',
-                }}
-              >
+              <Image source={icon.ico_location} style={styles.locatedIcon} />
+              <View style={{ width: 8 }} />
+              <Text style={styles.locatedText}>
                 {nearestOffice?.ET_AREA_NAME}
               </Text>
             </View>
@@ -342,24 +302,13 @@ const MYH010101 = ({ navigation }) => {
               }}
               name='refresh'
               color='#B0B9C1'
-              style={{
-                ...LVStyles.iconS,
-              }}
             />
           ) : (
             <ActivityIndicator size='large' color='gray' />
           )}
         </View>
-        <View
-          style={{
-            ...LVStyles.row,
-            marginTop: 8,
-            marginHorizontal: 16,
-          }}
-        >
-          <Text style={styles.trackerLeftText}>
-            {/* {nearestOffice?.OFFICE_NAME_LOC} */}
-          </Text>
+        <View style={{ height: 8 }} />
+        <View style={styles.trackerBottmView}>
           <Text style={styles.trackerRightText}>
             {todayInfo?.WORK_CODE
               ? todayInfo?.ON_TIME
@@ -372,6 +321,7 @@ const MYH010101 = ({ navigation }) => {
                 `정규출퇴근이 지정되지 않았습니다.\n인사팀에 문의하세요.`}{' '}
           </Text>
         </View>
+        <View style={{ height: 24 }} />
       </View>
     );
   };
@@ -430,16 +380,9 @@ const MYH010101 = ({ navigation }) => {
               img={icon.ico_on}
               subtitle={todayInfo?.START_DATETIME?.substr(11) || '-'}
               buttonStyle={{ backgroundColor: '#EEF8FF', marginTop: 0 }}
-              textStyle={{
-                color: '#27A7FF',
-                fontWeight: '700',
-                fontSize: 20,
-                lineHeight: 24,
-              }}
+              textStyle={styles.startBtnText}
               subTextStyle={{ color: '#1E2125' }}
-              imgStyle={{
-                tintColor: '#27A7FF',
-              }}
+              imgStyle={{ tintColor: '#27A7FF' }}
               onPress={() => {
                 setCheckType('S');
               }}
@@ -448,16 +391,9 @@ const MYH010101 = ({ navigation }) => {
               title={'퇴근하기'}
               img={icon.ico_off}
               subtitle={todayInfo?.END_DATETIME?.substr(11) || '-'}
-              textStyle={{
-                color: '#003282',
-                fontWeight: '700',
-                fontSize: 20,
-                lineHeight: 24,
-              }}
+              textStyle={styles.endBtnText}
               buttonStyle={{ backgroundColor: '#D5ECFF', marginTop: 8 }}
-              imgStyle={{
-                tintColor: '#003282',
-              }}
+              imgStyle={{ tintColor: '#003282' }}
               onPress={() => {
                 setCheckType('E');
               }}
@@ -468,16 +404,9 @@ const MYH010101 = ({ navigation }) => {
               subtitle={
                 Util.convertDateTime('', todayInfo?.OFFSITE_TIME) || '-'
               }
-              textStyle={{
-                color: '#373747',
-                fontWeight: '700',
-                fontSize: 16,
-                lineHeight: 24,
-              }}
+              textStyle={styles.offsiteBtnText}
               buttonStyle={{ backgroundColor: '#F7FCFF', marginTop: 8 }}
-              imgStyle={{
-                tintColor: '#373747',
-              }}
+              imgStyle={{ tintColor: '#373747' }}
               onPress={() => {
                 setCheckType('O');
               }}
@@ -516,109 +445,40 @@ const MYH010101 = ({ navigation }) => {
     return (
       <Container
         onPress={onPress}
-        style={[
-          {
-            width: '100%',
-            minHeight: 110,
-            borderRadius: 8,
-            backgroundColor: '#FFF',
-            padding: 8,
-          },
-          cardStyle,
-        ]}
+        style={{
+          width: '100%',
+          minHeight: 110,
+          borderRadius: 8,
+          backgroundColor: '#FFF',
+          padding: 8,
+          ...cardStyle,
+        }}
       >
         {moreView ? (
-          <TouchableOpacity
-            onPress={onClick}
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingBottom: 8,
-            }}
-          >
-            <Text
-              style={{
-                padding: 8,
-                fontWeight: '700',
-                fontSize: 16,
-                color: '#373747',
-              }}
-            >
-              {title}
-            </Text>
-            <Image source={moreView} style={[LVStyles.iconS]} />
+          <TouchableOpacity onPress={onClick} style={styles.cardEntire}>
+            <Text style={styles.cardTitle}>{title}</Text>
+            <Image source={moreView} style={LVStyles.iconS} />
           </TouchableOpacity>
         ) : (
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingBottom: 8,
-            }}
-          >
-            <Text
-              style={{
-                padding: 8,
-                fontWeight: '700',
-                fontSize: 16,
-                color: '#373747',
-              }}
-            >
-              {title}
-            </Text>
+          <View style={styles.cardEntire}>
+            <Text style={styles.cardTitle}>{title}</Text>
           </View>
         )}
         {img && (
           <Image
             source={img}
-            style={[
-              {
-                position: 'absolute',
-                right: 12,
-                bottom: 12,
-              },
-              imgStyle,
-            ]}
+            style={{
+              ...styles.cardImage,
+              ...imgStyle,
+            }}
           />
         )}
         {children}
         {cover && (
-          <View
-            style={{
-              borderRadius: 8,
-              backgroundColor: '#323336BF',
-              display: 'flex',
-              flexDirection: 'column',
-              position: 'absolute',
-              zIndex: 999,
-              justifyContent: 'center',
-              alignItems: 'center',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-          >
-            <Image
-              source={icon.ico_build_circle}
-              style={[
-                LVStyles.iconS,
-                {
-                  marginBottom: 8,
-                },
-              ]}
-            />
-            <Text
-              style={{
-                color: '#FFF',
-              }}
-            >
-              Coming Soon
-            </Text>
+          <View style={styles.cardCover}>
+            <Image source={icon.ico_build_circle} style={LVStyles.iconS} />
+            <View style={{ height: 8 }} />
+            <Text style={{ color: '#FFF' }}>Coming Soon</Text>
           </View>
         )}
       </Container>
@@ -631,42 +491,23 @@ const MYH010101 = ({ navigation }) => {
     <SafeAreaView>
       {/* 헤더 */}
       <Layout style={styles.entire}>
-        <Image
-          source={icon.ico_logo_htns}
-          style={{
-            marginLeft: 32,
-            marginTop: 8,
-            width: 75,
-            height: 16,
-          }}
-        />
+        <Image source={icon.ico_logo_htns} style={styles.logo} />
         <TouchableOpacity
           onPress={() => {
             movingScreen.navigate('ETC010101');
           }}
         >
-          <Image
-            source={icon.ico_account}
-            style={{
-              marginTop: 8,
-              marginRight: 24,
-              ...LVStyles.iconS,
-            }}
-          />
+          <Image source={icon.ico_account} style={styles.accountIcon} />
         </TouchableOpacity>
       </Layout>
       {/* 본문 */}
       <Layout>
         <KeyboardAwareScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-          }}
+          contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps='handled'
           enableOnAndroid
           extraScrollHeight={20}
-          style={{
-            backgroundColor: '#F0F2F6',
-          }}
+          style={{ backgroundColor: '#F0F2F6' }}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
@@ -682,7 +523,7 @@ const MYH010101 = ({ navigation }) => {
             />
           )}
           {!Util.isEmpty(laborNotice2) && (
-            // 연차촉진통지
+            // 연차촉진통지 2차
             <LaborNoticeScreen
               type='annual'
               data={laborNotice2[0]}
@@ -795,40 +636,12 @@ const ContentsOfOffsite = (props: any) => {
 const ContentsOfNotInside = (props: any) => {
   const { checkType } = props;
   return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 16,
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 16,
-          fontWeight: '600',
-          color: '#373747',
-        }}
-      >
-        근무지 반경에서 벗어나 있어요
-      </Text>
-      <Text
-        style={{
-          marginTop: 8,
-          fontSize: 16,
-          fontWeight: '600',
-          color: '#373747',
-        }}
-      >
-        저장하시겠어요?
-      </Text>
-      <Text
-        style={{
-          marginTop: 24,
-          fontSize: 12,
-          fontWeight: '700',
-          color: '#FF676A',
-        }}
-      >
+    <View style={styles.modalEntire}>
+      <Text style={styles.modalText}>근무지 반경에서 벗어나 있어요</Text>
+      <View style={{ height: 8 }} />
+      <Text style={styles.modalText}>저장하시겠어요?</Text>
+      <View style={{ height: 24 }} />
+      <Text style={styles.modalImportantText}>
         ※ 반경 외 기록은 유효하지 않습니다
       </Text>
     </View>
@@ -860,6 +673,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   tracker: {
+    ...LVStyles.row,
     height: 56,
     borderRadius: 28,
     backgroundColor: '#444457',
@@ -876,4 +690,99 @@ const styles = StyleSheet.create({
     color: '#939DAA',
   },
   cardArea: { width: '48%' },
+  modalEntire: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  modalText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#373747',
+  },
+  modalImportantText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: LVColors.warning,
+  },
+  trackerBottmView: {
+    ...LVStyles.row,
+    justifyContent: 'flex-end',
+    marginHorizontal: 16,
+  },
+  noLocatedIcon: {
+    ...LVStyles.iconS,
+    tintColor: '#FF9294',
+  },
+  noLocatedText: {
+    color: '#FF9294',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  locatedIcon: {
+    ...LVStyles.iconS,
+    tintColor: '#14D46A',
+  },
+  locatedText: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: '#14D46A',
+  },
+  startBtnText: {
+    color: '#27A7FF',
+    fontWeight: '700',
+    fontSize: 20,
+    lineHeight: 24,
+  },
+  endBtnText: {
+    color: '#003282',
+    fontWeight: '700',
+    fontSize: 20,
+    lineHeight: 24,
+  },
+  offsiteBtnText: {
+    color: '#373747',
+    fontWeight: '700',
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  cardEntire: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 8,
+  },
+  cardTitle: {
+    padding: 8,
+    fontWeight: '700',
+    fontSize: 16,
+    color: '#373747',
+  },
+  cardImage: { position: 'absolute', right: 12, bottom: 12 },
+  cardCover: {
+    borderRadius: 8,
+    backgroundColor: '#323336BF',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'absolute',
+    zIndex: 999,
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  logo: {
+    marginLeft: 32,
+    marginTop: 8,
+    width: 75,
+    height: 16,
+  },
+  accountIcon: {
+    marginTop: 8,
+    marginRight: 24,
+    ...LVStyles.iconS,
+  },
 });
