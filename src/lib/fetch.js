@@ -7,8 +7,14 @@ import { Alert, Image } from 'react-native';
 // import ImageResizer from 'react-native-image-resizer';
 
 const envConfig = env();
-const fetchURL = envConfig.fetchURL;
+let fetchURL = envConfig.fetchURL;
+const settingUrl = async () => {
+  fetchURL = await AsyncStorage.getItem('url');
+};
+settingUrl();
+
 const request = async (code, method, config, toastYN) => {
+  fetchURL = await AsyncStorage.getItem('url');
   try {
     //    await Cookie.clear();
     await CookieManager.clearAll();
@@ -67,6 +73,7 @@ const request = async (code, method, config, toastYN) => {
 };
 
 const getInit = async () => {
+  fetchURL = await AsyncStorage.getItem('url');
   const result = await request('G1E000000SVC', 'getInitG1M', {
     body: JSON.stringify({
       WINS: {},
@@ -79,6 +86,7 @@ const getInit = async () => {
 };
 
 const preCheckSignIn = async () => {
+  fetchURL = await AsyncStorage.getItem('url');
   let result = true;
   if (Platform.OS === 'android') {
     result = await Util.permissionChkFunc();
@@ -97,6 +105,7 @@ const preCheckSignIn = async () => {
 };
 
 const tokenHttp = async () => {
+  fetchURL = await AsyncStorage.getItem('url');
   try {
     let localcookie = null;
     await AsyncStorage.getItem('cookie', (err, result) => {
@@ -135,6 +144,7 @@ const tokenHttp = async () => {
 };
 
 const loginHttp = async (csrf, id, password) => {
+  fetchURL = await AsyncStorage.getItem('url');
   // ! * ' ( ) ; : @ & = + $ , / ? # [ ]
   // GET 방식으로 파라미터 전달시 &와 + 기호는 전달되지 않는다.
   // 로컬에서 데이터를 전달하는 시점에 + 기호를 공백으로 변경하여 전달한다.
@@ -208,6 +218,7 @@ const loginHttp = async (csrf, id, password) => {
 };
 
 const logout = async () => {
+  fetchURL = await AsyncStorage.getItem('url');
   try {
     const response = await fetch(`${fetchURL}/j_spring_security_logout`, {
       method: 'POST',
@@ -235,6 +246,7 @@ const logout = async () => {
  * @returns
  */
 const getCommonCode = async (option) => {
+  fetchURL = await AsyncStorage.getItem('url');
   const result = await request(
     'SMS070010SVC',
     'getCode',
@@ -248,6 +260,7 @@ const getCommonCode = async (option) => {
 };
 
 const updatePushToken = async (mobileToken) => {
+  fetchURL = await AsyncStorage.getItem('url');
   const result = await request('VTX010101SVC', 'appUserToken', {
     body: JSON.stringify({
       APP_ID: 'G1MB',
@@ -261,6 +274,7 @@ const updatePushToken = async (mobileToken) => {
 };
 
 const getFileList = async (item) => {
+  fetchURL = await AsyncStorage.getItem('url');
   const result = await request(
     'file',
     'getList',
@@ -283,6 +297,7 @@ const upload = async ({
   onSuccess,
   onError,
 }) => {
+  fetchURL = await AsyncStorage.getItem('url');
   const fileUri = fileConfig.fileUri;
   const fileType = fileConfig.fileType;
   const fileName = fileConfig.fileName;
@@ -384,6 +399,7 @@ const upload = async ({
 };
 
 const forceLogout = async (phoneno, password) => {
+  fetchURL = await AsyncStorage.getItem('url');
   console.log(
     'fetch-log',
     'forceLogout',
@@ -402,6 +418,7 @@ const forceLogout = async (phoneno, password) => {
 };
 
 const fetchCommonCode = async (groupCode, SQL) => {
+  fetchURL = await AsyncStorage.getItem('url');
   const result = await request('COM050101SVC', 'getCode', {
     body: JSON.stringify({
       groupCode,

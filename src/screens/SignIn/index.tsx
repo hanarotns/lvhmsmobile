@@ -18,6 +18,8 @@ import {
   LVButton,
   LVCheckBox,
   LVLoadingIndicator,
+  LVModal,
+  LVRadioButton,
   LVStyles,
   SafeAreaView,
   ShowPasswordIcon,
@@ -26,10 +28,15 @@ import {
   TextField,
 } from '@/src/components';
 import { Util } from '@/src/lib';
+import env from '@/src/lib/env';
 import { useNavigation } from '@react-navigation/native';
 import * as Application from 'expo-application';
 import * as Device from 'expo-device';
 import * as Action from './Action';
+
+const envConfig = env();
+const fetchURL = envConfig.fetchURL;
+const fetchQaURL = envConfig.fetchQaURL;
 
 const SignIn = ({ navigation }) => {
   const movingScreen = useNavigation();
@@ -41,9 +48,12 @@ const SignIn = ({ navigation }) => {
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
+  const [url, setUrl] = useState(fetchURL);
+  const [urlFinal, setUrlFinal] = useState(fetchURL);
 
   const [visiblePwd, setVisiblePwd] = useState(false);
   const [visibleTerms, setVisibleTerms] = useState(false);
+  const [visibleServerChange, setVisibleServerChange] = useState(false);
   const [loginError, setLoginError] = useState('');
 
   // 비동기 실행
@@ -53,6 +63,7 @@ const SignIn = ({ navigation }) => {
   }, []);
 
   const mount = async () => {
+    await AsyncStorage.setItem('url', fetchURL);
     const deviceInfo = {
       deviceId:
         Platform.OS === 'android'
@@ -132,6 +143,12 @@ const SignIn = ({ navigation }) => {
     setVisibleTerms(!visibleTerms);
   };
 
+  const handleChange = async () => {
+    setUrlFinal(url);
+    await AsyncStorage.setItem('url', url);
+    setVisibleServerChange(!visibleServerChange);
+  };
+
   return loading ? (
     <LVLoadingIndicator />
   ) : (
@@ -145,11 +162,25 @@ const SignIn = ({ navigation }) => {
         extraScrollHeight={20}
       >
         <View style={{ height: 158 }} />
-        <Image
-          source={icon.ico_logo_lvhms}
-          resizeMode={'contain'}
-          style={styles.logobox}
-        />
+        <TouchableOpacity
+          onPress={() => {
+            setVisibleServerChange(true);
+          }}
+        >
+          {urlFinal === fetchURL ? (
+            <Image
+              source={icon.ico_logo_lvhms}
+              resizeMode={'contain'}
+              style={styles.logobox}
+            />
+          ) : (
+            <Image
+              source={icon.ico_logo_lvhms_beta}
+              resizeMode={'contain'}
+              style={styles.logobox}
+            />
+          )}
+        </TouchableOpacity>
         <View style={styles.container}>
           <TextField
             placeholder='아이디'
@@ -223,10 +254,49 @@ const SignIn = ({ navigation }) => {
         </View>
       </KeyboardAwareScrollView>
       {visibleTerms && Terms({ onConfirm })}
+      {visibleServerChange && (
+        <LVModal
+          title={'서버 변경'}
+          titleIcon={icon.ico_warning}
+          contents={
+            <ServerChangeModal
+              value={url}
+              onChange={(e) => {
+                setUrl(e);
+              }}
+            />
+          }
+          onVisible={ServerChangeModal}
+          onOk={handleChange}
+        />
+      )}
     </SafeAreaView>
   );
 };
 export default SignIn;
+
+const ServerChangeModal = (props: any) => {
+  const { value, onChange } = props;
+  return (
+    <View>
+      <LVRadioButton
+        title='운영'
+        gubun={value === fetchURL}
+        onPress={() => {
+          onChange(fetchURL);
+        }}
+      />
+      <View style={{ height: 8 }} />
+      <LVRadioButton
+        title='QA'
+        gubun={value === fetchQaURL}
+        onPress={() => {
+          onChange(fetchQaURL);
+        }}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   safeAreaView: {

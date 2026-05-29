@@ -4,7 +4,7 @@
   "fetchURL": "https://lv1.htns.com", // PRO URL 주소
   "fetchEuURL": "http://lv1-c.htns.com/", // 유럽 URL 주소
   "fetchCnURL": "http://lv1.htnscn.com/", // 중국 URL 주소
-  "fetchURL": "https://qa-lv1.htns.com", // [TEST용도] QA URL 주소
+  "fetchQaURL": "https://qa-lv1.htns.com", // [TEST용도] QA URL 주소
   // "fetchURL": "http://lv1dev.htns.com:18080", // [TEST용도] DEV(개발) URL 주소
   // "fetchURL": "http://192.168.0.36:8080", // [TEST용도] 로컬 백단 서버 연결 (실제 기기)
   // "fetchURL": "http://10.0.2.2:8080", // [TEST용도] 로컬 백단 서버 연결 (Android 에뮬레이터)
