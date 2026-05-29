@@ -110,7 +110,7 @@ const PAL010201 = () => {
       const res = await COMAction.getPopup('PP0004', {
         EMP_NAME: name,
         COMPANY_CODE: empInfo?.COMPANY_CODE,
-        USER_LANG: sessioninfo?.USER_LANG,
+        USER_LANG: sessionInfo?.USER_LANG,
       });
       setUserList(res);
     };

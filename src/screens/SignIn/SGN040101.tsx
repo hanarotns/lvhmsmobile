@@ -54,9 +54,9 @@ const SGN040101 = () => {
 
       // 필요 시 세션값 사용
       const nextUserInfo = {
-        userId: paramUserInfo.userId || sessioninfo?.USER_ID || '',
-        userName: paramUserInfo.userName || sessioninfo?.USER_NAME || '',
-        mobileNo: paramUserInfo.mobileNo || sessioninfo?.USER_CP || '',
+        userId: paramUserInfo.userId || sessionInfo?.USER_ID || '',
+        userName: paramUserInfo.userName || sessionInfo?.USER_NAME || '',
+        mobileNo: paramUserInfo.mobileNo || sessionInfo?.USER_CP || '',
       };
 
       // 필요하면 여기서 사용자 상세 조회 API 추가 가능
