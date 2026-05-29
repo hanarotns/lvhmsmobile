@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -46,6 +46,7 @@ type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
 const LEA010201 = () => {
   const movingScreen = useNavigation();
   const route = useRoute<DetailScreenRouteProp>();
+
   const loginInfo = useLoginStore((state) => state.loginInfo);
   const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
   const sessionInfo = useSessionStore((state) => state.sessionInfo);
@@ -107,8 +108,8 @@ const LEA010201 = () => {
     const res = await PALAction.getMyApprLine(payload1);
     const reqMemberInfo = {
       ADD_TYPE: 'U',
-      AP_DEPT_CODE: 'HA1300',
-      AP_DEPT_NAME: '경영지원그룹',
+      AP_DEPT_CODE: empInfo?.DEPT_CODE,
+      AP_DEPT_NAME: empInfo?.DEPT_NAME,
       AP_DUTY_CODE: 'XX',
       AP_EMP_ID: empInfo?.EMP_ID,
       AP_EMP_NAME: empInfo?.EMP_NAME_LC,
@@ -400,11 +401,23 @@ const LEA010201 = () => {
         <View>
           <Calendar
             onDayPress={(day: any) => {
+              const YYYYMMDD = day.dateString.replace('-', '').replace('-', '');
+
               const found = leaveInfoList.some((item) => {
                 return item.date === day.dateString;
               });
               if (found) {
-                Util.toastMsg('이미 선택한 휴가일자입니다!', 'info');
+                Alert.alert('알림', '이미 선택한 휴가일자입니다!');
+                return;
+              }
+              if (
+                route?.params?.APPLY_S_DATE > YYYYMMDD ||
+                route?.params?.APPLY_E_DATE < YYYYMMDD
+              ) {
+                Alert.alert(
+                  '알림',
+                  `연차 신청 가능 일자가 아닙니다! \n * 신청 가능 기간: ${route?.params?.APPLY_S_DATE}~${route?.params?.APPLY_E_DATE}`,
+                );
                 return;
               }
               const tempDate = dayjs(day?.dateString, 'YYYY-MM-DD').locale(
