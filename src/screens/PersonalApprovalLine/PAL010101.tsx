@@ -74,8 +74,8 @@ const PAL010101 = () => {
     const res = await Action.getMyApprLine(payload1);
     const reqMemberInfo = {
       ADD_TYPE: 'U',
-      AP_DEPT_CODE: 'HA1300',
-      AP_DEPT_NAME: '경영지원그룹',
+      AP_DEPT_CODE: empInfo?.DEPT_CODE,
+      AP_DEPT_NAME: empInfo?.DEPT_NAME,
       AP_DUTY_CODE: 'XX',
       AP_EMP_ID: empInfo?.EMP_ID,
       AP_EMP_NAME: empInfo?.EMP_NAME_LC,
