@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
   Icon,
   LVChip,
+  LVColors,
   LVLoadingIndicator,
   LVNoData,
   LVStyles,
@@ -84,14 +85,13 @@ const WLO010101 = () => {
       WA_GUBUN: 'GW', // GW(일반)으로 값고정 (나머지 미사용)
     };
     const res = await Action.getInfoM(payload); // @@ 달력 변경 데이터 넣기
-    const obj = {};
     res?.HD?.filter((item) => ['CHECK'].includes(item.M_TYPE))
       .map((item) => item.M_DATE)
       .forEach(
         (key: string, i: number) =>
           (obj[key] = {
             customStyles: {
-              container: { borderWidth: 1, borderColor: 'blue' },
+              container: { borderWidth: 1, borderColor: LVColors.primary },
             },
           }),
       );
@@ -200,11 +200,11 @@ export default WLO010101;
 const Form = (props: any) => {
   const { elem } = props;
 
-  let bg1 = '#27A7FF';
+  let bg1 = LVColors.primary;
   let bg2 = '#F0F6FA';
 
   if (elem.WA_TYPE === 'S') {
-    bg1 = '#27A7FF';
+    bg1 = LVColors.primary;
     bg2 = '#F0F6FA';
   } else if (elem.WA_TYPE === 'E') {
     bg1 = '#003282';
@@ -326,10 +326,11 @@ const Filter = (props: any) => {
             chipStyle={{
               paddingVertical: 6,
               borderColor:
-                selectedCheckType === e?.HQCODE ? '#27A7FF' : '#6A727B',
+                selectedCheckType === e?.HQCODE ? LVColors.primary : '#6A727B',
             }}
             textStyle={{
-              color: selectedCheckType === e?.HQCODE ? '#27A7FF' : '#6A727B',
+              color:
+                selectedCheckType === e?.HQCODE ? LVColors.primary : '#6A727B',
             }}
           />
         </TouchableOpacity>
@@ -342,9 +343,9 @@ const themeOfCalendar = {
   backgroundColor: '#6f6161ff',
   calendarBackground: '#ffffff',
   textSectionTitleColor: '#b6c1cd',
-  selectedDayBackgroundColor: '#39CCCC',
+  selectedDayBackgroundColor: LVColors.primary,
   selectedDayTextColor: '#ffffff',
-  todayTextColor: '#39CCCC',
+  todayTextColor: LVColors.primary,
   dayTextColor: '#2d4150',
   monthTextColor: '#454D58',
   'stylesheet.calendar.header': {
