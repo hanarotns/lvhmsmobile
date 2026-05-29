@@ -257,8 +257,8 @@ const ETC010301 = () => {
         return;
       }
       const payload2 = {
-        F_USER_ID: sessioninfo?.USER_ID,
-        F_COMPANY_CODE: sessioninfo?.COMPANY_CODE,
+        F_USER_ID: sessionInfo?.USER_ID,
+        F_COMPANY_CODE: sessionInfo?.COMPANY_CODE,
         C_PW: memberInfo.pw,
         N_PW: memberInfo.pwNew,
         N_PW_C: memberInfo.pwChkNew,
@@ -276,6 +276,7 @@ const ETC010301 = () => {
       }
     } catch (error) {
       Util.toastMsg('비밀번호 변경 중 오류가 발생했습니다.', 'error');
+      console.log('@@ ERROR', error);
     } finally {
       setLoading(false);
     }
