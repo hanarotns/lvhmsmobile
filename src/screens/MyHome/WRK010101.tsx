@@ -154,16 +154,7 @@ const WRK010101 = () => {
           </View>
           <TouchableOpacity
             onPress={handleSearch}
-            style={{
-              marginLeft: 8,
-              padding: 4,
-              aspectRatio: 1,
-              borderWidth: 2,
-              borderColor: '#27A7FF',
-              borderRadius: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            style={styles.searchIconButton}
           >
             <Icon name='file-search-outline' color='#27A7FF' size={24} />
           </TouchableOpacity>
@@ -399,5 +390,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     bottom: 0,
+  },
+  searchIconButton: {
+    marginLeft: 8,
+    padding: 4,
+    aspectRatio: 1,
+    borderWidth: 2,
+    borderColor: '#27A7FF',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

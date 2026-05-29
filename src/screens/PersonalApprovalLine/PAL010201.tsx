@@ -130,16 +130,7 @@ const PAL010201 = () => {
           />
           <TouchableOpacity
             onPress={handleSearch}
-            style={{
-              marginLeft: 8,
-              padding: 4,
-              aspectRatio: 1,
-              borderWidth: 2,
-              borderColor: '#27A7FF',
-              borderRadius: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            style={styles.searchIconButton}
           >
             <Icon name='file-search-outline' color='#27A7FF' />
           </TouchableOpacity>
@@ -418,4 +409,15 @@ const PersonalForm = (props: any) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  searchIconButton: {
+    marginLeft: 8,
+    padding: 4,
+    aspectRatio: 1,
+    borderWidth: 2,
+    borderColor: '#27A7FF',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

@@ -346,16 +346,7 @@ const WRK010201 = ({ navigation, route }) => {
 
           <TouchableOpacity
             onPress={handleSearch}
-            style={{
-              marginLeft: 8,
-              padding: 4,
-              aspectRatio: 1,
-              borderWidth: 2,
-              borderColor: '#27A7FF',
-              borderRadius: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            style={styles.searchIconButton}
           >
             <Icon name='file-search-outline' color='#27A7FF' size={24} />
           </TouchableOpacity>
@@ -904,5 +895,15 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     color: '#373747',
+  },
+  searchIconButton: {
+    marginLeft: 8,
+    padding: 4,
+    aspectRatio: 1,
+    borderWidth: 2,
+    borderColor: '#27A7FF',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
