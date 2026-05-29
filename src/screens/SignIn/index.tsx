@@ -74,34 +74,6 @@ const SignIn = ({ navigation }) => {
       osName: Device.osName,
       osVersion: Device.osVersion,
     };
-    const setStorageValue = async (field) => {
-      let value = await AsyncStorage.getItem(field);
-      if (field == 'autoLogin' && value == null) {
-        value = 'true';
-      }
-      return value;
-    };
-    setStorageValue('loginId').then((value) => {
-      const loginId = value;
-      setStorageValue('loginPwd').then((value) => {
-        const loginPwd = value;
-        setStorageValue('autoLogin').then((value) => {
-          const autoLogin = value;
-          setStorageValue('isRememberLogin').then((value) => {
-            console.log('@@ isRememberLogin value', value);
-            const isRememberLogin = JSON.parse(value);
-            setStorageValue('isPreHire').then((value) => {
-              const isPreHire = JSON.parse(value);
-              setLoginInfo({
-                ...loginInfo,
-                ...{ loginId, loginPwd, autoLogin, isRememberLogin, isPreHire },
-              });
-            });
-          });
-        });
-      });
-    });
-    console.log(deviceInfo);
   };
 
   const signIn = () => {

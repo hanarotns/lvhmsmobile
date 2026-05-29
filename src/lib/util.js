@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 
 const isEmpty = (value) => {
@@ -85,9 +86,30 @@ const formatNumber = (num) => {
   }
   return Tnum;
 };
+
+/**
+ * return true : 이미 로그인 홈으로 이동.
+ * return false : 로그인 화면으로 이동.
+ * @param {*} navigation
+ */
+const checkIsToken = async () => {
+  const result = await AsyncStorage.getItem('cookie');
+  if (result) {
+    global.gCookie = result;
+    const token = await AsyncStorage.getItem('token');
+    if (token !== null || token !== undefined) {
+      global.gToken = token;
+      return true;
+    }
+  }
+
+  return false;
+};
+
 export default {
   isEmpty,
   toastMsg,
   convertDateTime,
   formatNumber,
+  checkIsToken,
 };

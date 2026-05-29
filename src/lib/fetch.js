@@ -86,17 +86,18 @@ const getInit = async () => {
 };
 
 const preCheckSignIn = async () => {
-  fetchURL = await AsyncStorage.getItem('url');
-  let result = true;
-  if (Platform.OS === 'android') {
-    result = await Util.permissionChkFunc();
-  }
-  if (!result) {
-    Util.toastMsg('요청한 모든 권한을 설정해야 사용할 수 있습니다.');
-    return null;
-  }
+  // let result = true;
+  // if (Platform.OS === 'android') {
+  //   result = await Util.permissionChkFunc();
+  // }
+  // if (!result) {
+  //   Util.toastMsg('요청한 모든 권한을 설정해야 사용할 수 있습니다.');
+  //   return null;
+  // }
   const passed = await Util.checkIsToken();
   const sessionData = await getInit();
+  console.log('@@ passed', passed);
+  console.log('@@ sessionData', sessionData);
 
   if (passed && sessionData) {
     return sessionData.session;
