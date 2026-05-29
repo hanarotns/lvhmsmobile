@@ -108,8 +108,6 @@ const WLO010101 = () => {
     // 리스트 가져오기 (선택된 날의 raw 데이터)
     setList(res?.DT);
     const compareDate = selectedInfo.date.replace(/-/g, '').replace(/-/g, '');
-    console.log('@@ compareDate', compareDate);
-    console.log('@@ res', res?.DT);
     let tempList;
     if (selectedCheckType === 'A') {
       tempList = res?.DT.filter((item) => item.WA_LOG_DATE === compareDate);
@@ -125,11 +123,7 @@ const WLO010101 = () => {
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       {/* 캘린더 */}
-      <View
-        style={{
-          marginVertical: 8,
-        }}
-      >
+      <View style={{ marginVertical: 8 }}>
         <Calendar
           onDayPress={(day: any) => {
             const date = day.dateString;
@@ -204,13 +198,7 @@ const WLO010101 = () => {
 export default WLO010101;
 
 const Form = (props: any) => {
-  const {
-    elem,
-    setIsVisibleEdit,
-    setIsVisibleDelete,
-    setIsVisibleOff,
-    setOffsiteInfo,
-  } = props;
+  const { elem } = props;
 
   let bg1 = '#27A7FF';
   let bg2 = '#F0F6FA';
@@ -227,15 +215,7 @@ const Form = (props: any) => {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        borderRadius: 4,
-        marginBottom: 8,
-      }}
-    >
+    <View style={styles.entireCardView}>
       <View
         style={{
           width: 4,
@@ -255,38 +235,21 @@ const Form = (props: any) => {
             justifyContent: 'space-between',
           }}
         >
-          <View
-            style={{
-              flex: 0.2,
-            }}
-          >
+          <View style={{ flex: 0.2 }}>
             <Text style={styles.label}>시간</Text>
             <Text style={styles.value}>
               {Util.convertDateTime('', elem?.WA_LOG_TIME).trim() || '-'}
             </Text>
           </View>
-          <View
-            style={{
-              flex: 0.2,
-            }}
-          >
+          <View style={{ flex: 0.2 }}>
             <Text style={styles.label}>구분</Text>
             <Text style={styles.value}>{elem?.WA_TYPE_NM || '-'}</Text>
           </View>
-          <View
-            style={{
-              flex: 0.2,
-            }}
-          >
+          <View style={{ flex: 0.2 }}>
             <Text style={styles.label}>반경여부</Text>
             <Text style={styles.value}>{elem?.WAT_STATUS_NM || '-'}</Text>
           </View>
-          <View style={{ width: 8 }} />
-          <View
-            style={{
-              flex: 0.4,
-            }}
-          >
+          <View style={{ flex: 0.4 }}>
             <Text style={styles.label}>지점명</Text>
             <Text style={styles.value} numberOfLines={1}>
               {elem?.WAT_STATUS === 'Y' ? elem?.WAT_AREA_NAME : '-'}
@@ -310,30 +273,18 @@ const Form = (props: any) => {
               justifyContent: 'space-between',
             }}
           >
-            <View
-              style={{
-                flex: 0.2,
-              }}
-            >
+            <View style={{ flex: 0.2 }}>
               <Text style={styles.label}>시간</Text>
               <Text style={styles.value}>
                 {Util.convertDateTime('', elem?.WA_LOG_TIME).trim() || '-'}
               </Text>
             </View>
-            <View
-              style={{
-                flex: 0.2,
-              }}
-            >
+            <View style={{ flex: 0.2 }}>
               <Text style={styles.label}>구분</Text>
               <Text style={styles.value}>{elem?.WA_TYPE_NM || '-'}</Text>
             </View>
-            <View
-              style={{
-                flex: 0.6,
-              }}
-            >
-              <Text style={styles.label}>장소</Text>
+            <View style={{ flex: 0.6 }}>
+              <Text style={styles.label}>지역</Text>
               <Text style={styles.value} numberOfLines={1}>
                 {elem?.WAT_AREA_NAME || '-'}
               </Text>
@@ -346,11 +297,7 @@ const Form = (props: any) => {
               marginTop: 8,
             }}
           >
-            <View
-              style={{
-                flex: 1,
-              }}
-            >
+            <View style={{ flex: 1 }}>
               <Text style={styles.label}>내용</Text>
               <Text style={styles.value} numberOfLines={1}>
                 {elem?.OOO_REASON || '-'}
@@ -449,5 +396,12 @@ const styles = StyleSheet.create({
     color: '#1E2125',
     fontSize: 14,
     fontWeight: '800',
+  },
+  entireCardView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 4,
+    marginBottom: 8,
   },
 });
