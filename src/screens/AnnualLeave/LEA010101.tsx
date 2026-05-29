@@ -68,7 +68,7 @@ const LEA010101 = () => {
       SS_USER_ROLE: 'U',
       AUTH_GA: 'Y',
       AUTH_AM: 'Y',
-      TO_YEAR: '2026', // @@
+      TO_YEAR: selectedDate.format('YYYY'), // @@
     };
     const res1 = await Action.getInfoM(payload1);
     if (res1) {
