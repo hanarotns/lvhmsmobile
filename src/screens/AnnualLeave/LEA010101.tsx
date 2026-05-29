@@ -10,6 +10,7 @@ import {
   LVButton,
   LVCard,
   LVChip,
+  LVFilter,
   LVLoadingIndicator,
   LVModal,
   LVMovingDateOfArrow,
@@ -42,6 +43,9 @@ const LEA010101 = () => {
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
   const [stats, setStats] = useState({});
   const [list, setList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [apprFilter, setApprFilter] = useState([]);
+  const [selectedApprType, setSelectedApprType] = useState('ALL');
 
   const [isVisibleModal, setIsVisibleModal] = useState(false);
 
@@ -51,8 +55,43 @@ const LEA010101 = () => {
     }
   }, [isFocused, selectedDate]);
 
+  useEffect(() => {
+    const res = list?.filter((e) => {
+      if (selectedApprType === 'ALL') {
+        return true;
+      } else {
+        console.log(
+          '@@ appr_TYPE',
+          selectedApprType,
+          e?.VA_TYPE,
+          selectedApprType.includes(e?.VA_TYPE),
+        );
+        return selectedApprType.includes(e?.VA_TYPE);
+      }
+    });
+    setFilteredList(res);
+  }, [selectedApprType]);
+
   const mount = async () => {
     setLoading(true);
+    const allFilter = {
+      HQCODE: 'ALL',
+      HQNAME: '전체',
+    };
+    let resOfApprType = [
+      // @@ 공통코드(VA_TYPE)가 무의미해서 일단 하드코딩
+      {
+        HQCODE: ['VY', 'VM', 'VA', 'VH', 'VE'],
+        HQNAME: '연차차감',
+      },
+      {
+        HQCODE: ['OD', 'OM', 'OA', 'VO', 'VOM', 'VOD'], // @@ 대체휴가는 공가가 아님
+        HQNAME: '연차미차감',
+      },
+    ];
+
+    setApprFilter([allFilter, ...resOfApprType]);
+
     const payload1 = {
       S_COMPANY_CODE: empInfo?.COMPANY_CODE,
       S_DEPT_CODE: empInfo?.DEPT_CODE,
@@ -90,6 +129,7 @@ const LEA010101 = () => {
       const res2 = await Action.getListM(payload2);
       setStats(res1);
       setList(res2);
+      setFilteredList(res2);
     } else {
       setIsVisibleModal(true);
     }
@@ -135,11 +175,17 @@ const LEA010101 = () => {
             rightImg={icon.ico_open}
             buttonStyle={{ marginTop: 24, borderRadius: 28 }}
           />
+          <LVFilter
+            apprFilter={apprFilter}
+            selectedApprType={selectedApprType}
+            setSelectedApprType={setSelectedApprType}
+            filteredList={filteredList}
+          />
         </View>
         <View style={styles.body}>
-          {!Util.isEmpty(list) ? (
+          {!Util.isEmpty(filteredList) ? (
             <View>
-              {list?.map((e, i) => (
+              {filteredList?.map((e, i) => (
                 <LVCard
                   category='docuPreview'
                   onPress={() => {
@@ -241,7 +287,15 @@ const DocuPreviewContent = (props: any) => {
         </View>
         <Text
           numberOfLines={1}
-          style={{ ...styles.mainText, color: '#27A7FF' }}
+          style={{
+            ...styles.mainText,
+            // @@ 연차미차감 건들만 하드코딩
+            color: ['OD', 'OM', 'OA', 'VO', 'VOM', 'VOD'].includes(
+              elem?.VA_TYPE,
+            )
+              ? '#939DAA'
+              : '#27A7FF',
+          }}
         >
           {elem?.PERIOD} 일
         </Text>
