@@ -219,7 +219,9 @@ const PAL010101 = () => {
       {isVisibleDelete && (
         <LVModal
           onVisible={setIsVisibleDelete}
+          titleIcon={icon.ico_warning}
           title={'결재선 삭제'}
+          buttonText='삭제'
           contents={<ContentsOfDelete />}
           onOk={handleDelete}
         />
@@ -236,7 +238,6 @@ const ContentsOfDelete = (props: any) => {
       style={{
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 16,
       }}
     >
       <Text
