@@ -36,6 +36,7 @@ const LVModal = (props: any) => {
           </View>
           {!isCancelDisabled && (
             <TouchableOpacity
+              style={{ padding: 4 }}
               onPress={() => {
                 onVisible(false);
               }}
