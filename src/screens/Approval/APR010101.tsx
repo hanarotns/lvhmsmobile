@@ -19,9 +19,11 @@ import {
 } from '@/src/components'; // 공통컴포넌트
 import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
+import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action'; // API통신
+dayjs.locale('ko');
 
 const APR010101 = () => {
   const isFocused = useIsFocused();
@@ -193,7 +195,10 @@ const DocuPreviewContent = (props: any) => {
   return (
     <>
       <View style={LVStyles.row}>
-        <Text style={styles.mainText}>{elem?.RQ_TYPE_NAME}</Text>
+        <Text style={styles.mainText}>
+          {Util.convertDateTime(elem?.RQ_DATE)} (
+          {dayjs(elem?.RQ_DATE).format('ddd')}) | {elem?.RQ_TYPE_NAME}
+        </Text>
         <Text
           style={{
             fontWeight: '600',
