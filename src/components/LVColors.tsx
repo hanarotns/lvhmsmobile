@@ -1,5 +1,6 @@
 const LVColors = {
   primary: '#27A7FF',
+  secondary: '#939DAA',
   screen: '#F6F7FB',
   white: '#FFFFFF',
   border: '#E5E9F0',

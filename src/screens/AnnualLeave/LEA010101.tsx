@@ -10,6 +10,7 @@ import {
   LVButton,
   LVCard,
   LVChip,
+  LVColors,
   LVFilter,
   LVLoadingIndicator,
   LVModal,
@@ -293,8 +294,8 @@ const DocuPreviewContent = (props: any) => {
             color: ['OD', 'OM', 'OA', 'VO', 'VOM', 'VOD'].includes(
               elem?.VA_TYPE,
             )
-              ? '#939DAA'
-              : '#27A7FF',
+              ? LVColors.secondary
+              : LVColors.primary,
           }}
         >
           {elem?.PERIOD} 일
