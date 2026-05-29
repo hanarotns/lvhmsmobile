@@ -336,107 +336,6 @@ const LEA010201 = () => {
         USER_LANG: 'KO',
       });
 
-      const sortedArr = [
-        'VY',
-        'VM',
-        'VA',
-        'VO',
-        'VOM',
-        'VOD',
-        'OD',
-        'OM',
-        'OA',
-        'VH',
-        'VE',
-      ];
-
-      const customVaType = {
-        VY: {
-          HQNAME_01: '연차',
-          HQNAME_02: '종일',
-          HQNAME_03: '연차',
-          DAY_01: 1,
-          DAY_02: 1,
-        },
-        VM: {
-          HQNAME_01: '반차',
-          HQNAME_02: '오전',
-          HQNAME_03: '오전반차',
-          DAY_01: 0.5,
-          DAY_02: 0.5,
-        },
-        VA: {
-          HQNAME_01: '반차',
-          HQNAME_02: '오후',
-          HQNAME_03: '오후반차',
-          DAY_01: 0.5,
-          DAY_02: 0.5,
-        },
-        VH: {
-          HQNAME_01: '',
-          HQNAME_02: '보건',
-          HQNAME_03: '보건',
-          DAY_01: 1,
-          DAY_02: 1,
-        },
-        VE: {
-          HQNAME_01: '',
-          HQNAME_02: '조퇴',
-          HQNAME_03: '조퇴',
-          DAY_01: 0,
-          DAY_02: 0,
-        },
-        AA: {
-          HQNAME_01: '',
-          HQNAME_02: '조퇴',
-          HQNAME_03: '조퇴',
-          DAY_01: 0,
-          DAY_02: 0,
-        },
-        VO: {
-          HQNAME_01: '대휴',
-          HQNAME_02: '종일',
-          HQNAME_03: '대체휴가',
-          DAY_01: 1,
-          DAY_02: 0,
-        },
-        VOM: {
-          HQNAME_01: '대휴',
-          HQNAME_02: '오전',
-          HQNAME_03: '오전대체휴가',
-          DAY_01: 0.5,
-          DAY_02: 0,
-        },
-        VOD: {
-          HQNAME_01: '대휴',
-          HQNAME_02: '오후',
-          HQNAME_03: '오후대체휴가',
-          DAY_01: 0.5,
-          DAY_02: 0,
-        },
-        OD: {
-          HQNAME_01: '공가',
-          HQNAME_02: '종일',
-          HQNAME_03: '공가',
-          DAY_01: 1,
-          DAY_02: 0,
-        },
-        OM: {
-          HQNAME_01: '공가',
-          HQNAME_02: '오전',
-          HQNAME_03: '오전공가',
-          DAY_01: 0.5,
-          DAY_02: 0,
-        },
-        OA: {
-          HQNAME_01: '공가',
-          HQNAME_02: '오후',
-          HQNAME_03: '오후공가',
-          DAY_01: 0.5,
-          DAY_02: 0,
-        },
-      };
-
       res = res
         .filter((e) => sortedArr.includes(e?.HQCODE))
         .map((e) => ({
@@ -1112,3 +1011,104 @@ const styles = StyleSheet.create({
     borderColor: '#D5DCE5',
   },
 });
+
+const sortedArr = [
+  'VY',
+  'VM',
+  'VA',
+  'VO',
+  'VOM',
+  'VOD',
+  'OD',
+  'OM',
+  'OA',
+  'VH',
+  'VE',
+];
+
+const customVaType = {
+  VY: {
+    HQNAME_01: '연차',
+    HQNAME_02: '종일',
+    HQNAME_03: '연차',
+    DAY_01: 1,
+    DAY_02: 1,
+  },
+  VM: {
+    HQNAME_01: '반차',
+    HQNAME_02: '오전',
+    HQNAME_03: '오전반차',
+    DAY_01: 0.5,
+    DAY_02: 0.5,
+  },
+  VA: {
+    HQNAME_01: '반차',
+    HQNAME_02: '오후',
+    HQNAME_03: '오후반차',
+    DAY_01: 0.5,
+    DAY_02: 0.5,
+  },
+  VH: {
+    HQNAME_01: '',
+    HQNAME_02: '보건',
+    HQNAME_03: '보건',
+    DAY_01: 1,
+    DAY_02: 1,
+  },
+  VE: {
+    HQNAME_01: '',
+    HQNAME_02: '조퇴',
+    HQNAME_03: '조퇴',
+    DAY_01: 0,
+    DAY_02: 0,
+  },
+  AA: {
+    HQNAME_01: '',
+    HQNAME_02: '조퇴',
+    HQNAME_03: '조퇴',
+    DAY_01: 0,
+    DAY_02: 0,
+  },
+  VO: {
+    HQNAME_01: '대휴',
+    HQNAME_02: '종일',
+    HQNAME_03: '대체휴가',
+    DAY_01: 1,
+    DAY_02: 0,
+  },
+  VOM: {
+    HQNAME_01: '대휴',
+    HQNAME_02: '오전',
+    HQNAME_03: '오전대체휴가',
+    DAY_01: 0.5,
+    DAY_02: 0,
+  },
+  VOD: {
+    HQNAME_01: '대휴',
+    HQNAME_02: '오후',
+    HQNAME_03: '오후대체휴가',
+    DAY_01: 0.5,
+    DAY_02: 0,
+  },
+  OD: {
+    HQNAME_01: '공가',
+    HQNAME_02: '종일',
+    HQNAME_03: '공가',
+    DAY_01: 1,
+    DAY_02: 0,
+  },
+  OM: {
+    HQNAME_01: '공가',
+    HQNAME_02: '오전',
+    HQNAME_03: '오전공가',
+    DAY_01: 0.5,
+    DAY_02: 0,
+  },
+  OA: {
+    HQNAME_01: '공가',
+    HQNAME_02: '오후',
+    HQNAME_03: '오후공가',
+    DAY_01: 0.5,
+    DAY_02: 0,
+  },
+};
