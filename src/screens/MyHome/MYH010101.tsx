@@ -630,15 +630,7 @@ const MYH010101 = ({ navigation }) => {
   ) : (
     <SafeAreaView>
       {/* 헤더 */}
-      <Layout
-        style={{
-          marginVertical: 8,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: 'transparent',
-        }}
-      >
+      <Layout style={styles.entire}>
         <Image
           source={icon.ico_logo_htns}
           style={{
@@ -713,7 +705,7 @@ const MYH010101 = ({ navigation }) => {
             Util.isEmpty(laborNotice2) &&
             Util.isEmpty(laborRefusal) && (
               <>
-                <View style={styles.entireView}>
+                <View style={styles.layout}>
                   <LayoutOfGreeting />
                   <LayoutOfTracker />
                   <LayoutOfCards />
@@ -844,7 +836,12 @@ const ContentsOfNotInside = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-  entireView: {
+  entire: {
+    ...LVStyles.row,
+    marginVertical: 8,
+    backgroundColor: 'transparent',
+  },
+  layout: {
     paddingVertical: 24,
     paddingHorizontal: 32,
   },
