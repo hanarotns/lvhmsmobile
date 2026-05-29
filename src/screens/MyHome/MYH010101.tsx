@@ -71,7 +71,9 @@ const MYH010101 = ({ navigation }) => {
   useEffect(() => {
     // 외근등록 모달 껐을 때 외근정보 초기화
     if (!isVisibleModal) {
-      setOffsiteInfo({});
+      setOffsiteInfo({
+        address,
+      });
       setCheckType('');
     }
   }, [isVisibleModal]);
@@ -195,6 +197,9 @@ const MYH010101 = ({ navigation }) => {
       .filter(Boolean)
       .join(' ');
     setAdress(tempAddress);
+    setOffsiteInfo({
+      address: tempAddress,
+    });
     const result = await WLOAction.getNearOfficeM(payload);
     setTimeout(() => setNearestOffice(result), 300);
   };
@@ -589,19 +594,23 @@ const ContentsOfOffsite = (props: any) => {
   const { offsiteInfo, setOffsiteInfo } = props;
   return (
     <View>
-      <Input
-        placeholder='외근 지역을 입력하세요.'
-        value={offsiteInfo?.input}
-        onChangeText={(p) => {
-          setOffsiteInfo({
-            ...offsiteInfo,
-            address: p,
-          });
-        }}
-        size='large'
-        style={{ backgroundColor: '#FFF' }}
-        textStyle={{ color: '#373747' }}
-      />
+      {Util.isEmpty(offsiteInfo?.address) ? (
+        <Input
+          placeholder='외근 지역을 입력하세요.'
+          value={offsiteInfo?.address}
+          onChangeText={(p) => {
+            setOffsiteInfo({
+              ...offsiteInfo,
+              address: p,
+            });
+          }}
+          size='large'
+          style={{ backgroundColor: '#FFF' }}
+          textStyle={{ color: '#373747' }}
+        />
+      ) : (
+        <Input value={offsiteInfo?.address} disabled size='large' />
+      )}
       <Input
         placeholder='외근 업체명을 입력하세요.'
         value={offsiteInfo?.name}
