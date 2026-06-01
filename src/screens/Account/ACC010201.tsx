@@ -31,9 +31,7 @@ const ACC010201 = () => {
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
-  const [selectedDate, setSelectedDate] = useState(
-    dayjs(new Date()).add(-1, 'month'),
-  );
+  const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
   const [salary, setSalary] = useState({});
 
   const [loading, setLoading] = useState(true);
