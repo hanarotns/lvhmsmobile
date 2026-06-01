@@ -291,18 +291,7 @@ const ACC010201 = () => {
           }
         />
       </View>
-      <View
-        style={[
-          {
-            borderRadius: 8,
-            backgroundColor: '#6A727B',
-            paddingHorizontal: 16,
-            paddingVertical: 16,
-            marginHorizontal: 16,
-            marginBottom: 16,
-          },
-        ]}
-      >
+      <View style={styles.summaryView}>
         <View style={LVStyles.row}>
           <Text style={styles.text}>회사</Text>
           <Text style={styles.text}>
@@ -468,5 +457,13 @@ const styles = StyleSheet.create({
   subContentText: {
     color: '#7A828B',
     fontWeight: '500',
+  },
+  summaryView: {
+    borderRadius: 8,
+    backgroundColor: '#6A727B',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    marginHorizontal: 16,
+    marginBottom: 16,
   },
 });
