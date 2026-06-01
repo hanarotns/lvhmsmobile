@@ -98,9 +98,9 @@ const MYH010101 = ({ navigation }) => {
   const mount = async () => {
     setLoading(true);
     const payload = {
-      S_COMPANY_CODE: sessionInfo?.COMPANY_CODE,
+      S_COMPANY_CODE: empInfo?.COMPANY_CODE,
       S_TO_DATE: dayjs(new Date()).format('YYYYMMDD'),
-      S_EMP_ID: sessionInfo?.EMP_ID,
+      S_EMP_ID: empInfo?.EMP_ID,
     };
 
     const res1 = await Action.LaborRefusalNotice(payload);
