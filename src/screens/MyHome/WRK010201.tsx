@@ -31,7 +31,6 @@ import * as Action from './Action'; // API통신
 const WRK010201 = () => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-
   const loginInfo = useLoginStore((state) => state.loginInfo);
   const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
   const sessionInfo = useSessionStore((state) => state.sessionInfo);
@@ -41,36 +40,28 @@ const WRK010201 = () => {
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
+
   const [isSearched, setIsSearched] = useState(false);
   const [isSelectedCompany, setIsSelectedCompany] = useState(false);
   const [isPostModal, setIsPostModal] = useState(false);
   const [isFileModal, setIsFileModal] = useState(false);
-
   const [companyList, setCompanyList] = useState([
     { code: 'C001', name: '하나로에이' },
     // {code: 'C002', name: '두번째회사'},
   ]);
-
   const [selectedCompanyIndex, setSelectedCompanyIndex] = useState(
     new IndexPath(0),
   );
   const [selectedCompany, setSelectedCompany] = useState('하나로에이');
-
   const [postList, setPostList] = useState([]);
   const [selectedPostInfo, setSelectedPostInfo] = useState({});
-
   const [hopeDate, setHopeDate] = useState<Date>(new Date());
   const [workStartDate, setWorkStartDate] = useState<Date>(new Date());
-
   const [remark, setRemark] = useState('');
   const [applyForm, setApplyForm] = useState({});
-
   const [fileList, setFileList] = useState([]);
-
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
-
-  const [isVisibleInfoModal, setIsVisibleInfoModal] = useState(false);
 
   useEffect(() => {
     if (isFocused) {

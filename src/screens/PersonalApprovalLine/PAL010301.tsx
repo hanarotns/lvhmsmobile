@@ -17,6 +17,7 @@ const PAL010301 = () => {
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
+
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
 

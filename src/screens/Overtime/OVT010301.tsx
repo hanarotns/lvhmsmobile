@@ -41,7 +41,6 @@ const OVT010301 = () => {
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
-
   const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
 
   const [dt, setDt] = useState({});

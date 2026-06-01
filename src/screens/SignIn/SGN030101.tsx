@@ -44,8 +44,8 @@ const SGN030101 = ({ navigation }) => {
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
-  const [visiblePwd, setVisiblePwd] = useState(false);
 
+  const [visiblePwd, setVisiblePwd] = useState(false);
   const [memberInfo, setMemberInfo] = useState<MemberInfo>({
     id: '',
     name: '',
@@ -54,10 +54,8 @@ const SGN030101 = ({ navigation }) => {
     pw: '',
     pwChk: '',
   });
-
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [touched, setTouched] = useState<TouchedFields>({});
-
   const [isPhoneAuthRequested, setIsPhoneAuthRequested] = useState(false);
   const [isPhoneAuthVerified, setIsPhoneAuthVerified] = useState(false);
   const [phoneAuthCode, setPhoneAuthCode] = useState('');

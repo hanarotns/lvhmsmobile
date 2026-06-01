@@ -54,8 +54,6 @@ const ETC010301 = () => {
   const route = useRoute<DetailScreenRouteProp>();
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-
-  const [loading, setLoading] = useState(true);
   const loginInfo = useLoginStore((state) => state.loginInfo);
   const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
   const sessionInfo = useSessionStore((state) => state.sessionInfo);
@@ -63,12 +61,13 @@ const ETC010301 = () => {
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
+  const [loading, setLoading] = useState(true);
+
   const [memberInfo, setMemberInfo] = useState<MemberInfo>({
     pw: '',
     pwNew: '',
     pwChkNew: '',
   });
-
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [touched, setTouched] = useState<TouchedFields>({});
   const [visiblePwd, setVisiblePwd] = useState(false);

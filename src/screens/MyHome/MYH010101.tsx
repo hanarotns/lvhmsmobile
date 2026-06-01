@@ -39,10 +39,9 @@ import * as Action from './Action'; // API통신
 import LaborNoticeScreen from './LaborNoticeScreen';
 
 const MYH010101 = ({ navigation }) => {
+  const TopNavigationActionEx = withPreventDoubleClick(TopNavigationAction); // @@ 필요성 확인!
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-  const TopNavigationActionEx = withPreventDoubleClick(TopNavigationAction);
-
   const loginInfo = useLoginStore((state) => state.loginInfo);
   const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
   const sessionInfo = useSessionStore((state) => state.sessionInfo);

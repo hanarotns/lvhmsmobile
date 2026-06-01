@@ -26,13 +26,11 @@ const SGN040101 = () => {
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
-
   const [userInfo, setUserInfo] = useState({
     userId: '',
     userName: '',
     mobileNo: '',
   });
-
   const [authNo, setAuthNo] = useState('');
   const [isSmsSent, setIsSmsSent] = useState(false);
   const [sendDateTime, setSendDateTime] = useState('');

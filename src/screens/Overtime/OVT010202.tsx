@@ -61,7 +61,6 @@ const OVT010202 = () => {
   const [initTime, setInitTime] = useState('');
   const [changeTime, setChangeTime] = useState('');
   const [overtimeInfo, setOvertimeInfo] = useState({}); // 시간외 결재문서 정보
-
   const [myApprList, setMyApprList] = useState([]);
   const [dt, setDt] = useState({});
 

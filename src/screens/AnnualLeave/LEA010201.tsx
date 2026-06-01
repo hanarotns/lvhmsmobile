@@ -65,7 +65,6 @@ const LEA010201 = () => {
   // mount API 기본 정보
   const [officialLeaveType, setOfficialLeaveType] = useState({});
   const [myApprList, setMyApprList] = useState([]);
-
   // 휴가 HD
   const [hd, setHd] = useState({
     MEMO: '',

@@ -69,14 +69,14 @@ const SGN010201 = () => {
   const route = useRoute<DetailScreenRouteProp>();
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-
-  const [loading, setLoading] = useState(true);
   const loginInfo = useLoginStore((state) => state.loginInfo);
   const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
   const sessionInfo = useSessionStore((state) => state.sessionInfo);
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
+
+  const [loading, setLoading] = useState(true);
 
   const [memberInfo, setMemberInfo] = useState<MemberInfo>({
     id: '',
@@ -88,13 +88,11 @@ const SGN010201 = () => {
     phoneNumber: '',
     email: '',
   });
-
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [touched, setTouched] = useState<TouchedFields>({});
   const [visiblePwd, setVisiblePwd] = useState(false);
   const [isIdChecked, setIsIdChecked] = useState(false);
   const [isIdAvailable, setIsIdAvailable] = useState(false);
-
   // 휴대폰 인증 UI용 state (레이아웃용)
   const [isPhoneAuthRequested, setIsPhoneAuthRequested] = useState(false);
   const [isPhoneAuthVerified, setIsPhoneAuthVerified] = useState(false);

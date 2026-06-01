@@ -48,7 +48,6 @@ const PAL010201 = () => {
   const [approvalLine, setApprovalLine] = useState({});
   const [approvalLineDt, setApprovalLineDt] = useState([]);
   const [apprRoleList, setApprRoleList] = useState([]);
-
   const [isVisibleApprovalModal, setIsVisibleApprovalModal] = useState(false);
 
   const approvalLineRef = useRef<any>(null);

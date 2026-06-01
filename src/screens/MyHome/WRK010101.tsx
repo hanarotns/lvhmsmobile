@@ -37,14 +37,11 @@ const WRK010101 = () => {
     { code: 'Y', name: '승인' },
     { code: 'N', name: '반려' },
   ]);
-
   const [selectedStatusIndex, setSelectedStatusIndex] = useState(
     new IndexPath(0),
   );
   const [selectedStatus, setSelectedStatus] = useState('전체');
-
   const [isSearched, setIsSearched] = useState(false);
-
   const [applyList, setApplyList] = useState([]);
 
   useEffect(() => {

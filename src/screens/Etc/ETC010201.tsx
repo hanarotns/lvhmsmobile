@@ -44,11 +44,12 @@ const ETC010201 = () => {
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
-  const [userInfo, setUserInfo] = useState({});
-  const [loginHistory, setLoginHistory] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
+
+  const [userInfo, setUserInfo] = useState({});
+  const [loginHistory, setLoginHistory] = useState([]);
 
   useEffect(() => {
     if (isFocused) {
