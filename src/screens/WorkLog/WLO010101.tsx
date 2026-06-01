@@ -81,6 +81,7 @@ const WLO010101 = () => {
       YEAR_MONTH: yearMonthParam,
       WA_GUBUN: 'GW', // GW(일반)으로 값고정 (나머지 미사용)
     };
+    let obj = {};
     const res = await Action.getInfoM(payload); // @@ 달력 변경 데이터 넣기
     res?.HD?.filter((item) => ['CHECK'].includes(item.M_TYPE))
       .map((item) => item.M_DATE)
