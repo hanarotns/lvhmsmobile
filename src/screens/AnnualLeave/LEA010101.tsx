@@ -201,7 +201,6 @@ const LEA010101 = () => {
           )}
         </View>
       </ScrollView>
-      {loading && <LVLoadingIndicator />}
       {isVisibleModal && (
         <LVModal
           title={'기초데이터 미설정'}
@@ -213,6 +212,7 @@ const LEA010101 = () => {
           buttonText={'확인'}
         />
       )}
+      {loading && <LVLoadingIndicator />}
     </SafeAreaView>
   );
 };

@@ -190,7 +190,6 @@ const WLO010101 = () => {
           {Util.isEmpty(filteredList) && <LVNoData />}
         </ScrollView>
       </View>
-      {/* 모달 */}
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>
   );
