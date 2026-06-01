@@ -81,37 +81,14 @@ const WRK010101 = () => {
   const onPressEdit = async () => {};
 
   const renderHeader = () => (
-    <Layout
-      style={{
-        marginVertical: 8,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: 'transparent',
-      }}
-    >
-      <Image
-        source={icon.ico_logo_htns}
-        style={{
-          marginLeft: 32,
-          marginTop: 8,
-          width: 75,
-          height: 16,
-        }}
-      />
+    <Layout style={styles.renderHeaderLayout}>
+      <Image source={icon.ico_logo_htns} style={styles.renderHeaderImage} />
       <TouchableOpacity
         onPress={() => {
           movingScreen.navigate('ETC010101');
         }}
       >
-        <Image
-          source={icon.ico_account}
-          style={{
-            marginTop: 8,
-            marginRight: 24,
-            ...LVStyles.iconS,
-          }}
-        />
+        <Image source={icon.ico_account} style={styles.renderHeaderSubImage} />
       </TouchableOpacity>
     </Layout>
   );
@@ -397,5 +374,21 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  renderHeaderLayout: {
+    ...LVStyles.row,
+    marginVertical: 8,
+    backgroundColor: 'transparent',
+  },
+  renderHeaderImage: {
+    marginLeft: 32,
+    marginTop: 8,
+    width: 75,
+    height: 16,
+  },
+  renderHeaderSubImage: {
+    marginTop: 8,
+    marginRight: 24,
+    ...LVStyles.iconS,
   },
 });

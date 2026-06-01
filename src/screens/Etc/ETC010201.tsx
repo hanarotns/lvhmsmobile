@@ -183,6 +183,55 @@ const ETC010201 = () => {
 };
 export default ETC010201;
 
+const Form = (props: any) => {
+  const { label, fieldKey, value, editType, onChange } = props;
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', height: 48 }}>
+      <View style={{ width: '20%' }}>
+        <Text style={styles.formLabel}>{label}</Text>
+      </View>
+      <View style={{ width: '80%' }}>
+        {editType === 'input' && (
+          <TextField
+            style={styles.textFieldSt}
+            autoCapitalize='none'
+            onChangeValue={(p) => {
+              onChange(fieldKey, p);
+            }}
+            value={value}
+          />
+        )}
+        {editType === 'radio' && (
+          <View
+            style={{
+              ...LVStyles.row,
+              ...styles.radio,
+            }}
+          >
+            <LVRadioButton
+              title='KO(한국어)'
+              gubun={value === 'KO'}
+              onPress={() => {
+                onChange('F_USER_LANG', 'KO');
+              }}
+            />
+            <LVRadioButton
+              title='EN(영어)'
+              gubun={value === 'EN'}
+              onPress={() => {
+                onChange('F_USER_LANG', 'EN');
+              }}
+            />
+          </View>
+        )}
+        {Util.isEmpty(editType) && (
+          <Text style={styles.formValue}>{value}</Text>
+        )}
+      </View>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#FFF',
@@ -263,80 +312,18 @@ const styles = StyleSheet.create({
     color: '#27A7FF',
     fontWeight: '600',
   },
+  formLabel: {
+    fontWeight: '600',
+    fontSize: 14,
+    color: '#6A727B',
+  },
+  radio: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  formValue: {
+    fontWeight: '700',
+    fontSize: 14,
+    color: '#373747',
+  },
 });
-
-const Form = (props: any) => {
-  const { label, fieldKey, value, editType, onChange } = props;
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', height: 48 }}>
-      <View
-        style={{
-          width: '20%',
-        }}
-      >
-        <Text
-          style={{
-            fontWeight: '600',
-            fontSize: 14,
-            color: '#6A727B',
-          }}
-        >
-          {label}
-        </Text>
-      </View>
-      <View
-        style={{
-          width: '80%',
-        }}
-      >
-        {editType === 'input' && (
-          <TextField
-            style={styles.textFieldSt}
-            autoCapitalize='none'
-            onChangeValue={(p) => {
-              onChange(fieldKey, p);
-            }}
-            value={value}
-          />
-        )}
-        {editType === 'radio' && (
-          <View
-            style={[
-              LVStyles.row,
-              {
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-              },
-            ]}
-          >
-            <LVRadioButton
-              title='KO(한국어)'
-              gubun={value === 'KO'}
-              onPress={() => {
-                onChange('F_USER_LANG', 'KO');
-              }}
-            />
-            <LVRadioButton
-              title='EN(영어)'
-              gubun={value === 'EN'}
-              onPress={() => {
-                onChange('F_USER_LANG', 'EN');
-              }}
-            />
-          </View>
-        )}
-        {Util.isEmpty(editType) && (
-          <Text
-            style={{
-              fontWeight: '700',
-              fontSize: 14,
-              color: '#373747',
-            }}
-          >
-            {value}
-          </Text>
-        )}
-      </View>
-    </View>
-  );
-};

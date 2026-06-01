@@ -64,34 +64,12 @@ const ACC010201 = () => {
   };
 
   const SubTitle = ({ label, value, fontColor }) => (
-    <View
-      style={{
-        flexDirection: 'row',
-        marginLeft: 8,
-        marginVertical: 8,
-        paddingRight: 8,
-        justifyContent: 'space-between',
-        flex: 1,
-        // borderColor: 'gray',
-        // borderWidth: 1,
-        // padding: 8,
-        // borderRadius: 8,
-      }}
-    >
+    <View style={styles.subTitleView}>
+      <Text style={styles.subTitleLabelText}>{label}</Text>
       <Text
         style={{
-          fontWeight: '600',
-          fontSize: 16,
-        }}
-      >
-        {label}
-      </Text>
-      <Text
-        style={{
-          marginLeft: 16,
-          fontWeight: '800',
-          fontSize: 16,
-          color: fontColor || '#373747',
+          ...styles.subTitleValueText,
+          color: fontColor,
         }}
       >
         {value ? value + '원' : ''}
@@ -102,26 +80,12 @@ const ACC010201 = () => {
   const SalaryAccordion = (props: any) => {
     const { title, totalValue, primaryColor, salary, data1, data2 } = props;
     const [isOpen, setIsOpen] = useState(false);
-
     return (
-      <View
-        style={{
-          backgroundColor: '#FFF',
-          marginVertical: 8,
-          borderRadius: 8,
-          overflow: 'hidden',
-        }}
-      >
+      <View style={styles.salaryAccordion}>
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => setIsOpen((prev) => !prev)}
-          style={{
-            padding: 8,
-            paddingHorizontal: 16,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
+          style={styles.salaryAccordionTouch}
         >
           <SubTitle
             label={title}
@@ -132,14 +96,7 @@ const ACC010201 = () => {
         </TouchableOpacity>
 
         {isOpen && (
-          <View
-            style={{
-              padding: 12,
-              paddingHorizontal: 24,
-              borderTopWidth: 1,
-              borderTopColor: '#F0F0F0',
-            }}
-          >
+          <View style={styles.salaryAccordionInside}>
             {data1?.map((e) => (
               <FormOfContents
                 key={e.value}
@@ -388,15 +345,7 @@ const ACC010201 = () => {
           </Text>
         </View>
       </View>
-      <View
-        style={{
-          flex: 1,
-          borderBottomWidth: 1,
-          borderTopWidth: 1,
-          backgroundColor: '#6A727B17',
-          borderColor: '#D5DCE5',
-        }}
-      >
+      <View style={styles.detailView}>
         {!Util.isEmpty(salary) && (
           <ScrollView
             style={{ paddingHorizontal: 12 }}
@@ -445,33 +394,15 @@ const FormOfContents = (props: any) => {
   return (
     <View style={{ paddingVertical: 8 }}>
       <View style={[LVStyles.row]}>
-        <Text
-          style={{
-            color: '#6A727B',
-            fontWeight: '600',
-          }}
-        >
-          {label}
-        </Text>
-        <Text
-          style={{
-            fontWeight: '600',
-          }}
-        >
+        <Text style={styles.labelText}>{label}</Text>
+        <Text style={styles.valueText}>
           {Util.formatNumber(value)}
           {unit || `원`}
         </Text>
       </View>
       {subContent?.map((e) => (
         <View style={[LVStyles.row, { paddingLeft: 16, paddingTop: 8 }]}>
-          <Text
-            style={{
-              color: '#7A828B',
-              fontWeight: '500',
-            }}
-          >
-            {e}
-          </Text>
+          <Text style={styles.subContentText}>{e}</Text>
         </View>
       ))}
     </View>
@@ -483,5 +414,59 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: '600',
     fontSize: 16,
+  },
+  subTitleView: {
+    ...LVStyles.row,
+    marginLeft: 8,
+    marginVertical: 8,
+    paddingRight: 8,
+    flex: 1,
+  },
+  subTitleLabelText: {
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  subTitleValueText: {
+    marginLeft: 16,
+    fontWeight: '800',
+    fontSize: 16,
+    color: '#373747',
+  },
+  salaryAccordion: {
+    backgroundColor: '#FFF',
+    marginVertical: 8,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  salaryAccordionTouch: {
+    padding: 8,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  salaryAccordionInside: {
+    padding: 12,
+    paddingHorizontal: 24,
+    borderTopWidth: 1,
+    borderTopColor: '#F0F0F0',
+  },
+  labelText: {
+    color: '#6A727B',
+    fontWeight: '600',
+  },
+  valueText: {
+    fontWeight: '600',
+  },
+  detailView: {
+    flex: 1,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    backgroundColor: '#6A727B17',
+    borderColor: '#D5DCE5',
+  },
+  subContentText: {
+    color: '#7A828B',
+    fontWeight: '500',
   },
 });

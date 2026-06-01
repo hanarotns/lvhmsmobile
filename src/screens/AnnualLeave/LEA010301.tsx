@@ -300,25 +300,12 @@ const LEA010301 = () => {
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         >
-          <View
-            style={{
-              borderColor: '#D5DCE5',
-              borderBottomWidth: 1,
-              borderTopWidth: 1,
-              padding: 16,
-            }}
-          >
+          <View style={styles.container}>
             <LVFormOfContents
               title={'문서번호'}
               children={
-                <View style={[LVStyles.row, { flex: 1, marginRight: 16 }]}>
-                  <Text
-                    style={{
-                      fontWeight: '500',
-                    }}
-                  >
-                    {dt?.JOB_NO}
-                  </Text>
+                <View style={{ ...LVStyles.row, flex: 1, marginRight: 16 }}>
+                  <Text style={{ fontWeight: '500' }}>{dt?.JOB_NO}</Text>
                   <LVChip
                     category='apprStatus'
                     title={dt?.AP_STATUS_NAME}
@@ -330,21 +317,10 @@ const LEA010301 = () => {
             <LVFormOfContents
               title={'신청정보'}
               children={
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
+                <View style={styles.infoView}>
                   <View>
                     {dt?.DETAIL?.map((e, i) => (
-                      <View
-                        style={{
-                          height: 48,
-                          justifyContent: 'center',
-                        }}
-                      >
+                      <View style={styles.detailView}>
                         <LVChip
                           category='info'
                           leftText={`${Util.convertDateTime(e?.VA_DATE)} (${dayjs(
@@ -361,20 +337,8 @@ const LEA010301 = () => {
                         />
                       </View>
                     ))}
-                    <View
-                      style={{
-                        height: 48,
-                        paddingLeft: 16,
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Text
-                        style={{
-                          color: '#39CCCC',
-                          fontWeight: '700',
-                          fontSize: 14,
-                        }}
-                      >
+                    <View style={styles.totalCntView}>
+                      <Text style={styles.totalCntText}>
                         {dt?.VA_PERIOD ? `총 ${dt?.VA_PERIOD} 일` : `-`}
                       </Text>
                     </View>
@@ -385,23 +349,14 @@ const LEA010301 = () => {
             <LVFormOfContents
               title={'내용'}
               children={
-                <Text
-                  style={{
-                    fontWeight: '700',
-                  }}
-                >
-                  {dt?.REASON || `-`}
-                </Text>
+                <Text style={{ fontWeight: '700' }}>{dt?.REASON || `-`}</Text>
               }
             />
             {/* @@ 상신 일시 신청 전 기준이라는 것을 명시하는게 좋을 것 같음. (사용자가 혼란을 겪을 수 있음.) */}
             {/* <LVFormOfContents
             title={'잔여연차'}
             children={
-              <Text
-                style={{
-                  fontWeight: '700',
-                }}>
+              <Text style={{fontWeight: '700'}}>
                 {dt?.REM_VC_QTY}
               </Text>
             }
@@ -409,13 +364,14 @@ const LEA010301 = () => {
             <LVFormOfContents
               title={'결재선'}
               children={
-                <View style={[LVStyles.row]}>
+                <View style={LVStyles.row}>
                   {!Util.isEmpty(dt?.APPR_LINE) ? (
                     <View
-                      style={[
-                        LVStyles.row,
-                        { justifyContent: 'flex-start', flexWrap: 'wrap' },
-                      ]}
+                      style={{
+                        ...LVStyles.row,
+                        justifyContent: 'flex-start',
+                        flexWrap: 'wrap',
+                      }}
                     >
                       <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
                     </View>
@@ -433,27 +389,20 @@ const LEA010301 = () => {
             <LVButton
               title={'회수'}
               onPress={handleRecall}
-              buttonStyle={{
-                flex: 1,
-                backgroundColor: '#FFF',
-                borderWidth: 1,
-                borderColor: '#D5DCE5',
-              }}
-              textStyle={{
-                color: '#373747',
-              }}
+              buttonStyle={styles.recallButton}
+              textStyle={styles.recallButtonText}
             />
             <View style={{ width: 8 }} />
             <LVButton
               title={'삭제'}
               onPress={handleCancel}
-              buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
+              buttonStyle={styles.cancelButton}
             />
             <View style={{ width: 8 }} />
             <LVButton
               title={'상신'}
               onPress={handleReApprove}
-              buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
+              buttonStyle={styles.reApproveButton}
             />
           </View>
         )}
@@ -541,4 +490,47 @@ const ContentsOfRefusal = (props: any) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    borderColor: '#D5DCE5',
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    padding: 16,
+  },
+  infoView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  detailView: {
+    height: 48,
+    justifyContent: 'center',
+  },
+  totalCntView: {
+    height: 48,
+    paddingLeft: 16,
+    justifyContent: 'center',
+  },
+  totalCntText: {
+    color: '#39CCCC',
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  recallButton: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  recallButtonText: {
+    color: '#373747',
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: '#939DAA',
+  },
+  reApproveButton: {
+    flex: 1,
+    backgroundColor: '#27A7FF',
+  },
+});

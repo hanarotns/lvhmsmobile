@@ -9,14 +9,7 @@ const LaborNoticeScreen = ({ type = 'annual', data = {}, onConfirm }) => {
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          borderTopWidth: 1,
-          borderTopColor: '#F0F2F6',
-          height: '100%',
-          padding: 8,
-        }}
-      >
+      <View style={styles.subContainer}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           {isAnnual ? (
             <AnnualLeaveNotice data={data} />
@@ -319,6 +312,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     lineHeight: 25,
+  },
+  subContainer: {
+    borderTopWidth: 1,
+    borderTopColor: '#F0F2F6',
+    height: '100%',
+    padding: 8,
   },
 });
 

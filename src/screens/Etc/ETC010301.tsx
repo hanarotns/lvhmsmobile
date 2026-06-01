@@ -358,14 +358,7 @@ const ETC010301 = () => {
   const isFormFilled = Object.values(memberInfo).every(Boolean);
 
   return (
-    <SafeAreaView
-      edges={['bottom']}
-      style={{
-        flex: 1,
-        justifyContent: 'space-between',
-        backgroundColor: '#FFF',
-      }}
-    >
+    <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
         <KeyboardAwareScrollView
           contentContainerStyle={{

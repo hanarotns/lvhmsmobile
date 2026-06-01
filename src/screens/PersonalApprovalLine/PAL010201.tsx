@@ -134,12 +134,7 @@ const PAL010201 = () => {
             <Icon name='file-search-outline' color='#27A7FF' />
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            display: 'flex',
-            marginTop: 10,
-          }}
-        >
+        <View style={styles.approvalView}>
           {!Util.isEmpty(userList) &&
             userList?.map((e, i) => (
               <TouchableOpacity
@@ -157,32 +152,20 @@ const PAL010201 = () => {
                     AP_TYPE: 'AP',
                   });
                 }}
-                style={{
-                  marginBottom: 8,
-                }}
+                style={{ marginBottom: 8 }}
               >
                 <View
                   style={{
+                    ...styles.userListView,
                     backgroundColor:
                       selectedAppr?.index === i ? '#27A7FF17' : 'transparent',
                     borderColor:
                       selectedAppr?.index === i ? '#27A7FF' : 'lightgray',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginHorizontal: 8,
-                    paddingVertical: 8,
-                    paddingHorizontal: 16,
-                    borderRadius: 8,
-                    borderWidth: 1,
                   }}
                 >
                   <Text style={{ fontSize: 16 }}>{`${e?.DEPT_NAME}`}</Text>
                   <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: '600',
-                    }}
+                    style={styles.empText}
                   >{`${e?.EMP_NAME} ${e?.POSITION_NAME}`}</Text>
                 </View>
               </TouchableOpacity>
@@ -196,22 +179,8 @@ const PAL010201 = () => {
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
-        <View
-          style={{
-            padding: 16,
-            // borderBottomWidth: 1,
-            // borderTopWidth: 1,
-            // borderColor: '#D5DCE5',
-          }}
-        >
-          <Text
-            style={{
-              color: '#6A727B',
-              fontWeight: '600',
-            }}
-          >
-            결재선
-          </Text>
+        <View style={{ padding: 16 }}>
+          <Text style={styles.approvalLineLabel}>결재선</Text>
           <Input
             placeholder='결재선 이름을 입력하세요.'
             placeholderTextColor='#939DAA'
@@ -244,20 +213,9 @@ const PAL010201 = () => {
           }
         >
           {/* Detail */}
-          <View
-            style={{
-              padding: 16,
-            }}
-          >
+          <View style={{ padding: 16 }}>
             <View style={[LVStyles.row, { paddingRight: 16 }]}>
-              <Text
-                style={{
-                  color: '#6A727B',
-                  fontWeight: '600',
-                }}
-              >
-                결재자 지정
-              </Text>
+              <Text style={styles.approvalLineLabel}>결재자 지정</Text>
               <TouchableOpacity
                 onPress={() => {
                   setIsVisibleApprovalModal(true);
@@ -266,12 +224,7 @@ const PAL010201 = () => {
                 <Icon name='account-plus' color='#373747' />
               </TouchableOpacity>
             </View>
-            <View
-              style={{
-                padding: 8,
-                flex: 1,
-              }}
-            >
+            <View style={{ padding: 8, flex: 1 }}>
               {approvalLineDt.map((e, i) => (
                 <PersonalForm
                   elem={{ ...e, index: i + 1 }}
@@ -322,69 +275,18 @@ const PersonalForm = (props: any) => {
   const { elem, apprRoleList, onDelete } = props;
   console.log('@@ elem', elem);
   return (
-    <View
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        padding: 8,
-        paddingHorizontal: 16,
-        alignItems: 'center',
-        minHeight: 64,
-        borderRadius: 8,
-        marginBottom: 8,
-        backgroundColor: '#F0F2F6',
-        flex: 1,
-      }}
-    >
-      <Text
-        style={{
-          flex: 0.1,
-          fontSize: 16,
-          color: '#6A727B',
-        }}
-      >
-        {elem?.index}
-      </Text>
-      <View
-        style={{
-          flex: 0.5,
-        }}
-      >
+    <View style={styles.personalFormView}>
+      <Text style={styles.indexText}>{elem?.index}</Text>
+      <View style={{ flex: 0.5 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text
-            style={{
-              fontWeight: '600',
-              fontSize: 16,
-            }}
-          >
-            {elem?.EMP_NAME}
-          </Text>
-          <Text
-            style={{
-              fontWeight: '600',
-              marginLeft: 4,
-            }}
-          >
-            {elem?.POSITION_NAME}
-          </Text>
+          <Text style={styles.empNameText}>{elem?.EMP_NAME}</Text>
+          <Text style={styles.empPositionText}>{elem?.POSITION_NAME}</Text>
         </View>
         <View style={{ flexDirection: 'row', marginTop: 8 }}>
-          <Text
-            style={{
-              color: '#6A727B',
-            }}
-          >
-            {elem?.DEPT_NAME}
-          </Text>
+          <Text style={{ color: '#6A727B' }}>{elem?.DEPT_NAME}</Text>
         </View>
       </View>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flex: 0.4,
-        }}
-      >
+      <View style={styles.personalFormSubView}>
         <View style={{ flex: 1, width: '100%', justifyContent: 'center' }}>
           <LVSelectBox
             value={'AP'} //@@ 확인 필요
@@ -394,14 +296,7 @@ const PersonalForm = (props: any) => {
           />
         </View>
       </View>
-      <TouchableOpacity
-        onPress={onDelete}
-        style={{
-          marginLeft: 8,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <TouchableOpacity onPress={onDelete} style={styles.iconWrap}>
         <Icon name='close' color='gray' />
       </TouchableOpacity>
     </View>
@@ -416,6 +311,63 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#27A7FF',
     borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  approvalView: {
+    display: 'flex',
+    marginTop: 10,
+  },
+  userListView: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  empText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  approvalLineLabel: {
+    color: '#6A727B',
+    fontWeight: '600',
+  },
+  personalFormView: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 8,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    minHeight: 64,
+    borderRadius: 8,
+    marginBottom: 8,
+    backgroundColor: '#F0F2F6',
+    flex: 1,
+  },
+  indexText: {
+    flex: 0.1,
+    fontSize: 16,
+    color: '#6A727B',
+  },
+  empNameText: {
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  empPositionText: {
+    fontWeight: '600',
+    marginLeft: 4,
+  },
+  personalFormSubView: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 0.4,
+  },
+  iconWrap: {
+    marginLeft: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },

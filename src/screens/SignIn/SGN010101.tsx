@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -85,12 +85,7 @@ const SGN010101 = () => {
                 onPress={() => {
                   onConfirm(e?.category);
                 }}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingVertical: 8,
-                  paddingHorizontal: 32,
-                }}
+                style={styles.termView}
               >
                 <LVCheckBox value={e?.checked} onChange={e?.setChecked} />
                 <View style={{ width: 8 }} />
@@ -125,12 +120,7 @@ const SGN010101 = () => {
         </View>
       </View>
       {visibleTerms && (
-        <View
-          style={{
-            marginHorizontal: 20,
-            marginBottom: 60,
-          }}
-        >
+        <View style={styles.modalTermView}>
           <TermsOfPiece category={category} onConfirm={onConfirm} />
         </View>
       )}
@@ -139,3 +129,16 @@ const SGN010101 = () => {
   );
 };
 export default SGN010101;
+
+const styles = StyleSheet.create({
+  termView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 32,
+  },
+  modalTermView: {
+    marginHorizontal: 20,
+    marginBottom: 60,
+  },
+});

@@ -540,11 +540,7 @@ const WRK010201 = () => {
                 <View style={{ width: 8 }} />
                 <TouchableOpacity
                   onPress={() => handleDeleteFile(elem.seq)}
-                  style={{
-                    padding: 8,
-                    borderRadius: 4,
-                    backgroundColor: '#FF3D71',
-                  }}
+                  style={styles.deleteIconWrap}
                 >
                   <Icon
                     name='trash-can-outline'
@@ -636,11 +632,7 @@ const WRK010201 = () => {
                   <View style={{ width: 8 }} />
                   <TouchableOpacity
                     onPress={() => handleDeleteFile(elem.seq)}
-                    style={{
-                      padding: 8,
-                      borderRadius: 4,
-                      backgroundColor: '#FF3D71',
-                    }}
+                    style={styles.deleteIconWrap}
                   >
                     <Icon name='trash-can-outline' color='#FFFFFF' />
                   </TouchableOpacity>
@@ -896,5 +888,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  deleteIconWrap: {
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: '#FF3D71',
   },
 });

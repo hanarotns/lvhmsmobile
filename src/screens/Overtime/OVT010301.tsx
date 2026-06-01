@@ -199,25 +199,12 @@ const OVT010301 = () => {
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         >
-          <View
-            style={{
-              borderColor: '#D5DCE5',
-              borderBottomWidth: 1,
-              borderTopWidth: 1,
-              padding: 16,
-            }}
-          >
+          <View style={styles.container}>
             <LVFormOfContents
               title={'예정번호'}
               children={
                 <View style={[LVStyles.row, { flex: 1 }]}>
-                  <Text
-                    style={{
-                      fontWeight: '500',
-                    }}
-                  >
-                    {dt?.JOB_NO}
-                  </Text>
+                  <Text style={{ fontWeight: '500' }}>{dt?.JOB_NO}</Text>
                   <LVChip
                     category='apprStatus'
                     title={dt?.AP_STATUS_NAME}
@@ -229,12 +216,7 @@ const OVT010301 = () => {
             <LVFormOfContents
               title={'예정시간'}
               children={
-                <Text
-                  style={{
-                    fontWeight: '700',
-                    color: '#ABBACD',
-                  }}
-                >
+                <Text style={styles.dateTimeText}>
                   {Util.convertDateTime(
                     dt?.ND_DATE,
                     dt?.ND_TYPE !== 'OT' ? dt?.START_TIME : dt?.NORMAL_OFF_TIME,
@@ -250,11 +232,7 @@ const OVT010301 = () => {
                 title={'확정번호'}
                 children={
                   <View style={[LVStyles.row, { flex: 1 }]}>
-                    <Text
-                      style={{
-                        fontWeight: '500',
-                      }}
-                    >
+                    <Text style={{ fontWeight: '500' }}>
                       {dt?.CONFIRM_JOB_NO}
                     </Text>
                     <LVChip
@@ -271,17 +249,8 @@ const OVT010301 = () => {
                 title={'확정시간'}
                 children={
                   <View>
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        paddingVertical: 16,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontWeight: '700',
-                        }}
-                      >
+                    <View style={styles.dateTimevIew}>
+                      <Text style={{ fontWeight: '700' }}>
                         {Util.convertDateTime(
                           dt?.CONFIRM_NDS_DATE,
                           dt?.CONFIRM_NDS_TIME,
@@ -293,42 +262,14 @@ const OVT010301 = () => {
                         )}
                       </Text>
                     </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        paddingVertical: 16,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontWeight: '700',
-                          color: '#FF9E3C',
-                        }}
-                      >
+                    <View style={styles.totalTimeView}>
+                      <Text style={styles.totalTimeText}>
                         {dt?.NC_HOUR ? `총 ${dt?.NC_HOUR} 시간` : `-`}
                       </Text>
                       {!Util.isEmpty(dt?.NC_CHANGE_REASON) && (
                         <View style={LVStyles.row}>
-                          <View
-                            style={{
-                              marginLeft: 16,
-                              borderColor: '#ABBACD',
-                              borderWidth: 1,
-                              borderRadius: 4,
-                              padding: 6,
-                              paddingHorizontal: 12,
-                            }}
-                          >
-                            <Text
-                              style={{
-                                color: '#ABBACD',
-                                fontSize: 12,
-                                fontWeight: '600',
-                              }}
-                            >
-                              수정됨
-                            </Text>
+                          <View style={styles.changeReasonView}>
+                            <Text style={styles.changeResonText}>수정됨</Text>
                           </View>
                           <View style={{ width: 8 }} />
                           <Text>{dt?.NC_CHANGE_REASON}</Text>
@@ -345,25 +286,15 @@ const OVT010301 = () => {
                 <LVChip
                   category='type'
                   content={dt?.ND_TYPE_NM}
-                  chipStyle={{
-                    borderColor: '#FF9E3C',
-                    backgroundColor: '#FFF7EF',
-                    maxWidth: 100,
-                  }}
-                  textStyle={{
-                    color: '#FF9E3C',
-                  }}
+                  chipStyle={styles.typeChip}
+                  textStyle={{ color: '#FF9E3C' }}
                 />
               }
             />
             <LVFormOfContents
               title={'주누적'}
               children={
-                <Text
-                  style={{
-                    fontWeight: '700',
-                  }}
-                >
+                <Text style={{ fontWeight: '700' }}>
                   {dt?.NC_WEEK_HOUR
                     ? `총 ${dt?.NC_WEEK_HOUR} 시간`
                     : `총 ${accumulatedHours?.NC_WEEK_HOUR} 시간`}
@@ -373,11 +304,7 @@ const OVT010301 = () => {
             <LVFormOfContents
               title={'월누적'}
               children={
-                <Text
-                  style={{
-                    fontWeight: '700',
-                  }}
-                >
+                <Text style={{ fontWeight: '700' }}>
                   {dt?.NC_MONTH_HOUR
                     ? `총 ${dt?.NC_MONTH_HOUR} 시간`
                     : `총 ${accumulatedHours?.NC_MONTH_HOUR} 시간`}
@@ -386,26 +313,19 @@ const OVT010301 = () => {
             />
             <LVFormOfContents
               title={'내용'}
-              children={
-                <Text
-                  style={{
-                    fontWeight: '700',
-                  }}
-                >
-                  {dt?.REASON}
-                </Text>
-              }
+              children={<Text style={{ fontWeight: '700' }}>{dt?.REASON}</Text>}
             />
             <LVFormOfContents
               title={'결재선'}
               children={
-                <View style={[LVStyles.row]}>
+                <View style={LVStyles.row}>
                   {!Util.isEmpty(dt?.APPR_LINE) ? (
                     <View
-                      style={[
-                        LVStyles.row,
-                        { justifyContent: 'flex-start', flexWrap: 'wrap' },
-                      ]}
+                      style={{
+                        ...LVStyles.row,
+                        justifyContent: 'flex-start',
+                        flexWrap: 'wrap',
+                      }}
                     >
                       <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
                     </View>
@@ -520,4 +440,46 @@ const ContentsOfRefusal = (props: any) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  dateTimeText: {
+    fontWeight: '700',
+    color: '#ABBACD',
+  },
+  dateTimeView: {
+    justifyContent: 'center',
+    paddingVertical: 16,
+  },
+  totalTimeView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  totalTimeText: {
+    fontWeight: '700',
+    color: '#FF9E3C',
+  },
+  changeReasonView: {
+    marginLeft: 16,
+    borderColor: '#ABBACD',
+    borderWidth: 1,
+    borderRadius: 4,
+    padding: 6,
+    paddingHorizontal: 12,
+  },
+  changeResonText: {
+    color: '#ABBACD',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  typeChip: {
+    borderColor: '#FF9E3C',
+    backgroundColor: '#FFF7EF',
+    maxWidth: 100,
+  },
+});

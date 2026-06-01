@@ -127,12 +127,7 @@ const PAL010101 = () => {
             <TouchableOpacity
               key={e?.H_TP_SEQ || i}
               style={{
-                display: 'flex',
-                flexDirection: 'row',
-                padding: 16,
-                marginTop: 16,
-                borderWidth: 1,
-                // borderRadius: 16,
+                ...styles.myApprListView,
                 borderColor:
                   selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ
                     ? '#27A7FF'
@@ -146,11 +141,7 @@ const PAL010101 = () => {
                 // movingScreen.navigate('PAL010301');
               }}
             >
-              <View
-                style={{
-                  flex: 1,
-                }}
-              >
+              <View style={{ flex: 1 }}>
                 <View style={LVStyles.row}>
                   <View style={styles.apprLineView}>
                     <LVChip category='apprLineFlag' title='일반' />
@@ -193,11 +184,7 @@ const PAL010101 = () => {
           }
         >
           {!Util.isEmpty(myApprList) && (
-            <View
-              style={{
-                marginHorizontal: 24,
-              }}
-            >
+            <View style={{ marginHorizontal: 24 }}>
               <ContentsOfApproval ref={approvalLineRef} />
             </View>
           )}
@@ -234,22 +221,8 @@ export default PAL010101;
 
 const ContentsOfDelete = (props: any) => {
   return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Text
-        style={{
-          marginTop: 8,
-          fontSize: 16,
-          fontWeight: '600',
-          color: '#373747',
-        }}
-      >
-        이 결재선을 정말 삭제하시겠어요?
-      </Text>
+    <View style={styles.modalView}>
+      <Text style={styles.modalText}>이 결재선을 정말 삭제하시겠어요?</Text>
     </View>
   );
 };
@@ -277,5 +250,22 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  modalView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalText: {
+    marginTop: 8,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#373747',
+  },
+  myApprListView: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 16,
+    marginTop: 16,
+    borderWidth: 1,
   },
 });

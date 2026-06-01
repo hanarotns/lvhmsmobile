@@ -177,11 +177,7 @@ const OVT010201 = () => {
             <TouchableOpacity
               key={e?.H_TP_SEQ || i}
               style={{
-                display: 'flex',
-                flexDirection: 'row',
-                padding: 16,
-                borderBottomWidth: 1,
-                borderBottomColor: '#D5DCE5',
+                ...styles.myApprListView,
                 borderColor:
                   selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ
                     ? '#27A7FF'
@@ -195,27 +191,11 @@ const OVT010201 = () => {
                 setSelectedAppr(e);
               }}
             >
-              <View
-                style={{
-                  flex: 1,
-                }}
-              >
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
+              <View style={{ flex: 1 }}>
+                <View style={styles.myApprListTitleView}>
                   <LVChip category='apprLineFlag' title='일반' />
                   <View style={{ width: 8 }} />
-                  <Text
-                    style={{
-                      fontWeight: '700',
-                      fontSize: 16,
-                      color: '#373747',
-                    }}
-                  >
+                  <Text style={styles.myApprListTitle}>
                     {e?.APPR_LINE_NAME}
                   </Text>
                 </View>
@@ -241,14 +221,7 @@ const OVT010201 = () => {
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         >
-          <View
-            style={{
-              padding: 16,
-              borderBottomWidth: 1,
-              borderTopWidth: 1,
-              borderColor: '#D5DCE5',
-            }}
-          >
+          <View style={styles.container}>
             <LVFormOfContents
               title={'결재선'}
               children={
@@ -257,30 +230,19 @@ const OVT010201 = () => {
                     <LVApprLine
                       data={approvalLine}
                       mainColor={'#373747'}
-                      style={{
-                        width: '80%',
-                      }}
+                      style={{ width: '80%' }}
                     />
                     <TouchableOpacity
                       onPress={() => {
                         setIsVisibleApprovalModal(true);
                       }}
-                      style={{
-                        marginLeft: 8,
-                        width: 32,
-                        height: 32,
-                        borderWidth: 2,
-                        borderColor: '#27A7FF',
-                        borderRadius: 4,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
+                      style={styles.iconWrap}
                     >
                       <Icon name='text-box-edit-outline' color='#27A7FF' />
                     </TouchableOpacity>
                   </View>
                 ) : (
-                  <View style={[LVStyles.row, { width: '100%' }]}>
+                  <View style={{ ...LVStyles.row, width: '100%' }}>
                     <Text>등록된 결재선이 없습니다.</Text>
                     <LVButton
                       title={'결재선 등록'}
@@ -288,9 +250,7 @@ const OVT010201 = () => {
                         movingScreen.navigate('PAL010201');
                       }}
                       buttonStyle={styles.button}
-                      textStyle={{
-                        color: '#27A7FF',
-                      }}
+                      textStyle={{ color: '#27A7FF' }}
                     />
                   </View>
                 )
@@ -299,13 +259,7 @@ const OVT010201 = () => {
             <LVFormOfContents
               title={'종류'}
               children={
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                  }}
-                >
+                <View style={styles.typeListView}>
                   {overtimeTypeList?.map((e: any) => (
                     <TouchableOpacity
                       onPress={() => {
@@ -427,5 +381,43 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     color: '#373747',
+  },
+  myApprListView: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#D5DCE5',
+  },
+  myApprListTitleView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  myApprListTitle: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: '#373747',
+  },
+  container: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  iconWrap: {
+    marginLeft: 8,
+    width: 32,
+    height: 32,
+    borderWidth: 2,
+    borderColor: '#27A7FF',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  typeListView: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });

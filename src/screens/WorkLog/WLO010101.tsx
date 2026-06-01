@@ -217,23 +217,13 @@ const Form = (props: any) => {
 
   return (
     <View style={styles.entireCardView}>
-      <View
-        style={{
-          width: 4,
-          borderRadius: 4,
-          backgroundColor: bg1,
-        }}
-      />
+      <View style={{ ...styles.cardSignature, backgroundColor: bg1 }} />
       {elem?.WA_TYPE !== 'O' ? (
         // 출퇴근 카드 폼
         <View
           style={{
-            flex: 1,
-            borderRadius: 4,
+            ...styles.generalCardForm,
             backgroundColor: bg2,
-            padding: 16,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
           }}
         >
           <View style={{ flex: 0.2 }}>
@@ -261,19 +251,11 @@ const Form = (props: any) => {
         // 외근 카드 폼
         <View
           style={{
-            flex: 1,
-            borderRadius: 4,
+            ...styles.offsiteCardForm,
             backgroundColor: bg2,
-            padding: 16,
           }}
         >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
+          <View style={styles.offsiteCardLine1}>
             <View style={{ flex: 0.2 }}>
               <Text style={styles.label}>시간</Text>
               <Text style={styles.value}>
@@ -291,13 +273,7 @@ const Form = (props: any) => {
               </Text>
             </View>
           </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              marginTop: 8,
-            }}
-          >
+          <View style={styles.offsiteCardLine2}>
             <View style={{ flex: 1 }}>
               <Text style={styles.label}>내용</Text>
               <Text style={styles.value} numberOfLines={1}>
@@ -405,5 +381,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 4,
     marginBottom: 8,
+  },
+  cardSignature: {
+    width: 4,
+    borderRadius: 4,
+  },
+  generalCardForm: {
+    flex: 1,
+    borderRadius: 4,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  offsiteCardForm: { flex: 1, borderRadius: 4, padding: 16 },
+  offsiteCardLine1: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  offsiteCardLine2: {
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: 8,
   },
 });

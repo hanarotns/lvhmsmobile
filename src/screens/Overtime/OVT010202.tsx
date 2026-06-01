@@ -167,11 +167,7 @@ const OVT010202 = () => {
             <TouchableOpacity
               key={e?.H_TP_SEQ || i}
               style={{
-                display: 'flex',
-                flexDirection: 'row',
-                padding: 16,
-                borderBottomWidth: 1,
-                borderBottomColor: '#D5DCE5',
+                ...styles.myApprListView,
                 borderColor:
                   selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ
                     ? '#27A7FF'
@@ -185,27 +181,11 @@ const OVT010202 = () => {
                 setSelectedAppr(e);
               }}
             >
-              <View
-                style={{
-                  flex: 1,
-                }}
-              >
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
+              <View style={{ flex: 1 }}>
+                <View style={styles.myApprListTitleView}>
                   <LVChip category='apprLineFlag' title='일반' />
                   <View style={{ width: 8 }} />
-                  <Text
-                    style={{
-                      fontWeight: '700',
-                      fontSize: 16,
-                      color: '#373747',
-                    }}
-                  >
+                  <Text style={styles.myApprListTitle}>
                     {e?.APPR_LINE_NAME}
                   </Text>
                 </View>
@@ -231,50 +211,38 @@ const OVT010202 = () => {
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         >
-          <View
-            style={{
-              padding: 16,
-              borderBottomWidth: 1,
-              borderTopWidth: 1,
-              borderColor: '#D5DCE5',
-            }}
-          >
+          <View style={styles.container}>
             <LVFormOfContents
               title={'결재선'}
               children={
                 !Util.isEmpty(approvalLine) ? (
-                  <View style={[LVStyles.row, { width: '100%' }]}>
+                  <View style={{ ...LVStyles.row, width: '100%' }}>
                     <LVApprLine
                       data={approvalLine}
                       mainColor={'#373747'}
-                      style={{
-                        width: '80%',
-                      }}
-                      reqApproval={true}
+                      style={{ width: '80%' }}
                     />
                     <TouchableOpacity
                       onPress={() => {
                         setIsVisibleApprovalModal(true);
                       }}
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderWidth: 2,
-                        borderColor: '#27A7FF',
-                        borderRadius: 4,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
+                      style={styles.iconWrap}
                     >
-                      <Icon
-                        name='file-search-outline'
-                        color='#27A7FF'
-                        size={30}
-                      />
+                      <Icon name='text-box-edit-outline' color='#27A7FF' />
                     </TouchableOpacity>
                   </View>
                 ) : (
-                  <Text>내 결재선관리에서 결재선을 생성하세요.</Text>
+                  <View style={[LVStyles.row, { width: '100%' }]}>
+                    <Text>등록된 결재선이 없습니다.</Text>
+                    <LVButton
+                      title={'결재선 등록'}
+                      onPress={() => {
+                        movingScreen.navigate('PAL010201');
+                      }}
+                      buttonStyle={styles.button}
+                      textStyle={{ color: '#27A7FF' }}
+                    />
+                  </View>
                 )
               }
             />
@@ -282,65 +250,25 @@ const OVT010202 = () => {
             <LVFormOfContents
               title={'예정시간'}
               children={
-                <Text
-                  style={{
-                    fontWeight: '700',
-                    color: '#ABBACD',
-                  }}
-                >
-                  {dt?.M_ES_DATETIME}
-                </Text>
+                <Text style={styles.dateTimeText}>{dt?.M_ES_DATETIME}</Text>
               }
             />
             <LVFormOfContents
               title={'종류'}
               children={
-                <View
-                  style={{
-                    borderColor: '#FF9E3C',
-                    backgroundColor: '#FFF7EF',
-                    borderWidth: 1,
-                    borderRadius: 16,
-                    padding: 6,
-                    paddingHorizontal: 12,
-                    // @@ 크기 유동적으로 수정할 것.
-                    width: 100,
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: '#FF9E3C',
-                      fontSize: 14,
-                      fontWeight: '700',
-                    }}
-                  >
-                    {dt?.M_TYPE_NAME}
-                  </Text>
+                <View style={styles.typeView}>
+                  <Text style={styles.typeText}>{dt?.M_TYPE_NAME}</Text>
                 </View>
               }
             />
             <LVFormOfContents
               title={'내용'}
-              children={
-                <Text
-                  style={{
-                    fontWeight: '700',
-                  }}
-                >
-                  {dt?.M_MEMO}
-                </Text>
-              }
+              children={<Text style={{ fontWeight: '700' }}>{dt?.M_MEMO}</Text>}
             />
             <LVFormOfContents
               title={'시작일시'}
               children={
-                <Text
-                  style={{
-                    fontWeight: '700',
-                    color: '#ABBACD',
-                  }}
-                >
+                <Text style={styles.dateTimeText}>
                   {Util.convertDateTime('', dt?.RA_START_TIME) || '-'}
                 </Text>
               }
@@ -348,12 +276,7 @@ const OVT010202 = () => {
             <LVFormOfContents
               title={'종료일시'}
               children={
-                <Text
-                  style={{
-                    fontWeight: '700',
-                    color: '#ABBACD',
-                  }}
-                >
+                <Text style={styles.dateTimeText}>
                   {Util.convertDateTime('', dt?.RA_END_TIME) || '-'}
                 </Text>
               }
@@ -364,9 +287,7 @@ const OVT010202 = () => {
             children={
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text
-                  style={{
-                    fontWeight: '700',
-                  }}>
+                  style={{fontWeight: '700'}}>
                   {dt?.RA_APPLY_TIME}
                 </Text>
                 <Icon
@@ -464,5 +385,58 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     color: '#373747',
+  },
+  myApprListView: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#D5DCE5',
+  },
+  myApprListTitleView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  myApprListTitle: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: '#373747',
+  },
+  container: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  iconWrap: {
+    marginLeft: 8,
+    width: 32,
+    height: 32,
+    borderWidth: 2,
+    borderColor: '#27A7FF',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dateTimeText: {
+    fontWeight: '700',
+    color: '#ABBACD',
+  },
+  typeView: {
+    borderColor: '#FF9E3C',
+    backgroundColor: '#FFF7EF',
+    borderWidth: 1,
+    borderRadius: 16,
+    padding: 6,
+    paddingHorizontal: 12,
+    // @@ 크기 유동적으로 수정할 것.
+    width: 100,
+    alignItems: 'center',
+  },
+  typeText: {
+    color: '#FF9E3C',
+    fontSize: 14,
+    fontWeight: '700',
   },
 });

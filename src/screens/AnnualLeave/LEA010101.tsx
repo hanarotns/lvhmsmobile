@@ -307,21 +307,8 @@ const DocuPreviewContent = (props: any) => {
 
 const ContentsOfAlert = (props: any) => {
   return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 16,
-      }}
-    >
-      <Text
-        style={{
-          marginTop: 8,
-          fontSize: 16,
-          fontWeight: '600',
-          color: '#373747',
-        }}
-      >
+    <View style={styles.alertView}>
+      <Text style={styles.alertText}>
         {`연차부여일이 미설정되었습니다.\n인사팀에 문의하세요`}
       </Text>
     </View>
@@ -349,4 +336,15 @@ const styles = StyleSheet.create({
     color: '#939DAA',
   },
   mainText: { fontWeight: '700', fontSize: 14 },
+  alertView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  alertText: {
+    marginTop: 8,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#373747',
+  },
 });

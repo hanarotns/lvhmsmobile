@@ -199,14 +199,7 @@ const DocuPreviewContent = (props: any) => {
           {Util.convertDateTime(elem?.RQ_DATE)} (
           {dayjs(elem?.RQ_DATE).format('ddd')}) | {elem?.RQ_TYPE_NAME}
         </Text>
-        <Text
-          style={{
-            fontWeight: '600',
-            color: '#939DAA',
-          }}
-        >
-          {elem?.JOB_NO}
-        </Text>
+        <Text style={styles.docuPreviewText}>{elem?.JOB_NO}</Text>
       </View>
       <View style={{ height: 16 }} />
       <View style={{ flex: 1 }}>
@@ -267,15 +260,7 @@ const Filter = (props: any) => {
           </TouchableOpacity>
         ))}
       </View>
-      <Text
-        style={{
-          color: '#1E2125',
-          fontSize: 14,
-          fontWeight: '800',
-        }}
-      >
-        {filteredList?.length} 건
-      </Text>
+      <Text style={styles.filterText}>{filteredList?.length} 건</Text>
     </View>
   );
 };
@@ -308,5 +293,14 @@ const styles = StyleSheet.create({
   mainText: {
     fontWeight: '700',
     fontSize: 16,
+  },
+  docuPreviewText: {
+    fontWeight: '600',
+    color: '#939DAA',
+  },
+  filterText: {
+    color: '#1E2125',
+    fontSize: 14,
+    fontWeight: '800',
   },
 });

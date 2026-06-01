@@ -242,11 +242,7 @@ const LEA010201 = () => {
             <TouchableOpacity
               key={e?.H_TP_SEQ || i}
               style={{
-                display: 'flex',
-                flexDirection: 'row',
-                padding: 16,
-                borderBottomWidth: 1,
-                borderBottomColor: '#D5DCE5',
+                ...styles.myApprListView,
                 borderColor:
                   selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ
                     ? '#27A7FF'
@@ -260,27 +256,11 @@ const LEA010201 = () => {
                 setSelectedAppr(e);
               }}
             >
-              <View
-                style={{
-                  flex: 1,
-                }}
-              >
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
+              <View style={{ flex: 1 }}>
+                <View style={styles.myApprListTitleView}>
                   <LVChip category='apprLineFlag' title='일반' />
                   <View style={{ width: 8 }} />
-                  <Text
-                    style={{
-                      fontWeight: '700',
-                      fontSize: 16,
-                      color: '#373747',
-                    }}
-                  >
+                  <Text style={styles.myApprListTitle}>
                     {e?.APPR_LINE_NAME}
                   </Text>
                 </View>
@@ -395,11 +375,7 @@ const LEA010201 = () => {
     const grid = toColumnGrid(leaveTypeList, columnCount);
 
     return (
-      <View
-        style={{
-          justifyContent: 'flex-start',
-        }}
-      >
+      <View style={{ justifyContent: 'flex-start' }}>
         {/* 신청정보_휴가일자 션택영역 */}
         <View>
           <Calendar
@@ -462,31 +438,11 @@ const LEA010201 = () => {
           />
         </View>
         {/* 선택한 신청정보 표시영역 */}
-        <View
-          style={{
-            borderTopWidth: 1,
-            borderTopColor: '#F0F2F6',
-            height: '100%',
-            padding: 8,
-          }}
-        >
-          <ScrollView
-            style={{
-              width: '100%',
-            }}
-          >
-            <View
-              style={{
-                alignItems: 'center',
-              }}
-            >
+        <View style={styles.selectedDisp}>
+          <ScrollView style={{ width: '100%' }}>
+            <View style={{ alignItems: 'center' }}>
               {leaveInfoList.map((e: any, i: number) => (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    marginBottom: 8,
-                  }}
-                >
+                <View style={styles.chipView}>
                   <LVChip
                     category='info'
                     leftText={e?.DISP_VA_DATE}
@@ -509,22 +465,10 @@ const LEA010201 = () => {
             title={'종류를 선택하세요'}
             buttonText={'선택'}
             contents={
-              <View
-                style={{
-                  padding: 12,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
+              <View style={styles.modalView}>
                 {grid.map((row, rowIdx) => {
                   return (
-                    <View
-                      key={rowIdx}
-                      style={{
-                        flexDirection: 'row',
-                        marginBottom: 8,
-                      }}
-                    >
+                    <View key={rowIdx} style={styles.chipView}>
                       {row.map((item, colIdx) =>
                         item ? (
                           <TouchableOpacity
@@ -594,7 +538,6 @@ const LEA010201 = () => {
   const CameraButton = () => {
     return (
       <TouchableOpacity
-        style={{}}
         onPress={() => {
           setVisiblePhotoList(!visiblePhotoList);
         }}
@@ -612,40 +555,22 @@ const LEA010201 = () => {
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         >
-          <View
-            style={{
-              padding: 16,
-              borderBottomWidth: 1,
-              borderTopWidth: 1,
-              borderColor: '#D5DCE5',
-            }}
-          >
+          <View style={styles.container}>
             <LVFormOfContents
               title={'결재선'}
               children={
                 !Util.isEmpty(approvalLine) ? (
-                  <View style={[LVStyles.row, { width: '100%' }]}>
+                  <View style={{ ...LVStyles.row, width: '100%' }}>
                     <LVApprLine
                       data={approvalLine}
                       mainColor={'#373747'}
-                      style={{
-                        width: '80%',
-                      }}
+                      style={{ width: '80%' }}
                     />
                     <TouchableOpacity
                       onPress={() => {
                         setIsVisibleApprovalModal(true);
                       }}
-                      style={{
-                        marginLeft: 8,
-                        width: 32,
-                        height: 32,
-                        borderWidth: 2,
-                        borderColor: '#27A7FF',
-                        borderRadius: 4,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
+                      style={styles.iconWrap}
                     >
                       <Icon name='text-box-edit-outline' color='#27A7FF' />
                     </TouchableOpacity>
@@ -659,9 +584,7 @@ const LEA010201 = () => {
                         movingScreen.navigate('PAL010201');
                       }}
                       buttonStyle={styles.button}
-                      textStyle={{
-                        color: '#27A7FF',
-                      }}
+                      textStyle={{ color: '#27A7FF' }}
                     />
                   </View>
                 )
@@ -674,27 +597,14 @@ const LEA010201 = () => {
                   <View style={[LVStyles.row, { flex: 1 }]}>
                     {Util.isEmpty(infoList) && (
                       <View>
-                        <Text
-                          style={{
-                            color: '#939DAA',
-                          }}
-                        >
+                        <Text style={{ color: '#939DAA' }}>
                           우측버튼을 선택하세요.
                         </Text>
                       </View>
                     )}
-                    <View
-                      style={{
-                        flex: 1,
-                      }}
-                    >
+                    <View style={{ flex: 1 }}>
                       {infoList?.map((e, i) => (
-                        <View
-                          style={{
-                            height: 48,
-                            justifyContent: 'center',
-                          }}
-                        >
+                        <View style={styles.infoListView}>
                           <LVChip
                             category='info'
                             leftText={e?.DISP_VA_DATE}
@@ -708,16 +618,7 @@ const LEA010201 = () => {
                       onPress={() => {
                         setIsVisibleInfoModal(true);
                       }}
-                      style={{
-                        marginLeft: 8,
-                        width: 32,
-                        height: 32,
-                        borderWidth: 2,
-                        borderColor: '#27A7FF',
-                        borderRadius: 4,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
+                      style={styles.iconWrap}
                     >
                       <Icon
                         name={
@@ -735,13 +636,7 @@ const LEA010201 = () => {
             <LVFormOfContents
               children={
                 <View style={[LVStyles.row, { flex: 1, marginVertical: 12 }]}>
-                  <View
-                    style={{
-                      margin: 4,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <View style={styles.leavedayCalculation}>
                     <Text style={{ fontSize: 14, fontWeight: '600' }}>
                       잔여 연차
                     </Text>
@@ -752,13 +647,7 @@ const LEA010201 = () => {
                   <View>
                     <Text style={{ fontSize: 20, fontWeight: '700' }}>-</Text>
                   </View>
-                  <View
-                    style={{
-                      margin: 4,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <View style={styles.leavedayCalculation}>
                     <Text style={{ fontSize: 14, fontWeight: '600' }}>
                       신청 연차
                     </Text>
@@ -769,14 +658,7 @@ const LEA010201 = () => {
                   <View>
                     <Text style={{ fontSize: 20, fontWeight: '700' }}>=</Text>
                   </View>
-
-                  <View
-                    style={{
-                      margin: 4,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <View style={styles.leavedayCalculation}>
                     <Text style={{ fontSize: 14, fontWeight: '600' }}>
                       이후 연차
                     </Text>
@@ -795,13 +677,7 @@ const LEA010201 = () => {
                 <LVFormOfContents
                   title={'공가종류'}
                   children={
-                    <View
-                      style={{
-                        flex: 1,
-                        width: '70%',
-                        justifyContent: 'center',
-                      }}
-                    >
+                    <View style={styles.selectBoxWrap}>
                       <LVSelectBox
                         onChange={(value: string) => {
                           setSelectedOfficialLeaveType(value);
@@ -819,27 +695,14 @@ const LEA010201 = () => {
                     <View style={[LVStyles.row, { flex: 1 }]}>
                       {Util.isEmpty(attach) && (
                         <View>
-                          <Text
-                            style={{
-                              color: '#939DAA',
-                            }}
-                          >
+                          <Text style={{ color: '#939DAA' }}>
                             첨부파일을 선택하세요.
                           </Text>
                         </View>
                       )}
-                      <View
-                        style={{
-                          flex: 1,
-                        }}
-                      >
+                      <View style={{ flex: 1 }}>
                         {attach.map((e, i) => (
-                          <View
-                            style={{
-                              height: 48,
-                              justifyContent: 'center',
-                            }}
-                          >
+                          <View style={styles.infoListView}>
                             <LVChip
                               category='info'
                               leftText={''}
@@ -853,15 +716,7 @@ const LEA010201 = () => {
                         onPress={() => {
                           setIsVisibleAttachModal(true);
                         }}
-                        style={{
-                          width: 32,
-                          height: 32,
-                          borderWidth: 2,
-                          borderColor: '#27A7FF',
-                          borderRadius: 4,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
+                        style={styles.iconWrap}
                       >
                         <Icon name='content-save-outline' color='#27A7FF' />
                       </TouchableOpacity>
@@ -1003,31 +858,6 @@ const themeOfCalendar = {
   textMonthFontSize: 20,
 };
 
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#FFF',
-    borderColor: '#27A7FF',
-    borderWidth: 1,
-    padding: 10,
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: '#D5DCE5',
-  },
-  cancelButtonText: {
-    color: '#373747',
-  },
-  iconOfarrow: {
-    ...LVStyles.iconS,
-    tintColor: '#454D58',
-    borderRadius: 4,
-    borderWidth: 0.75,
-    borderColor: '#D5DCE5',
-  },
-});
-
 const sortedArr = [
   'VY',
   'VM',
@@ -1128,3 +958,90 @@ const customVaType = {
     DAY_02: 0,
   },
 };
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#FFF',
+    borderColor: '#27A7FF',
+    borderWidth: 1,
+    padding: 10,
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  cancelButtonText: {
+    color: '#373747',
+  },
+  iconOfarrow: {
+    ...LVStyles.iconS,
+    tintColor: '#454D58',
+    borderRadius: 4,
+    borderWidth: 0.75,
+    borderColor: '#D5DCE5',
+  },
+  myApprListView: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#D5DCE5',
+  },
+  myApprListTitleView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  myApprListTitle: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: '#373747',
+  },
+  selectedDisp: {
+    borderTopWidth: 1,
+    borderTopColor: '#F0F2F6',
+    height: '100%',
+    padding: 8,
+  },
+  chipView: {
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  modalView: {
+    padding: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  iconWrap: {
+    marginLeft: 8,
+    width: 32,
+    height: 32,
+    borderWidth: 2,
+    borderColor: '#27A7FF',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  infoListView: {
+    height: 48,
+    justifyContent: 'center',
+  },
+  leavedayCalculation: {
+    margin: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  selectBoxWrap: {
+    flex: 1,
+    width: '70%',
+    justifyContent: 'center',
+  },
+});
