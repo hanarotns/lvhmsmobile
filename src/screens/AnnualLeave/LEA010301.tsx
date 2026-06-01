@@ -31,7 +31,11 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as Action from './Action'; // API통신
 
+type RootStackParamList = {
+  DetailScreen: undefined;
+};
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
+
 const LEA010301 = () => {
   const movingScreen = useNavigation();
   const route = useRoute<DetailScreenRouteProp>();

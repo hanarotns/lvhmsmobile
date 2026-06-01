@@ -24,16 +24,15 @@ import {
 } from '@react-navigation/native';
 import * as Action from './Action';
 
-type RootStackParamList = {
-  DetailScreen: undefined;
-};
-
-type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
-
 type UserInfo = {};
 
 type ValidationErrors = Partial<Record<keyof UserInfo, string>>;
 type TouchedFields = Partial<Record<keyof UserInfo, boolean>>;
+
+type RootStackParamList = {
+  DetailScreen: undefined;
+};
+type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
 
 const ETC010201 = () => {
   const route = useRoute<DetailScreenRouteProp>();

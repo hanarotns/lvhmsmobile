@@ -27,12 +27,17 @@ import {
   Text,
 } from '@/src/components'; // 공통컴포넌트
 import { Util } from '@/src/lib';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as PALAction from '../PersonalApprovalLine/Action'; // API통신 (개인별 결재선 분리)
 import * as Action from './Action'; // API통신
+
+type RootStackParamList = {
+  DetailScreen: undefined;
+};
+type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
 
 const OVT010202 = () => {
   const movingScreen = useNavigation();

@@ -42,7 +42,11 @@ import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as PALAction from '../PersonalApprovalLine/Action'; // API통신 (개인별 결재선 분리)
 import * as WLOAction from '../WorkLog/Action'; // API통신 (달력)
 
+type RootStackParamList = {
+  DetailScreen: undefined;
+};
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
+
 const LEA010201 = () => {
   const movingScreen = useNavigation();
   const route = useRoute<DetailScreenRouteProp>();

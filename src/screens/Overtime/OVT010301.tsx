@@ -24,7 +24,11 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import * as Action from './Action'; // API통신
 
+type RootStackParamList = {
+  DetailScreen: undefined;
+};
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
+
 const OVT010301 = () => {
   const movingScreen = useNavigation();
   const route = useRoute<DetailScreenRouteProp>();

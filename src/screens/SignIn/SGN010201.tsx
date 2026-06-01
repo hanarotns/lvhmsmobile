@@ -27,7 +27,6 @@ import * as Action from './Action';
 type RootStackParamList = {
   DetailScreen: undefined;
 };
-
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
 
 type MemberInfo = {
