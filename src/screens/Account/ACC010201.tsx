@@ -90,7 +90,7 @@ const ACC010201 = () => {
           <SubTitle
             label={title}
             value={Util.formatNumber(totalValue)}
-            fontColor={primaryColor}
+            fontColor={primaryColor || '#373747'}
           />
           <Icon name={isOpen ? 'chevron-up' : 'chevron-down'} color='#666' />
         </TouchableOpacity>
@@ -348,14 +348,12 @@ const ACC010201 = () => {
             <SalaryAccordion
               title={'지급 내역'}
               totalValue={salary?.TOTAL_SAL}
-              primaryColor={'#373747'}
               salary={salary}
               data1={sal1}
             />
             <SalaryAccordion
               title={'공제 내역'} // @@ 공제 총액 + 세액 총액 합치기
               totalValue={salary?.TOTAL_TAX + salary?.TOTAL_DEDUCTION}
-              primaryColor={'#373747'}
               salary={salary}
               data1={sal3}
               data2={sal2}
@@ -363,7 +361,6 @@ const ACC010201 = () => {
             <SalaryAccordion
               title={'계산 내역'}
               totalValue={''}
-              primaryColor={'#373747'}
               salary={salary}
               data1={etc1}
               data2={etc2}
