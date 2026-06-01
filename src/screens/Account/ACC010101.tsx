@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
@@ -6,14 +6,7 @@ import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {
-  LVButton,
-  RefreshControl,
-  ScrollView,
-  ShowPasswordIcon,
-  Text,
-  TextField,
-} from '@/src/components';
+import { LVButton, ShowPasswordIcon, Text, TextField } from '@/src/components';
 import { Util } from '@/src/lib';
 import {
   StackActions,
@@ -32,32 +25,8 @@ const ACC010101 = () => {
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const [isCertify, setIsCertify] = useState(false);
   const [password, setPassword] = useState('');
   const [visiblePwd, setVisiblePwd] = useState(false);
-
-  useEffect(() => {
-    if (isFocused) {
-      mount();
-    }
-  }, [isFocused]);
-
-  const mount = async () => {
-    setLoading(true);
-    // @@ 인증 관련해서 API 추가될 수 있음.
-    setLoading(false);
-  };
-
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      mount();
-      setRefreshing(false);
-    }, 1000);
-  };
 
   const handleSubmit = () => {
     AsyncStorage.getItem('loginPwd').then((p) => {
@@ -69,15 +38,7 @@ const ACC010101 = () => {
     });
   };
 
-  return isCertify ? (
-    <View style={styles.basicView}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      ></ScrollView>
-    </View>
-  ) : (
+  return (
     <View style={styles.basicView}>
       <View>
         <Text style={styles.hdText}>
