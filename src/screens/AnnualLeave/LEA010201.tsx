@@ -469,7 +469,7 @@ const LEA010201 = () => {
               <View style={styles.modalView}>
                 {grid.map((row, rowIdx) => {
                   return (
-                    <View key={rowIdx} style={styles.chipView}>
+                    <View key={rowIdx} style={styles.modalInsideView}>
                       {row.map((item, colIdx) =>
                         item ? (
                           <TouchableOpacity
@@ -1016,5 +1016,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '70%',
     justifyContent: 'center',
+  },
+  modalInsideView: {
+    flexDirection: 'row',
+    marginBottom: 8,
   },
 });
