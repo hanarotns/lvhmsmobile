@@ -42,7 +42,7 @@ const LEA010301 = () => {
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
   const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
 
