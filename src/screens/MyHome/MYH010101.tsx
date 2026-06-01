@@ -451,11 +451,7 @@ const MYH010101 = ({ navigation }) => {
       <Container
         onPress={onPress}
         style={{
-          width: '100%',
-          minHeight: 110,
-          borderRadius: 8,
-          backgroundColor: '#FFF',
-          padding: 8,
+          ...styles.cardView,
           ...cardStyle,
         }}
       >
@@ -793,5 +789,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginRight: 24,
     ...LVStyles.iconS,
+  },
+  cardView: {
+    width: '100%',
+    minHeight: 110,
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+    padding: 8,
   },
 });
