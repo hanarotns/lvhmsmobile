@@ -36,7 +36,6 @@ const ACC010101 = () => {
   const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
 
   const [isCertify, setIsCertify] = useState(false);
-  const [memberInfo, setMemberInfo] = useState({});
   const [password, setPassword] = useState('');
   const [visiblePwd, setVisiblePwd] = useState(false);
 
