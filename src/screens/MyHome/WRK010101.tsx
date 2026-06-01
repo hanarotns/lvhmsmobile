@@ -23,7 +23,7 @@ import {
 import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { IndexPath, Select, SelectItem } from '@ui-kitten/components';
-import * as Action from './Action'; // API통신
+import * as Action from './Action';
 
 const WRK010101 = () => {
   const isFocused = useIsFocused();

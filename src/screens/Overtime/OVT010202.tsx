@@ -25,14 +25,14 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-} from '@/src/components'; // 공통컴포넌트
+} from '@/src/components';
 import { Util } from '@/src/lib';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as PALAction from '../PersonalApprovalLine/Action'; // API통신 (개인별 결재선 분리)
-import * as Action from './Action'; // API통신
+import * as Action from './Action';
 
 type RootStackParamList = {
   DetailScreen: undefined;
@@ -51,7 +51,7 @@ const OVT010202 = () => {
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
-  const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
+  const [refreshing, setRefreshing] = useState(false);
 
   const [approvalLine, setApprovalLine] = useState([]);
   const approvalLineRef = useRef<any>(null);

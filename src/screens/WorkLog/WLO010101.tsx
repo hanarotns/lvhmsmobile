@@ -11,15 +11,14 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-} from '@/src/components'; // 공통컴포넌트
+} from '@/src/components';
 import { Util } from '@/src/lib';
 import { useIsFocused } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { Calendar } from 'react-native-calendars';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
-import * as Action from './Action'; // API통신
-
+import * as Action from './Action';
 dayjs.locale('ko');
 
 const WLO010101 = () => {

@@ -26,7 +26,7 @@ import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { IndexPath, Input, Select, SelectItem } from '@ui-kitten/components';
 import * as DocumentPicker from 'expo-document-picker';
-import * as Action from './Action'; // API통신
+import * as Action from './Action';
 
 const WRK010201 = () => {
   const isFocused = useIsFocused();

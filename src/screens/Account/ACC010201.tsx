@@ -15,12 +15,12 @@ import {
   RefreshControl,
   ScrollView,
   Text,
-} from '@/src/components'; // 공통컴포넌트
+} from '@/src/components';
 import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import * as Action from './Action'; // API통신
+import * as Action from './Action';
 
 const ACC010201 = () => {
   const isFocused = useIsFocused();
@@ -33,7 +33,7 @@ const ACC010201 = () => {
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
+  const [refreshing, setRefreshing] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
   const [salary, setSalary] = useState({});

@@ -24,13 +24,13 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-} from '@/src/components'; // 공통컴포넌트
+} from '@/src/components';
 import { Util } from '@/src/lib';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import 'dayjs/locale/ko';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
-import * as Action from './Action'; // API통신
+import * as Action from './Action';
 
 const PAL010201 = () => {
   const movingScreen = useNavigation();
@@ -43,7 +43,7 @@ const PAL010201 = () => {
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
-  const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
+  const [refreshing, setRefreshing] = useState(false);
 
   const [approvalLine, setApprovalLine] = useState({});
   const [approvalLineDt, setApprovalLineDt] = useState([]);

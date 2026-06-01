@@ -1,8 +1,7 @@
 import React from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { LVButton, LVStyles } from '@/src/components';
-
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const LaborNoticeScreen = ({ type = 'annual', data = {}, onConfirm }) => {
   const isAnnual = type === 'annual';

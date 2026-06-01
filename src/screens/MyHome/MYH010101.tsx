@@ -27,7 +27,7 @@ import {
   Text,
   TopNavigationAction,
   withPreventDoubleClick,
-} from '@/src/components'; // 공통컴포넌트
+} from '@/src/components';
 import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
@@ -35,7 +35,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as Location from 'expo-location';
 import * as WLOAction from '../WorkLog/Action'; // API통신 (공통)
-import * as Action from './Action'; // API통신
+import * as Action from './Action';
 import LaborNoticeScreen from './LaborNoticeScreen';
 
 const MYH010101 = ({ navigation }) => {
@@ -50,7 +50,7 @@ const MYH010101 = ({ navigation }) => {
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
+  const [refreshing, setRefreshing] = useState(false);
 
   const [todayInfo, setTodayInfo] = useState({});
   const [nearestOffice, setNearestOffice] = useState({});

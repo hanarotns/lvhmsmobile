@@ -26,7 +26,7 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-} from '@/src/components'; // 공통컴포넌트
+} from '@/src/components';
 import { Util } from '@/src/lib';
 import {
   RouteProp,
@@ -60,7 +60,7 @@ const LEA010201 = () => {
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
-  const [refreshing, setRefreshing] = useState(false); // 새로고침 상태를 나타내는 상태 변수
+  const [refreshing, setRefreshing] = useState(false);
 
   // mount API 기본 정보
   const [officialLeaveType, setOfficialLeaveType] = useState({});
