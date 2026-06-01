@@ -34,10 +34,6 @@ const WLO010101 = () => {
   });
   const [checkFilter, setCheckFilter] = useState([]);
   const [selectedCheckType, setSelectedCheckType] = useState('A');
-  const [offsiteInfo, setOffsiteInfo] = useState({});
-  const [isVisibleEdit, setIsVisibleEdit] = useState(false);
-  const [isVisibleDelete, setIsVisibleDelete] = useState(false);
-  const [isVisibleOff, setIsVisibleOff] = useState(false);
 
   useEffect(() => {
     if (isFocused) {
@@ -176,14 +172,7 @@ const WLO010101 = () => {
           {!Util.isEmpty(filteredList) && (
             <View>
               {filteredList.map((e, i) => (
-                <Form
-                  elem={e}
-                  key={i}
-                  setIsVisibleEdit={setIsVisibleEdit}
-                  setIsVisibleDelete={setIsVisibleDelete}
-                  setIsVisibleOff={setIsVisibleOff}
-                  setOffsiteInfo={setOffsiteInfo}
-                />
+                <Form elem={e} key={i} />
               ))}
             </View>
           )}
