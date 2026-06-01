@@ -28,7 +28,7 @@ import { IndexPath, Input, Select, SelectItem } from '@ui-kitten/components';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Action from './Action'; // API통신
 
-const WRK010201 = ({ navigation, route }) => {
+const WRK010201 = () => {
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
 
