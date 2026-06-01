@@ -93,7 +93,7 @@ const ACC010101 = () => {
           onChangeValue={(value) => setPassword(value)}
           accessoryRight={
             <ShowPasswordIcon
-              fill={'black'}
+              color='black'
               visiblePwd={visiblePwd}
               setVisible={setVisiblePwd}
             />
