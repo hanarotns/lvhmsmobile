@@ -273,11 +273,7 @@ const DocuPreviewContent = (props: any) => {
           />
           <View style={{ width: 8 }} />
           <Text numberOfLines={1} style={styles.mainText}>
-            {elem?.VAC_START === elem?.VAC_END
-              ? Util.convertDateTime(elem?.VAC_START)
-              : Util.convertDateTime(elem?.VAC_START) +
-                '...' +
-                Util.convertDateTime(elem?.VAC_END)}
+            {Util.convertDateTime(elem?.VAC_START)}
           </Text>
         </View>
         <Text
