@@ -67,16 +67,6 @@ const MYH010101 = ({ navigation }) => {
     mount();
   }, []);
 
-  useEffect(() => {
-    // 외근등록 모달 껐을 때 외근정보 초기화
-    if (!isVisibleModal) {
-      setOffsiteInfo({
-        address,
-      });
-      setCheckType('');
-    }
-  }, [isVisibleModal]);
-
   // 위치(position)가 세팅되면 그때 사무소 조회하기
   useEffect(() => {
     if (!Util.isEmpty(position)) {
@@ -84,6 +74,23 @@ const MYH010101 = ({ navigation }) => {
       getNearOfficeM();
     }
   }, [position]);
+
+  // 사원정보 저장 후, 나머지 정보도 확인.
+  useEffect(() => {
+    if (!Util.isEmpty(empInfo)) {
+      getLaborInfo();
+    }
+  }, [empInfo]);
+
+  // 외근등록 모달 껐을 때 외근정보 초기화
+  useEffect(() => {
+    if (!isVisibleModal) {
+      setOffsiteInfo({
+        address,
+      });
+      setCheckType('');
+    }
+  }, [isVisibleModal]);
 
   useEffect(() => {
     if (checkType) {
@@ -100,12 +107,15 @@ const MYH010101 = ({ navigation }) => {
     await getEmpInfoM();
     await getInfoM();
     await getLatLon();
+    setLoading(false);
+  };
+
+  const getLaborInfo = async () => {
     const payload = {
       S_COMPANY_CODE: empInfo?.COMPANY_CODE,
       S_EMP_ID: empInfo?.EMP_ID,
       S_TO_DATE: dayjs(new Date()).format('YYYYMMDD'),
     };
-
     const res1 = await Action.LaborRefusalNotice(payload);
     setLaborNotice1(res1);
     if (Util.isEmpty(res1)) {
@@ -116,7 +126,6 @@ const MYH010101 = ({ navigation }) => {
     setLaborRefusal(res3);
     if (Util.isEmpty(loginInfo)) {
     }
-    setLoading(false);
   };
 
   const handleRefresh = () => {
