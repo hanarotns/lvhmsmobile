@@ -718,50 +718,48 @@ const LEA010201 = () => {
                     </View>
                   }
                 />
-                <LVFormOfContents
-                  title={'첨부파일'}
-                  children={
-                    <View style={{ ...LVStyles.row, flex: 1 }}>
-                      {Util.isEmpty(attach) ? (
-                        <Text style={{ color: '#939DAA' }}>
-                          우측버튼을 선택하세요.
-                        </Text>
-                      ) : (
-                        <View style={{ flex: 1 }}>
-                          {attach.map((e, i) => (
-                            <View style={styles.infoListView}>
-                              <LVChip
-                                category='info'
-                                leftText={''}
-                                rightText={''}
-                                i={i}
-                              />
-                            </View>
-                          ))}
-                        </View>
-                      )}
-                      <TouchableOpacity
-                        onPress={() => {
-                          setIsVisibleAttachModal(true);
-                        }}
-                        style={styles.iconWrap}
-                      >
-                        <Icon
-                          name={
-                            Util.isEmpty(attach)
-                              ? 'plus'
-                              : 'text-box-edit-outline'
-                          }
-                          color='#27A7FF'
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  }
-                />
               </View>
             ) : (
               <></>
             )}
+            <LVFormOfContents
+              title={'첨부파일'}
+              children={
+                <View style={{ ...LVStyles.row, flex: 1 }}>
+                  {Util.isEmpty(attach) ? (
+                    <Text style={{ color: '#939DAA' }}>
+                      우측버튼을 선택하세요.
+                    </Text>
+                  ) : (
+                    <View style={{ flex: 1 }}>
+                      {attach.map((e, i) => (
+                        <View style={styles.infoListView}>
+                          <LVChip
+                            category='info'
+                            leftText={''}
+                            rightText={''}
+                            i={i}
+                          />
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                  <TouchableOpacity
+                    onPress={() => {
+                      setIsVisibleAttachModal(true);
+                    }}
+                    style={styles.iconWrap}
+                  >
+                    <Icon
+                      name={
+                        Util.isEmpty(attach) ? 'plus' : 'text-box-edit-outline'
+                      }
+                      color='#27A7FF'
+                    />
+                  </TouchableOpacity>
+                </View>
+              }
+            />
             <LVFormOfContents
               title={'내용'}
               children={
