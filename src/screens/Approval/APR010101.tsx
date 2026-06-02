@@ -43,6 +43,7 @@ const APR010101 = () => {
   const [filteredList, setFilteredList] = useState([]);
   const [apprFilter, setApprFilter] = useState([]);
   const [selectedApprType, setSelectedApprType] = useState('ALL');
+  const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
 
   useEffect(() => {
     if (isFocused) {
@@ -94,6 +95,8 @@ const APR010101 = () => {
       SS_EMP_ID: empInfo?.EMP_ID,
       SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
       ADMIN_AUTH_CHK: 'N',
+      S_ADD_DATE_FROM: selectedDate.add(-3, 'month').format('YYYYMMDD'),
+      S_ADD_DATE_TO: selectedDate.format('YYYYMMDD'),
     };
     const res2 = await Action.getListM(payload2);
     setList(res2);
