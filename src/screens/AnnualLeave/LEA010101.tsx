@@ -77,11 +77,11 @@ const LEA010101 = () => {
       // @@ 공통코드(VA_TYPE)가 무의미해서 일단 하드코딩
       {
         HQCODE: ['VY', 'VM', 'VA', 'VH', 'VE'],
-        HQNAME: '연차차감',
+        HQNAME: '연차',
       },
       {
         HQCODE: ['OD', 'OM', 'OA', 'VO', 'VOM', 'VOD'], // @@ 대체휴가는 공가가 아님
-        HQNAME: '연차미차감',
+        HQNAME: '공가',
       },
     ];
 
