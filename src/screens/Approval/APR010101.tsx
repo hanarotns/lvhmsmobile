@@ -97,6 +97,9 @@ const APR010101 = () => {
       ADMIN_AUTH_CHK: 'N',
       S_ADD_DATE_FROM: selectedDate.add(-3, 'month').format('YYYYMMDD'),
       S_ADD_DATE_TO: selectedDate.format('YYYYMMDD'),
+      // @@ 스크롤에 따른 문서 개수 조정
+      PAGE_NO_FROM: 1,
+      PAGE_NO_TO: 100,
     };
     const res2 = await Action.getListM(payload2);
     setList(res2);
