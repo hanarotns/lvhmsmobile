@@ -86,7 +86,7 @@ const MYH010101 = ({ navigation }) => {
   useEffect(() => {
     if (!isVisibleModal) {
       setOffsiteInfo({
-        address,
+        WAT_AREA_NAME: address,
       });
       setCheckType('');
     }
@@ -206,7 +206,7 @@ const MYH010101 = ({ navigation }) => {
       .join(' ');
     setAdress(tempAddress);
     setOffsiteInfo({
-      address: tempAddress,
+      WAT_AREA_NAME: tempAddress,
     });
     const result = await WLOAction.getNearOfficeM(payload);
     setTimeout(() => setNearestOffice(result), 300);
@@ -222,13 +222,15 @@ const MYH010101 = ({ navigation }) => {
       WA_TYPE: checkType,
       FWH_TYPE: 'S', // 간주근로'A' 미사용으로 선택 일반/선택'S' 하드코딩
       WAT_AREA: nearestOffice.ET_AREA_CODE,
-      WAT_AREA_NAME: nearestOffice.ET_AREA_NAME,
+      WAT_AREA_NAME:
+        checkType !== 'O'
+          ? nearestOffice.ET_AREA_NAME
+          : offsiteInfo.WAT_AREA_NAME,
       WAT_AREA_SEQ: nearestOffice.ET_SEQ_NO,
       WAT_STATUS: nearestOffice.ET_STATUS,
       // MOBILE_TOKEN: token,
-      // // 외근인 경우만.
-      // OOO_GUBUN: oooGubun,
-      // OOO_REASON: oooReason,
+      // 외근인 경우만.
+      OOO_REASON: offsiteInfo?.OOO_REASON,
     };
     const result = await WLOAction.saveM(payload);
     // 사용자 알림 메시지
@@ -249,7 +251,8 @@ const MYH010101 = ({ navigation }) => {
 
   const handleSave = async () => {
     if (checkType === 'O') {
-      if (!(offsiteInfo?.address && offsiteInfo?.name && offsiteInfo?.memo)) {
+      if (!(offsiteInfo?.WAT_AREA_NAME && offsiteInfo?.OOO_REASON)) {
+        // @@ 외근업체명: && offsiteInfo?.name
         Util.toastMsg('입력란을 모두 작성하세요.', 'info');
         return false;
       }
@@ -598,14 +601,14 @@ const ContentsOfOffsite = (props: any) => {
   const { offsiteInfo, setOffsiteInfo } = props;
   return (
     <View>
-      {Util.isEmpty(offsiteInfo?.address) ? (
+      {Util.isEmpty(offsiteInfo?.WAT_AREA_NAME) ? (
         <Input
           placeholder='외근 지역을 입력하세요.'
-          value={offsiteInfo?.address}
+          value={offsiteInfo?.WAT_AREA_NAME}
           onChangeText={(p) => {
             setOffsiteInfo({
               ...offsiteInfo,
-              address: p,
+              WAT_AREA_NAME: p,
             });
           }}
           size='large'
@@ -613,8 +616,9 @@ const ContentsOfOffsite = (props: any) => {
           textStyle={{ color: '#373747' }}
         />
       ) : (
-        <Input value={offsiteInfo?.address} disabled size='large' />
+        <Input value={offsiteInfo?.WAT_AREA_NAME} disabled size='large' />
       )}
+      {/* @@ 외근업체 컬럼 없음 */}
       <Input
         placeholder='외근 업체명을 입력하세요.'
         value={offsiteInfo?.name}
@@ -630,11 +634,11 @@ const ContentsOfOffsite = (props: any) => {
       />
       <Input
         placeholder='외근 내용을 입력하세요.'
-        value={offsiteInfo?.memo}
+        value={offsiteInfo?.OOO_REASON}
         onChangeText={(p) => {
           setOffsiteInfo({
             ...offsiteInfo,
-            memo: p,
+            OOO_REASON: p,
           });
         }}
         size='large'
