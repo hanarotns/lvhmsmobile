@@ -625,44 +625,42 @@ const LEA010201 = () => {
             <LVFormOfContents
               title={'신청정보'}
               children={
-                <>
-                  <View style={[LVStyles.row, { flex: 1 }]}>
-                    {Util.isEmpty(infoList) && (
-                      <View>
-                        <Text style={{ color: '#939DAA' }}>
-                          우측버튼을 선택하세요.
-                        </Text>
-                      </View>
-                    )}
-                    <View style={{ flex: 1 }}>
-                      {infoList?.map((e, i) => (
-                        <View style={styles.infoListView}>
-                          <LVChip
-                            category='info'
-                            leftText={e?.DISP_VA_DATE}
-                            rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
-                            i={i}
-                          />
-                        </View>
-                      ))}
+                <View style={[LVStyles.row, { flex: 1 }]}>
+                  {Util.isEmpty(infoList) && (
+                    <View>
+                      <Text style={{ color: '#939DAA' }}>
+                        우측버튼을 선택하세요.
+                      </Text>
                     </View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setIsVisibleInfoModal(true);
-                      }}
-                      style={styles.iconWrap}
-                    >
-                      <Icon
-                        name={
-                          Util.isEmpty(infoList)
-                            ? 'plus'
-                            : 'text-box-edit-outline'
-                        }
-                        color='#27A7FF'
-                      />
-                    </TouchableOpacity>
+                  )}
+                  <View style={{ flex: 1 }}>
+                    {infoList?.map((e, i) => (
+                      <View style={styles.infoListView}>
+                        <LVChip
+                          category='info'
+                          leftText={e?.DISP_VA_DATE}
+                          rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
+                          i={i}
+                        />
+                      </View>
+                    ))}
                   </View>
-                </>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setIsVisibleInfoModal(true);
+                    }}
+                    style={styles.iconWrap}
+                  >
+                    <Icon
+                      name={
+                        Util.isEmpty(infoList)
+                          ? 'plus'
+                          : 'text-box-edit-outline'
+                      }
+                      color='#27A7FF'
+                    />
+                  </TouchableOpacity>
+                </View>
               }
             />
             <LVFormOfContents
