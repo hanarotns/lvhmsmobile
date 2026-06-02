@@ -307,9 +307,40 @@ const LEA010201 = () => {
     useEffect(() => {
       // 휴가 종류까지 선택하면 값 reset
       if (!Util.isEmpty(selectedInfo?.HQCODE)) {
-        setLeaveInfoList([...leaveInfoList, selectedInfo]);
-        setSelectedInfo({});
-        setIsVisibleVaTypeModal(false);
+        // 연차, 공가, 대휴에 따른 동일 타입만 선택 가능한 로직
+        const type1 = ['VY', 'VM', 'VA', 'VH', 'VE']; // 연차
+        const type2 = ['OD', 'OM', 'OA']; // 공가
+        const type3 = ['VO', 'VOM', 'VOD']; // 대휴
+
+        const getType = (hqCode: string) => {
+          if (type1.includes(hqCode)) return 'type1';
+          if (type2.includes(hqCode)) return 'type2';
+          if (type3.includes(hqCode)) return 'type3';
+          return null;
+        };
+
+        const validateLeaveType = (
+          selectedInfo: { HQCODE: string },
+          leaveInfoList: { HQCODE: string }[],
+        ) => {
+          const selectedType = getType(selectedInfo.HQCODE);
+
+          const hasDifferentType = leaveInfoList.some(
+            (item) => getType(item.HQCODE) !== selectedType,
+          );
+
+          if (hasDifferentType) {
+            alert('동일한 휴가 유형만 선택할 수 있습니다.');
+            return false;
+          }
+          return true;
+        };
+        const result = validateLeaveType(selectedInfo, leaveInfoList);
+        if (result) {
+          setLeaveInfoList([...leaveInfoList, selectedInfo]);
+          setSelectedInfo({});
+          setIsVisibleVaTypeModal(false);
+        }
       }
     }, [selectedInfo]);
 
