@@ -97,10 +97,13 @@ const MYH010101 = ({ navigation }) => {
 
   const mount = async () => {
     setLoading(true);
+    await getEmpInfoM();
+    await getInfoM();
+    await getLatLon();
     const payload = {
       S_COMPANY_CODE: empInfo?.COMPANY_CODE,
-      S_TO_DATE: dayjs(new Date()).format('YYYYMMDD'),
       S_EMP_ID: empInfo?.EMP_ID,
+      S_TO_DATE: dayjs(new Date()).format('YYYYMMDD'),
     };
 
     const res1 = await Action.LaborRefusalNotice(payload);
@@ -113,9 +116,6 @@ const MYH010101 = ({ navigation }) => {
     setLaborRefusal(res3);
     if (Util.isEmpty(loginInfo)) {
     }
-    await getEmpInfoM();
-    await getInfoM();
-    await getLatLon();
     setLoading(false);
   };
 
@@ -322,7 +322,7 @@ const MYH010101 = ({ navigation }) => {
                   )}~${Util.convertDateTime('', todayInfo?.OFF_TIME)}`
                 : `휴일`
               : // : `${todayInfo?.CHECK_NAME}` // @@ API 변경사항 있음. (백단 완료 후 재적용)
-                `정규출퇴근이 지정되지 않았습니다.\n인사팀에 문의하세요.`}{' '}
+                `정규출퇴근이 지정되지 않았습니다.\n인사팀에 문의하세요.`}
           </Text>
         </View>
         <View style={{ height: 24 }} />

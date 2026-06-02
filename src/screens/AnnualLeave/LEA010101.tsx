@@ -61,12 +61,6 @@ const LEA010101 = () => {
       if (selectedApprType === 'ALL') {
         return true;
       } else {
-        console.log(
-          '@@ appr_TYPE',
-          selectedApprType,
-          e?.VA_TYPE,
-          selectedApprType.includes(e?.VA_TYPE),
-        );
         return selectedApprType.includes(e?.VA_TYPE);
       }
     });
