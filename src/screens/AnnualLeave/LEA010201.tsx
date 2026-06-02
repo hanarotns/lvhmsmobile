@@ -625,26 +625,25 @@ const LEA010201 = () => {
             <LVFormOfContents
               title={'신청정보'}
               children={
-                <View style={[LVStyles.row, { flex: 1 }]}>
-                  {Util.isEmpty(infoList) && (
-                    <View>
-                      <Text style={{ color: '#939DAA' }}>
-                        우측버튼을 선택하세요.
-                      </Text>
+                <View style={{ ...LVStyles.row, flex: 1 }}>
+                  {Util.isEmpty(infoList) ? (
+                    <Text style={{ color: '#939DAA' }}>
+                      우측버튼을 선택하세요.
+                    </Text>
+                  ) : (
+                    <View style={{ flex: 1 }}>
+                      {infoList?.map((e, i) => (
+                        <View style={styles.infoListView}>
+                          <LVChip
+                            category='info'
+                            leftText={e?.DISP_VA_DATE}
+                            rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
+                            i={i}
+                          />
+                        </View>
+                      ))}
                     </View>
                   )}
-                  <View style={{ flex: 1 }}>
-                    {infoList?.map((e, i) => (
-                      <View style={styles.infoListView}>
-                        <LVChip
-                          category='info'
-                          leftText={e?.DISP_VA_DATE}
-                          rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
-                          i={i}
-                        />
-                      </View>
-                    ))}
-                  </View>
                   <TouchableOpacity
                     onPress={() => {
                       setIsVisibleInfoModal(true);
@@ -722,33 +721,39 @@ const LEA010201 = () => {
                 <LVFormOfContents
                   title={'첨부파일'}
                   children={
-                    <View style={[LVStyles.row, { flex: 1 }]}>
-                      {Util.isEmpty(attach) && (
-                        <View>
-                          <Text style={{ color: '#939DAA' }}>
-                            첨부파일을 선택하세요.
-                          </Text>
+                    <View style={{ ...LVStyles.row, flex: 1 }}>
+                      {Util.isEmpty(attach) ? (
+                        <Text style={{ color: '#939DAA' }}>
+                          우측버튼을 선택하세요.
+                        </Text>
+                      ) : (
+                        <View style={{ flex: 1 }}>
+                          {attach.map((e, i) => (
+                            <View style={styles.infoListView}>
+                              <LVChip
+                                category='info'
+                                leftText={''}
+                                rightText={''}
+                                i={i}
+                              />
+                            </View>
+                          ))}
                         </View>
                       )}
-                      <View style={{ flex: 1 }}>
-                        {attach.map((e, i) => (
-                          <View style={styles.infoListView}>
-                            <LVChip
-                              category='info'
-                              leftText={''}
-                              rightText={''}
-                              i={i}
-                            />
-                          </View>
-                        ))}
-                      </View>
                       <TouchableOpacity
                         onPress={() => {
                           setIsVisibleAttachModal(true);
                         }}
                         style={styles.iconWrap}
                       >
-                        <Icon name='content-save-outline' color='#27A7FF' />
+                        <Icon
+                          name={
+                            Util.isEmpty(attach)
+                              ? 'plus'
+                              : 'text-box-edit-outline'
+                          }
+                          color='#27A7FF'
+                        />
                       </TouchableOpacity>
                     </View>
                   }
