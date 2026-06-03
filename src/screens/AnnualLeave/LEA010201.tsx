@@ -497,21 +497,10 @@ const LEA010201 = () => {
                       ))}
                     </View>
                   )}
-                  <TouchableOpacity
-                    onPress={() => {
-                      setIsVisibleInfoModal(true);
-                    }}
-                    style={styles.iconWrap}
-                  >
-                    <Icon
-                      name={
-                        Util.isEmpty(infoList)
-                          ? 'plus'
-                          : 'text-box-edit-outline'
-                      }
-                      color='#27A7FF'
-                    />
-                  </TouchableOpacity>
+                  <AddNEditIconButton
+                    onVisible={setIsVisibleInfoModal}
+                    data={infoList}
+                  />
                 </View>
               }
             />
@@ -597,19 +586,10 @@ const LEA010201 = () => {
                       ))}
                     </View>
                   )}
-                  <TouchableOpacity
-                    onPress={() => {
-                      setIsVisibleAttachModal(true);
-                    }}
-                    style={styles.iconWrap}
-                  >
-                    <Icon
-                      name={
-                        Util.isEmpty(attach) ? 'plus' : 'text-box-edit-outline'
-                      }
-                      color='#27A7FF'
-                    />
-                  </TouchableOpacity>
+                  <AddNEditIconButton
+                    onVisible={setIsVisibleAttachModal}
+                    data={attach}
+                  />
                 </View>
               }
             />
@@ -690,6 +670,23 @@ const LEA010201 = () => {
   );
 };
 export default LEA010201;
+
+const AddNEditIconButton = (props) => {
+  const { onVisible, data } = props;
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        onVisible(true);
+      }}
+      style={styles.iconWrap}
+    >
+      <Icon
+        name={Util.isEmpty(data) ? 'plus' : 'text-box-edit-outline'}
+        color='#27A7FF'
+      />
+    </TouchableOpacity>
+  );
+};
 
 const sortedArr = [
   'VY',
