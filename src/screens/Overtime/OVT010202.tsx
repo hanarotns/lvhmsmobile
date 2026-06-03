@@ -130,7 +130,7 @@ const OVT010202 = () => {
         >
           <View style={styles.container}>
             <LVFormOfContents
-              title={'신청정보'}
+              title={'결재선'}
               children={
                 <LVApprLineForm
                   approvalLine={approvalLine}
