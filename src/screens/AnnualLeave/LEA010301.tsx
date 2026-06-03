@@ -296,7 +296,7 @@ const LEA010301 = () => {
             />
           </View>
         </ScrollView>
-        {!route.params.M_APPR_MEMBER_RANK_NAME && dt?.APPR_STATUS !== '02' && (
+        {route?.params?.RQ_EMP_ID === empInfo?.EMP_ID && (
           // 상신자 사용
           <View style={LVStyles.bottomButtonView}>
             <LVButton
@@ -329,7 +329,7 @@ const LEA010301 = () => {
             />
           </View>
         )}
-        {route.params.M_APPR_MEMBER_RANK_NAME && (
+        {route?.params?.RQ_EMP_ID !== empInfo?.EMP_ID && (
           // 결재자 사용
           <View style={LVStyles.bottomButtonView}>
             <LVButton
