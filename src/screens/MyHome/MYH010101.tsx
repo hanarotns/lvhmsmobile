@@ -106,7 +106,7 @@ const MYH010101 = ({ navigation }) => {
     setLoading(true);
     await getEmpInfoM();
     await getInfoM();
-    await getLatLon();
+    // await getLatLon();
     setLoading(false);
   };
 
@@ -126,14 +126,6 @@ const MYH010101 = ({ navigation }) => {
     setLaborRefusal(res3);
     if (Util.isEmpty(loginInfo)) {
     }
-  };
-
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      mount();
-      setRefreshing(false);
-    }, 1000);
   };
 
   const getEmpInfoM = async () => {
@@ -262,6 +254,14 @@ const MYH010101 = ({ navigation }) => {
     await saveM(checkType);
     // 근태 타입 초기화
     setCheckType('');
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      mount();
+      setRefreshing(false);
+    }, 1000);
   };
 
   const LayoutOfGreeting = () => {

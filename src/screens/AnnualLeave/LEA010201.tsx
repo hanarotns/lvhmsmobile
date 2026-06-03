@@ -147,14 +147,6 @@ const LEA010201 = () => {
     return true;
   };
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      mount();
-      setRefreshing(false);
-    }, 1000);
-  };
-
   const handleSubmit = async () => {
     const isCheck = await checkLogic();
     if (!isCheck) {
@@ -168,6 +160,14 @@ const LEA010201 = () => {
         movingScreen.goBack();
       }, 1200);
     }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      mount();
+      setRefreshing(false);
+    }, 1000);
   };
 
   const ContentsOfInfo = forwardRef((props: any, ref) => {

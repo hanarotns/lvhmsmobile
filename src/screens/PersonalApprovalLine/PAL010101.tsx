@@ -97,20 +97,20 @@ const PAL010101 = () => {
     setLoading(false);
   };
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      mount();
-      setRefreshing(false);
-    }, 1000);
-  };
-
   const handleDelete = async () => {
     await Action.deleteM({
       H_TP_SEQ: selectedAppr?.H_TP_SEQ,
     });
     await mount();
     setIsVisibleDelete(false);
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      mount();
+      setRefreshing(false);
+    }, 1000);
   };
 
   const ContentsOfApproval = forwardRef((props: any, ref) => {

@@ -61,14 +61,6 @@ const OVT010201 = () => {
     setLoading(false);
   };
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      mount();
-      setRefreshing(false);
-    }, 1000);
-  };
-
   const handleSubmit = async () => {
     const approvalInfo = {
       APPR_TITLE: '시간외근무신청',
@@ -104,6 +96,14 @@ const OVT010201 = () => {
         movingScreen.goBack();
       }, 1200);
     }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      mount();
+      setRefreshing(false);
+    }, 1000);
   };
 
   return (

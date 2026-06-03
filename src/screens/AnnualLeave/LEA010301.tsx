@@ -179,14 +179,6 @@ const LEA010301 = () => {
     setLoading(false);
   };
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      mount();
-      setRefreshing(false);
-    }, 1000);
-  };
-
   // 상신자
   const handleRecall = async () => {
     const result = await Action.save({
@@ -289,6 +281,14 @@ const LEA010301 = () => {
         movingScreen.goBack();
       }, 1200);
     }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      mount();
+      setRefreshing(false);
+    }, 1000);
   };
 
   return (

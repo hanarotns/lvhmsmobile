@@ -68,14 +68,6 @@ const PAL010201 = () => {
     setLoading(false);
   };
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      mount();
-      setRefreshing(false);
-    }, 1000);
-  };
-
   const handleSave = async () => {
     const result = await Action.saveMobile(
       { ...approvalLine, ...empInfo },
@@ -93,6 +85,14 @@ const PAL010201 = () => {
 
   const handleDeleteApprovalLine = (index: number) => {
     setApprovalLineDt((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      mount();
+      setRefreshing(false);
+    }, 1000);
   };
 
   const ContentsOfApproval = forwardRef((props: any, ref) => {
