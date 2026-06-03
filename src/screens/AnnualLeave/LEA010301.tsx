@@ -74,92 +74,6 @@ const LEA010301 = () => {
       APPROVAL_NO: route?.params?.APPROVAL_NO,
     };
     let detail = await Action.getDt(payload);
-    const customVaType = {
-      VY: {
-        HQNAME_01: '연차',
-        HQNAME_02: '종일',
-        HQNAME_03: '연차',
-        DAY_01: 1,
-        DAY_02: 1,
-      },
-      VM: {
-        HQNAME_01: '반차',
-        HQNAME_02: '오전',
-        HQNAME_03: '오전반차',
-        DAY_01: 0.5,
-        DAY_02: 0.5,
-      },
-      VA: {
-        HQNAME_01: '반차',
-        HQNAME_02: '오후',
-        HQNAME_03: '오후반차',
-        DAY_01: 0.5,
-        DAY_02: 0.5,
-      },
-      VH: {
-        HQNAME_01: '',
-        HQNAME_02: '보건',
-        HQNAME_03: '보건',
-        DAY_01: 1,
-        DAY_02: 1,
-      },
-      VE: {
-        HQNAME_01: '',
-        HQNAME_02: '조퇴',
-        HQNAME_03: '조퇴',
-        DAY_01: 0,
-        DAY_02: 0,
-      },
-      AA: {
-        HQNAME_01: '',
-        HQNAME_02: '조퇴',
-        HQNAME_03: '조퇴',
-        DAY_01: 0,
-        DAY_02: 0,
-      },
-      VO: {
-        HQNAME_01: '대휴',
-        HQNAME_02: '종일',
-        HQNAME_03: '대체휴가',
-        DAY_01: 1,
-        DAY_02: 0,
-      },
-      VOM: {
-        HQNAME_01: '대휴',
-        HQNAME_02: '오전',
-        HQNAME_03: '오전대체휴가',
-        DAY_01: 0.5,
-        DAY_02: 0,
-      },
-      VOD: {
-        HQNAME_01: '대휴',
-        HQNAME_02: '오후',
-        HQNAME_03: '오후대체휴가',
-        DAY_01: 0.5,
-        DAY_02: 0,
-      },
-      OD: {
-        HQNAME_01: '공가',
-        HQNAME_02: '종일',
-        HQNAME_03: '공가',
-        DAY_01: 1,
-        DAY_02: 0,
-      },
-      OM: {
-        HQNAME_01: '공가',
-        HQNAME_02: '오전',
-        HQNAME_03: '오전공가',
-        DAY_01: 0.5,
-        DAY_02: 0,
-      },
-      OA: {
-        HQNAME_01: '공가',
-        HQNAME_02: '오후',
-        HQNAME_03: '오후공가',
-        DAY_01: 0.5,
-        DAY_02: 0,
-      },
-    };
 
     detail = detail.map((e) => ({
       ...e,
@@ -473,6 +387,93 @@ const ContentsOfRefusal = (props: any) => {
       />
     </View>
   );
+};
+
+const customVaType = {
+  VY: {
+    HQNAME_01: '연차',
+    HQNAME_02: '종일',
+    HQNAME_03: '연차',
+    DAY_01: 1,
+    DAY_02: 1,
+  },
+  VM: {
+    HQNAME_01: '반차',
+    HQNAME_02: '오전',
+    HQNAME_03: '오전반차',
+    DAY_01: 0.5,
+    DAY_02: 0.5,
+  },
+  VA: {
+    HQNAME_01: '반차',
+    HQNAME_02: '오후',
+    HQNAME_03: '오후반차',
+    DAY_01: 0.5,
+    DAY_02: 0.5,
+  },
+  VH: {
+    HQNAME_01: '',
+    HQNAME_02: '보건',
+    HQNAME_03: '보건',
+    DAY_01: 1,
+    DAY_02: 1,
+  },
+  VE: {
+    HQNAME_01: '',
+    HQNAME_02: '조퇴',
+    HQNAME_03: '조퇴',
+    DAY_01: 0,
+    DAY_02: 0,
+  },
+  AA: {
+    HQNAME_01: '',
+    HQNAME_02: '조퇴',
+    HQNAME_03: '조퇴',
+    DAY_01: 0,
+    DAY_02: 0,
+  },
+  VO: {
+    HQNAME_01: '대휴',
+    HQNAME_02: '종일',
+    HQNAME_03: '대체휴가',
+    DAY_01: 1,
+    DAY_02: 0,
+  },
+  VOM: {
+    HQNAME_01: '대휴',
+    HQNAME_02: '오전',
+    HQNAME_03: '오전대체휴가',
+    DAY_01: 0.5,
+    DAY_02: 0,
+  },
+  VOD: {
+    HQNAME_01: '대휴',
+    HQNAME_02: '오후',
+    HQNAME_03: '오후대체휴가',
+    DAY_01: 0.5,
+    DAY_02: 0,
+  },
+  OD: {
+    HQNAME_01: '공가',
+    HQNAME_02: '종일',
+    HQNAME_03: '공가',
+    DAY_01: 1,
+    DAY_02: 0,
+  },
+  OM: {
+    HQNAME_01: '공가',
+    HQNAME_02: '오전',
+    HQNAME_03: '오전공가',
+    DAY_01: 0.5,
+    DAY_02: 0,
+  },
+  OA: {
+    HQNAME_01: '공가',
+    HQNAME_02: '오후',
+    HQNAME_03: '오후공가',
+    DAY_01: 0.5,
+    DAY_02: 0,
+  },
 };
 
 const styles = StyleSheet.create({
