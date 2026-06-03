@@ -69,23 +69,7 @@ const LEA010101 = () => {
 
   const mount = async () => {
     setLoading(true);
-    const allFilter = {
-      HQCODE: 'ALL',
-      HQNAME: '전체',
-    };
-    let resOfApprType = [
-      // @@ 공통코드(VA_TYPE)가 무의미해서 일단 하드코딩
-      {
-        HQCODE: ['VY', 'VM', 'VA', 'VH', 'VE'],
-        HQNAME: '연차',
-      },
-      {
-        HQCODE: ['OD', 'OM', 'OA', 'VO', 'VOM', 'VOD'], // @@ 대체휴가는 공가가 아님
-        HQNAME: '공가',
-      },
-    ];
-
-    setApprFilter([allFilter, ...resOfApprType]);
+    setApprFilter([allFilter, ...restFilter]);
 
     const payload1 = {
       S_COMPANY_CODE: empInfo?.COMPANY_CODE,
@@ -303,6 +287,22 @@ const ContentsOfAlert = (props: any) => {
     </View>
   );
 };
+
+const allFilter = {
+  HQCODE: 'ALL',
+  HQNAME: '전체',
+};
+
+let restFilter = [
+  {
+    HQCODE: ['VY', 'VM', 'VA', 'VH', 'VE'],
+    HQNAME: '연차',
+  },
+  {
+    HQCODE: ['OD', 'OM', 'OA', 'VO', 'VOM', 'VOD'], // @@ 대체휴가는 공가가 아님
+    HQNAME: '공가',
+  },
+];
 
 const styles = StyleSheet.create({
   header: {

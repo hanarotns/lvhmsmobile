@@ -68,10 +68,6 @@ const APR010101 = () => {
     let resOfApprType = await COMAction.getCode('code', 'PC0001', {
       GCODE: 'RQ_TYPE',
     });
-    const allFilter = {
-      HQCODE: 'ALL',
-      HQNAME: '전체',
-    };
     setSelectedApprType('ALL');
     const sortedArr = ['VA', 'ND', 'NC'];
     resOfApprType = resOfApprType.filter((e) => {
@@ -269,6 +265,11 @@ const Filter = (props: any) => {
       <Text style={styles.filterText}>{filteredList?.length} 건</Text>
     </View>
   );
+};
+
+const allFilter = {
+  HQCODE: 'ALL',
+  HQNAME: '전체',
 };
 
 const styles = StyleSheet.create({

@@ -61,10 +61,6 @@ const WLO010101 = () => {
     let resOfCheckType = await COMAction.getCode('code', 'PC0001', {
       GCODE: 'WA_TYPE',
     });
-    const allFilter = {
-      HQCODE: 'A',
-      HQNAME: '전체',
-    };
 
     const sortedArr = ['S', 'E', 'O'];
     resOfCheckType = resOfCheckType.filter((e) => {
@@ -303,6 +299,11 @@ const Filter = (props: any) => {
       ))}
     </View>
   );
+};
+
+const allFilter = {
+  HQCODE: 'A',
+  HQNAME: '전체',
 };
 
 const styles = StyleSheet.create({
