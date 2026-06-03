@@ -322,17 +322,10 @@ const LEA010301 = () => {
                       <View style={styles.detailView}>
                         <LVChip
                           category='info'
-                          leftText={`${Util.convertDateTime(e?.VA_DATE)} (${dayjs(
-                            e?.VA_DATE,
-                            'YYYYMMDD',
-                          )
-                            .locale('ko')
-                            .format('ddd')})`}
+                          leftText={`${Util.convertDateTime(e?.VA_DATE)} (${dayjs(e?.VA_DATE, 'YYYYMMDD').locale('ko').format('ddd')})`}
                           rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
                           i={i}
-                          chipStyle={{
-                            marginBottom: 0,
-                          }}
+                          chipStyle={{ marginBottom: 0 }}
                         />
                       </View>
                     ))}
@@ -427,9 +420,7 @@ const LEA010301 = () => {
                 borderWidth: 1,
                 borderColor: '#D5DCE5',
               }}
-              textStyle={{
-                color: '#373747',
-              }}
+              textStyle={{ color: '#373747' }}
             />
             <View style={{ width: 8 }} />
             <LVButton
