@@ -34,6 +34,9 @@ import {
   ScrollView,
   Text,
 } from '@/src/components';
+import ImageAttachment, {
+  AttachedImage,
+} from '@/src/components/ImageAttachment';
 import { Util } from '@/src/lib';
 import { calendarTheme } from '@/src/theme/calendarTheme';
 import {
@@ -91,6 +94,7 @@ const LEA010201 = () => {
   // 파일 첨부
   const [selectedAttachType, setSelectedAttachType] = useState('photo');
   const [fileList, setFileList] = useState([]);
+  const [images, setImages] = useState<AttachedImage[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
 
@@ -564,7 +568,11 @@ const LEA010201 = () => {
               <ScrollView style={{ height: 200, margin: 16 }}>
                 {selectedAttachType === 'photo' && (
                   <>
-                    <Text>사진화면</Text>
+                    <ImageAttachment
+                      images={images}
+                      onChangeImages={setImages}
+                      maxCount={5}
+                    />
                   </>
                 )}
                 {selectedAttachType === 'file' && (
