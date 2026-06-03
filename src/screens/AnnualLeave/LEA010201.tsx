@@ -457,19 +457,6 @@ const LEA010201 = () => {
     );
   });
 
-  const [visiblePhotoList, setVisiblePhotoList] = useState(false);
-  const CameraButton = () => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          setVisiblePhotoList(!visiblePhotoList);
-        }}
-      >
-        <Icon name='content-save-outline' color='#27A7FF' />
-      </TouchableOpacity>
-    );
-  };
-
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
@@ -690,11 +677,7 @@ const LEA010201 = () => {
         <LVModal
           title={'첨부파일을 추가하세요!'}
           buttonText={'선택'}
-          contents={
-            <View>
-              <CameraButton />
-            </View>
-          }
+          contents={<View></View>}
           onVisible={setIsVisibleAttachModal}
           onOk={() => {
             // @@
