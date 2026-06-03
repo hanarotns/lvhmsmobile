@@ -106,7 +106,7 @@ const MYH010101 = ({ navigation }) => {
     setLoading(true);
     await getEmpInfoM();
     await getInfoM();
-    // await getLatLon();
+    await getLatLon();
     setLoading(false);
   };
 
