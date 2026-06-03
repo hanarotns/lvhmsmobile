@@ -337,50 +337,37 @@ const OVT010301 = () => {
             />
           </View>
         </ScrollView>
-        {!route.params.M_APPR_MEMBER_RANK_NAME ? (
+        {!route.params.M_APPR_MEMBER_RANK_NAME && (
           // 상신자 사용
           <View style={LVStyles.bottomButtonView}>
             <LVButton
               title={'회수'}
               onPress={handleRecall}
-              buttonStyle={{
-                flex: 1,
-                backgroundColor: '#FFF',
-                borderWidth: 1,
-                borderColor: '#D5DCE5',
-              }}
-              textStyle={{
-                color: '#373747',
-              }}
+              buttonStyle={styles.recallButton}
+              textStyle={styles.recallButtonText}
             />
             <View style={{ width: 8 }} />
             <LVButton
               title={'삭제'}
               onPress={handleCancel}
-              buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
+              buttonStyle={styles.cancelButton}
             />
             <View style={{ width: 8 }} />
             <LVButton
               title={'상신'}
               onPress={handleReApprove}
-              buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
+              buttonStyle={styles.reApproveButton}
             />
           </View>
-        ) : (
+        )}
+        {route.params.M_APPR_MEMBER_RANK_NAME && (
           // 결재자 사용
           <View style={LVStyles.bottomButtonView}>
             <LVButton
               title={'회수'}
               onPress={handleRecallForApprover}
-              buttonStyle={{
-                flex: 1,
-                backgroundColor: '#FFF',
-                borderWidth: 1,
-                borderColor: '#D5DCE5',
-              }}
-              textStyle={{
-                color: '#373747',
-              }}
+              buttonStyle={styles.recallButton}
+              textStyle={styles.recallButtonText}
             />
             <View style={{ width: 8 }} />
             <LVButton
@@ -388,13 +375,13 @@ const OVT010301 = () => {
               onPress={() => {
                 setIsVisibleModal(true);
               }}
-              buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
+              buttonStyle={styles.cancelButton}
             />
             <View style={{ width: 8 }} />
             <LVButton
               title={'결재'}
               onPress={handleApproveForApprover}
-              buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
+              buttonStyle={styles.reApproveButton}
             />
           </View>
         )}
@@ -481,5 +468,22 @@ const styles = StyleSheet.create({
     borderColor: '#FF9E3C',
     backgroundColor: '#FFF7EF',
     maxWidth: 100,
+  },
+  recallButton: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  recallButtonText: {
+    color: '#373747',
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: '#939DAA',
+  },
+  reApproveButton: {
+    flex: 1,
+    backgroundColor: '#27A7FF',
   },
 });

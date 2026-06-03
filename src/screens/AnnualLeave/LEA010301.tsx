@@ -404,7 +404,7 @@ const LEA010301 = () => {
             <LVButton
               title={'변경'}
               onPress={handleAgain}
-              buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
+              buttonStyle={styles.reApproveButton}
             />
           </View>
         )}
@@ -414,13 +414,8 @@ const LEA010301 = () => {
             <LVButton
               title={'회수'}
               onPress={handleRecallForApprover}
-              buttonStyle={{
-                flex: 1,
-                backgroundColor: '#FFF',
-                borderWidth: 1,
-                borderColor: '#D5DCE5',
-              }}
-              textStyle={{ color: '#373747' }}
+              buttonStyle={styles.recallButton}
+              textStyle={styles.recallButtonText}
             />
             <View style={{ width: 8 }} />
             <LVButton
@@ -428,13 +423,13 @@ const LEA010301 = () => {
               onPress={() => {
                 setIsVisibleModal(true);
               }}
-              buttonStyle={{ flex: 1, backgroundColor: '#939DAA' }}
+              buttonStyle={styles.cancelButton}
             />
             <View style={{ width: 8 }} />
             <LVButton
               title={'결재'}
               onPress={handleApproveForApprover}
-              buttonStyle={{ flex: 1, backgroundColor: '#27A7FF' }}
+              buttonStyle={styles.reApproveButton}
             />
           </View>
         )}
