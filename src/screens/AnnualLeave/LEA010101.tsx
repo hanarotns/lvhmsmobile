@@ -156,9 +156,8 @@ const LEA010101 = () => {
             setSelectedDate={setSelectedDate}
             gap='year'
             content={
-              `${Util.convertDateTime(
-                stats?.APPLY_S_DATE,
-              )} ~ ${Util.convertDateTime(stats?.APPLY_E_DATE)}` || '-'
+              `${Util.convertDateTime(stats?.APPLY_S_DATE)} ~ ${Util.convertDateTime(stats?.APPLY_E_DATE)}` ||
+              '-'
             }
           />
           <LayoutOfStats stats={stats} />
