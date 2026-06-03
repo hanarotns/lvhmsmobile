@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
@@ -38,14 +38,11 @@ const OVT010201 = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [approvalLine, setApprovalLine] = useState([]);
-  const approvalLineRef = useRef<any>(null);
   const [fromDateTime, setFromDateTime] = useState<Date>(new Date());
   const [toDateTime, setToDateTime] = useState<Date>(new Date());
   const [overtimeTypeList, setOvertimeTypeList] = useState([]);
   const [selectedType, setSelectedType] = useState({});
   const [overtimeInfo, setOvertimeInfo] = useState({}); // 시간외 결재문서 정보
-  const [myApprList, setMyApprList] = useState([]);
-  const [isVisibleApprovalModal, setIsVisibleApprovalModal] = useState(false);
 
   useEffect(() => {
     mount();

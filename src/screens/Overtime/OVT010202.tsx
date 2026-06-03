@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
@@ -43,14 +43,11 @@ const OVT010202 = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [approvalLine, setApprovalLine] = useState([]);
-  const approvalLineRef = useRef<any>(null);
   const [changeReason, setChangeReason] = useState('');
-  const [isVisibleApprovalModal, setIsVisibleApprovalModal] = useState(false);
   const [isCheckOfDate, setIsCheckOfDate] = useState(false);
   const [initTime, setInitTime] = useState('');
   const [changeTime, setChangeTime] = useState('');
   const [overtimeInfo, setOvertimeInfo] = useState({}); // 시간외 결재문서 정보
-  const [myApprList, setMyApprList] = useState([]);
   const [dt, setDt] = useState({});
 
   useEffect(() => {

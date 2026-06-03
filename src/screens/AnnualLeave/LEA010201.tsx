@@ -65,7 +65,6 @@ const LEA010201 = () => {
 
   // mount API 기본 정보
   const [officialLeaveType, setOfficialLeaveType] = useState({});
-  const [myApprList, setMyApprList] = useState([]);
   // 휴가 HD
   const [hd, setHd] = useState({
     MEMO: '',
@@ -80,9 +79,7 @@ const LEA010201 = () => {
   const [attach, setAttach] = useState([]);
   // 결재선
   const [approvalLine, setApprovalLine] = useState([]);
-  const approvalLineRef = useRef<any>(null);
 
-  const [isVisibleApprovalModal, setIsVisibleApprovalModal] = useState(false);
   const [isVisibleInfoModal, setIsVisibleInfoModal] = useState(false);
   const [isVisibleAttachModal, setIsVisibleAttachModal] = useState(false);
 
