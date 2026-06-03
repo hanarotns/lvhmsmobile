@@ -1,0 +1,151 @@
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+
+import { LVApprLine, LVChip, LVStyles, Text } from '@/src/components';
+import 'dayjs/locale/ko';
+
+const LVApprList = forwardRef((props: any, ref) => {
+  const { myApprList } = props;
+
+  const [selectedAppr, setSelectedAppr] = useState({});
+  useImperativeHandle(ref, () => ({
+    getSelectedValues: () => ({
+      selectedAppr,
+    }),
+  }));
+
+  return (
+    <View>
+      {myApprList?.map((e, i) => {
+        return (
+          <TouchableOpacity
+            key={e?.H_TP_SEQ || i}
+            style={{
+              ...styles.myApprListView,
+              borderColor:
+                selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ ? '#27A7FF' : '#6A727B',
+              backgroundColor:
+                selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ ? '#EEF8FF' : '#F0F2F6',
+            }}
+            onPress={() => {
+              setSelectedAppr(e);
+            }}
+          >
+            <View style={{ flex: 1 }}>
+              <View style={styles.myApprListTitleView}>
+                <LVChip category='apprLineFlag' title='일반' />
+                <View style={{ width: 8 }} />
+                <Text style={styles.myApprListTitle}>{e?.APPR_LINE_NAME}</Text>
+              </View>
+              <View style={{ height: 8 }} />
+              <LVApprLine
+                data={e?.DETAILS}
+                mainColor={'#6A727B'}
+                reqApproval={true}
+              />
+            </View>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+});
+
+export default LVApprList;
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#FFF',
+    borderColor: '#27A7FF',
+    borderWidth: 1,
+    padding: 10,
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  cancelButtonText: {
+    color: '#373747',
+  },
+  iconOfarrow: {
+    ...LVStyles.iconS,
+    tintColor: '#454D58',
+    borderRadius: 4,
+    borderWidth: 0.75,
+    borderColor: '#D5DCE5',
+  },
+  myApprListView: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#D5DCE5',
+  },
+  myApprListTitleView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  myApprListTitle: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: '#373747',
+  },
+  selectedDisp: {
+    borderTopWidth: 1,
+    borderTopColor: '#F0F2F6',
+    height: '100%',
+    padding: 8,
+  },
+  chipView: {
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  modalView: {
+    padding: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  iconWrap: {
+    marginLeft: 8,
+    width: 32,
+    height: 32,
+    borderWidth: 2,
+    borderColor: '#27A7FF',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  infoListView: {
+    height: 48,
+    justifyContent: 'center',
+  },
+  leavedayCalculation: {
+    margin: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  selectBoxWrap: {
+    flex: 1,
+    width: '70%',
+    justifyContent: 'center',
+  },
+  modalInsideView: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

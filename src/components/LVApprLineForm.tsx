@@ -14,6 +14,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 import {
   Icon,
   LVApprLine,
+  LVApprList,
   LVButton,
   LVChip,
   LVModal,
@@ -94,57 +95,6 @@ const LVApprLineForm = (props: any) => {
     setApprovalLine(defaultAppr?.DETAILS);
   };
 
-  const ContentsOfApproval = forwardRef((props: any, ref) => {
-    const [selectedAppr, setSelectedAppr] = useState({});
-    useImperativeHandle(ref, () => ({
-      getSelectedValues: () => ({
-        selectedAppr,
-      }),
-    }));
-
-    return (
-      <View>
-        {myApprList?.map((e, i) => {
-          return (
-            <TouchableOpacity
-              key={e?.H_TP_SEQ || i}
-              style={{
-                ...styles.myApprListView,
-                borderColor:
-                  selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ
-                    ? '#27A7FF'
-                    : '#6A727B',
-                backgroundColor:
-                  selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ
-                    ? '#EEF8FF'
-                    : '#F0F2F6',
-              }}
-              onPress={() => {
-                setSelectedAppr(e);
-              }}
-            >
-              <View style={{ flex: 1 }}>
-                <View style={styles.myApprListTitleView}>
-                  <LVChip category='apprLineFlag' title='일반' />
-                  <View style={{ width: 8 }} />
-                  <Text style={styles.myApprListTitle}>
-                    {e?.APPR_LINE_NAME}
-                  </Text>
-                </View>
-                <View style={{ height: 8 }} />
-                <LVApprLine
-                  data={e?.DETAILS}
-                  mainColor={'#6A727B'}
-                  reqApproval={true}
-                />
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
-  });
-
   return (
     <>
       {!Util.isEmpty(approvalLine) ? (
@@ -188,7 +138,9 @@ const LVApprLineForm = (props: any) => {
             <LVModal
               title={'내 결재선을 선택하세요!'}
               buttonText={'선택'}
-              contents={<ContentsOfApproval ref={approvalLineRef} />}
+              contents={
+                <LVApprList ref={approvalLineRef} myApprList={myApprList} />
+              }
               onVisible={setIsVisibleApprovalModal}
               onOk={() => {
                 // 1. 자식에서 선택값 가져오기
@@ -307,4 +259,51 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+});
+
+const ContentsOfApproval = forwardRef((props: any, ref) => {
+  const { myApprList } = props;
+
+  const [selectedAppr, setSelectedAppr] = useState({});
+  useImperativeHandle(ref, () => ({
+    getSelectedValues: () => ({
+      selectedAppr,
+    }),
+  }));
+
+  return (
+    <View>
+      {myApprList?.map((e, i) => {
+        return (
+          <TouchableOpacity
+            key={e?.H_TP_SEQ || i}
+            style={{
+              ...styles.myApprListView,
+              borderColor:
+                selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ ? '#27A7FF' : '#6A727B',
+              backgroundColor:
+                selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ ? '#EEF8FF' : '#F0F2F6',
+            }}
+            onPress={() => {
+              setSelectedAppr(e);
+            }}
+          >
+            <View style={{ flex: 1 }}>
+              <View style={styles.myApprListTitleView}>
+                <LVChip category='apprLineFlag' title='일반' />
+                <View style={{ width: 8 }} />
+                <Text style={styles.myApprListTitle}>{e?.APPR_LINE_NAME}</Text>
+              </View>
+              <View style={{ height: 8 }} />
+              <LVApprLine
+                data={e?.DETAILS}
+                mainColor={'#6A727B'}
+                reqApproval={true}
+              />
+            </View>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
 });

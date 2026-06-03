@@ -3,6 +3,7 @@ import LVStyles from './LVStyles';
 
 import LVApprLine from './LVApprLine';
 import LVApprLineForm from './LVApprLineForm';
+import LVApprList from './LVApprList';
 import LVButton from './LVButton';
 import LVCard from './LVCard';
 import LVCheckBox from './LVCheckBox';
@@ -85,6 +86,7 @@ export {
   List,
   LVApprLine,
   LVApprLineForm,
+  LVApprList,
   LVButton,
   LVCard,
   LVCheckBox,
