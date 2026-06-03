@@ -238,7 +238,7 @@ const SignIn = ({ navigation }) => {
               }}
             />
           }
-          onVisible={ServerChangeModal}
+          onVisible={setVisibleServerChange}
           onOk={handleChange}
         />
       )}
