@@ -167,293 +167,6 @@ const LEA010201 = () => {
     }, 1000);
   };
 
-  const ContentsOfInfo = forwardRef((props: any, ref) => {
-    const isFocused = useIsFocused();
-
-    const [leaveTypeList, setLeaveTypeList] = useState([]);
-    const [selectedInfo, setSelectedInfo] = useState({});
-    const [leaveInfoList, setLeaveInfoList] = useState([]);
-
-    const [calDispList, setCalDispList] = useState({});
-    const [isVisibleVaTypeModal, setIsVisibleVaTypeModal] = useState(false);
-
-    useImperativeHandle(ref, () => ({
-      getSelectedValues: () => ({
-        leaveInfoList,
-      }),
-    }));
-
-    useEffect(() => {
-      if (isFocused) {
-        let initYearMonth = !Util.isEmpty(selectedInfo?.date)
-          ? selectedInfo?.date?.replace(/-/g, '').substring(0, 6)
-          : dayjs().format('YYYYMM');
-        mount(initYearMonth);
-      }
-    }, [isFocused]);
-
-    useEffect(() => {
-      // 휴가 종류까지 선택하면 값 reset
-      if (!Util.isEmpty(selectedInfo?.HQCODE)) {
-        // 연차, 공가, 대휴에 따른 동일 타입만 선택 가능한 로직
-        const type1 = ['VY', 'VM', 'VA', 'VH', 'VE']; // 연차
-        const type2 = ['OD', 'OM', 'OA']; // 공가
-        const type3 = ['VO', 'VOM', 'VOD']; // 대휴
-
-        const getType = (hqCode: string) => {
-          if (type1.includes(hqCode)) return 'type1';
-          if (type2.includes(hqCode)) return 'type2';
-          if (type3.includes(hqCode)) return 'type3';
-          return null;
-        };
-
-        const validateLeaveType = (
-          selectedInfo: { HQCODE: string },
-          leaveInfoList: { HQCODE: string }[],
-        ) => {
-          const selectedType = getType(selectedInfo.HQCODE);
-
-          const hasDifferentType = leaveInfoList.some(
-            (item) => getType(item.HQCODE) !== selectedType,
-          );
-
-          if (hasDifferentType) {
-            alert('동일한 휴가 유형만 선택할 수 있습니다.');
-            return false;
-          }
-          return true;
-        };
-        const result = validateLeaveType(selectedInfo, leaveInfoList);
-        if (result) {
-          setLeaveInfoList([...leaveInfoList, selectedInfo]);
-          setSelectedInfo({});
-          setIsVisibleVaTypeModal(false);
-        }
-      }
-    }, [selectedInfo]);
-
-    const mount = async (yearMonthParam: string) => {
-      let res = await COMAction.getPopup('PC0008T', {
-        VA_TYPE_CODE: '연차',
-        WEB_YN: 'Y',
-        GCODE: 'VA_TYPE',
-        USER_LANG: 'KO',
-      });
-
-      res = res
-        .filter((e) => sortedArr.includes(e?.HQCODE))
-        .map((e) => ({
-          ...e,
-          ...(customVaType[e.HQCODE] || {}),
-        }));
-
-      const sorted = res.sort(
-        (a, b) => sortedArr.indexOf(a.HQCODE) - sortedArr.indexOf(b.HQCODE),
-      );
-
-      setLeaveTypeList(sorted);
-
-      const payload = {
-        YEAR_MONTH: yearMonthParam,
-        WA_GUBUN: 'GW', // GW(일반)으로 값고정 (나머지 미사용)
-      };
-      const resOfCal = await WLOAction.getInfoM(payload); // @@ 달력 변경 데이터 넣기
-      const obj = {};
-      if (!Util.isEmpty(resOfCal)) {
-        resOfCal?.HD?.filter((item) =>
-          ['HOLIDAY', 'WEEKEND'].includes(item.M_TYPE),
-        )
-          .map((item) => item.M_DATE)
-          .forEach(
-            (key: string, i: number) =>
-              (obj[key] = {
-                customStyles: {
-                  text: {
-                    color: '#FF585B',
-                  },
-                },
-              }),
-          );
-        setCalDispList(obj);
-      }
-    };
-
-    function toColumnGrid(list, columnCount = 3) {
-      const columns = Array.from({ length: columnCount }, () => []);
-      list.forEach((item, i) => {
-        columns[i % columnCount].push(item);
-      });
-      // row 우선 변환 (세로 3줄, 가로로)
-      const maxRowLen = Math.max(...columns.map((col) => col.length));
-      const grid = [];
-      for (let r = 0; r < maxRowLen; r++) {
-        grid.push(columns.map((col) => col[r] || null));
-      }
-      return grid; // [ [1,4,7], [2,5,8], [3,6,null] ]
-    }
-    const columnCount = 3;
-    const grid = toColumnGrid(leaveTypeList, columnCount);
-
-    return (
-      <View style={{ justifyContent: 'flex-start' }}>
-        {/* 신청정보_휴가일자 션택영역 */}
-        <View>
-          <Calendar
-            onDayPress={(day: any) => {
-              const YYYYMMDD = day.dateString.replace('-', '').replace('-', '');
-
-              const found = leaveInfoList.some((item) => {
-                return item.date === day.dateString;
-              });
-              if (found) {
-                Alert.alert('알림', '이미 선택한 휴가일자입니다!');
-                return;
-              }
-              if (
-                route?.params?.APPLY_S_DATE > YYYYMMDD ||
-                route?.params?.APPLY_E_DATE < YYYYMMDD
-              ) {
-                Alert.alert(
-                  '알림',
-                  `연차 신청 가능 일자가 아닙니다! \n * 신청 가능 기간: ${route?.params?.APPLY_S_DATE}~${route?.params?.APPLY_E_DATE}`,
-                );
-                return;
-              }
-              const tempDate = dayjs(day?.dateString, 'YYYY-MM-DD').locale(
-                'ko',
-              );
-              setSelectedInfo({
-                ...selectedInfo,
-                date: day.dateString,
-                VA_DATE: day.dateString.replace('-', '').replace('-', ''),
-                DISP_VA_DATE: `${day.dateString} (${tempDate.format('ddd')})`,
-              });
-              setIsVisibleVaTypeModal(true);
-            }}
-            onMonthChange={(month: any) => {
-              const date = month.dateString;
-              setSelectedInfo({
-                date,
-              });
-              const yearMonth = date.replace(/-/g, '').substring(0, 6);
-              mount(yearMonth);
-            }}
-            markingType='custom'
-            markedDates={{
-              ...calDispList,
-              [selectedInfo?.date]: {
-                selected: true,
-                disableTouchEvent: true,
-                selectedDotColor: 'orange',
-              },
-            }}
-            monthFormat='yyyy년 M월'
-            renderArrow={(direction: any) => (
-              <Icon
-                name={direction === 'left' ? 'chevron-left' : 'chevron-right'}
-                color='gray'
-              />
-            )}
-            theme={calendarTheme}
-          />
-        </View>
-        {/* 선택한 신청정보 표시영역 */}
-        <View style={styles.selectedDisp}>
-          <ScrollView style={{ width: '100%' }}>
-            <View style={{ alignItems: 'center' }}>
-              {leaveInfoList.map((e: any, i: number) => (
-                <View style={styles.chipView}>
-                  <LVChip
-                    category='info'
-                    leftText={e?.DISP_VA_DATE}
-                    rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
-                    i={i}
-                    onPress={() => {
-                      setLeaveInfoList((prev) =>
-                        prev.filter((_, idx) => idx !== i),
-                      );
-                    }}
-                  />
-                </View>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-        {/* 신청정보_휴가종류 션택영역 */}
-        {isVisibleVaTypeModal && (
-          <LVModal
-            title={'종류를 선택하세요'}
-            buttonText={'선택'}
-            contents={
-              <View style={styles.modalView}>
-                {grid.map((row, rowIdx) => {
-                  return (
-                    <View key={rowIdx} style={styles.modalInsideView}>
-                      {row.map((item, colIdx) =>
-                        item ? (
-                          <TouchableOpacity
-                            key={item?.HQCODE || colIdx}
-                            onPress={() => {
-                              if (selectedInfo?.date) {
-                                setSelectedInfo({
-                                  ...selectedInfo,
-                                  ...item,
-                                  REQ_LEAVE: item.ETC2, // @@ 좋은방식인지 생각해보기
-                                  USED_LEAVE: item.ETC3, // @@ 좋은방식인지 생각해보기
-                                  LEAVE_TYPE: item.HQCODE, // @@ 좋은방식인지 생각해보기
-                                });
-                              } else {
-                                Util.toastMsg('휴가일자를 선택하세요!', 'info');
-                              }
-                            }}
-                            activeOpacity={0.8}
-                            style={{
-                              marginRight: colIdx < columnCount - 1 ? 8 : 0,
-                            }}
-                          >
-                            <LVChip
-                              category='type'
-                              content={item?.HQNAME_02}
-                              subContent={item?.HQNAME_01}
-                              chipStyle={{
-                                width: 60,
-                                borderColor:
-                                  selectedInfo?.HQCODE === item?.HQCODE
-                                    ? '#39CCCC'
-                                    : '#6A727B',
-                              }}
-                              textStyle={{
-                                color:
-                                  selectedInfo?.HQCODE === item?.HQCODE
-                                    ? '#39CCCC'
-                                    : '#6A727B',
-                              }}
-                            />
-                          </TouchableOpacity>
-                        ) : (
-                          // 마지막 줄이 비는 경우, 빈 뷰로 공간 맞추기
-                          <View
-                            key={colIdx}
-                            style={{
-                              width: 60,
-                              marginRight: colIdx < columnCount - 1 ? 8 : 0,
-                            }}
-                          />
-                        ),
-                      )}
-                    </View>
-                  );
-                })}
-              </View>
-            }
-            onVisible={setIsVisibleVaTypeModal}
-            onOk={() => {}}
-          />
-        )}
-      </View>
-    );
-  });
-
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
@@ -613,7 +326,7 @@ const LEA010201 = () => {
           category='entire'
           title={'휴가일자와 종류를 추가하세요.'}
           buttonText={'선택'}
-          contents={<ContentsOfInfo ref={infoRef} />}
+          contents={<ContentsOfInfo ref={infoRef} route={route} />}
           onVisible={setIsVisibleInfoModal}
           onOk={() => {
             // 1. 자식에서 선택값 가져오기
@@ -677,6 +390,293 @@ const LeaveDayItem = ({
     <Text style={styles.leaveDayValue}>{value}</Text>
   </View>
 );
+
+const ContentsOfInfo = forwardRef((props: any, ref) => {
+  const { route } = props;
+
+  const isFocused = useIsFocused();
+
+  const [leaveTypeList, setLeaveTypeList] = useState([]);
+  const [selectedInfo, setSelectedInfo] = useState({});
+  const [leaveInfoList, setLeaveInfoList] = useState([]);
+
+  const [calDispList, setCalDispList] = useState({});
+  const [isVisibleVaTypeModal, setIsVisibleVaTypeModal] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    getSelectedValues: () => ({
+      leaveInfoList,
+    }),
+  }));
+
+  useEffect(() => {
+    if (isFocused) {
+      let initYearMonth = !Util.isEmpty(selectedInfo?.date)
+        ? selectedInfo?.date?.replace(/-/g, '').substring(0, 6)
+        : dayjs().format('YYYYMM');
+      mount(initYearMonth);
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    // 휴가 종류까지 선택하면 값 reset
+    if (!Util.isEmpty(selectedInfo?.HQCODE)) {
+      // 연차, 공가, 대휴에 따른 동일 타입만 선택 가능한 로직
+      const type1 = ['VY', 'VM', 'VA', 'VH', 'VE']; // 연차
+      const type2 = ['OD', 'OM', 'OA']; // 공가
+      const type3 = ['VO', 'VOM', 'VOD']; // 대휴
+
+      const getType = (hqCode: string) => {
+        if (type1.includes(hqCode)) return 'type1';
+        if (type2.includes(hqCode)) return 'type2';
+        if (type3.includes(hqCode)) return 'type3';
+        return null;
+      };
+
+      const validateLeaveType = (
+        selectedInfo: { HQCODE: string },
+        leaveInfoList: { HQCODE: string }[],
+      ) => {
+        const selectedType = getType(selectedInfo.HQCODE);
+
+        const hasDifferentType = leaveInfoList.some(
+          (item) => getType(item.HQCODE) !== selectedType,
+        );
+
+        if (hasDifferentType) {
+          alert('동일한 휴가 유형만 선택할 수 있습니다.');
+          return false;
+        }
+        return true;
+      };
+      const result = validateLeaveType(selectedInfo, leaveInfoList);
+      if (result) {
+        setLeaveInfoList([...leaveInfoList, selectedInfo]);
+        setSelectedInfo({});
+        setIsVisibleVaTypeModal(false);
+      }
+    }
+  }, [selectedInfo]);
+
+  const mount = async (yearMonthParam: string) => {
+    let res = await COMAction.getPopup('PC0008T', {
+      VA_TYPE_CODE: '연차',
+      WEB_YN: 'Y',
+      GCODE: 'VA_TYPE',
+      USER_LANG: 'KO',
+    });
+
+    res = res
+      .filter((e) => sortedArr.includes(e?.HQCODE))
+      .map((e) => ({
+        ...e,
+        ...(customVaType[e.HQCODE] || {}),
+      }));
+
+    const sorted = res.sort(
+      (a, b) => sortedArr.indexOf(a.HQCODE) - sortedArr.indexOf(b.HQCODE),
+    );
+
+    setLeaveTypeList(sorted);
+
+    const payload = {
+      YEAR_MONTH: yearMonthParam,
+      WA_GUBUN: 'GW', // GW(일반)으로 값고정 (나머지 미사용)
+    };
+    const resOfCal = await WLOAction.getInfoM(payload); // @@ 달력 변경 데이터 넣기
+    const obj = {};
+    if (!Util.isEmpty(resOfCal)) {
+      resOfCal?.HD?.filter((item) =>
+        ['HOLIDAY', 'WEEKEND'].includes(item.M_TYPE),
+      )
+        .map((item) => item.M_DATE)
+        .forEach(
+          (key: string, i: number) =>
+            (obj[key] = {
+              customStyles: {
+                text: {
+                  color: '#FF585B',
+                },
+              },
+            }),
+        );
+      setCalDispList(obj);
+    }
+  };
+
+  function toColumnGrid(list, columnCount = 3) {
+    const columns = Array.from({ length: columnCount }, () => []);
+    list.forEach((item, i) => {
+      columns[i % columnCount].push(item);
+    });
+    // row 우선 변환 (세로 3줄, 가로로)
+    const maxRowLen = Math.max(...columns.map((col) => col.length));
+    const grid = [];
+    for (let r = 0; r < maxRowLen; r++) {
+      grid.push(columns.map((col) => col[r] || null));
+    }
+    return grid; // [ [1,4,7], [2,5,8], [3,6,null] ]
+  }
+  const columnCount = 3;
+  const grid = toColumnGrid(leaveTypeList, columnCount);
+
+  return (
+    <View style={{ justifyContent: 'flex-start' }}>
+      {/* 신청정보_휴가일자 션택영역 */}
+      <View>
+        <Calendar
+          onDayPress={(day: any) => {
+            const YYYYMMDD = day.dateString.replace('-', '').replace('-', '');
+
+            const found = leaveInfoList.some((item) => {
+              return item.date === day.dateString;
+            });
+            if (found) {
+              Alert.alert('알림', '이미 선택한 휴가일자입니다!');
+              return;
+            }
+            if (
+              route?.params?.APPLY_S_DATE > YYYYMMDD ||
+              route?.params?.APPLY_E_DATE < YYYYMMDD
+            ) {
+              Alert.alert(
+                '알림',
+                `연차 신청 가능 일자가 아닙니다! \n * 신청 가능 기간: ${route?.params?.APPLY_S_DATE}~${route?.params?.APPLY_E_DATE}`,
+              );
+              return;
+            }
+            const tempDate = dayjs(day?.dateString, 'YYYY-MM-DD').locale('ko');
+            setSelectedInfo({
+              ...selectedInfo,
+              date: day.dateString,
+              VA_DATE: day.dateString.replace('-', '').replace('-', ''),
+              DISP_VA_DATE: `${day.dateString} (${tempDate.format('ddd')})`,
+            });
+            setIsVisibleVaTypeModal(true);
+          }}
+          onMonthChange={(month: any) => {
+            const date = month.dateString;
+            setSelectedInfo({
+              date,
+            });
+            const yearMonth = date.replace(/-/g, '').substring(0, 6);
+            mount(yearMonth);
+          }}
+          markingType='custom'
+          markedDates={{
+            ...calDispList,
+            [selectedInfo?.date]: {
+              selected: true,
+              disableTouchEvent: true,
+              selectedDotColor: 'orange',
+            },
+          }}
+          monthFormat='yyyy년 M월'
+          renderArrow={(direction: any) => (
+            <Icon
+              name={direction === 'left' ? 'chevron-left' : 'chevron-right'}
+              color='gray'
+            />
+          )}
+          theme={calendarTheme}
+        />
+      </View>
+      {/* 선택한 신청정보 표시영역 */}
+      <View style={styles.selectedDisp}>
+        <ScrollView style={{ width: '100%' }}>
+          <View style={{ alignItems: 'center' }}>
+            {leaveInfoList.map((e: any, i: number) => (
+              <View style={styles.chipView}>
+                <LVChip
+                  category='info'
+                  leftText={e?.DISP_VA_DATE}
+                  rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
+                  i={i}
+                  onPress={() => {
+                    setLeaveInfoList((prev) =>
+                      prev.filter((_, idx) => idx !== i),
+                    );
+                  }}
+                />
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+      {/* 신청정보_휴가종류 션택영역 */}
+      {isVisibleVaTypeModal && (
+        <LVModal
+          title={'종류를 선택하세요'}
+          buttonText={'선택'}
+          contents={
+            <View style={styles.modalView}>
+              {grid.map((row, rowIdx) => {
+                return (
+                  <View key={rowIdx} style={styles.modalInsideView}>
+                    {row.map((item, colIdx) =>
+                      item ? (
+                        <TouchableOpacity
+                          key={item?.HQCODE || colIdx}
+                          onPress={() => {
+                            if (selectedInfo?.date) {
+                              setSelectedInfo({
+                                ...selectedInfo,
+                                ...item,
+                                REQ_LEAVE: item.ETC2, // @@ 좋은방식인지 생각해보기
+                                USED_LEAVE: item.ETC3, // @@ 좋은방식인지 생각해보기
+                                LEAVE_TYPE: item.HQCODE, // @@ 좋은방식인지 생각해보기
+                              });
+                            } else {
+                              Util.toastMsg('휴가일자를 선택하세요!', 'info');
+                            }
+                          }}
+                          activeOpacity={0.8}
+                          style={{
+                            marginRight: colIdx < columnCount - 1 ? 8 : 0,
+                          }}
+                        >
+                          <LVChip
+                            category='type'
+                            content={item?.HQNAME_02}
+                            subContent={item?.HQNAME_01}
+                            chipStyle={{
+                              width: 60,
+                              borderColor:
+                                selectedInfo?.HQCODE === item?.HQCODE
+                                  ? '#39CCCC'
+                                  : '#6A727B',
+                            }}
+                            textStyle={{
+                              color:
+                                selectedInfo?.HQCODE === item?.HQCODE
+                                  ? '#39CCCC'
+                                  : '#6A727B',
+                            }}
+                          />
+                        </TouchableOpacity>
+                      ) : (
+                        // 마지막 줄이 비는 경우, 빈 뷰로 공간 맞추기
+                        <View
+                          key={colIdx}
+                          style={{
+                            width: 60,
+                            marginRight: colIdx < columnCount - 1 ? 8 : 0,
+                          }}
+                        />
+                      ),
+                    )}
+                  </View>
+                );
+              })}
+            </View>
+          }
+          onVisible={setIsVisibleVaTypeModal}
+          onOk={() => {}}
+        />
+      )}
+    </View>
+  );
+});
 
 const sortedArr = [
   'VY',
