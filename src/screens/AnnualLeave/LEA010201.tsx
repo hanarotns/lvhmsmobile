@@ -305,11 +305,19 @@ const LEA010201 = () => {
       S_EMP_ID: empInfo?.EMP_ID,
       S_EMP_FLAG: 'Y',
     };
-    const etcInfo = {
+    const general = {
       R_VA_TYPE: 'V',
       REASON_TYPE: 'P',
       REASON_CODE: 'P1',
     };
+    const official = {
+      R_VA_TYPE: 'O',
+      REASON_TYPE: 'O',
+      REASON_CODE: 'O1',
+    };
+    const etcInfo = Util.isEmpty(selectedOfficialLeaveType)
+      ? general
+      : official;
     const param = { ...commonInfo, ...etcInfo, ...hd, ...config };
 
     const result = await Action.saveApproval(param, infoList, approvalLine);
