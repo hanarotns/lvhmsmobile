@@ -76,8 +76,8 @@ const save = async (body1: object, body2: object, body3: object) => {
   const result = await Fetch.request('PORU010302SVC', 'save', {
     body: JSON.stringify({
       PORU010302F236: body1, // 휴가원HD
-      PORU010302G35: { data: body3 }, // 휴가원DT
-      PORU010302G33: { data: body2 }, // 결재라인
+      PORU010302G35: { data: body2 }, // 휴가원DT
+      PORU010302G33: { data: body3 }, // 결재라인
     }),
   });
   if (result.TYPE === -1) {
@@ -90,8 +90,8 @@ const saveApproval = async (body1: object, body2: object, body3: object) => {
   const result = await Fetch.request('PORU010302SVC', 'saveApproval', {
     body: JSON.stringify({
       PORU010302F236: body1, // 휴가원HD
-      PORU010302G35: { data: body3 }, // 휴가원DT
-      PORU010302G33: { data: body2 }, // 결재라인
+      PORU010302G35: { data: body2 }, // 휴가원DT
+      PORU010302G33: { data: body3 }, // 결재라인
     }),
   });
   if (result.TYPE === -1) {
