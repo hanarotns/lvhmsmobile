@@ -72,6 +72,18 @@ const getApprLine = async (body: object) => {
   return result.PORU010399G1;
 };
 
+const getClearInfo = async (body) => {
+  const result = await Fetch.request('PORU010302SVC', 'getClearInfo', {
+    body: JSON.stringify({
+      PORU010302F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010302F23;
+};
+
 const save = async (body1: object, body2: object, body3: object) => {
   const result = await Fetch.request('PORU010302SVC', 'save', {
     body: JSON.stringify({
@@ -141,6 +153,7 @@ export {
   deleteMobile,
   deleteRow,
   getApprLine,
+  getClearInfo,
   getDetailM,
   getDt,
   getInfoM,

@@ -64,12 +64,12 @@ const LEA010201 = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   // mount API 기본 정보
+  const [config, setConfig] = useState({});
   const [officialLeaveType, setOfficialLeaveType] = useState({});
   // 휴가 HD
   const [hd, setHd] = useState({
-    MEMO: '',
-    REM_VC_QTY: route?.params.REM_VC_QTY,
-    TOTAL_PERIOD: 0,
+    REM_VC_QTY: route?.params?.REM_VC_QTY,
+    PERIOD: 0,
   });
   // 휴가 DT
   const [infoList, setInfoList] = useState([]);
@@ -89,6 +89,16 @@ const LEA010201 = () => {
 
   const mount = async () => {
     setLoading(true);
+    const payload = {
+      S_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      SS_EMP_ID: empInfo?.EMP_ID,
+      TO_YEAR: dayjs(new Date()).format('YYYY'),
+    };
+
+    const res = await Action.getClearInfo(payload);
+    setConfig(res?.[0]);
+
     // 공가 타입 가져오기
     const resOfOfficialLeaveType = await COMAction.getPopup('PC0001', {
       GCODE: 'OFFICIAL_VACATION_REASON',
@@ -99,7 +109,6 @@ const LEA010201 = () => {
       setApprovalLine(route.params?.APPR_LINE);
       setHd({
         ...hd,
-        MEMO: route?.params?.M_MEMO,
       });
       setInfoList(route.params?.DETAIL);
     }
@@ -110,7 +119,7 @@ const LEA010201 = () => {
     if (!Util.isEmpty(selectedOfficialLeaveType)) {
       const targetTypes = ['04', '05', '06'];
       const updatedInfoList = infoList.map((item) =>
-        targetTypes.includes(item.LEAVE_TYPE)
+        targetTypes.includes(item.VA_TYPE)
           ? { ...item, OFFICIAL_LEAVE_TYPE: selectedOfficialLeaveType }
           : item,
       );
@@ -127,7 +136,7 @@ const LEA010201 = () => {
       };
 
       const total = getTotalDAY_02(infoList);
-      setHd({ ...hd, TOTAL_PERIOD: total });
+      setHd({ ...hd, PERIOD: total });
     }
   }, [infoList]);
 
@@ -137,7 +146,7 @@ const LEA010201 = () => {
    */
   const checkLogic = async () => {
     // @@ 로직 더 넣고, 다른화면에도 추가 필요함.
-    if (Util.isEmpty(hd?.MEMO)) {
+    if (Util.isEmpty(hd?.REASON)) {
       Util.toastMsg('휴가 신청 내용을 입력하세요', 'info');
       return false;
     }
@@ -149,7 +158,22 @@ const LEA010201 = () => {
     if (!isCheck) {
       return;
     }
-    const result = await Action.saveApproval(hd, infoList, approvalLine);
+
+    const commonInfo = {
+      S_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      S_DEPT_CODE: empInfo?.DEPT_CODE,
+      S_EMP_NAME: empInfo?.EMP_NAME_LC,
+      S_EMP_ID: empInfo?.EMP_ID,
+      S_EMP_FLAG: 'Y',
+    };
+    const etcInfo = {
+      R_VA_TYPE: 'V',
+      REASON_TYPE: 'P',
+      REASON_CODE: 'P1',
+    };
+    const param = { ...commonInfo, ...etcInfo, ...hd, ...config };
+
+    const result = await Action.saveApproval(param, infoList, approvalLine);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {
@@ -222,11 +246,11 @@ const LEA010201 = () => {
                     value={route?.params.REM_VC_QTY}
                   />
                   <Text style={styles.operatorText}>-</Text>
-                  <LeaveDayItem label='신청 연차' value={hd?.TOTAL_PERIOD} />
+                  <LeaveDayItem label='신청 연차' value={hd?.PERIOD} />
                   <Text style={styles.operatorText}>=</Text>
                   <LeaveDayItem
                     label='이후 연차'
-                    value={route?.params.REM_VC_QTY - hd?.TOTAL_PERIOD}
+                    value={route?.params.REM_VC_QTY - hd?.PERIOD}
                   />
                 </View>
               }
@@ -289,11 +313,11 @@ const LEA010201 = () => {
                 <Input
                   placeholder='휴가내용을 입력하세요.'
                   placeholderTextColor='#939DAA'
-                  value={hd.MEMO}
+                  value={hd?.REASON}
                   onChangeText={(value) => {
                     setHd({
                       ...hd,
-                      MEMO: value,
+                      REASON: value,
                     });
                   }}
                   size='large'
@@ -622,9 +646,10 @@ const ContentsOfInfo = forwardRef((props: any, ref) => {
                               setSelectedInfo({
                                 ...selectedInfo,
                                 ...item,
-                                REQ_LEAVE: item.ETC2, // @@ 좋은방식인지 생각해보기
-                                USED_LEAVE: item.ETC3, // @@ 좋은방식인지 생각해보기
-                                LEAVE_TYPE: item.HQCODE, // @@ 좋은방식인지 생각해보기
+                                PERIOD: item.DAY_01, // @@ 좋은방식인지 생각해보기
+                                VA_PERIOD: item.DAY_02, // @@ 좋은방식인지 생각해보기
+                                VA_TYPE: item.HQCODE, // @@ 좋은방식인지 생각해보기
+                                VA_TYPE_NAME: item.HQNAME, // @@ 좋은방식인지 생각해보기
                               });
                             } else {
                               Util.toastMsg('휴가일자를 선택하세요!', 'info');
