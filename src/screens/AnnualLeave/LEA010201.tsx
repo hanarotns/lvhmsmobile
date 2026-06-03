@@ -42,6 +42,7 @@ import { Calendar } from 'react-native-calendars';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as PALAction from '../PersonalApprovalLine/Action'; // API통신 (개인별 결재선 분리)
 import * as WLOAction from '../WorkLog/Action'; // API통신 (달력)
+import * as Action from './Action';
 
 type RootStackParamList = {
   DetailScreen: undefined;
@@ -204,28 +205,14 @@ const LEA010201 = () => {
     if (!isCheck) {
       return;
     }
-    // const approvalInfo = {
-    //   APPR_TITLE: '연차신청',
-    //   APPR_TYPE: '01',
-    //   APPR_STATUS: '01',
-    //   APPR_PARAM: route.params?.APPR_NO && 'A',
-    //   APPR_NO: route.params?.APPR_NO,
-    //   APPR_COMMENT: '1',
-    // };
-    // const body = {
-    //   F1: approvalInfo,
-    //   G1: approvalLine,
-    //   F2: hd,
-    //   G2: infoList,
-    // };
-    // const result = await Action.saveApproval(body);
-    // if (result.TYPE === 1) {
-    //   setConfirming(true);
-    //   setTimeout(() => {
-    //     setConfirming(false);
-    //     movingScreen.goBack();
-    //   }, 1200);
-    // }
+    const result = await Action.saveApproval(hd, infoList, approvalLine);
+    if (result.TYPE === 1) {
+      setConfirming(true);
+      setTimeout(() => {
+        setConfirming(false);
+        movingScreen.goBack();
+      }, 1200);
+    }
   };
 
   const ContentsOfApproval = forwardRef((props: any, ref) => {
