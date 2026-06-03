@@ -253,7 +253,10 @@ const DocuPreviewContent = (props: any) => {
           />
           <View style={{ width: 8 }} />
           <Text numberOfLines={1} style={styles.mainText}>
-            {Util.convertDateTime(elem?.VAC_START)}
+            <Text numberOfLines={1} style={styles.mainText}>
+              {Util.convertDateTime(elem?.VAC_START)} (
+              {dayjs(elem?.VAC_START).format('ddd')})
+            </Text>
           </Text>
         </View>
         <Text
