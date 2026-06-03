@@ -504,40 +504,20 @@ const LEA010201 = () => {
             <LVFormOfContents
               children={
                 <View style={[LVStyles.row, { flex: 1, marginVertical: 12 }]}>
-                  <View style={styles.leavedayCalculation}>
-                    <Text style={{ fontSize: 14, fontWeight: '600' }}>
-                      잔여 연차
-                    </Text>
-                    <Text style={{ fontSize: 20, fontWeight: '700' }}>
-                      {route?.params.REM_VC_QTY}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text style={{ fontSize: 20, fontWeight: '700' }}>-</Text>
-                  </View>
-                  <View style={styles.leavedayCalculation}>
-                    <Text style={{ fontSize: 14, fontWeight: '600' }}>
-                      신청 연차
-                    </Text>
-                    <Text style={{ fontSize: 20, fontWeight: '700' }}>
-                      {hd?.TOTAL_PERIOD}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text style={{ fontSize: 20, fontWeight: '700' }}>=</Text>
-                  </View>
-                  <View style={styles.leavedayCalculation}>
-                    <Text style={{ fontSize: 14, fontWeight: '600' }}>
-                      이후 연차
-                    </Text>
-                    <Text style={{ fontSize: 20, fontWeight: '700' }}>
-                      {route?.params.REM_VC_QTY - hd?.TOTAL_PERIOD}
-                    </Text>
-                  </View>
+                  <LeaveDayItem
+                    label='잔여 연차'
+                    value={route?.params.REM_VC_QTY}
+                  />
+                  <Text style={styles.operatorText}>-</Text>
+                  <LeaveDayItem label='신청 연차' value={hd?.TOTAL_PERIOD} />
+                  <Text style={styles.operatorText}>=</Text>
+                  <LeaveDayItem
+                    label='이후 연차'
+                    value={route?.params.REM_VC_QTY - hd?.TOTAL_PERIOD}
+                  />
                 </View>
               }
             />
-
             {/* @@ 휴가종류에 '공가'가 포함된 경우만 공가 종류 선택 기능 추가*/}
             {!Util.isEmpty(officialLeaveType) &&
             infoList.find((e) => ['OD', 'OM', 'OA'].includes(e.HQCODE)) ? (
@@ -684,6 +664,19 @@ const AddNEditIconButton = (props) => {
     </TouchableOpacity>
   );
 };
+
+const LeaveDayItem = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number;
+}) => (
+  <View style={styles.leavedayCalculation}>
+    <Text style={styles.leaveDayLabel}>{label}</Text>
+    <Text style={styles.leaveDayValue}>{value}</Text>
+  </View>
+);
 
 const sortedArr = [
   'VY',
@@ -874,5 +867,17 @@ const styles = StyleSheet.create({
   modalInsideView: {
     flexDirection: 'row',
     marginBottom: 8,
+  },
+  leaveDayLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  leaveDayValue: {
+    fontSize: 20,
+    fontWeight: '700',
+  },
+  operatorText: {
+    fontSize: 20,
+    fontWeight: '700',
   },
 });
