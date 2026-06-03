@@ -67,44 +67,41 @@ const LEA010101 = () => {
     setFilteredList(res);
   }, [selectedApprType]);
 
+  const commonInfo = {
+    S_COMPANY_CODE: empInfo?.COMPANY_CODE,
+    S_DEPT_CODE: empInfo?.DEPT_CODE,
+    S_EMP_NAME: empInfo?.EMP_NAME_LC,
+    S_EMP_ID: empInfo?.EMP_ID,
+    S_EMP_FLAG: 'Y',
+    S_LINE_STATUS: '',
+
+    SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+    SS_EMP_ID: empInfo?.EMP_ID,
+    SS_USER_ROLE: 'U',
+
+    AUTH_GA: 'Y',
+    AUTH_AM: 'Y',
+  };
+
   const mount = async () => {
     setLoading(true);
     setApprFilter([allFilter, ...restFilter]);
 
     const payload1 = {
-      S_COMPANY_CODE: empInfo?.COMPANY_CODE,
-      S_DEPT_CODE: empInfo?.DEPT_CODE,
-      S_EMP_NAME: empInfo?.EMP_NAME_LC,
-      S_EMP_ID: empInfo?.EMP_ID,
-      S_EMP_FLAG: 'Y',
+      ...commonInfo,
       DATE_GUBUN: 'VA_DATE',
       S_ADD_DATE_FROM: selectedDate.format('YYYYMMDD'),
       S_ADD_DATE_TO: selectedDate.format('YYYYMMDD'),
-      S_LINE_STATUS: '',
-      SS_EMP_ID: empInfo?.EMP_ID,
-      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
-      SS_USER_ROLE: 'U',
-      AUTH_GA: 'Y',
-      AUTH_AM: 'Y',
       TO_YEAR: selectedDate.format('YYYY'), // @@
     };
     const res1 = await Action.getInfoM(payload1);
     if (res1) {
       const payload2 = {
-        S_COMPANY_CODE: empInfo?.COMPANY_CODE,
-        S_DEPT_CODE: empInfo?.DEPT_CODE,
-        S_EMP_NAME: empInfo?.EMP_NAME_LC,
-        S_EMP_ID: empInfo?.EMP_ID,
-        S_EMP_FLAG: 'Y',
+        ...commonInfo,
         DATE_GUBUN: 'VA_DATE',
         S_ADD_DATE_FROM: res1?.APPLY_S_DATE,
         S_ADD_DATE_TO: res1?.APPLY_E_DATE,
-        S_LINE_STATUS: '',
-        SS_USER_ROLE: 'U',
-        AUTH_GA: 'Y',
-        AUTH_AM: 'Y',
       };
-
       const res2 = await Action.getListM(payload2);
       setStats(res1);
       setList(res2);
