@@ -76,6 +76,7 @@ const OVT010202 = () => {
   };
 
   const handleSubmit = async () => {
+    if (empInfo) return; // @@ 버튼 무효화
     const approvalInfo = {
       APPR_TITLE: '시간외근무신청',
       APPR_TYPE: '02',

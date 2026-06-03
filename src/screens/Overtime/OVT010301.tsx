@@ -84,6 +84,7 @@ const OVT010301 = () => {
 
   // 상신자
   const handleRecall = async () => {
+    if (empInfo) return; // @@ 버튼 무효화
     const result = await Action.save({
       F1: {
         APPR_NO: dt?.APPR_NO,
@@ -101,6 +102,7 @@ const OVT010301 = () => {
   };
 
   const handleCancel = async () => {
+    if (empInfo) return; // @@ 버튼 무효화
     const result = await Action.save({
       F1: {
         APPR_NO: dt?.APPR_NO,
@@ -117,6 +119,7 @@ const OVT010301 = () => {
   };
 
   const handleReApprove = async () => {
+    if (empInfo) return; // @@ 버튼 무효화
     const result = await Action.save({
       F1: {
         APPR_NO: dt?.APPR_NO,
@@ -134,6 +137,7 @@ const OVT010301 = () => {
 
   // 결재자
   const handleRecallForApprover = async () => {
+    if (empInfo) return; // @@ 버튼 무효화
     const result = await Action.save({
       F1: {
         APPR_NO: dt?.APPR_NO,
@@ -150,6 +154,7 @@ const OVT010301 = () => {
   };
 
   const handleRefusalForApprover = async () => {
+    if (empInfo) return; // @@ 버튼 무효화
     const result = await Action.save({
       F1: {
         APPR_NO: dt?.APPR_NO,
@@ -168,6 +173,7 @@ const OVT010301 = () => {
   };
 
   const handleApproveForApprover = async () => {
+    if (empInfo) return; // @@ 버튼 무효화
     const result = await Action.save({
       F1: {
         APPR_NO: dt?.APPR_NO,
