@@ -166,7 +166,7 @@ const ETC010201 = () => {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <View style={[LVStyles.row, LVStyles.bottomButtonView]}>
+        <View style={LVStyles.bottomButtonView}>
           <LVButton
             title='저장'
             onPress={handleSave}
