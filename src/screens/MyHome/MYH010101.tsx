@@ -550,31 +550,32 @@ const MYH010101 = ({ navigation }) => {
                 }}
               />
             )}
-          {(!Util.isEmpty(laborRefusal) ||
-            Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE)) && (
-            // 노무수령거부통지
-            <LaborNoticeScreen
-              type='refusal'
-              data={laborRefusal[0]}
-              onConfirm={() => {
-                console.log('@@ 노무수령거부');
-                const payload = {
-                  P_COMPANY_CODE: laborRefusal?.[0]?.COMPANY_CODE,
-                  P_EMP_ID: laborRefusal?.[0]?.EMP_ID,
-                  P_VA_DATE: laborRefusal?.[0]?.PLAN_VA_DATE,
-                  P_JOB_NO: laborRefusal?.[0]?.PLAN_JOB_NO,
-                };
-                Action.LaborRefusal_confirm(payload);
-                setLaborRefusal([]);
-              }}
-            />
-          )}
+          {!Util.isEmpty(laborRefusal) &&
+            Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE) && (
+              // 노무수령거부통지
+              <LaborNoticeScreen
+                type='refusal'
+                data={laborRefusal[0]}
+                onConfirm={() => {
+                  console.log('@@ 노무수령거부');
+                  const payload = {
+                    P_COMPANY_CODE: laborRefusal?.[0]?.COMPANY_CODE,
+                    P_EMP_ID: laborRefusal?.[0]?.EMP_ID,
+                    P_VA_DATE: laborRefusal?.[0]?.PLAN_VA_DATE,
+                    P_JOB_NO: laborRefusal?.[0]?.PLAN_JOB_NO,
+                  };
+                  Action.LaborRefusal_confirm(payload);
+                  setLaborRefusal([]);
+                }}
+              />
+            )}
           {(Util.isEmpty(laborNotice1) ||
             laborNotice1?.[0]?.LABOR_CHECK === 'Y') &&
             (Util.isEmpty(laborNotice2) ||
               laborNotice2?.[0]?.LABOR_CHECK === 'Y') &&
             (Util.isEmpty(laborRefusal) ||
-              !Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE)) && (
+              (!Util.isEmpty(laborRefusal) &&
+                !Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE))) && (
               <>
                 <View style={styles.layout}>
                   <LayoutOfGreeting />
