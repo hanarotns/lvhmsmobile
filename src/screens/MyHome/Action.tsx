@@ -114,9 +114,7 @@ const saveRefusalNotice = async (body: object) => {
 
 const LaborRefusal_confirm = async (body: object) => {
   const result = await Fetch.request('PORM020113SVC', 'LaborRefusal_confirm', {
-    body: JSON.stringify({
-      PORM020113F1: body,
-    }),
+    body: JSON.stringify(body),
   });
   if (result.TYPE === -1) {
     Util.toastMsg(result.MSG, 'error');
