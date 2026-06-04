@@ -208,6 +208,10 @@ const LEA010201 = () => {
       setUploading(true);
 
       const refNo = fileList?.REF_NO || generateRefNo();
+      setHd({
+        ...hd,
+        ATTACH_NO: refNo,
+      });
       const pendingFiles = fileList.filter((f) => !f.uploaded);
 
       if (pendingFiles.length === 0) {
@@ -435,26 +439,7 @@ const LEA010201 = () => {
                     </Text>
                   ) : (
                     <View style={{ flex: 1 }}>
-                      {fileList?.map((elem, i) => (
-                        <View
-                          style={[styles.infoRow, { alignItems: 'center' }]}
-                          key={elem.seq}
-                        >
-                          <View style={styles.infoValueBox}>
-                            <Text style={[styles.infoValueText]}>
-                              {elem?.seq}
-                            </Text>
-                          </View>
-                          <View style={{ width: 8 }} />
-                          <View style={[styles.infoValueBox, { flex: 1 }]}>
-                            <Text style={styles.infoValueText}>
-                              {elem?.fileName} ({elem?.fileSize})
-                              {elem?.uploaded && ' ✅'}
-                            </Text>
-                          </View>
-                          <View style={{ width: 8 }} />
-                        </View>
-                      ))}
+                      <Text style={{ color: '#939DAA' }}>{hd?.ATTACH_NO}</Text>
                     </View>
                   )}
                   <AddNEditIconButton
