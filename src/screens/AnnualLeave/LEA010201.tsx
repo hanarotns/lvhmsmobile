@@ -517,7 +517,7 @@ const LEA010201 = () => {
             <>
               <View style={LVStyles.row}>
                 <LVButton
-                  title={'사진 첨부'}
+                  title={'사진'}
                   onPress={() => {
                     setSelectedAttachType('photo');
                   }}
@@ -538,7 +538,7 @@ const LEA010201 = () => {
                 />
                 <View style={{ width: 8 }} />
                 <LVButton
-                  title={'파일 첨부'}
+                  title={'파일'}
                   onPress={() => {
                     setSelectedAttachType('file');
                   }}
@@ -565,17 +565,13 @@ const LEA010201 = () => {
                       images={images}
                       onChangeImages={setImages}
                       maxCount={5}
+                      setFileList={setFileList}
                     />
                   </>
                 )}
                 {selectedAttachType === 'file' && (
                   <>
-                    <LVButton
-                      title='파일 선택 +'
-                      onPress={onPressFileAdd}
-                      buttonStyle={styles.smallOutlineButton}
-                      textStyle={styles.smallOutlineButtonText}
-                    />
+                    <LVButton title='가져오기' onPress={onPressFileAdd} />
                     <View style={{ height: 12 }} />
                     {fileList?.map((elem, i) => (
                       <View

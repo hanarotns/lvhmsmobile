@@ -1,3 +1,4 @@
+import { Util } from '@/src/lib';
 import * as ImagePicker from 'expo-image-picker';
 import React from 'react';
 import {
@@ -9,6 +10,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import LVButton from './LVButton';
 
 export type AttachedImage = {
   uri: string;
@@ -20,14 +22,16 @@ type Props = {
   images: AttachedImage[];
   onChangeImages: (images: AttachedImage[]) => void;
   maxCount?: number;
+  setFileList?: object;
 };
 
 export default function ImageAttachment({
   images,
   onChangeImages,
   maxCount = 5,
+  setFileList,
 }: Props) {
-  const pickImages = async () => {
+  const onPressPhotoAdd = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permission.granted) {
@@ -45,10 +49,32 @@ export default function ImageAttachment({
     if (result.canceled) return;
 
     const selectedImages = result.assets.map((asset) => ({
-      uri: asset.uri,
-      fileName: asset.fileName,
-      mimeType: asset.mimeType,
+      ...asset,
     }));
+
+    const pickedFile = result.assets?.[0];
+
+    if (!pickedFile) {
+      return;
+    }
+
+    if ((pickedFile.fileSize ?? 0) > 5242880) {
+      Util.toastMsg('파일 크기는 5MB 이하여야 합니다.', 'error');
+      return;
+    }
+
+    setFileList((prev) => [
+      ...prev,
+      {
+        seq: String(prev.length + 1).padStart(2, '0'),
+        fileName: pickedFile.fileName,
+        fileSize: `${Math.round((pickedFile.fileSize ?? 0) / 1024)}KB`,
+        uri: pickedFile.uri,
+        type: pickedFile.mimeType || 'application/octet-stream',
+        size: pickedFile.fileSize ?? 0,
+        uploaded: false,
+      },
+    ]);
 
     onChangeImages([...images, ...selectedImages].slice(0, maxCount));
   };
@@ -59,18 +85,7 @@ export default function ImageAttachment({
 
   return (
     <View style={styles.container}>
-      <Pressable
-        style={[
-          styles.attachButton,
-          images.length >= maxCount && styles.disabledButton,
-        ]}
-        onPress={pickImages}
-        disabled={images.length >= maxCount}
-      >
-        <Text style={styles.attachText}>
-          사진 첨부 {images.length}/{maxCount}
-        </Text>
-      </Pressable>
+      <LVButton title='가져오기' onPress={onPressPhotoAdd} />
 
       {images.length > 0 && (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -118,6 +133,7 @@ const styles = StyleSheet.create({
   previewList: {
     flexDirection: 'row',
     gap: 10,
+    paddingVertical: 16,
   },
   previewItem: {
     position: 'relative',
