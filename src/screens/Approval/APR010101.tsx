@@ -144,6 +144,7 @@ const APR010101 = () => {
     const res2 = await Action.getListM(payload2);
     setList(res2);
     setFilteredList(res2);
+    setSelectedApprType('ALL');
     setLoading(false);
   };
 
