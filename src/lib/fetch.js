@@ -79,10 +79,10 @@ const getInit = async () => {
       WINS: {},
     }),
   });
-  if (result.TYPE === -1) {
-    Alert.alert('알림', result.MSG);
-  }
   if (result) {
+    if (result.TYPE === -1) {
+      Alert.alert('알림', result.MSG);
+    }
     return result.data;
   }
   return null;
@@ -98,8 +98,8 @@ const preCheckSignIn = async () => {
   //   return null;
   // }
   const passed = await Util.checkIsToken();
-  const sessionData = await getInit();
   console.log('@@ passed', passed);
+  const sessionData = await getInit();
   console.log('@@ sessionData', sessionData);
 
   if (passed && sessionData) {
