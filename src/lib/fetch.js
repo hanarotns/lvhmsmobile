@@ -74,11 +74,14 @@ const request = async (code, method, config, toastYN) => {
 
 const getInit = async () => {
   fetchURL = await AsyncStorage.getItem('url');
-  const result = await request('G1E000000SVC', 'getInitG1M', {
+  const result = await request('G1E000000SVC', 'getInitNewPortal', {
     body: JSON.stringify({
       WINS: {},
     }),
   });
+  if (result.TYPE === -1) {
+    Alert.alert('알림', result.MSG);
+  }
   if (result) {
     return result.data;
   }
