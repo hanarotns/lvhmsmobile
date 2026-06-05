@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
@@ -12,6 +12,7 @@ import {
   LVChip,
   LVColors,
   LVFilter,
+  LVFilterBottomSheet,
   LVLoadingIndicator,
   LVModal,
   LVMovingDateOfArrow,
@@ -23,6 +24,7 @@ import {
   Text,
 } from '@/src/components';
 import { Util } from '@/src/lib';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
@@ -50,6 +52,13 @@ const LEA010101 = () => {
   const [selectedApprType, setSelectedApprType] = useState('ALL');
 
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const openFilter = () => {
+    console.log('ref:', bottomSheetRef.current);
+    bottomSheetRef.current?.present();
+  };
 
   useEffect(() => {
     if (isFocused) {
@@ -177,10 +186,11 @@ const LEA010101 = () => {
         </View>
       </ScrollView>
       <View style={styles.floatingButton}>
-        <TouchableOpacity style={styles.filterIconButton} onPress={() => {}}>
+        <TouchableOpacity style={styles.filterIconButton} onPress={openFilter}>
           <SlidersHorizontal size={24} color='#FFF' />
         </TouchableOpacity>
       </View>
+      <LVFilterBottomSheet ref={bottomSheetRef} />
       {isVisibleModal && (
         <LVModal
           title={'기초데이터 미설정'}

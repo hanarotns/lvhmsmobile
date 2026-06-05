@@ -12,6 +12,7 @@ import LVConfirmIndicator from './LVConfirmIndicator';
 import LVDatePicker from './LVDatePicker';
 import LVDateTimePicker from './LVDateTimePicker';
 import LVFilter from './LVFilter';
+import LVFilterBottomSheet from './LVFilterBottomSheet';
 import LVFlag from './LVFlag'; // @@ 사용하는 곳 없음.
 import LVFormOfContents from './LVFormOfContents';
 import LVLoadingIndicator from './LVLoadingIndicator';
@@ -96,6 +97,7 @@ export {
   LVDatePicker,
   LVDateTimePicker,
   LVFilter,
+  LVFilterBottomSheet,
   LVFlag,
   LVFormOfContents,
   LVLoadingIndicator,

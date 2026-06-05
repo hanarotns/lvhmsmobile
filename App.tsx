@@ -1,4 +1,5 @@
 import * as eva from '@eva-design/eva';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ApplicationProvider } from '@ui-kitten/components';
 import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -14,10 +15,10 @@ function AppContent() {
   const insets = useSafeAreaInsets();
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <>
       <RootNavigator />
       <Toast config={toastConfig} bottomOffset={insets.bottom + 20} />
-    </GestureHandlerRootView>
+    </>
   );
 }
 
@@ -27,12 +28,14 @@ export default function App() {
   });
 
   return (
-    <SafeAreaProvider>
-      <ApplicationProvider {...eva} theme={eva.light}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <AppContent />
-        </GestureHandlerRootView>
-      </ApplicationProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <ApplicationProvider {...eva} theme={eva.light}>
+          <BottomSheetModalProvider>
+            <AppContent />
+          </BottomSheetModalProvider>
+        </ApplicationProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
