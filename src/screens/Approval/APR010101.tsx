@@ -41,15 +41,29 @@ const APR010101 = () => {
   const [stats, setStats] = useState({});
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
+  const [cardFilter, setCardFilter] = useState([]);
+  const [selectedCards, setSelectedCards] = useState<string[]>(['pending']);
   const [apprFilter, setApprFilter] = useState([]);
   const [selectedApprType, setSelectedApprType] = useState('ALL');
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
+
+  const toggleCard = (key: string) => {
+    setSelectedCards([key]);
+    // @@ 임시로
+    // setSelectedCards((prev) =>
+    //   prev.includes(key) ? prev.filter((item) => item !== key) : [...prev, key],
+    // );
+  };
 
   useEffect(() => {
     if (isFocused) {
       mount();
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    getList();
+  }, [selectedCards]);
 
   useEffect(() => {
     const res = list?.filter((e) => {
@@ -69,7 +83,6 @@ const APR010101 = () => {
       GCODE: 'RQ_TYPE',
     });
     setSelectedApprType('ALL');
-    const sortedArr = ['VA', 'ND', 'NC'];
     resOfApprType = resOfApprType.filter((e) => {
       return sortedArr.includes(e?.HQCODE); // @@ 연차, 연장 관련만 하드코딩
     });
@@ -82,21 +95,52 @@ const APR010101 = () => {
     // 통계리스트 조회
     const payload1 = {
       S_RQ_TYPE_MULTI: sortedArr,
+      S_ADD_DATE_FROM: selectedDate.add(-3, 'month').format('YYYYMMDD'),
+      S_ADD_DATE_TO: selectedDate.format('YYYYMMDD'),
     };
     const res1 = await Action.getInfoM(payload1);
     setStats(res1);
+    setLoading(false);
+  };
+
+  const getList = async () => {
+    let commonInfo = {
+      S_AP_STATUS_MULTI: ['S'],
+      S_LINE_STATUS: 'C',
+    };
+    if (selectedCards.includes('complete')) {
+      commonInfo = {
+        S_AP_STATUS_MULTI: ['A', 'R'],
+        S_LINE_STATUS: '',
+      };
+    }
+    if (selectedCards.includes('pending')) {
+      commonInfo = {
+        S_AP_STATUS_MULTI: ['S'],
+        S_LINE_STATUS: 'C',
+      };
+    }
+    if (selectedCards.includes('progress')) {
+      commonInfo = {
+        S_AP_STATUS_MULTI: ['S'],
+        S_LINE_STATUS: '',
+      };
+    }
+
     const payload2 = {
-      S_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      ...commonInfo,
       S_RQ_TYPE_MULTI: sortedArr,
-      SS_EMP_ID: empInfo?.EMP_ID,
-      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
-      ADMIN_AUTH_CHK: 'N',
       S_ADD_DATE_FROM: selectedDate.add(-3, 'month').format('YYYYMMDD'),
       S_ADD_DATE_TO: selectedDate.format('YYYYMMDD'),
       // @@ 스크롤에 따른 문서 개수 조정
       PAGE_NO_FROM: 1,
       PAGE_NO_TO: 100,
+      S_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      SS_EMP_ID: empInfo?.EMP_ID,
+      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      ADMIN_AUTH_CHK: 'N',
     };
+    setLoading(true);
     const res2 = await Action.getListM(payload2);
     setList(res2);
     setFilteredList(res2);
@@ -123,7 +167,11 @@ const APR010101 = () => {
           <Text style={styles.headerText}>
             {empInfo?.EMP_NAME_LC}님 결재 현황입니다.
           </Text>
-          <LayoutOfStats stats={stats} />
+          <LayoutOfStats
+            stats={stats}
+            toggleCard={toggleCard}
+            selectedCards={selectedCards}
+          />
           <Filter
             apprFilter={apprFilter}
             selectedApprType={selectedApprType}
@@ -162,30 +210,48 @@ const APR010101 = () => {
 export default APR010101;
 
 const LayoutOfStats = (props: any) => {
-  const { stats } = props;
+  const { stats, toggleCard, selectedCards } = props;
   return (
     <View style={[LVStyles.row, { marginTop: 8 }]}>
       <LVCard
         category='stat'
         label={'완료 문서'}
+        onPress={() => toggleCard('complete')}
         value={stats?.COMPLETE_APPR_CNT}
-        cardStyle={{ backgroundColor: '#F7F8FB', height: 112 }}
+        cardStyle={{
+          backgroundColor: '#F7F8FB',
+          height: 112,
+          borderColor: '#939DAA',
+          borderWidth: selectedCards.includes('complete') ? 2 : 0,
+        }}
         valueStyle={{ color: '#939DAA' }}
       />
       <View style={{ width: 8 }} />
       <LVCard
         category='stat'
         label={'결재할 문서'}
+        onPress={() => toggleCard('pending')}
         value={stats?.PENDING_APPR_CNT}
-        cardStyle={{ backgroundColor: '#EEF8FF', height: 112 }}
+        cardStyle={{
+          backgroundColor: '#EEF8FF',
+          height: 112,
+          borderColor: '#27A7FF',
+          borderWidth: selectedCards.includes('pending') ? 2 : 0,
+        }}
         valueStyle={{ color: '#27A7FF' }}
       />
       <View style={{ width: 8 }} />
       <LVCard
         category='stat'
         label={'진행 문서'}
+        onPress={() => toggleCard('progress')}
         value={stats?.PROGRESS_APPR_CNT}
-        cardStyle={{ backgroundColor: '#EBEFF5', height: 112 }}
+        cardStyle={{
+          backgroundColor: '#EBEFF5',
+          height: 112,
+          borderColor: '#003282',
+          borderWidth: selectedCards.includes('progress') ? 2 : 0,
+        }}
         valueStyle={{ color: '#003282' }}
       />
     </View>
@@ -271,6 +337,8 @@ const allFilter = {
   HQCODE: 'ALL',
   HQNAME: '전체',
 };
+
+const sortedArr = ['VA', 'ND', 'NC'];
 
 const styles = StyleSheet.create({
   header: {

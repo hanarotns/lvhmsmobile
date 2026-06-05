@@ -7,9 +7,10 @@ const LVCard = (props: any) => {
   const { category } = props;
 
   if (category === 'stat') {
-    const { label, value, cardStyle, valueStyle } = props;
+    const { onPress, label, value, cardStyle, valueStyle } = props;
     return (
       <TouchableOpacity
+        onPress={onPress}
         style={{
           flex: 1,
           height: 100,
