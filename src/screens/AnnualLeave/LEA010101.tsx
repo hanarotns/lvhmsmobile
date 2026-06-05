@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -28,7 +28,6 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import { SlidersHorizontal } from 'lucide-react-native';
 import * as Action from './Action';
 
 const LEA010101 = () => {
@@ -185,11 +184,11 @@ const LEA010101 = () => {
           )}
         </View>
       </ScrollView>
-      <View style={styles.floatingButton}>
+      {/* <View style={styles.floatingButton}>
         <TouchableOpacity style={styles.filterIconButton} onPress={openFilter}>
           <SlidersHorizontal size={24} color='#FFF' />
         </TouchableOpacity>
-      </View>
+      </View> */}
       <LVFilterBottomSheet ref={bottomSheetRef} />
       {isVisibleModal && (
         <LVModal
