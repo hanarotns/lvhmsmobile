@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -26,6 +26,7 @@ import { Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import { SlidersHorizontal } from 'lucide-react-native';
 import * as Action from './Action';
 
 const LEA010101 = () => {
@@ -175,6 +176,11 @@ const LEA010101 = () => {
           )}
         </View>
       </ScrollView>
+      <View style={styles.floatingButton}>
+        <TouchableOpacity style={styles.filterIconButton} onPress={() => {}}>
+          <SlidersHorizontal size={24} color='#FFF' />
+        </TouchableOpacity>
+      </View>
       {isVisibleModal && (
         <LVModal
           title={'기초데이터 미설정'}
@@ -338,5 +344,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#373747',
+  },
+  filterIconButton: {
+    width: 48,
+    height: 48,
+    backgroundColor: '#27A7FF',
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  floatingButton: {
+    position: 'absolute',
+    top: 24,
+    right: 32,
   },
 });
