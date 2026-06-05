@@ -1,7 +1,14 @@
 import { Fetch, Util } from '@/src/lib';
 import env from '@/src/lib/env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CookieManager from '@react-native-cookies/cookies';
-const fetchURL = env().fetchURL;
+
+const envConfig = env();
+let fetchURL = envConfig.fetchURL;
+const settingUrl = async () => {
+  fetchURL = await AsyncStorage.getItem('url');
+};
+settingUrl();
 
 // @@ API 신규 정의 필요 (유사 API없음.)
 const getEmpInfoM = async (body: object) => {
@@ -123,6 +130,7 @@ const LaborRefusal_confirm = async (body: object) => {
 };
 
 const uploadFile = async (file, refNo, companyCode = 'HTNS') => {
+  fetchURL = await AsyncStorage.getItem('url');
   await CookieManager.clearAll();
 
   const now = new Date();
@@ -157,6 +165,7 @@ const uploadFile = async (file, refNo, companyCode = 'HTNS') => {
       Cookie: global.gCookie,
     },
   });
+  fetchURL = await AsyncStorage.getItem('url');
 
   const result = await response.json();
   console.log('[uploadFile] response', JSON.stringify(result.data));
