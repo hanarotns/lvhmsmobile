@@ -258,8 +258,13 @@ const DocuPreviewContent = (props: any) => {
               title={`확정 ${elem?.CONFIRM_P_STATUS_NAME}`}
               code={elem?.CONFIRM_P_STATUS}
             />
-            <View style={{ width: 8 }} />
-            <Text style={{ fontWeight: '700' }}>
+            <Text
+              style={{
+                marginLeft: 8,
+                fontWeight: '600',
+                color: elem?.CONFIRM_JOB_NO ? '#373747' : '#ABBACD',
+              }}
+            >
               {Util.convertDateTime(
                 elem?.CONFIRM_NDS_DATE,
                 elem?.ND_TYPE === 'OT'
