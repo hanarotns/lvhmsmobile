@@ -68,8 +68,10 @@ const OVT010301 = () => {
       ...route.params,
     };
     const detail = await Action.getDetailM(payload);
-    const hours = await Action.getAccumulatedHours(detail);
-    setAccumulatedHours(hours);
+    if (detail) {
+      const hours = await Action.getAccumulatedHours(detail);
+      setAccumulatedHours(hours);
+    }
     const apprLine = await Action.getApprLine(payload);
 
     const sortedApprLine = [...apprLine].sort((a, b) => a.LINE_ID - b.LINE_ID);
