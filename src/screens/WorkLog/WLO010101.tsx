@@ -260,7 +260,7 @@ const Form = (props: any) => {
           </View>
           <View style={styles.offsiteCardLine2}>
             <View style={{ flex: 1 }}>
-              <Text style={styles.label}>내용</Text>
+              <Text style={styles.label}>업체명 / 내용</Text>
               <Text style={styles.value} numberOfLines={1}>
                 {elem?.OOO_REASON || '-'}
               </Text>

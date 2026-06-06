@@ -222,7 +222,7 @@ const MYH010101 = ({ navigation }) => {
       WAT_STATUS: nearestOffice.ET_STATUS,
       // MOBILE_TOKEN: token,
       // 외근인 경우만.
-      OOO_REASON: offsiteInfo?.OOO_REASON,
+      OOO_REASON: ` ${offsiteInfo?.OOO_COMPANY} / ${offsiteInfo?.OOO_REASON}`,
     };
     const result = await WLOAction.saveM(payload);
     // 사용자 알림 메시지
@@ -243,8 +243,13 @@ const MYH010101 = ({ navigation }) => {
 
   const handleSave = async () => {
     if (checkType === 'O') {
-      if (!(offsiteInfo?.WAT_AREA_NAME && offsiteInfo?.OOO_REASON)) {
-        // @@ 외근업체명: && offsiteInfo?.name
+      if (
+        !(
+          offsiteInfo?.WAT_AREA_NAME &&
+          offsiteInfo?.OOO_COMPANY &&
+          offsiteInfo?.OOO_REASON
+        )
+      ) {
         Util.toastMsg('입력란을 모두 작성하세요.', 'info');
         return false;
       }
@@ -640,11 +645,11 @@ const ContentsOfOffsite = (props: any) => {
       {/* @@ 외근업체 컬럼 없음 */}
       <Input
         placeholder='외근 업체명을 입력하세요.'
-        value={offsiteInfo?.name}
+        value={offsiteInfo?.OOO_COMPANY}
         onChangeText={(p) => {
           setOffsiteInfo({
             ...offsiteInfo,
-            name: p,
+            OOO_COMPANY: p,
           });
         }}
         size='large'
