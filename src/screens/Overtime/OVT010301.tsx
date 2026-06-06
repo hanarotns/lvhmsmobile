@@ -302,8 +302,8 @@ const OVT010301 = () => {
               children={
                 <Text style={{ fontWeight: '700' }}>
                   {dt?.NC_WEEK_HOUR
-                    ? `총 ${dt?.NC_WEEK_HOUR} 시간`
-                    : `총 ${accumulatedHours?.NC_WEEK_HOUR} 시간`}
+                    ? `총 ${dt?.NC_WEEK_HOUR || 0} 시간`
+                    : `총 ${accumulatedHours?.NC_WEEK_HOUR || 0} 시간`}
                 </Text>
               }
             />
@@ -312,8 +312,8 @@ const OVT010301 = () => {
               children={
                 <Text style={{ fontWeight: '700' }}>
                   {dt?.NC_MONTH_HOUR
-                    ? `총 ${dt?.NC_MONTH_HOUR} 시간`
-                    : `총 ${accumulatedHours?.NC_MONTH_HOUR} 시간`}
+                    ? `총 ${dt?.NC_MONTH_HOUR || 0} 시간`
+                    : `총 ${accumulatedHours?.NC_MONTH_HOUR || 0} 시간`}
                 </Text>
               }
             />
