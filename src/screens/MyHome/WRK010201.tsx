@@ -575,7 +575,6 @@ const WRK010201 = () => {
             buttonStyle={styles.cancelButton}
             textStyle={styles.cancelButtonText}
           />
-          <View style={{ width: 8 }} />
           <LVButton
             title='지원'
             onPress={onPressSubmit}

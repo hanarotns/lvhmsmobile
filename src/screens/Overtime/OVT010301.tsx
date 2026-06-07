@@ -392,7 +392,6 @@ const OVT010301 = () => {
               buttonStyle={styles.recallButton}
               textStyle={styles.recallButtonText}
             />
-            <View style={{ width: 8 }} />
             <LVButton
               title={'반려'}
               onPress={() => {
@@ -400,7 +399,6 @@ const OVT010301 = () => {
               }}
               buttonStyle={styles.cancelButton}
             />
-            <View style={{ width: 8 }} />
             <LVButton
               title={'결재'}
               onPress={handleApproveForApprover}

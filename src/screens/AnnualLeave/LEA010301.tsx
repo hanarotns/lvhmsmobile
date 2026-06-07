@@ -313,13 +313,11 @@ const LEA010301 = () => {
               buttonStyle={styles.recallButton}
               textStyle={styles.recallButtonText}
             />
-            <View style={{ width: 8 }} />
             <LVButton
               title={'삭제'}
               onPress={handleDelete}
               buttonStyle={styles.cancelButton}
             />
-            <View style={{ width: 8 }} />
             <LVButton
               title={'상신'}
               onPress={handleReApprove}
@@ -346,7 +344,6 @@ const LEA010301 = () => {
               buttonStyle={styles.recallButton}
               textStyle={styles.recallButtonText}
             />
-            <View style={{ width: 8 }} />
             <LVButton
               title={'반려'}
               onPress={() => {
@@ -354,7 +351,6 @@ const LEA010301 = () => {
               }}
               buttonStyle={styles.cancelButton}
             />
-            <View style={{ width: 8 }} />
             <LVButton
               title={'결재'}
               onPress={handleApproveForApprover}

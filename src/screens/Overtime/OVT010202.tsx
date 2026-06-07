@@ -222,7 +222,6 @@ const OVT010202 = () => {
             buttonStyle={styles.cancelButton}
             textStyle={styles.cancelButtonText}
           />
-          <View style={{ width: 8 }} />
           {/* 최초 상신 */}
           <LVButton
             title={'상신'}
