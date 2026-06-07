@@ -67,9 +67,9 @@ const OVT010301 = () => {
       EMP_ID: empInfo?.EMP_ID,
       ...route.params,
     };
-    const detail = await Action.getDetailM(payload);
+    const detail = await Action.getDetailM('nd', payload);
     if (detail) {
-      const hours = await Action.getAccumulatedHours(detail);
+      const hours = await Action.getAccumulatedHours('nd', detail);
       setAccumulatedHours(hours);
     }
     let apprLine = await Action.getApprLine(payload);
@@ -131,7 +131,7 @@ const OVT010301 = () => {
 
   const handleReApprove = async () => {
     setLoading(true);
-    const result = await Action.saveApproval(dt, dt?.APPR_LINE);
+    const result = await Action.saveApproval('nd', dt, dt?.APPR_LINE);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);

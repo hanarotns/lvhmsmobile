@@ -8,7 +8,10 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 import {
   LVApprLineForm,
   LVButton,
+  LVCheckBox,
+  LVChip,
   LVConfirmIndicator,
+  LVDateTimePicker,
   LVFormOfContents,
   LVLoadingIndicator,
   LVStyles,
@@ -19,9 +22,11 @@ import {
 } from '@/src/components';
 import { Util } from '@/src/lib';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { Input } from '@ui-kitten/components';
+import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import * as Action from './Action';
+dayjs.extend(customParseFormat);
 
 type RootStackParamList = {
   DetailScreen: undefined;
@@ -43,64 +48,73 @@ const OVT010202 = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [approvalLine, setApprovalLine] = useState([]);
+  const [fromDateTime, setFromDateTime] = useState<Date>(new Date());
+  const [toDateTime, setToDateTime] = useState<Date>(new Date());
+  const [isChange, setIsChange] = useState(false);
   const [changeReason, setChangeReason] = useState('');
-  const [isCheckOfDate, setIsCheckOfDate] = useState(false);
-  const [initTime, setInitTime] = useState('');
-  const [changeTime, setChangeTime] = useState('');
+
   const [overtimeInfo, setOvertimeInfo] = useState({}); // 시간외 결재문서 정보
   const [dt, setDt] = useState({});
+  const [accumulatedHours, setAccumulatedHours] = useState({});
+  const [otHours, setOtHours] = useState({});
 
   useEffect(() => {
     mount();
   }, []);
 
-  useEffect(() => {
-    if (initTime !== changeTime) {
-      setIsCheckOfDate(true);
-    } else {
-      setIsCheckOfDate(false);
-      setChangeReason('');
-      // @@ 다시 확인 할것!
-    }
-  }, [changeTime]);
-
   const mount = async () => {
     setLoading(true);
-    const res = {};
+    const detail = await Action.getDetailM('nc', route?.params);
+    const hours1 = await Action.getAccumulatedHours('nc', detail);
+    setAccumulatedHours(hours1);
+    const hours2 = await Action.calTime(detail);
+    setOtHours(hours2);
+
+    setFromDateTime(
+      dayjs(route?.params?.ND_DATE + route?.params?.START_TIME, 'YYYYMMDDHHmm'),
+    );
+    setToDateTime(
+      dayjs(
+        route?.params?.CLOSING_DATE + route?.params?.CLOSING_TIME,
+        'YYYYMMDDHHmm',
+      ),
+    );
+    let apprLine = await Action.getApproval33(detail);
+    apprLine = apprLine.map((e) => ({
+      ...e,
+      LINE_ID: e?.LINE_NO,
+      APPROVAL_EMP_ID: e?.AP_EMP_ID,
+      APPROVAL_EMP_NAME: e?.AP_EMP_NAME,
+      APPROVAL_EMP_DEPT_CODE: e?.AP_DEPT_CODE,
+      APPROVAL_EMP_DEPT_NAME: e?.AP_DEPT_NAME,
+    }));
+    const sortedApprLine = [...apprLine].sort((a, b) => a.LINE_ID - b.LINE_ID);
+
+    const res = {
+      ...route.params,
+      ...detail,
+      APPR_LINE: sortedApprLine,
+    };
     // const res = await Action.getDetailM(route.params.APPR_NO);
     setDt(res);
     setApprovalLine(res?.APPR_LINE);
-    setInitTime(res?.RA_APPLY_TIME);
-    setChangeTime(res?.RA_APPLY_TIME);
     setLoading(false);
   };
 
   const handleSubmit = async () => {
-    if (empInfo) return; // @@ 버튼 무효화
-    const approvalInfo = {
-      APPR_TITLE: '시간외근무신청',
-      APPR_TYPE: '02',
-      APPR_STATUS: '01',
-      APPR_NO: route.params.APPR_NO,
+    setLoading(true);
+    const payload = {
+      ...dt,
+      APPLY_WEEK_HOUR: String(
+        accumulatedHours?.NC_WEEK_HOUR + otHours?.OVER_TIME,
+      ),
+      APPLY_MONTH_HOUR: String(
+        accumulatedHours?.NC_MONTH_HOUR + otHours?.OVER_TIME,
+      ),
+      APPLY_HOUR_W: String(otHours?.OVER_TIME),
     };
-    const body = {
-      F1: approvalInfo,
-      G1: approvalLine,
-      F2: {
-        OT_DATE: dt?.OT_DATE,
-        OT_TYPE: dt?.OT_TYPE,
-        RA_START_TIME: dt?.RA_START_TIME
-          ? dt?.RA_START_TIME.substring(0, 4)
-          : null,
-        RA_END_DATE: dt?.RA_END_DATE,
-        RA_END_TIME: dt?.RA_END_TIME ? dt?.RA_END_TIME.substring(0, 4) : null,
-        RA_APPLY_TIME: dt?.RA_APPLY_TIME,
-        MODIFIED_FLAG: changeReason ? 'Y' : 'N',
-        MODIFIED_MEMO: changeReason,
-        MODIFIED_TIME: changeTime,
-      },
-    };
-    const result = await Action.save(body);
+    const result = await Action.saveApproval('nc', payload, approvalLine);
+    setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {
@@ -137,82 +151,118 @@ const OVT010202 = () => {
               }
             />
             <LVFormOfContents
+              title={'예정번호'}
+              children={
+                <View style={[LVStyles.row, { flex: 1 }]}>
+                  <Text style={{ fontWeight: '500' }}>{dt?.JOB_NO}</Text>
+                  <LVChip
+                    category='apprStatus'
+                    title={dt?.AP_STATUS_NAME}
+                    code={dt?.AP_STATUS}
+                  />
+                </View>
+              }
+            />
+            <LVFormOfContents
               title={'예정시간'}
               children={
-                <Text style={styles.dateTimeText}>{dt?.M_ES_DATETIME}</Text>
+                <Text style={styles.dateTimeText}>
+                  {Util.convertDateTime(
+                    dt?.ND_DATE,
+                    dt?.ND_TYPE !== 'OT' ? dt?.START_TIME : dt?.NORMAL_OFF_TIME,
+                    //@@ ND_TYPE = 'OT' 인 경우 연장시작시간 가져오는 로직으로 수정 필요!!!
+                  )}
+                  {'~'}
+                  {Util.convertDateTime(dt?.CLOSING_DATE, dt?.CLOSING_TIME)}
+                </Text>
               }
             />
             <LVFormOfContents
               title={'종류'}
               children={
-                <View style={styles.typeView}>
-                  <Text style={styles.typeText}>{dt?.M_TYPE_NAME}</Text>
-                </View>
+                <LVChip
+                  category='type'
+                  content={dt?.ND_TYPE_NM}
+                  chipStyle={styles.typeChip}
+                  textStyle={{ color: '#FF9E3C' }}
+                />
+              }
+            />
+            <LVFormOfContents
+              title={'주누적'}
+              children={
+                <Text style={{ fontWeight: '700' }}>
+                  {dt?.NC_WEEK_HOUR
+                    ? `총 ${dt?.NC_WEEK_HOUR || 0} 시간`
+                    : `총 ${accumulatedHours?.NC_WEEK_HOUR || 0} 시간`}
+                </Text>
+              }
+            />
+            <LVFormOfContents
+              title={'월누적'}
+              children={
+                <Text style={{ fontWeight: '700' }}>
+                  {dt?.NC_MONTH_HOUR
+                    ? `총 ${dt?.NC_MONTH_HOUR || 0} 시간`
+                    : `총 ${accumulatedHours?.NC_MONTH_HOUR || 0} 시간`}
+                </Text>
               }
             />
             <LVFormOfContents
               title={'내용'}
-              children={<Text style={{ fontWeight: '700' }}>{dt?.M_MEMO}</Text>}
+              children={<Text style={{ fontWeight: '700' }}>{dt?.REASON}</Text>}
             />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+              }}
+            >
+              <LVCheckBox
+                label='시간변경'
+                value={isChange}
+                onChange={setIsChange}
+              />
+            </View>
             <LVFormOfContents
               title={'시작일시'}
               children={
-                <Text style={styles.dateTimeText}>
-                  {Util.convertDateTime('', dt?.RA_START_TIME) || '-'}
-                </Text>
+                isChange ? (
+                  <LVDateTimePicker
+                    date={fromDateTime}
+                    setDate={setFromDateTime}
+                  />
+                ) : (
+                  <Text style={styles.dateTimeText}>
+                    {Util.convertDateTime(dt?.ND_DATE, dt?.START_TIME) || '-'}
+                  </Text>
+                )
               }
             />
             <LVFormOfContents
               title={'종료일시'}
               children={
-                <Text style={styles.dateTimeText}>
-                  {Util.convertDateTime('', dt?.RA_END_TIME) || '-'}
+                isChange ? (
+                  <LVDateTimePicker date={toDateTime} setDate={setToDateTime} />
+                ) : (
+                  <Text style={styles.dateTimeText}>
+                    {Util.convertDateTime(dt?.CLOSING_DATE, dt?.CLOSING_TIME) ||
+                      '-'}
+                  </Text>
+                )
+              }
+            />
+            <LVFormOfContents
+              title={'신청시간'}
+              children={
+                <Text style={{ fontWeight: '700' }}>
+                  {dt?.NC_HOUR
+                    ? `${dt?.NC_HOUR || 0} 시간`
+                    : `${otHours?.OVER_TIME || 0} 시간`}
                 </Text>
               }
             />
-            {/*  @@ 로직확인 */}
-            {/* <LVFormOfContents
-            title={'시간변경'}
-            children={
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text
-                  style={{fontWeight: '700'}}>
-                  {dt?.RA_APPLY_TIME}
-                </Text>
-                <Icon
-                  name='chevron-right'
-                  color='#373747'
-                  style={[LVStyles.iconS]}
-                />
-                <Input
-                  value={String(changeTime)}
-                  onChangeText={e => {
-                    setChangeTime(e);
-                  }}
-                  style={{backgroundColor: '#FFF', width: '30%'}}
-                  textStyle={{color: '#373747'}}
-                />
-                <View style={{width: 16}} />
-              </View>
-            }
-          /> */}
-            {isCheckOfDate ? (
-              <LVFormOfContents
-                title={'변경내용'}
-                children={
-                  <Input
-                    value={changeReason}
-                    onChangeText={setChangeReason}
-                    size='large'
-                    style={{ backgroundColor: '#FFF' }}
-                    textStyle={{ color: '#373747', minHeight: 100 }}
-                    multiline={true}
-                  />
-                }
-              />
-            ) : (
-              <></>
-            )}
           </View>
         </ScrollView>
         <View style={LVStyles.bottomButtonView}>
@@ -305,5 +355,10 @@ const styles = StyleSheet.create({
     color: '#FF9E3C',
     fontSize: 14,
     fontWeight: '700',
+  },
+  typeChip: {
+    borderColor: '#FF9E3C',
+    backgroundColor: '#FFF7EF',
+    maxWidth: 100,
   },
 });

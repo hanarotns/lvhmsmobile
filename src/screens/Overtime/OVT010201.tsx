@@ -60,7 +60,7 @@ const OVT010201 = () => {
       EMP_ID: empInfo?.EMP_ID,
       ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
     };
-    const res1 = await Action.getAccumulatedHours(payload1);
+    const res1 = await Action.getAccumulatedHours('nd', payload1);
     setAccumulatedHours(res1);
     const payload2 = {
       EMP_ID: empInfo?.EMP_ID,
@@ -115,7 +115,7 @@ const OVT010201 = () => {
       OT_LEVEL: otEmpInfo?.OT_LEVEL,
     };
     setLoading(true);
-    const result = await Action.saveApproval(body, approvalLine);
+    const result = await Action.saveApproval('nd', body, approvalLine);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
