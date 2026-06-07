@@ -137,7 +137,71 @@ const deleteMobile = async (body: object) => {
   return result;
 };
 
+/**
+ * 회수 (결재자)
+ * @param body1
+ * @param body2
+ * @returns
+ */
+const recallForApprover = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010301SVC', 'GCollect', {
+    body: JSON.stringify({
+      PORU010301F1: body1,
+      PORU010301G1: {
+        data: body2,
+      },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 반려 (결재자)
+ * @param body1
+ * @param body2
+ * @returns
+ */
+const refusalForApprover = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010301SVC', 'GApprovalCancel', {
+    body: JSON.stringify({
+      PORU010301F1: body1,
+      PORU010301G1: {
+        data: body2,
+      },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 결재 (결재자)
+ * @param body1
+ * @param body2
+ * @returns
+ */
+const approveForApprover = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010301SVC', 'GApproval', {
+    body: JSON.stringify({
+      PORU010301F1: body1,
+      PORU010301G1: {
+        data: body2,
+      },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
 export {
+  approveForApprover,
   deleteMobile,
   // 문서 기준의 주, 월 누적시간 조회
   getAccumulatedHours,
@@ -151,5 +215,7 @@ export {
   getInfoM,
   getListM,
   recall,
+  recallForApprover,
+  refusalForApprover,
   saveApproval,
 };

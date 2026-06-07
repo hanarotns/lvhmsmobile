@@ -144,13 +144,14 @@ const OVT010301 = () => {
 
   // 결재자
   const handleRecallForApprover = async () => {
-    if (empInfo) return; // @@ 버튼 무효화
-    const result = await Action.save({
-      F1: {
-        APPR_NO: dt?.APPR_NO,
-        APPR_PARAM: 'R', // 회수
-      },
-    });
+    const payload1 = {
+      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      SS_EMP_ID: empInfo?.EMP_ID,
+    };
+    const payload2 = [dt];
+    setLoading(true);
+    const result = await Action.recallForApprover(payload1, payload2);
+    setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {
@@ -161,13 +162,14 @@ const OVT010301 = () => {
   };
 
   const handleRefusalForApprover = async () => {
-    if (empInfo) return; // @@ 버튼 무효화
-    const result = await Action.save({
-      F1: {
-        APPR_NO: dt?.APPR_NO,
-        APPR_PARAM: 'F', // 반려
-      },
-    });
+    const payload1 = {
+      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      SS_EMP_ID: empInfo?.EMP_ID,
+    };
+    const payload2 = [{ ...dt, CANCEL_REMARKS: refusalReason }];
+    setLoading(true);
+    const result = await Action.refusalForApprover(payload1, payload2);
+    setLoading(false);
     // 모달 닫기
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -180,13 +182,14 @@ const OVT010301 = () => {
   };
 
   const handleApproveForApprover = async () => {
-    if (empInfo) return; // @@ 버튼 무효화
-    const result = await Action.save({
-      F1: {
-        APPR_NO: dt?.APPR_NO,
-        APPR_PARAM: 'U', // 승인
-      },
-    });
+    const payload1 = {
+      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      SS_EMP_ID: empInfo?.EMP_ID,
+    };
+    const payload2 = [dt];
+    setLoading(true);
+    const result = await Action.approveForApprover(payload1, payload2);
+    setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {
