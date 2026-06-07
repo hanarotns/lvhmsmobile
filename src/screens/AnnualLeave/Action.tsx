@@ -112,6 +112,18 @@ const saveApproval = async (body1: object, body2: object, body3: object) => {
   return result;
 };
 
+const collect = async (body: object) => {
+  const result = await Fetch.request('PORU010302SVC', 'Collect', {
+    body: JSON.stringify({
+      PORU010302F236: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
 const deleteMobile = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'delete', {
     body: JSON.stringify({
@@ -128,18 +140,6 @@ const deleteRow = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'deleterow', {
     body: JSON.stringify({
       PORU010302G35: body,
-    }),
-  });
-  if (result.TYPE === -1) {
-    Util.toastMsg(result.MSG, 'error');
-  }
-  return result;
-};
-
-const collect = async (body: object) => {
-  const result = await Fetch.request('PORU010302SVC', 'Collect', {
-    body: JSON.stringify({
-      PORU010302F236: body,
     }),
   });
   if (result.TYPE === -1) {
