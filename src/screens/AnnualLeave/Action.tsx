@@ -84,20 +84,13 @@ const getClearInfo = async (body) => {
   return result.PORU010302F23;
 };
 
-const save = async (body1: object, body2: object, body3: object) => {
-  const result = await Fetch.request('PORU010302SVC', 'save', {
-    body: JSON.stringify({
-      PORU010302F236: body1, // 휴가원HD
-      PORU010302G35: { data: body2 }, // 휴가원DT
-      PORU010302G33: { data: body3 }, // 결재라인
-    }),
-  });
-  if (result.TYPE === -1) {
-    Util.toastMsg(result.MSG, 'error');
-  }
-  return result;
-};
-
+/**
+ * 상신
+ * @param body1
+ * @param body2
+ * @param body3
+ * @returns
+ */
 const saveApproval = async (body1: object, body2: object, body3: object) => {
   const result = await Fetch.request('PORU010302SVC', 'saveApproval', {
     body: JSON.stringify({
@@ -112,7 +105,12 @@ const saveApproval = async (body1: object, body2: object, body3: object) => {
   return result;
 };
 
-const collect = async (body: object) => {
+/**
+ * 회수
+ * @param body
+ * @returns
+ */
+const recall = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'Collect', {
     body: JSON.stringify({
       PORU010302F236: body,
@@ -124,6 +122,11 @@ const collect = async (body: object) => {
   return result;
 };
 
+/**
+ * 삭제
+ * @param body
+ * @returns
+ */
 const deleteMobile = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'delete', {
     body: JSON.stringify({
@@ -136,6 +139,11 @@ const deleteMobile = async (body: object) => {
   return result;
 };
 
+/**
+ * 휴가DT 삭제
+ * @param body
+ * @returns
+ */
 const deleteRow = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'deleterow', {
     body: JSON.stringify({
@@ -149,7 +157,6 @@ const deleteRow = async (body: object) => {
 };
 
 export {
-  collect,
   deleteMobile,
   deleteRow,
   getApprLine,
@@ -159,6 +166,6 @@ export {
   getInfoM,
   getListM,
   getPTHR_DGMD,
-  save,
+  recall,
   saveApproval,
 };
