@@ -96,9 +96,10 @@ const OVT010201 = () => {
   const handleSubmit = async () => {
     const body = {
       ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
-      START_TIME: dayjs(fromDateTime).format('HHmm'),
+      START_TIME:
+        selectedType?.HQCODE === 'OT' ? '' : dayjs(fromDateTime).format('HHmm'),
       CLOSING_DATE: dayjs(toDateTime).format('YYYYMMDD'),
-      CLOSING_TIME: dayjs(fromDateTime).format('HHmm'),
+      CLOSING_TIME: dayjs(toDateTime).format('HHmm'),
       ND_TYPE: selectedType?.HQCODE,
       HOLI_GUBUN: selectedType?.HQCODE === 'HO' ? 'Y' : 'N',
       MORN_GUBUN: selectedType?.HQCODE === 'XX' ? 'Y' : 'N',
