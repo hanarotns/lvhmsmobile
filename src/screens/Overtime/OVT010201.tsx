@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -17,9 +17,11 @@ import {
   RefreshControl,
   SafeAreaView,
   ScrollView,
+  Text,
 } from '@/src/components';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
+import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action';
@@ -37,6 +39,8 @@ const OVT010201 = () => {
   const [confirming, setConfirming] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [otEmpInfo, setOtEmpInfo] = useState({});
+  const [accumulatedHours, setAccumulatedHours] = useState({});
   const [approvalLine, setApprovalLine] = useState([]);
   const [fromDateTime, setFromDateTime] = useState<Date>(new Date());
   const [toDateTime, setToDateTime] = useState<Date>(new Date());
@@ -50,43 +54,67 @@ const OVT010201 = () => {
 
   const mount = async () => {
     setLoading(true);
-    // 시간외 종류 가져오기
-    let res = await COMAction.getCode('code', 'PC0001', {
-      GCODE: 'ND_TYPE',
-    });
-    setOvertimeTypeList(res);
+
+    const payload1 = {
+      COMPANY_CODE: empInfo?.COMPANY_CODE,
+      EMP_ID: empInfo?.EMP_ID,
+      ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
+    };
+    const res1 = await Action.getAccumulatedHours(payload1);
+    setAccumulatedHours(res1);
+    const payload2 = {
+      EMP_ID: empInfo?.EMP_ID,
+    };
+    const res2 = await Action.getClearInfo(payload2);
+    setOtEmpInfo(res2);
+    if (res2) {
+      let res3 = await COMAction.getCode('code', 'PC0001', {
+        GCODE: 'ND_TYPE',
+      });
+      // @@ OT_LEVEL, 조직/사원의 연장정보까지 고려 필요
+      let includedType = [''];
+      if (res2?.OT_LEVEL == '0') {
+        includedType = [''];
+        Alert.alert(
+          '알림',
+          '연장 불가능한 연장레벨입니다.\n인사팀에 문의하세요',
+        );
+      } else if (['1', '3'].includes(res2?.OT_LEVEL)) {
+        includedType = ['DU'];
+      } else if (res2?.OT_LEVEL == '2') {
+        includedType = ['OT', 'XX', 'HO']; // @@ 하나로에이 재택, 추가연장 없음 하드코딩
+      }
+      res3 = res3?.filter((e: object) => {
+        return includedType.includes(e?.HQCODE);
+      });
+      setOvertimeTypeList(res3);
+    }
+
     setLoading(false);
   };
 
   const handleSubmit = async () => {
     if (empInfo) return; // @@ 버튼 무효화
-    const approvalInfo = {
-      APPR_TITLE: '시간외근무신청',
-      APPR_TYPE: '02',
-      APPR_STATUS: '01',
-    };
     const body = {
-      F1: approvalInfo,
-      G1: approvalLine,
-      F2: {
-        ...overtimeInfo,
-        OT_TYPE: selectedType?.HQCODE, // 시간외 종류
-        // 예정 시작 일시
-        OT_DATE: fromDateTime.toISOString().substring(0, 10).replace(/-/g, ''),
-        ES_START_TIME:
-          ('0' + fromDateTime.getHours()).slice(-2) +
-          ('0' + fromDateTime.getMinutes()).slice(-2),
-        // 확정 시작 일시
-        ES_END_DATE: toDateTime
-          .toISOString()
-          .substring(0, 10)
-          .replace(/-/g, ''),
-        ES_END_TIME:
-          ('0' + toDateTime.getHours()).slice(-2) +
-          ('0' + toDateTime.getMinutes()).slice(-2),
-      },
+      ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
+      START_TIME: dayjs(fromDateTime).format('HHmm'),
+      CLOSING_DATE: dayjs(toDateTime).format('YYYYMMDD'),
+      CLOSING_TIME: dayjs(fromDateTime).format('HHmm'),
+      ND_TYPE: selectedType?.HQCODE,
+      HOLI_GUBUN: selectedType?.HQCODE === 'HO' ? 'Y' : 'N',
+      MORN_GUBUN: selectedType?.HQCODE === 'XX' ? 'Y' : 'N',
+      HOME_GUBUN: selectedType?.HQCODE === 'HM' ? 'Y' : 'N',
+      DUTY_GUBUN: selectedType?.HQCODE === 'DU' ? 'Y' : 'N',
+      REASON: overtimeInfo?.REASON,
+      DEPT_CODE: otEmpInfo?.DEPT_CODE,
+      DEPT_NAME: otEmpInfo?.DEPT_NAME,
+      EMP_NAME: otEmpInfo?.EMP_NAME,
+      EMP_ID: otEmpInfo?.EMP_ID,
+      POSITION_CODE: otEmpInfo?.POSITION_CODE,
+      POSITION_NAME: otEmpInfo?.POSITION_NAME,
+      OT_LEVEL: otEmpInfo?.OT_LEVEL,
     };
-    const result = await Action.save(body);
+    const result = await Action.saveApproval(body, approvalLine);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {
@@ -169,14 +197,27 @@ const OVT010201 = () => {
               }
             />
             <LVFormOfContents
+              title={'주누적'}
+              children={
+                <Text>총 {accumulatedHours?.NC_WEEK_HOUR || '0'} 시간</Text>
+              }
+            />
+            <LVFormOfContents
+              title={'월누적'}
+              children={
+                <Text>총 {accumulatedHours?.NC_MONTH_HOUR || '0'} 시간</Text>
+              }
+            />
+            <LVFormOfContents
               title={'내용'}
               children={
                 <Input
-                  value={overtimeInfo?.MEMO}
+                  placeholder='시간외 근무 사유를 입력하세요.'
+                  value={overtimeInfo?.REASON}
                   onChangeText={(p) => {
                     setOvertimeInfo({
                       ...overtimeInfo,
-                      MEMO: p,
+                      REASON: p,
                     });
                   }}
                   size='large'
