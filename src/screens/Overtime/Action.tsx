@@ -32,14 +32,19 @@ const getAccumulatedHours = async (body: object) => {
   });
   if (result1.TYPE === -1) {
     Util.toastMsg(result1.MSG, 'error');
-    // return;
+    return;
   }
   const reulst2 = await Fetch.request('PORU010301SVC', 'accrueTime', {
     body: JSON.stringify({
-      PORU010301F1: body,
-      ...result1.PORU010301F1[0],
+      PORU010301F1: {
+        ...body,
+        ...result1.PORU010301F1[0],
+      },
     }),
   });
+  if (result1.TYPE === -1) {
+    Util.toastMsg(result1.MSG, 'error');
+  }
   return reulst2.PORU010301F1[0];
 };
 
