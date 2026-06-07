@@ -84,6 +84,12 @@ const getClearInfo = async (body: object) => {
   return result.PORU010301F23[0];
 };
 
+/**
+ * 상신
+ * @param body1
+ * @param body2
+ * @returns
+ */
 const saveApproval = async (body1: object, body2: object) => {
   const result = await Fetch.request('PORU010301SVC', 'saveApproval', {
     body: JSON.stringify({
@@ -97,7 +103,42 @@ const saveApproval = async (body1: object, body2: object) => {
   return result;
 };
 
+/**
+ * 회수
+ * @param body
+ * @returns
+ */
+const recall = async (body: object) => {
+  const result = await Fetch.request('PORU010301SVC', 'Collect', {
+    body: JSON.stringify({
+      PORU010301F23: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 삭제
+ * @param body
+ * @returns
+ */
+const deleteMobile = async (body: object) => {
+  const result = await Fetch.request('PORU010301SVC', 'delete', {
+    body: JSON.stringify({
+      PORU010301F312: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
 export {
+  deleteMobile,
   // 문서 기준의 주, 월 누적시간 조회
   getAccumulatedHours,
   // 결재라인 조회
@@ -109,5 +150,6 @@ export {
   // 통계, 리스트 조회
   getInfoM,
   getListM,
+  recall,
   saveApproval,
 };
