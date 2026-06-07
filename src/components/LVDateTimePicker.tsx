@@ -68,7 +68,7 @@ const LVDateTimePicker: React.FC = (props) => {
                 mode={mode}
                 is24Hour={true}
                 textColor='#373747'
-                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                display={'spinner'}
                 onChange={onChange}
               />
             )}
