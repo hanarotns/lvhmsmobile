@@ -292,9 +292,7 @@ const DocuPreviewContent = (props: any) => {
               path={elem?.PICTURE_PATH}
             />
             <View style={{ width: 8 }} />
-            <Text style={styles.mainText}>
-              {elem?.RQ_EMP_NAME} {elem?.M_APPR_MEMBER_RANK_NAME}
-            </Text>
+            <Text style={styles.mainText}>{elem?.RQ_EMP_NAME}</Text>
           </View>
         </View>
       </View>
