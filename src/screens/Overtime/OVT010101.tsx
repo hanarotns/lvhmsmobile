@@ -131,8 +131,8 @@ const OVT010101 = () => {
                       elem={e}
                       key={i}
                       onConfReq={() => {
-                        if (e?.M_APPR_STATUS === '02') {
-                          movingScreen.navigate('OVT010202', elem);
+                        if (e?.AP_STATUS === 'A') {
+                          movingScreen.navigate('OVT010202', e);
                         } else {
                           Util.toastMsg(
                             '예정 결재가 완료되어야 신청가능합니다.',
