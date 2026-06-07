@@ -94,7 +94,6 @@ const OVT010201 = () => {
   };
 
   const handleSubmit = async () => {
-    if (empInfo) return; // @@ 버튼 무효화
     const body = {
       ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
       START_TIME: dayjs(fromDateTime).format('HHmm'),
@@ -114,7 +113,9 @@ const OVT010201 = () => {
       POSITION_NAME: otEmpInfo?.POSITION_NAME,
       OT_LEVEL: otEmpInfo?.OT_LEVEL,
     };
+    setLoading(true);
     const result = await Action.saveApproval(body, approvalLine);
+    setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {
@@ -122,6 +123,11 @@ const OVT010201 = () => {
         movingScreen.goBack();
       }, 1200);
     }
+  };
+
+  const handleBothDate = async (value) => {
+    setFromDateTime(value);
+    setToDateTime(value);
   };
 
   const handleRefresh = () => {
@@ -186,7 +192,7 @@ const OVT010201 = () => {
               children={
                 <LVDateTimePicker
                   date={fromDateTime}
-                  setDate={setFromDateTime}
+                  setDate={handleBothDate}
                 />
               }
             />

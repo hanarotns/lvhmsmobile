@@ -72,8 +72,15 @@ const OVT010301 = () => {
       const hours = await Action.getAccumulatedHours(detail);
       setAccumulatedHours(hours);
     }
-    const apprLine = await Action.getApprLine(payload);
-
+    let apprLine = await Action.getApprLine(payload);
+    apprLine = apprLine.map((e) => ({
+      ...e,
+      LINE_NO: e?.LINE_ID,
+      AP_EMP_ID: e?.APPROVAL_EMP_ID,
+      AP_EMP_NAME: e?.APPROVAL_EMP_NAME,
+      AP_DEPT_CODE: e?.APPROVAL_EMP_DEPT_CODE,
+      AP_DEPT_NAME: e?.APPROVAL_EMP_DEPT_NAME,
+    }));
     const sortedApprLine = [...apprLine].sort((a, b) => a.LINE_ID - b.LINE_ID);
 
     setDt({
@@ -86,14 +93,13 @@ const OVT010301 = () => {
 
   // 상신자
   const handleRecall = async () => {
-    if (empInfo) return; // @@ 버튼 무효화
-    const result = await Action.save({
-      F1: {
-        APPR_NO: dt?.APPR_NO,
-        APPR_PARAM: 'R', // 회수
-      },
-    });
-    setConfirming(true);
+    const payload = {
+      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      JOB_NO: dt?.CONFIRM_JOB_NO ? dt?.CONFIRM_JOB_NO : dt?.JOB_NO,
+    };
+    setLoading(true);
+    const result = await Action.recall(payload);
+    setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {
@@ -104,13 +110,16 @@ const OVT010301 = () => {
   };
 
   const handleDelete = async () => {
-    if (empInfo) return; // @@ 버튼 무효화
-    const result = await Action.save({
-      F1: {
-        APPR_NO: dt?.APPR_NO,
-        APPR_PARAM: 'D', // 삭제
-      },
-    });
+    const payload = {
+      COMPANY_CODE: empInfo?.COMPANY_CODE,
+      JOB_NO: dt?.CONFIRM_JOB_NO ? dt?.CONFIRM_JOB_NO : dt?.JOB_NO,
+      APPROVAL_NO: dt?.CONFIRM_JOB_NO
+        ? dt?.CONFIRM_APPROVAL_NO
+        : dt?.APPROVAL_NO,
+    };
+    setLoading(true);
+    const result = await Action.deleteMobile(payload);
+    setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {
@@ -121,13 +130,9 @@ const OVT010301 = () => {
   };
 
   const handleReApprove = async () => {
-    if (empInfo) return; // @@ 버튼 무효화
-    const result = await Action.save({
-      F1: {
-        APPR_NO: dt?.APPR_NO,
-        APPR_PARAM: 'U', // 승인
-      },
-    });
+    setLoading(true);
+    const result = await Action.saveApproval(dt, dt?.APPR_LINE);
+    setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {
@@ -345,30 +350,40 @@ const OVT010301 = () => {
             />
           </View>
         </ScrollView>
-        {route?.params?.RQ_EMP_ID === empInfo?.EMP_ID && (
+        {dt?.EMP_ID === empInfo?.EMP_ID && (
           // 상신자 사용
           <View style={LVStyles.bottomButtonView}>
-            <LVButton
-              title={'회수'}
-              onPress={handleRecall}
-              buttonStyle={styles.recallButton}
-              textStyle={styles.recallButtonText}
-            />
-            <View style={{ width: 8 }} />
-            <LVButton
-              title={'삭제'}
-              onPress={handleDelete}
-              buttonStyle={styles.cancelButton}
-            />
-            <View style={{ width: 8 }} />
-            <LVButton
-              title={'상신'}
-              onPress={handleReApprove}
-              buttonStyle={styles.reApproveButton}
-            />
+            {(dt?.CONFIRM_JOB_NO
+              ? dt?.CONFIRM_P_STATUS === 'S'
+              : dt?.AP_STATUS === 'S') && (
+              <LVButton
+                title={'회수'}
+                onPress={handleRecall}
+                buttonStyle={styles.recallButton}
+                textStyle={styles.recallButtonText}
+              />
+            )}
+            {(dt?.CONFIRM_JOB_NO
+              ? dt?.CONFIRM_P_STATUS === 'W'
+              : dt?.AP_STATUS === 'W') && (
+              <LVButton
+                title={'삭제'}
+                onPress={handleDelete}
+                buttonStyle={styles.cancelButton}
+              />
+            )}
+            {(dt?.CONFIRM_JOB_NO
+              ? dt?.CONFIRM_P_STATUS === 'W'
+              : dt?.AP_STATUS === 'W') && (
+              <LVButton
+                title={'상신'}
+                onPress={handleReApprove}
+                buttonStyle={styles.reApproveButton}
+              />
+            )}
           </View>
         )}
-        {route?.params?.RQ_EMP_ID !== empInfo?.EMP_ID && (
+        {dt?.EMP_ID !== empInfo?.EMP_ID && (
           // 결재자 사용
           <View style={LVStyles.bottomButtonView}>
             <LVButton
