@@ -72,11 +72,24 @@ const getApprLine = async (body: object) => {
   return result.PORU010399G1;
 };
 
-// @@ 신규 정의 필요(calTiem, accrueTime)
-// 상신, 회수, 삭제, 재상신 모두 분할 되어 있음
-const save = async (body: object) => {
-  const result = await Fetch.request('HMSOVT010SVC', 'save', {
-    body: JSON.stringify(body),
+const getClearInfo = async (body: object) => {
+  const result = await Fetch.request('PORU010301SVC', 'getClearInfo', {
+    body: JSON.stringify({
+      PORU010301F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010301F23[0];
+};
+
+const saveApproval = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010301SVC', 'saveApproval', {
+    body: JSON.stringify({
+      PORU010301F23: body1, // 시간외 HD
+      PORU010301G33: { data: body2 }, // 결재라인
+    }),
   });
   if (result.TYPE === -1) {
     Util.toastMsg(result.MSG, 'error');
@@ -89,11 +102,12 @@ export {
   getAccumulatedHours,
   // 결재라인 조회
   getApprLine,
+  // 연장관련 사원정보 조회
+  getClearInfo,
   // 상세 조회
   getDetailM,
   // 통계, 리스트 조회
   getInfoM,
   getListM,
-  // 신청: 상신 / 상세: 회수, 삭제, 재상신
-  save,
+  saveApproval,
 };
