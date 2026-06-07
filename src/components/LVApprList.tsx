@@ -33,8 +33,10 @@ const LVApprList = forwardRef((props: any, ref) => {
           >
             <View style={{ flex: 1 }}>
               <View style={styles.myApprListTitleView}>
-                <LVChip category='apprLineFlag' title='일반' />
-                <View style={{ width: 8 }} />
+                <View style={styles.apprLineView}>
+                  <LVChip category='apprLineFlag' title='일반' />
+                  <Text style={styles.apprLineNameText}>{e?.AP_NAME}</Text>
+                </View>
                 <Text style={styles.myApprListTitle}>{e?.APPR_LINE_NAME}</Text>
               </View>
               <View style={{ height: 8 }} />
@@ -54,6 +56,16 @@ const LVApprList = forwardRef((props: any, ref) => {
 export default LVApprList;
 
 const styles = StyleSheet.create({
+  apprLineView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  apprLineNameText: {
+    fontWeight: '700',
+    fontSize: 16,
+    marginLeft: 8,
+  },
   button: {
     backgroundColor: '#FFF',
     borderColor: '#27A7FF',
