@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
@@ -16,7 +10,6 @@ import {
   LVApprLine,
   LVApprList,
   LVButton,
-  LVChip,
   LVModal,
   LVStyles,
   Text,
@@ -259,51 +252,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-});
-
-const ContentsOfApproval = forwardRef((props: any, ref) => {
-  const { myApprList } = props;
-
-  const [selectedAppr, setSelectedAppr] = useState({});
-  useImperativeHandle(ref, () => ({
-    getSelectedValues: () => ({
-      selectedAppr,
-    }),
-  }));
-
-  return (
-    <View>
-      {myApprList?.map((e, i) => {
-        return (
-          <TouchableOpacity
-            key={e?.H_TP_SEQ || i}
-            style={{
-              ...styles.myApprListView,
-              borderColor:
-                selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ ? '#27A7FF' : '#6A727B',
-              backgroundColor:
-                selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ ? '#EEF8FF' : '#F0F2F6',
-            }}
-            onPress={() => {
-              setSelectedAppr(e);
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <View style={styles.myApprListTitleView}>
-                <LVChip category='apprLineFlag' title='일반' />
-                <View style={{ width: 8 }} />
-                <Text style={styles.myApprListTitle}>{e?.APPR_LINE_NAME}</Text>
-              </View>
-              <View style={{ height: 8 }} />
-              <LVApprLine
-                data={e?.DETAILS}
-                mainColor={'#6A727B'}
-                reqApproval={true}
-              />
-            </View>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
-  );
 });
