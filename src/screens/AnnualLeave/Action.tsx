@@ -130,7 +130,7 @@ const recall = async (body: object) => {
 const deleteMobile = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'delete', {
     body: JSON.stringify({
-      PORU010302F236: { data: body },
+      PORU010302F236: body,
     }),
   });
   if (result.TYPE === -1) {
