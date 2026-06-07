@@ -334,13 +334,14 @@ const LEA010301 = () => {
         {route?.params?.EMP_ID === empInfo?.EMP_ID && (
           // 상신자 사용, 결재완료 상태에서 변경 / 취소 가능함 추가
           <View style={LVStyles.bottomButtonView}>
-            {route?.params?.AP_STATUS === 'A' && (
-              <LVButton
-                title={'변경'}
-                onPress={handleAgain}
-                buttonStyle={styles.reApproveButton}
-              />
-            )}
+            {route?.params?.AP_STATUS === 'A' &&
+              false && ( // @@ 버튼 임시 비활성화
+                <LVButton
+                  title={'변경'}
+                  onPress={handleAgain}
+                  buttonStyle={styles.reApproveButton}
+                />
+              )}
           </View>
         )}
         {route?.params?.EMP_ID !== empInfo?.EMP_ID && (
