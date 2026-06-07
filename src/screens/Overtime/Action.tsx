@@ -37,10 +37,10 @@ const getAccumulatedHours = async (body: object) => {
   const reulst2 = await Fetch.request('PORU010301SVC', 'accrueTime', {
     body: JSON.stringify({
       PORU010301F1: body,
-      ...result1.PORU010301F1['0'],
+      ...result1.PORU010301F1[0],
     }),
   });
-  return reulst2.PORU010301F1['0'];
+  return reulst2.PORU010301F1[0];
 };
 
 const getDetailM = async (body: object) => {
