@@ -16,6 +16,7 @@ const LVStyles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     bottom: 0,
+    gap: 8,
   },
   iconXS: {
     width: 18,
