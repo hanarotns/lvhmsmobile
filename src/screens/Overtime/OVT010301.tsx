@@ -103,7 +103,7 @@ const OVT010301 = () => {
     }
   };
 
-  const handleCancel = async () => {
+  const handleDelete = async () => {
     if (empInfo) return; // @@ 버튼 무효화
     const result = await Action.save({
       F1: {
@@ -357,7 +357,7 @@ const OVT010301 = () => {
             <View style={{ width: 8 }} />
             <LVButton
               title={'삭제'}
-              onPress={handleCancel}
+              onPress={handleDelete}
               buttonStyle={styles.cancelButton}
             />
             <View style={{ width: 8 }} />
