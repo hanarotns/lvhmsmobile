@@ -2,14 +2,14 @@
   "expo": {
     "name": "LV-HMS",
     "slug": "lvoneportal",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "lvoneportal",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "buildNumber": "4",
+      "buildNumber": "1",
       "supportsTablet": true,
       "bundleIdentifier": "com.hanarotns.lvone.portal",
       "infoPlist": {
@@ -17,7 +17,7 @@
       }
     },
     "android": {
-      "versionCode": 13,
+      "versionCode": 14,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
