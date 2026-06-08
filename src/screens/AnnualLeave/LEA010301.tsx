@@ -86,7 +86,7 @@ const LEA010301 = () => {
     const sortedApprLine = [...apprLine].sort((a, b) => a.LINE_ID - b.LINE_ID);
 
     setDt({
-      ...route.params,
+      ...route?.params,
       ...res,
       DETAIL: detail,
       APPR_LINE: sortedApprLine,

@@ -65,7 +65,7 @@ const OVT010301 = () => {
     const payload = {
       COMPANY_CODE: empInfo?.COMPANY_CODE,
       EMP_ID: empInfo?.EMP_ID,
-      ...route.params,
+      ...route?.params,
     };
     const detail = await Action.getDetailM('nd', payload);
     if (detail) {
@@ -84,7 +84,7 @@ const OVT010301 = () => {
     const sortedApprLine = [...apprLine].sort((a, b) => a.LINE_ID - b.LINE_ID);
 
     setDt({
-      ...route.params,
+      ...route?.params,
       ...detail,
       APPR_LINE: sortedApprLine,
     });

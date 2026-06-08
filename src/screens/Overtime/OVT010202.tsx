@@ -91,11 +91,11 @@ const OVT010202 = () => {
     const sortedApprLine = [...apprLine].sort((a, b) => a.LINE_ID - b.LINE_ID);
 
     const res = {
-      ...route.params,
+      ...route?.params,
       ...detail,
       APPR_LINE: sortedApprLine,
     };
-    // const res = await Action.getDetailM(route.params.APPR_NO);
+    // const res = await Action.getDetailM(route?.params.APPR_NO);
     setDt(res);
     setApprovalLine(res?.APPR_LINE);
     setLoading(false);

@@ -125,11 +125,11 @@ const LEA010201 = () => {
     setOfficialLeaveType(resOfOfficialLeaveType);
     // 변경 상신인 경우.
     if (route?.params?.APPR_NO) {
-      setApprovalLine(route.params?.APPR_LINE);
+      setApprovalLine(route?.params?.APPR_LINE);
       setHd({
         ...hd,
       });
-      setInfoList(route.params?.DETAIL);
+      setInfoList(route?.params?.DETAIL);
     }
     setLoading(false);
   };
