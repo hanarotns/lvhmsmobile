@@ -224,6 +224,18 @@ const LEA010301 = () => {
         >
           <View style={styles.container}>
             <LVFormOfContents
+              title={'신청자정보'}
+              children={
+                <View style={[LVStyles.row, { flex: 1 }]}>
+                  <Text style={{ fontWeight: '500' }}>
+                    {!Util.isEmpty(dt?.DEPT_NAME)
+                      ? `[${dt?.DEPT_NAME}] ${dt?.EMP_NAME}`
+                      : `[${dt?.RQ_DEPT_NAME}] ${dt?.RQ_EMP_NAME}`}
+                  </Text>
+                </View>
+              }
+            />
+            <LVFormOfContents
               title={'문서번호'}
               children={
                 <View style={{ ...LVStyles.row, flex: 1, marginRight: 16 }}>
