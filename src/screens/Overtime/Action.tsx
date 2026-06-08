@@ -170,10 +170,16 @@ const saveApproval = async (type: string, body1: object, body2: object) => {
  * @param body
  * @returns
  */
-const recall = async (body: object) => {
-  const result = await Fetch.request('PORU010301SVC', 'Collect', {
+const recall = async (type: string, body: object) => {
+  let serviceName = 'PORU0103';
+  if (type === 'nd') {
+    serviceName += '01';
+  } else if (type === 'nc') {
+    serviceName += '20';
+  }
+  const result = await Fetch.request(`${serviceName}SVC`, 'Collect', {
     body: JSON.stringify({
-      PORU010301F23: body,
+      [`${serviceName}F23`]: body,
     }),
   });
   if (result.TYPE === -1) {
@@ -187,10 +193,16 @@ const recall = async (body: object) => {
  * @param body
  * @returns
  */
-const deleteMobile = async (body: object) => {
-  const result = await Fetch.request('PORU010301SVC', 'delete', {
+const deleteMobile = async (type: string, body: object) => {
+  let serviceName = 'PORU0103';
+  if (type === 'nd') {
+    serviceName += '01';
+  } else if (type === 'nc') {
+    serviceName += '20';
+  }
+  const result = await Fetch.request(`${serviceName}SVC`, 'delete', {
     body: JSON.stringify({
-      PORU010301F312: body,
+      [`${serviceName}F312`]: body,
     }),
   });
   if (result.TYPE === -1) {
@@ -205,11 +217,21 @@ const deleteMobile = async (body: object) => {
  * @param body2
  * @returns
  */
-const recallForApprover = async (body1: object, body2: object) => {
-  const result = await Fetch.request('PORU010301SVC', 'GCollect', {
+const recallForApprover = async (
+  type: string,
+  body1: object,
+  body2: object,
+) => {
+  let serviceName = 'PORU0103';
+  if (type === 'nd') {
+    serviceName += '01';
+  } else if (type === 'nc') {
+    serviceName += '20';
+  }
+  const result = await Fetch.request(`${serviceName}SVC`, 'GCollect', {
     body: JSON.stringify({
-      PORU010301F1: body1,
-      PORU010301G1: {
+      [`${serviceName}F1`]: body1,
+      [`${serviceName}G1`]: {
         data: body2,
       },
     }),
@@ -226,11 +248,21 @@ const recallForApprover = async (body1: object, body2: object) => {
  * @param body2
  * @returns
  */
-const refusalForApprover = async (body1: object, body2: object) => {
-  const result = await Fetch.request('PORU010301SVC', 'GApprovalCancel', {
+const refusalForApprover = async (
+  type: string,
+  body1: object,
+  body2: object,
+) => {
+  let serviceName = 'PORU0103';
+  if (type === 'nd') {
+    serviceName += '01';
+  } else if (type === 'nc') {
+    serviceName += '20';
+  }
+  const result = await Fetch.request(`${serviceName}SVC`, 'GApprovalCancel', {
     body: JSON.stringify({
-      PORU010301F1: body1,
-      PORU010301G1: {
+      [`${serviceName}F1`]: body1,
+      [`${serviceName}G1`]: {
         data: body2,
       },
     }),
@@ -247,11 +279,21 @@ const refusalForApprover = async (body1: object, body2: object) => {
  * @param body2
  * @returns
  */
-const approveForApprover = async (body1: object, body2: object) => {
-  const result = await Fetch.request('PORU010301SVC', 'GApproval', {
+const approveForApprover = async (
+  type: string,
+  body1: object,
+  body2: object,
+) => {
+  let serviceName = 'PORU0103';
+  if (type === 'nd') {
+    serviceName += '01';
+  } else if (type === 'nc') {
+    serviceName += '20';
+  }
+  const result = await Fetch.request(`${serviceName}SVC`, 'GApproval', {
     body: JSON.stringify({
-      PORU010301F1: body1,
-      PORU010301G1: {
+      [`${serviceName}F1`]: body1,
+      [`${serviceName}G1`]: {
         data: body2,
       },
     }),

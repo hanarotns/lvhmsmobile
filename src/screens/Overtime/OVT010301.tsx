@@ -45,6 +45,7 @@ const OVT010301 = () => {
 
   const [dt, setDt] = useState({});
   const [accumulatedHours, setAccumulatedHours] = useState({});
+  const [otHours, setOtHours] = useState({});
   const [refusalReason, setRefusalReason] = useState('');
 
   const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -68,28 +69,39 @@ const OVT010301 = () => {
       ...route?.params,
     };
     let detail = {};
-    if (route?.params?.JOB_NO.indexOf('NC') != -1) {
+    if (
+      !Util.isEmpty(route?.params?.JOB_NO) ||
+      route?.params?.JOB_NO.indexOf('NC') != -1
+    ) {
       detail = await Action.getDetailM('nc', payload);
     } else {
       detail = await Action.getDetailM('nd', payload);
     }
-    let hours = {};
+    let hours1 = {};
+    let hours2 = {};
     if (detail) {
-      if (route?.params?.JOB_NO.indexOf('NC') != -1) {
-        hours = await Action.getAccumulatedHours('nc', detail);
+      if (
+        !Util.isEmpty(route?.params?.JOB_NO) ||
+        route?.params?.JOB_NO.indexOf('NC') != -1
+      ) {
+        hours1 = await Action.getAccumulatedHours('nc', detail);
+        hours2 = await Action.calTime(detail);
+        setOtHours(hours2);
       } else {
-        hours = await Action.getAccumulatedHours('nd', detail);
+        hours1 = await Action.getAccumulatedHours('nd', detail);
       }
-      setAccumulatedHours(hours);
+      setAccumulatedHours(hours1);
     }
-    let apprLine = await Action.getApprLine(payload);
+
+    let apprLine = await Action.getApproval33(detail);
+
     apprLine = apprLine.map((e) => ({
       ...e,
-      LINE_NO: e?.LINE_ID,
-      AP_EMP_ID: e?.APPROVAL_EMP_ID,
-      AP_EMP_NAME: e?.APPROVAL_EMP_NAME,
-      AP_DEPT_CODE: e?.APPROVAL_EMP_DEPT_CODE,
-      AP_DEPT_NAME: e?.APPROVAL_EMP_DEPT_NAME,
+      LINE_ID: e?.LINE_NO,
+      APPROVAL_EMP_ID: e?.AP_EMP_ID,
+      APPROVAL_EMP_NAME: e?.AP_EMP_NAME,
+      APPROVAL_EMP_DEPT_CODE: e?.AP_DEPT_CODE,
+      APPROVAL_EMP_DEPT_NAME: e?.AP_DEPT_NAME,
     }));
     const sortedApprLine = [...apprLine].sort((a, b) => a.LINE_ID - b.LINE_ID);
 
@@ -105,10 +117,19 @@ const OVT010301 = () => {
   const handleRecall = async () => {
     const payload = {
       SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
-      JOB_NO: dt?.CONFIRM_JOB_NO ? dt?.CONFIRM_JOB_NO : dt?.JOB_NO,
+      JOB_NO: dt?.JOB_NO,
+      CONFIRM_JOB_NO: dt?.CONFIRM_JOB_NO,
     };
     setLoading(true);
-    const result = await Action.recall(payload);
+    let result = {};
+    if (
+      !Util.isEmpty(route?.params?.JOB_NO) ||
+      route?.params?.JOB_NO.indexOf('NC') != -1
+    ) {
+      result = await Action.recall('nc', payload);
+    } else {
+      result = await Action.recall('nd', payload);
+    }
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -122,13 +143,21 @@ const OVT010301 = () => {
   const handleDelete = async () => {
     const payload = {
       COMPANY_CODE: empInfo?.COMPANY_CODE,
-      JOB_NO: dt?.CONFIRM_JOB_NO ? dt?.CONFIRM_JOB_NO : dt?.JOB_NO,
-      APPROVAL_NO: dt?.CONFIRM_JOB_NO
-        ? dt?.CONFIRM_APPROVAL_NO
-        : dt?.APPROVAL_NO,
+      JOB_NO: dt?.JOB_NO,
+      APPROVAL_NO: dt?.APPROVAL_NO,
+      CONFIRM_JOB_NO: dt?.CONFIRM_JOB_NO,
+      CONFIRM_APPROVAL_NO: dt?.CONFIRM_APPROVAL_NO,
     };
     setLoading(true);
-    const result = await Action.deleteMobile(payload);
+    let result = {};
+    if (
+      !Util.isEmpty(route?.params?.JOB_NO) ||
+      route?.params?.JOB_NO.indexOf('NC') != -1
+    ) {
+      result = await Action.deleteMobile('nc', payload);
+    } else {
+      result = await Action.deleteMobile('nd', payload);
+    }
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -141,7 +170,25 @@ const OVT010301 = () => {
 
   const handleReApprove = async () => {
     setLoading(true);
-    const result = await Action.saveApproval('nd', dt, dt?.APPR_LINE);
+    let result = {};
+    const payload = {
+      ...dt,
+      APPLY_WEEK_HOUR: String(
+        accumulatedHours?.NC_WEEK_HOUR + otHours?.OVER_TIME,
+      ),
+      APPLY_MONTH_HOUR: String(
+        accumulatedHours?.NC_MONTH_HOUR + otHours?.OVER_TIME,
+      ),
+      APPLY_HOUR_W: String(otHours?.OVER_TIME),
+    };
+    if (
+      !Util.isEmpty(route?.params?.JOB_NO) ||
+      route?.params?.JOB_NO.indexOf('NC') != -1
+    ) {
+      result = await Action.saveApproval('nc', payload, dt?.APPR_LINE);
+    } else {
+      result = await Action.saveApproval('nd', payload, dt?.APPR_LINE);
+    }
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -160,7 +207,15 @@ const OVT010301 = () => {
     };
     const payload2 = [dt];
     setLoading(true);
-    const result = await Action.recallForApprover(payload1, payload2);
+    let result = {};
+    if (
+      !Util.isEmpty(route?.params?.JOB_NO) ||
+      route?.params?.JOB_NO.indexOf('NC') != -1
+    ) {
+      result = await Action.recallForApprover('nc', payload1, payload2);
+    } else {
+      result = await Action.recallForApprover('nd', payload1, payload2);
+    }
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -178,7 +233,16 @@ const OVT010301 = () => {
     };
     const payload2 = [{ ...dt, CANCEL_REMARKS: refusalReason }];
     setLoading(true);
-    const result = await Action.refusalForApprover(payload1, payload2);
+
+    let result = {};
+    if (
+      !Util.isEmpty(route?.params?.JOB_NO) ||
+      route?.params?.JOB_NO.indexOf('NC') != -1
+    ) {
+      result = await Action.refusalForApprover('nc', payload1, payload2);
+    } else {
+      result = await Action.refusalForApprover('nd', payload1, payload2);
+    }
     setLoading(false);
     // 모달 닫기
     if (result.TYPE === 1) {
@@ -198,7 +262,15 @@ const OVT010301 = () => {
     };
     const payload2 = [dt];
     setLoading(true);
-    const result = await Action.approveForApprover(payload1, payload2);
+    let result = {};
+    if (
+      !Util.isEmpty(route?.params?.JOB_NO) ||
+      route?.params?.JOB_NO.indexOf('NC') != -1
+    ) {
+      result = await Action.approveForApprover('nc', payload1, payload2);
+    } else {
+      result = await Action.approveForApprover('nd', payload1, payload2);
+    }
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
