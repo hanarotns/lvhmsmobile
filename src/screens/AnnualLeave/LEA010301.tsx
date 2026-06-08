@@ -73,6 +73,7 @@ const LEA010301 = () => {
       JOB_NO: route?.params?.JOB_NO,
       APPROVAL_NO: route?.params?.APPROVAL_NO,
     };
+    const res = await Action.getDetailM(payload);
     let detail = await Action.getDt(payload);
 
     detail = detail.map((e) => ({
@@ -86,6 +87,7 @@ const LEA010301 = () => {
 
     setDt({
       ...route.params,
+      ...res,
       DETAIL: detail,
       APPR_LINE: sortedApprLine,
     });
@@ -252,7 +254,7 @@ const LEA010301 = () => {
                     ))}
                     <View style={styles.totalCntView}>
                       <Text style={styles.totalCntText}>
-                        {dt?.VA_PERIOD ? `총 ${dt?.VA_PERIOD} 일` : `-`}
+                        {`총 ${dt?.PERIOD || '0'} 일`}
                       </Text>
                     </View>
                   </View>
@@ -304,10 +306,10 @@ const LEA010301 = () => {
             />
           </View>
         </ScrollView>
-        {route?.params?.EMP_ID === empInfo?.EMP_ID && (
+        {dt?.EMP_ID === empInfo?.EMP_ID && (
           // 상신자 사용
           <View style={LVStyles.bottomButtonView}>
-            {route?.params?.AP_STATUS === 'S' && (
+            {dt?.AP_STATUS === 'S' && (
               <LVButton
                 title={'회수'}
                 onPress={handleRecall}
@@ -315,14 +317,14 @@ const LEA010301 = () => {
                 textStyle={styles.recallButtonText}
               />
             )}
-            {route?.params?.AP_STATUS === 'W' && (
+            {dt?.AP_STATUS === 'W' && (
               <LVButton
                 title={'삭제'}
                 onPress={handleDelete}
                 buttonStyle={styles.cancelButton}
               />
             )}
-            {route?.params?.AP_STATUS === 'W' && (
+            {dt?.AP_STATUS === 'W' && (
               <LVButton
                 title={'상신'}
                 onPress={handleReApprove}
@@ -331,10 +333,10 @@ const LEA010301 = () => {
             )}
           </View>
         )}
-        {route?.params?.EMP_ID === empInfo?.EMP_ID && (
+        {dt?.EMP_ID === empInfo?.EMP_ID && (
           // 상신자 사용, 결재완료 상태에서 변경 / 취소 가능함 추가
           <View style={LVStyles.bottomButtonView}>
-            {route?.params?.AP_STATUS === 'A' &&
+            {dt?.AP_STATUS === 'A' &&
               false && ( // @@ 버튼 임시 비활성화
                 <LVButton
                   title={'변경'}
@@ -344,7 +346,7 @@ const LEA010301 = () => {
               )}
           </View>
         )}
-        {route?.params?.EMP_ID !== empInfo?.EMP_ID && (
+        {dt?.EMP_ID !== empInfo?.EMP_ID && (
           // 결재자 사용
           <View style={LVStyles.bottomButtonView}>
             <LVButton
