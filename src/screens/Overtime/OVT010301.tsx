@@ -67,9 +67,19 @@ const OVT010301 = () => {
       EMP_ID: empInfo?.EMP_ID,
       ...route?.params,
     };
-    const detail = await Action.getDetailM('nd', payload);
+    let detail = {};
+    if (route?.params?.JOB_NO.indexOf('NC') != -1) {
+      detail = await Action.getDetailM('nc', payload);
+    } else {
+      detail = await Action.getDetailM('nd', payload);
+    }
+    let hours = {};
     if (detail) {
-      const hours = await Action.getAccumulatedHours('nd', detail);
+      if (route?.params?.JOB_NO.indexOf('NC') != -1) {
+        hours = await Action.getAccumulatedHours('nc', detail);
+      } else {
+        hours = await Action.getAccumulatedHours('nd', detail);
+      }
       setAccumulatedHours(hours);
     }
     let apprLine = await Action.getApprLine(payload);
@@ -301,7 +311,7 @@ const OVT010301 = () => {
               children={
                 <LVChip
                   category='type'
-                  content={dt?.ND_TYPE_NM}
+                  content={dt?.ND_TYPE_NM || dt?.ND_TYPE_NAME}
                   chipStyle={styles.typeChip}
                   textStyle={{ color: '#FF9E3C' }}
                 />
