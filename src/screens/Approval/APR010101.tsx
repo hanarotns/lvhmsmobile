@@ -62,6 +62,7 @@ const APR010101 = () => {
   }, [isFocused]);
 
   useEffect(() => {
+    // @@ 화면 진입 시, 동작 안하도록
     getList();
   }, [selectedCards]);
 
@@ -99,6 +100,7 @@ const APR010101 = () => {
       S_ADD_DATE_TO: selectedDate.format('YYYYMMDD'),
     };
     const res1 = await Action.getInfoM(payload1);
+    getList();
     setStats(res1);
     setLoading(false);
   };
