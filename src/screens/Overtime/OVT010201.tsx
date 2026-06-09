@@ -19,6 +19,7 @@ import {
   ScrollView,
   Text,
 } from '@/src/components';
+import { Util } from '@/src/lib';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
@@ -93,7 +94,40 @@ const OVT010201 = () => {
     setLoading(false);
   };
 
+  /**
+   * 비즈니스 로직 확인용
+   */
+  const checkLogic = async () => {
+    if (Util.isEmpty(approvalLine)) {
+      Util.toastMsg('결재선을 선택하세요', 'info');
+      return false;
+    }
+    if (Util.isEmpty(selectedType)) {
+      Util.toastMsg('종류를 선택하세요', 'info');
+      return false;
+    }
+    if (!fromDateTime) {
+      Util.toastMsg('시작일시를 입력하세요', 'info');
+      return false;
+    }
+    if (!toDateTime) {
+      Util.toastMsg('종료일시를 입력하세요', 'info');
+      return false;
+    }
+    if (Util.isEmpty(overtimeInfo?.REASON)) {
+      Util.toastMsg('내용을 입력하세요', 'info');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async () => {
+    const isCheck = await checkLogic();
+    if (!isCheck) {
+      return;
+    }
+
     const body = {
       ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
       START_TIME:
