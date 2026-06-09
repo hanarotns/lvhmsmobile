@@ -70,15 +70,6 @@ const OVT010202 = () => {
     const hours2 = await Action.calTime(detail);
     setOtHours(hours2);
 
-    setFromDateTime(
-      dayjs(route?.params?.ND_DATE + route?.params?.START_TIME, 'YYYYMMDDHHmm'),
-    );
-    setToDateTime(
-      dayjs(
-        route?.params?.CLOSING_DATE + route?.params?.CLOSING_TIME,
-        'YYYYMMDDHHmm',
-      ),
-    );
     let apprLine = await Action.getApproval33(detail);
     apprLine = apprLine.map((e) => ({
       ...e,
@@ -95,6 +86,13 @@ const OVT010202 = () => {
       ...detail,
       APPR_LINE: sortedApprLine,
     };
+
+    setFromDateTime(
+      dayjs(res?.ND_DATE + res?.START_TIME, 'YYYYMMDDHHmm').toDate(),
+    );
+    setToDateTime(
+      dayjs(res?.CLOSING_DATE + res?.CLOSING_TIME, 'YYYYMMDDHHmm').toDate(),
+    );
 
     setDt(res);
     setApprovalLine(res?.APPR_LINE);
