@@ -95,7 +95,7 @@ const OVT010202 = () => {
       ...detail,
       APPR_LINE: sortedApprLine,
     };
-    // const res = await Action.getDetailM(route?.params.APPR_NO);
+
     setDt(res);
     setApprovalLine(res?.APPR_LINE);
     setLoading(false);
