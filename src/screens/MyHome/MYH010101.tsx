@@ -99,11 +99,10 @@ const MYH010101 = ({ navigation }) => {
           setIsVisibleModal(true);
           return;
         } else {
-          if (checkType === 'S' && todayInfo?.START_DATETIME) {
-            setIsVisibleModal(true);
-            return;
-          }
-          if (checkType === 'E' && todayInfo?.END_DATETIME) {
+          if (
+            (checkType === 'S' && todayInfo?.START_DATETIME) ||
+            (checkType === 'E' && todayInfo?.END_DATETIME)
+          ) {
             setIsVisibleModal(true);
             return;
           }
