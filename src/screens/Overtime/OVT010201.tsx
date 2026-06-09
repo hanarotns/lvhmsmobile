@@ -263,7 +263,7 @@ const OVT010201 = () => {
                   }}
                   size='large'
                   style={{ backgroundColor: '#FFF' }}
-                  textStyle={{ color: '#373747', minHeight: 100 }}
+                  textStyle={styles.multilineInput}
                   multiline={true}
                 />
               }
@@ -345,5 +345,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
+  },
+  multilineInput: {
+    color: '#373747',
+    minHeight: 100,
+    textAlignVertical: 'top', // Android에서 상단 정렬
   },
 });

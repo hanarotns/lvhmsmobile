@@ -416,7 +416,7 @@ const ContentsOfRefusal = (props: any) => {
         }}
         size='large'
         style={{ backgroundColor: '#FFF' }}
-        textStyle={{ color: '#373747', minHeight: 100 }}
+        textStyle={styles.multilineInput}
         multiline={true}
       />
     </View>
@@ -552,5 +552,10 @@ const styles = StyleSheet.create({
   reApproveButton: {
     flex: 1,
     backgroundColor: '#27A7FF',
+  },
+  multilineInput: {
+    color: '#373747',
+    minHeight: 100,
+    textAlignVertical: 'top', // Android에서 상단 정렬
   },
 });

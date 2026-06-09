@@ -464,7 +464,7 @@ const LEA010201 = () => {
                   }}
                   size='large'
                   style={{ backgroundColor: '#FFF' }}
-                  textStyle={{ color: '#373747', minHeight: 64, fontSize: 14 }}
+                  textStyle={styles.multilineInput}
                   multiline={true}
                 />
               }
@@ -1365,5 +1365,10 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 4,
     backgroundColor: '#FF3D71',
+  },
+  multilineInput: {
+    color: '#373747',
+    minHeight: 100,
+    textAlignVertical: 'top', // Android에서 상단 정렬
   },
 });

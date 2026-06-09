@@ -733,7 +733,7 @@ const ContentsOfOffsite = (props: any) => {
         }}
         size='large'
         style={{ backgroundColor: '#FFF', marginTop: 8 }}
-        textStyle={{ color: '#373747', minHeight: 100 }}
+        textStyle={styles.multilineInput}
         multiline={true}
       />
     </View>
@@ -947,5 +947,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#FFF',
     padding: 8,
+  },
+  multilineInput: {
+    color: '#373747',
+    minHeight: 100,
+    textAlignVertical: 'top', // Android에서 상단 정렬
   },
 });
