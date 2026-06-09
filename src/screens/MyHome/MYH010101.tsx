@@ -33,10 +33,12 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import * as Location from 'expo-location';
 import * as WLOAction from '../WorkLog/Action'; // API통신 (공통)
 import * as Action from './Action';
 import LaborNoticeScreen from './LaborNoticeScreen';
+dayjs.extend(customParseFormat);
 
 const MYH010101 = ({ navigation }) => {
   const TopNavigationActionEx = withPreventDoubleClick(TopNavigationAction); // @@ 필요성 확인!
@@ -58,6 +60,7 @@ const MYH010101 = ({ navigation }) => {
   const [address, setAdress] = useState({});
   const [checkType, setCheckType] = useState('');
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [isVisible30mModal, setIsVisible30mModal] = useState(false);
   const [laborNotice1, setLaborNotice1] = useState([]);
   const [laborNotice2, setLaborNotice2] = useState([]);
   const [laborRefusal, setLaborRefusal] = useState([]);
@@ -104,6 +107,25 @@ const MYH010101 = ({ navigation }) => {
             (checkType === 'E' && todayInfo?.END_DATETIME)
           ) {
             setIsVisibleModal(true);
+            return;
+          }
+
+          const now = dayjs(new Date());
+          const onTimeMin = dayjs('0900', 'HHmm').add(-30, 'minutes');
+          const onTimeMax = dayjs(todayInfo?.ON_TIME, 'HHmm').add(
+            30,
+            'minutes',
+          );
+          const offTimeMin = dayjs(todayInfo?.OFF_TIME, 'HHmm').add(
+            -30,
+            'minutes',
+          );
+          const offTimeMax = dayjs(todayInfo?.OFF_TIME, 'HHmm');
+          if (
+            (checkType === 'S' && (onTimeMin > now || onTimeMax < now)) ||
+            (checkType === 'E' && (offTimeMin > now || offTimeMax < now))
+          ) {
+            setIsVisible30mModal(true);
             return;
           }
         }
@@ -270,6 +292,7 @@ const MYH010101 = ({ navigation }) => {
     }
     // 모달 닫기
     setIsVisibleModal(false);
+    setIsVisible30mModal(false);
     await saveM(checkType);
     // 근태 타입 초기화
     setCheckType('');
@@ -625,7 +648,20 @@ const MYH010101 = ({ navigation }) => {
                       onOk={handleSave}
                     />
                   )}
-
+                {isVisible30mModal && (
+                  <LVModal
+                    title={'알림'}
+                    titleIcon={icon.ico_warning}
+                    contents={
+                      <ContentsOfNotIn30m
+                        checkType={checkType}
+                        todayInfo={todayInfo}
+                      />
+                    }
+                    onVisible={setIsVisible30mModal}
+                    onOk={handleSave}
+                  />
+                )}
                 {isVisibleModal && checkType === 'O' && (
                   <LVModal
                     title={'외근등록'}
@@ -733,6 +769,34 @@ const ContentsOfDuplicatedRecord = (props: any) => {
     <View style={styles.modalEntire}>
       <Text style={styles.modalText}>
         이전에 저장된 {checkTypeName}기록이 있어요
+      </Text>
+      <View style={{ height: 8 }} />
+      <Text style={styles.modalText}>저장하시겠어요?</Text>
+    </View>
+  );
+};
+
+const ContentsOfNotIn30m = (props: any) => {
+  const { checkType, todayInfo } = props;
+  let checkTypeName = '';
+  let dateTime = '';
+  if (checkType === 'S') {
+    checkTypeName = '출근';
+    dateTime = Util.convertDateTime('', todayInfo?.ON_TIME);
+  }
+  if (checkType === 'E') {
+    checkTypeName = '퇴근';
+    dateTime = Util.convertDateTime('', todayInfo?.OFF_TIME);
+  }
+
+  return (
+    <View style={styles.modalEntire}>
+      <Text style={styles.modalText}>
+        정규 {checkTypeName}시간과{`\n`}30분 이상 차이가 있어요.
+      </Text>
+      <View style={{ height: 8 }} />
+      <Text style={{ ...styles.modalText, color: 'gray' }}>
+        * 정규 {checkTypeName}시간: {dateTime}
       </Text>
       <View style={{ height: 8 }} />
       <Text style={styles.modalText}>저장하시겠어요?</Text>
