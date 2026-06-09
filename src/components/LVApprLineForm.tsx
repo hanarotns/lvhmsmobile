@@ -16,10 +16,15 @@ import {
 } from '@/src/components';
 import { Util } from '@/src/lib';
 import * as PALAction from '@/src/screens/PersonalApprovalLine/Action'; // API통신 (개인별 결재선 분리)
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import 'dayjs/locale/ko';
 
 const LVApprLineForm = (props: any) => {
+  const isFocused = useIsFocused();
   const movingScreen = useNavigation();
   const route = useRoute<DetailScreenRouteProp>();
 
@@ -38,8 +43,10 @@ const LVApprLineForm = (props: any) => {
   const [isVisibleApprovalModal, setIsVisibleApprovalModal] = useState(false);
 
   useEffect(() => {
-    mount();
-  }, []);
+    if (isFocused) {
+      mount();
+    }
+  }, [isFocused]);
 
   const mount = async () => {
     const reqMemberInfo = {
