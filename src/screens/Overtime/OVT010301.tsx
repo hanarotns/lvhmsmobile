@@ -447,62 +447,70 @@ const OVT010301 = () => {
             />
           </View>
         </ScrollView>
-        {dt?.EMP_ID && dt?.EMP_ID === empInfo?.EMP_ID && (
-          // 상신자 사용
-          <View style={LVStyles.bottomButtonView}>
-            {(dt?.CONFIRM_JOB_NO
-              ? dt?.CONFIRM_P_STATUS === 'S'
-              : dt?.AP_STATUS === 'S') && (
+        {dt?.EMP_ID &&
+          (dt?.CONFIRM_JOB_NO
+            ? dt?.CONFIRM_P_STATUS !== 'A'
+            : dt?.AP_STATUS !== 'A') &&
+          dt?.EMP_ID === empInfo?.EMP_ID && (
+            // 상신자 사용
+            <View style={LVStyles.bottomButtonView}>
+              {(dt?.CONFIRM_JOB_NO
+                ? dt?.CONFIRM_P_STATUS === 'S'
+                : dt?.AP_STATUS === 'S') && (
+                <LVButton
+                  title={'회수'}
+                  onPress={handleRecall}
+                  buttonStyle={styles.recallButton}
+                  textStyle={styles.recallButtonText}
+                />
+              )}
+              {(dt?.CONFIRM_JOB_NO
+                ? dt?.CONFIRM_P_STATUS === 'W'
+                : dt?.AP_STATUS === 'W') && (
+                <LVButton
+                  title={'삭제'}
+                  onPress={handleDelete}
+                  buttonStyle={styles.cancelButton}
+                />
+              )}
+              {(dt?.CONFIRM_JOB_NO
+                ? dt?.CONFIRM_P_STATUS === 'W'
+                : dt?.AP_STATUS === 'W') && (
+                <LVButton
+                  title={'상신'}
+                  onPress={handleReApprove}
+                  buttonStyle={styles.reApproveButton}
+                />
+              )}
+            </View>
+          )}
+        {dt?.EMP_ID &&
+          (dt?.CONFIRM_JOB_NO
+            ? dt?.CONFIRM_P_STATUS !== 'A'
+            : dt?.AP_STATUS !== 'A') &&
+          dt?.EMP_ID !== empInfo?.EMP_ID && (
+            // 결재자 사용
+            <View style={LVStyles.bottomButtonView}>
               <LVButton
                 title={'회수'}
-                onPress={handleRecall}
+                onPress={handleRecallForApprover}
                 buttonStyle={styles.recallButton}
                 textStyle={styles.recallButtonText}
               />
-            )}
-            {(dt?.CONFIRM_JOB_NO
-              ? dt?.CONFIRM_P_STATUS === 'W'
-              : dt?.AP_STATUS === 'W') && (
               <LVButton
-                title={'삭제'}
-                onPress={handleDelete}
+                title={'반려'}
+                onPress={() => {
+                  setIsVisibleModal(true);
+                }}
                 buttonStyle={styles.cancelButton}
               />
-            )}
-            {(dt?.CONFIRM_JOB_NO
-              ? dt?.CONFIRM_P_STATUS === 'W'
-              : dt?.AP_STATUS === 'W') && (
               <LVButton
-                title={'상신'}
-                onPress={handleReApprove}
+                title={'결재'}
+                onPress={handleApproveForApprover}
                 buttonStyle={styles.reApproveButton}
               />
-            )}
-          </View>
-        )}
-        {dt?.EMP_ID && dt?.EMP_ID !== empInfo?.EMP_ID && (
-          // 결재자 사용
-          <View style={LVStyles.bottomButtonView}>
-            <LVButton
-              title={'회수'}
-              onPress={handleRecallForApprover}
-              buttonStyle={styles.recallButton}
-              textStyle={styles.recallButtonText}
-            />
-            <LVButton
-              title={'반려'}
-              onPress={() => {
-                setIsVisibleModal(true);
-              }}
-              buttonStyle={styles.cancelButton}
-            />
-            <LVButton
-              title={'결재'}
-              onPress={handleApproveForApprover}
-              buttonStyle={styles.reApproveButton}
-            />
-          </View>
-        )}
+            </View>
+          )}
       </View>
       {isVisibleModal && (
         <LVModal
