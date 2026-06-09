@@ -68,7 +68,27 @@ const PAL010201 = () => {
     setLoading(false);
   };
 
+  /**
+   * 비즈니스 로직 확인용
+   */
+  const checkLogic = async () => {
+    if (Util.isEmpty(approvalLine.AP_NAME)) {
+      Util.toastMsg('결재선 이름을 입력하세요', 'info');
+      return false;
+    }
+    if (Util.isEmpty(approvalLineDt)) {
+      Util.toastMsg('결재자를 지정하세요', 'info');
+      return false;
+    }
+    return true;
+  };
+
   const handleSave = async () => {
+    const isCheck = await checkLogic();
+    if (!isCheck) {
+      return;
+    }
+
     const result = await Action.saveMobile(
       { ...approvalLine, ...empInfo },
       approvalLineDt,
@@ -253,6 +273,11 @@ const PAL010201 = () => {
             // 1. 자식에서 선택값 가져오기
             const { selectedAppr } =
               approvalLineRef.current.getSelectedValues();
+            console.log('@@ selectedAppr', selectedAppr);
+            if (selectedAppr?.EMP_ID === empInfo?.EMP_ID) {
+              Util.toastMsg('나를 결재자로 추가할 수 없습니다.', 'info');
+              return;
+            }
             if (Util.isEmpty(selectedAppr)) {
               Util.toastMsg('선택된 결재자가 없습니다.', 'info');
               return;
