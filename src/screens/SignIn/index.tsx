@@ -124,108 +124,110 @@ const SignIn = ({ navigation }) => {
   return loading ? (
     <LVLoadingIndicator />
   ) : (
-    <SafeAreaView style={styles.safeAreaView}>
-      <KeyboardAwareScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-        }}
-        keyboardShouldPersistTaps='handled'
-        enableOnAndroid
-        extraScrollHeight={20}
-      >
-        <View style={{ height: 158 }} />
-        <TouchableOpacity
-          onPress={() => {
-            setVisibleServerChange(true);
+    <>
+      <SafeAreaView style={styles.safeAreaView}>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
           }}
+          keyboardShouldPersistTaps='handled'
+          enableOnAndroid
+          extraScrollHeight={20}
         >
-          {urlFinal === fetchURL ? (
-            <Image
-              source={icon.ico_logo_lvhms}
-              resizeMode={'contain'}
-              style={styles.logobox}
-            />
-          ) : (
-            <Image
-              source={icon.ico_logo_lvhms_beta}
-              resizeMode={'contain'}
-              style={styles.logobox}
-            />
-          )}
-        </TouchableOpacity>
-        <View style={styles.container}>
-          <TextField
-            placeholder='아이디'
-            placeholderTextColor='#999FA8'
-            style={styles.textFieldSt}
-            autoCapitalize={'none'}
-            onChangeValue={(value) => onChangeValue(value, 'loginId')}
-            value={loginInfo.loginId}
-          />
-          <TextField
-            placeholder='비밀번호'
-            placeholderTextColor='#999FA8'
-            style={styles.textFieldSt}
-            autoCapitalize={'none'}
-            onChangeValue={(value) => onChangeValue(value, 'loginPwd')}
-            secureTextEntry={!visiblePwd}
-            value={loginInfo.loginPwd}
-            accessoryRight={
-              <ShowPasswordIcon
-                color={'black'}
-                visiblePwd={visiblePwd}
-                setVisible={setVisiblePwd}
+          <View style={{ height: 158 }} />
+          <TouchableOpacity
+            onPress={() => {
+              setVisibleServerChange(true);
+            }}
+          >
+            {urlFinal === fetchURL ? (
+              <Image
+                source={icon.ico_logo_lvhms}
+                resizeMode={'contain'}
+                style={styles.logobox}
               />
-            }
-          />
-          <View style={styles.subContainer}>
-            <LVCheckBox
-              label='간편로그인'
-              value={loginInfo.isRememberLogin}
-              onChange={(value) => onChangeValue(value, 'isRememberLogin')}
-            />
-            <LVCheckBox
-              label='입사지원'
-              value={loginInfo.isPreHire}
-              onChange={(value) => onChangeValue(value, 'isPreHire')}
-            />
-          </View>
-          <LVButton
-            title={'로그인'}
-            onPress={signIn}
-            buttonStyle={{ backgroundColor: '#27A7FF' }}
-          />
-          <View style={[LVStyles.row]}>
-            <LVButton
-              title={'비밀번호 찾기'}
-              onPress={() => {
-                movingScreen.navigate('SGN030101');
-              }}
-              textStyle={{ color: 'gray', fontWeight: '400' }}
-              buttonStyle={{
-                backgroundColor: 'transparent',
-                paddingHorizontal: 0,
-              }}
-            />
-            <LVButton
-              title={'회원가입'}
-              onPress={() => {
-                movingScreen.navigate('SGN010101');
-              }}
-              textStyle={{ color: 'gray', fontWeight: '400' }}
-              buttonStyle={{
-                backgroundColor: 'transparent',
-                paddingHorizontal: 0,
-              }}
-            />
-          </View>
-          <Text style={[styles.errorText]}>{loginError}</Text>
-          <TouchableOpacity onPress={onConfirm} style={styles.terms}>
-            <Text>이용약관/개인정보 확인</Text>
+            ) : (
+              <Image
+                source={icon.ico_logo_lvhms_beta}
+                resizeMode={'contain'}
+                style={styles.logobox}
+              />
+            )}
           </TouchableOpacity>
-        </View>
-      </KeyboardAwareScrollView>
-      {visibleTerms && Terms({ onConfirm })}
+          <View style={styles.container}>
+            <TextField
+              placeholder='아이디'
+              placeholderTextColor='#999FA8'
+              style={styles.textFieldSt}
+              autoCapitalize={'none'}
+              onChangeValue={(value) => onChangeValue(value, 'loginId')}
+              value={loginInfo.loginId}
+            />
+            <TextField
+              placeholder='비밀번호'
+              placeholderTextColor='#999FA8'
+              style={styles.textFieldSt}
+              autoCapitalize={'none'}
+              onChangeValue={(value) => onChangeValue(value, 'loginPwd')}
+              secureTextEntry={!visiblePwd}
+              value={loginInfo.loginPwd}
+              accessoryRight={
+                <ShowPasswordIcon
+                  color={'black'}
+                  visiblePwd={visiblePwd}
+                  setVisible={setVisiblePwd}
+                />
+              }
+            />
+            <View style={styles.subContainer}>
+              <LVCheckBox
+                label='간편로그인'
+                value={loginInfo.isRememberLogin}
+                onChange={(value) => onChangeValue(value, 'isRememberLogin')}
+              />
+              <LVCheckBox
+                label='입사지원'
+                value={loginInfo.isPreHire}
+                onChange={(value) => onChangeValue(value, 'isPreHire')}
+              />
+            </View>
+            <LVButton
+              title={'로그인'}
+              onPress={signIn}
+              buttonStyle={{ backgroundColor: '#27A7FF' }}
+            />
+            <View style={[LVStyles.row]}>
+              <LVButton
+                title={'비밀번호 찾기'}
+                onPress={() => {
+                  movingScreen.navigate('SGN030101');
+                }}
+                textStyle={{ color: 'gray', fontWeight: '400' }}
+                buttonStyle={{
+                  backgroundColor: 'transparent',
+                  paddingHorizontal: 0,
+                }}
+              />
+              <LVButton
+                title={'회원가입'}
+                onPress={() => {
+                  movingScreen.navigate('SGN010101');
+                }}
+                textStyle={{ color: 'gray', fontWeight: '400' }}
+                buttonStyle={{
+                  backgroundColor: 'transparent',
+                  paddingHorizontal: 0,
+                }}
+              />
+            </View>
+            <Text style={[styles.errorText]}>{loginError}</Text>
+            <TouchableOpacity onPress={onConfirm} style={styles.terms}>
+              <Text>이용약관/개인정보 확인</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAwareScrollView>
+        {visibleTerms && Terms({ onConfirm })}
+      </SafeAreaView>
       {visibleServerChange && (
         <LVModal
           title={'서버 변경'}
@@ -242,7 +244,7 @@ const SignIn = ({ navigation }) => {
           onOk={handleChange}
         />
       )}
-    </SafeAreaView>
+    </>
   );
 };
 export default SignIn;
