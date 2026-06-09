@@ -318,7 +318,7 @@ const LEA010301 = () => {
             />
           </View>
         </ScrollView>
-        {dt?.EMP_ID === empInfo?.EMP_ID && (
+        {dt?.EMP_ID && dt?.EMP_ID === empInfo?.EMP_ID && (
           // 상신자 사용
           <View style={LVStyles.bottomButtonView}>
             {dt?.AP_STATUS === 'S' && (
@@ -345,7 +345,7 @@ const LEA010301 = () => {
             )}
           </View>
         )}
-        {dt?.EMP_ID === empInfo?.EMP_ID && (
+        {dt?.EMP_ID && dt?.EMP_ID === empInfo?.EMP_ID && (
           // 상신자 사용, 결재완료 상태에서 변경 / 취소 가능함 추가
           <View style={LVStyles.bottomButtonView}>
             {dt?.AP_STATUS === 'A' &&
@@ -358,7 +358,7 @@ const LEA010301 = () => {
               )}
           </View>
         )}
-        {dt?.EMP_ID !== empInfo?.EMP_ID && (
+        {dt?.EMP_ID && dt?.EMP_ID !== empInfo?.EMP_ID && (
           // 결재자 사용
           <View style={LVStyles.bottomButtonView}>
             <LVButton

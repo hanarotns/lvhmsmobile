@@ -447,7 +447,7 @@ const OVT010301 = () => {
             />
           </View>
         </ScrollView>
-        {dt?.EMP_ID === empInfo?.EMP_ID && (
+        {dt?.EMP_ID && dt?.EMP_ID === empInfo?.EMP_ID && (
           // 상신자 사용
           <View style={LVStyles.bottomButtonView}>
             {(dt?.CONFIRM_JOB_NO
@@ -480,7 +480,7 @@ const OVT010301 = () => {
             )}
           </View>
         )}
-        {dt?.EMP_ID !== empInfo?.EMP_ID && (
+        {dt?.EMP_ID && dt?.EMP_ID !== empInfo?.EMP_ID && (
           // 결재자 사용
           <View style={LVStyles.bottomButtonView}>
             <LVButton
