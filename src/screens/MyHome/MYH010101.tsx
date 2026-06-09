@@ -94,11 +94,26 @@ const MYH010101 = ({ navigation }) => {
 
   useEffect(() => {
     if (checkType) {
-      if (['S', 'E'].includes(checkType) && nearestOffice?.ET_STATUS === 'Y') {
-        handleSave();
+      if (['S', 'E'].includes(checkType)) {
+        if (nearestOffice?.ET_STATUS === 'N') {
+          setIsVisibleModal(true);
+          return;
+        } else {
+          if (checkType === 'S' && todayInfo?.START_DATETIME) {
+            setIsVisibleModal(true);
+            return;
+          }
+          if (checkType === 'E' && todayInfo?.END_DATETIME) {
+            setIsVisibleModal(true);
+            return;
+          }
+        }
+      }
+      if (['O'].includes(checkType)) {
+        setIsVisibleModal(true);
         return;
       }
-      setIsVisibleModal(true);
+      handleSave();
     }
   }, [checkType]);
 
@@ -587,15 +602,31 @@ const MYH010101 = ({ navigation }) => {
                   <LayoutOfTracker />
                   <LayoutOfCards />
                 </View>
-                {isVisibleModal && ['S', 'E'].includes(checkType) && (
-                  <LVModal
-                    title={'알림'}
-                    titleIcon={icon.ico_warning}
-                    contents={<ContentsOfNotInside checkType={checkType} />}
-                    onVisible={setIsVisibleModal}
-                    onOk={handleSave}
-                  />
-                )}
+                {isVisibleModal &&
+                  ['S', 'E'].includes(checkType) &&
+                  nearestOffice?.ET_STATUS === 'N' && (
+                    <LVModal
+                      title={'알림'}
+                      titleIcon={icon.ico_warning}
+                      contents={<ContentsOfNotInside checkType={checkType} />}
+                      onVisible={setIsVisibleModal}
+                      onOk={handleSave}
+                    />
+                  )}
+                {isVisibleModal &&
+                  ((checkType === 'S' && todayInfo?.START_DATETIME) ||
+                    (checkType === 'E' && todayInfo?.END_DATETIME)) && (
+                    <LVModal
+                      title={'알림'}
+                      titleIcon={icon.ico_warning}
+                      contents={
+                        <ContentsOfDuplicatedRecord checkType={checkType} />
+                      }
+                      onVisible={setIsVisibleModal}
+                      onOk={handleSave}
+                    />
+                  )}
+
                 {isVisibleModal && checkType === 'O' && (
                   <LVModal
                     title={'외근등록'}
@@ -685,6 +716,27 @@ const ContentsOfNotInside = (props: any) => {
       <Text style={styles.modalImportantText}>
         ※ 반경 외 기록은 유효하지 않습니다
       </Text>
+    </View>
+  );
+};
+
+const ContentsOfDuplicatedRecord = (props: any) => {
+  const { checkType } = props;
+  let checkTypeName = '';
+  if (checkType === 'S') {
+    checkTypeName = '출근';
+  }
+  if (checkType === 'E') {
+    checkTypeName = '퇴근';
+  }
+
+  return (
+    <View style={styles.modalEntire}>
+      <Text style={styles.modalText}>
+        이전에 저장된 {checkTypeName}기록이 있어요
+      </Text>
+      <View style={{ height: 8 }} />
+      <Text style={styles.modalText}>저장하시겠어요?</Text>
     </View>
   );
 };
