@@ -18,6 +18,7 @@ import {
   Layout,
   LVButton,
   LVColors,
+  LVHeaderInfo,
   LVLoadingIndicator,
   LVModal,
   LVProfileImage,
@@ -546,6 +547,7 @@ const MYH010101 = ({ navigation }) => {
       {/* 헤더 */}
       <Layout style={styles.entire}>
         <Image source={icon.ico_logo_htns} style={styles.logo} />
+        <LVHeaderInfo />
         <TouchableOpacity
           onPress={() => {
             movingScreen.navigate('ETC010101');

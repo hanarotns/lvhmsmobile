@@ -17,6 +17,7 @@ import {
   KeyboardAwareScrollView,
   LVButton,
   LVCheckBox,
+  LVHeaderInfo,
   LVLoadingIndicator,
   LVModal,
   LVRadioButton,
@@ -126,6 +127,9 @@ const SignIn = ({ navigation }) => {
   ) : (
     <>
       <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.header}>
+          <LVHeaderInfo />
+        </View>
         <KeyboardAwareScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -134,7 +138,7 @@ const SignIn = ({ navigation }) => {
           enableOnAndroid
           extraScrollHeight={20}
         >
-          <View style={{ height: 158 }} />
+          <View style={{ height: 128 }} />
           <TouchableOpacity
             onPress={() => {
               setVisibleServerChange(true);
@@ -361,5 +365,11 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontSize: 20,
     height: 30,
+  },
+  header: {
+    ...LVStyles.row,
+    height: 30,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 24,
   },
 });

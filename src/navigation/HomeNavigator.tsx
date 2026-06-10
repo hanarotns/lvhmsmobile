@@ -26,6 +26,7 @@ import APR010101 from '../screens/Approval/APR010101';
 import ACC010101 from '../screens/Account/ACC010101';
 import ACC010201 from '../screens/Account/ACC010201';
 // 개인별 결재선 관리
+import LVHeaderInfo from '../components/LVHeaderInfo';
 import PAL010101 from '../screens/PersonalApprovalLine/PAL010101';
 import PAL010201 from '../screens/PersonalApprovalLine/PAL010201';
 import PAL010301 from '../screens/PersonalApprovalLine/PAL010301';
@@ -37,7 +38,12 @@ import PAL010301 from '../screens/PersonalApprovalLine/PAL010301';
 const Stack = createNativeStackNavigator();
 
 export const HomeNavigator = (props) => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: true,
+      headerRight: () => <LVHeaderInfo />,
+    }}
+  >
     <Stack.Screen
       name='Home'
       component={Home}

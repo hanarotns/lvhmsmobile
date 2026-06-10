@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import LVHeaderInfo from '../components/LVHeaderInfo';
 import SignIn from '../screens/SignIn';
 import SGN010101 from '../screens/SignIn/SGN010101';
 import SGN010201 from '../screens/SignIn/SGN010201';
@@ -11,7 +12,12 @@ const Stack = createNativeStackNavigator<SignInStackParamList>();
 
 export default function SignInNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        headerRight: () => <LVHeaderInfo />,
+      }}
+    >
       <Stack.Screen
         name='SignIn'
         component={SignIn}

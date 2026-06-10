@@ -14,6 +14,7 @@ import {
   LVButton,
   LVChip,
   LVColors,
+  LVHeaderInfo,
   LVLoadingIndicator,
   LVNoData,
   LVStyles,
@@ -83,6 +84,7 @@ const WRK010101 = () => {
   const renderHeader = () => (
     <Layout style={styles.renderHeaderLayout}>
       <Image source={icon.ico_logo_htns} style={styles.renderHeaderImage} />
+      <LVHeaderInfo />
       <TouchableOpacity
         onPress={() => {
           movingScreen.navigate('ETC010101');
