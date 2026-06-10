@@ -103,6 +103,14 @@ const PAL010201 = () => {
     }
   };
 
+  const handleChangeApprovalType = (index: number, apType: string) => {
+    setApprovalLineDt((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, AP_TYPE: apType } : item,
+      ),
+    );
+  };
+
   const handleDeleteApprovalLine = (index: number) => {
     setApprovalLineDt((prev) => prev.filter((_, i) => i !== index));
   };
@@ -169,7 +177,7 @@ const PAL010201 = () => {
                     AP_DEPT_NAME: e?.DEPT_NAME,
                     AP_EMP_ID: e?.EMP_ID,
                     AP_EMP_NAME: e?.EMP_NAME,
-                    AP_TYPE: 'AP',
+                    AP_TYPE: e?.AP_TYPE || 'AP',
                   });
                 }}
                 style={{ marginBottom: 8 }}
@@ -249,6 +257,7 @@ const PAL010201 = () => {
                 <PersonalForm
                   elem={{ ...e, index: i + 1 }}
                   apprRoleList={apprRoleList}
+                  onSelect={(value) => handleChangeApprovalType(i, value)}
                   onDelete={() => handleDeleteApprovalLine(i)}
                 />
               ))}
@@ -297,7 +306,7 @@ const PAL010201 = () => {
 export default PAL010201;
 
 const PersonalForm = (props: any) => {
-  const { elem, apprRoleList, onDelete } = props;
+  const { elem, apprRoleList, onSelect, onDelete } = props;
   console.log('@@ elem', elem);
   return (
     <View style={styles.personalFormView}>
@@ -315,6 +324,9 @@ const PersonalForm = (props: any) => {
         <View style={{ flex: 1, width: '100%', justifyContent: 'center' }}>
           <LVSelectBox
             value={'AP'} //@@ 확인 필요
+            onChange={(value: string) => {
+              onSelect(value);
+            }}
             data={apprRoleList}
             displayField={'HQNAME'}
             valueField={'HQCODE'}
