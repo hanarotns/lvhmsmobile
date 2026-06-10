@@ -70,6 +70,7 @@ const LVDateTimePicker: React.FC = (props) => {
                 textColor='#373747'
                 display={'spinner'}
                 onChange={onChange}
+                style={styles.dateTimePicker}
               />
             )}
             {/* iOS는 picker 자체가 닫히지 않으니 닫기 버튼 필요 */}
@@ -119,6 +120,11 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     width: 320,
+  },
+  dateTimePicker: {
+    width: 280,
+    height: 180,
+    alignSelf: 'center',
   },
 });
 
