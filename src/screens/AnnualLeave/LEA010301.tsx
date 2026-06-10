@@ -84,7 +84,15 @@ const LEA010301 = () => {
       ...(customVaType[e.VA_TYPE] || {}),
     }));
 
-    const apprLine = await Action.getApprLine(payload);
+    let apprLine = await Action.getApproval33(res);
+    apprLine = apprLine.map((e) => ({
+      ...e,
+      LINE_ID: e?.LINE_NO,
+      APPROVAL_EMP_ID: e?.AP_EMP_ID,
+      APPROVAL_EMP_NAME: e?.AP_EMP_NAME,
+      APPROVAL_EMP_DEPT_CODE: e?.AP_DEPT_CODE,
+      APPROVAL_EMP_DEPT_NAME: e?.AP_DEPT_NAME,
+    }));
 
     const sortedApprLine = [...apprLine].sort((a, b) => a.LINE_ID - b.LINE_ID);
 
@@ -138,7 +146,16 @@ const LEA010301 = () => {
 
   const handleReApprove = async () => {
     setLoading(true);
-    const result = await Action.saveApproval(dt, dt?.DETAIL, dt?.APPR_LINE);
+
+    const commonInfo = {
+      S_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      S_DEPT_CODE: empInfo?.DEPT_CODE,
+      S_EMP_NAME: empInfo?.EMP_NAME_LC,
+      S_EMP_ID: empInfo?.EMP_ID,
+      S_EMP_FLAG: 'Y',
+    };
+    const param = { ...commonInfo, ...dt };
+    const result = await Action.saveApproval(param, dt?.DETAIL, dt?.APPR_LINE);
     setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
