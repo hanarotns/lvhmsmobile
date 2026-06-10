@@ -5,9 +5,9 @@ import { LVApprLine, LVChip, LVStyles, Text } from '@/src/components';
 import 'dayjs/locale/ko';
 
 const LVApprList = forwardRef((props: any, ref) => {
-  const { myApprList } = props;
+  const { myApprList, approvalInfo } = props;
 
-  const [selectedAppr, setSelectedAppr] = useState({});
+  const [selectedAppr, setSelectedAppr] = useState(approvalInfo);
   useImperativeHandle(ref, () => ({
     getSelectedValues: () => ({
       selectedAppr,

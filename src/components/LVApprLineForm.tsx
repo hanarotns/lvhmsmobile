@@ -39,6 +39,7 @@ const LVApprLineForm = (props: any) => {
   const [myApprList, setMyApprList] = useState([]);
   const { approvalLine, setApprovalLine } = props;
   const approvalLineRef = useRef<any>(null);
+  const [approvalInfo, setApprovalInfo] = useState([]);
 
   const [isVisibleApprovalModal, setIsVisibleApprovalModal] = useState(false);
 
@@ -92,6 +93,7 @@ const LVApprLineForm = (props: any) => {
 
       return currNum > prevNum ? curr : prev;
     });
+    setApprovalInfo(defaultAppr);
     setApprovalLine(defaultAppr?.DETAILS);
   };
 
@@ -139,7 +141,11 @@ const LVApprLineForm = (props: any) => {
               title={'내 결재선을 선택하세요!'}
               buttonText={'선택'}
               contents={
-                <LVApprList ref={approvalLineRef} myApprList={myApprList} />
+                <LVApprList
+                  ref={approvalLineRef}
+                  myApprList={myApprList}
+                  approvalInfo={approvalInfo}
+                />
               }
               onVisible={setIsVisibleApprovalModal}
               onOk={() => {
