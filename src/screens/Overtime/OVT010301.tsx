@@ -174,7 +174,6 @@ const OVT010301 = () => {
   };
 
   const handleReApprove = async () => {
-    setLoading(true);
     let result = {};
     const payload = {
       ...dt,
@@ -186,6 +185,7 @@ const OVT010301 = () => {
       ),
       APPLY_HOUR_W: String(otHours?.OVER_TIME),
     };
+    setLoading(true);
     if (
       !Util.isEmpty(route?.params?.JOB_NO) ||
       route?.params?.JOB_NO.indexOf('NC') != -1
@@ -240,7 +240,6 @@ const OVT010301 = () => {
     };
     const payload2 = [{ ...dt, CANCEL_REMARKS: refusalReason }];
     setLoading(true);
-
     let result = {};
     if (
       !Util.isEmpty(route?.params?.JOB_NO) ||

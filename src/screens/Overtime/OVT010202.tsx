@@ -102,7 +102,6 @@ const OVT010202 = () => {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
     const payload = {
       ...dt,
       APPLY_WEEK_HOUR: String(
@@ -113,6 +112,7 @@ const OVT010202 = () => {
       ),
       APPLY_HOUR_W: String(otHours?.OVER_TIME),
     };
+    setLoading(true);
     const result = await Action.saveApproval('nc', payload, approvalLine);
     setLeaveRefresh(true);
     setLoading(false);

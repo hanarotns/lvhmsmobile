@@ -326,8 +326,10 @@ const LEA010201 = () => {
       : official;
     const param = { ...commonInfo, ...etcInfo, ...hd, ...config };
 
+    setLoading(true);
     const result = await Action.saveApproval(param, infoList, approvalLine);
     setLeaveRefresh(true);
+    setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {

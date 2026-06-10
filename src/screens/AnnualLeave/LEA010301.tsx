@@ -145,8 +145,6 @@ const LEA010301 = () => {
   };
 
   const handleReApprove = async () => {
-    setLoading(true);
-
     const commonInfo = {
       S_COMPANY_CODE: empInfo?.COMPANY_CODE,
       S_DEPT_CODE: empInfo?.DEPT_CODE,
@@ -155,6 +153,7 @@ const LEA010301 = () => {
       S_EMP_FLAG: 'Y',
     };
     const param = { ...commonInfo, ...dt };
+    setLoading(true);
     const result = await Action.saveApproval(param, dt?.DETAIL, dt?.APPR_LINE);
     setLeaveRefresh(true);
     setLoading(false);
