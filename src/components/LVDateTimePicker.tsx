@@ -12,89 +12,105 @@ import {
   View,
 } from 'react-native';
 
-const LVDateTimePicker: React.FC = (props) => {
-  const { date, setDate } = props;
+type Props = {
+  date: Date;
+  setDate: (date: Date) => void;
+};
 
-  const [mode, setMode] = useState<'date' | 'time'>();
-  const [showModal, setShowModal] = useState(false);
+const LVDateTimePicker: React.FC<Props> = ({ date, setDate }) => {
+  const [mode, setMode] = useState<'date' | 'time'>('date');
+  const [showPicker, setShowPicker] = useState(false);
 
-  // 모달 오픈 & 피커 모드 설정
-  const openModal = (pickerMode: 'date' | 'time') => {
+  const openPicker = (pickerMode: 'date' | 'time') => {
     setMode(pickerMode);
-    setShowModal(true);
+    setShowPicker(true);
   };
 
-  // 날짜/시간 선택 이벤트
-  const onChange = (_event: Event, selectedDate?: Date) => {
-    // Android: 값 선택시 자동 close
-    if (Platform.OS === 'android') setShowModal(false);
-    if (selectedDate) setDate(selectedDate);
+  const closePicker = () => {
+    setShowPicker(false);
   };
 
-  // 모달 내 닫기 버튼
-  const closeModal = () => setShowModal(false);
+  const onChange = (event: Event, selectedDate?: Date) => {
+    if (Platform.OS === 'android') {
+      closePicker();
+    }
+
+    if (event.type === 'dismissed') {
+      return;
+    }
+
+    if (selectedDate) {
+      setDate(selectedDate);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.selectButton}
-        onPress={() => openModal('date')}
+        onPress={() => openPicker('date')}
       >
         <Text style={styles.buttonText}>
           {dayjs(date).format('YYYY-MM-DD')}
         </Text>
         <Icon name='calendar' color='#6A727B' />
       </TouchableOpacity>
+
       <TouchableOpacity
         style={styles.selectButton}
-        onPress={() => openModal('time')}
+        onPress={() => openPicker('time')}
       >
         <Text style={styles.buttonText}>{dayjs(date).format('HH:mm')}</Text>
         <Icon name='clock-outline' color='#6A727B' />
       </TouchableOpacity>
-      <Modal
-        transparent
-        visible={showModal}
-        animationType='slide'
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalBg}>
-          <View style={styles.modalBox}>
-            {mode && (
+
+      {Platform.OS === 'android' && showPicker && (
+        <DateTimePicker
+          locale='ko-KR'
+          value={date}
+          mode={mode}
+          is24Hour
+          display='spinner'
+          onChange={onChange}
+        />
+      )}
+
+      {Platform.OS === 'ios' && (
+        <Modal
+          transparent
+          visible={showPicker}
+          animationType='slide'
+          onRequestClose={closePicker}
+        >
+          <View style={styles.modalBg}>
+            <View style={styles.modalBox}>
               <DateTimePicker
                 locale='ko-KR'
                 value={date}
                 mode={mode}
-                is24Hour={true}
+                is24Hour
+                display='spinner'
                 textColor='#373747'
-                display={'spinner'}
                 onChange={onChange}
                 style={styles.dateTimePicker}
               />
-            )}
-            {/* iOS는 picker 자체가 닫히지 않으니 닫기 버튼 필요 */}
-            {Platform.OS === 'ios' && (
+
               <LVButton
                 title='확인'
-                onPress={closeModal}
+                onPress={closePicker}
                 buttonStyle={{ backgroundColor: 'transparent' }}
-                textStyle={{
-                  color: '#27A7FF',
-                  fontSize: 16,
-                  fontWeight: '500',
-                }}
+                textStyle={styles.confirmText}
               />
-            )}
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     gap: 8,
@@ -114,8 +130,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginRight: 4,
   },
+  modalBg: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   modalBox: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 24,
     alignItems: 'center',
@@ -125,6 +147,11 @@ const styles = StyleSheet.create({
     width: 280,
     height: 180,
     alignSelf: 'center',
+  },
+  confirmText: {
+    color: '#27A7FF',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
 
