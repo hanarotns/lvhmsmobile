@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import LVStyles from './LVStyles';
@@ -17,6 +17,17 @@ const LVButton = (props: any) => {
     disabled = false,
   } = props;
 
+  const lastPress = useRef(0);
+
+  const handlePress = () => {
+    const now = Date.now();
+    if (now - lastPress.current < 1000) {
+      return;
+    }
+    lastPress.current = now;
+    onPress?.();
+  };
+
   return (
     <TouchableOpacity
       style={[styles.button, disabled && styles.buttonDisabled, buttonStyle]}
@@ -24,7 +35,7 @@ const LVButton = (props: any) => {
       activeOpacity={disabled ? 1 : 0.7}
       onPress={() => {
         if (!disabled && onPress) {
-          onPress();
+          handlePress();
         }
       }}
     >
