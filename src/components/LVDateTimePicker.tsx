@@ -45,7 +45,6 @@ const LVDateTimePicker: React.FC = (props) => {
         </Text>
         <Icon name='calendar' color='#6A727B' />
       </TouchableOpacity>
-      <View style={{ width: 8 }} />
       <TouchableOpacity
         style={styles.selectButton}
         onPress={() => openModal('time')}
@@ -98,12 +97,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    gap: 8,
   },
   selectButton: {
     borderColor: '#D3D6DD',
     borderRadius: 8,
     borderWidth: 1,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     paddingVertical: 8,
     alignItems: 'center',
     flexDirection: 'row',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     color: '#373747',
     fontSize: 16,
     fontWeight: '700',
-    marginRight: 8,
+    marginRight: 4,
   },
   modalBox: {
     backgroundColor: '#fff',
