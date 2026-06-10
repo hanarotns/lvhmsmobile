@@ -3,6 +3,7 @@ import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
+import { useRefreshStore } from '@/src/stores/refreshStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
@@ -35,6 +36,7 @@ const OVT010201 = () => {
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
+  const setLeaveRefresh = useRefreshStore((state) => state.setLeaveRefresh);
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
@@ -150,6 +152,7 @@ const OVT010201 = () => {
     };
     setLoading(true);
     const result = await Action.saveApproval('nd', body, approvalLine);
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);

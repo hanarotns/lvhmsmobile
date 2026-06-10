@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
+import { useRefreshStore } from '@/src/stores/refreshStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
@@ -18,7 +19,11 @@ import {
   Text,
 } from '@/src/components';
 import { Util } from '@/src/lib';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
@@ -34,6 +39,7 @@ const APR010101 = () => {
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
+  const { leaveRefresh, setLeaveRefresh } = useRefreshStore();
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -56,10 +62,17 @@ const APR010101 = () => {
   };
 
   useEffect(() => {
-    if (isFocused) {
-      mount();
-    }
-  }, [isFocused]);
+    mount();
+  }, [selectedDate]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (leaveRefresh) {
+        mount();
+        setLeaveRefresh(false);
+      }
+    }, [leaveRefresh]),
+  );
 
   useEffect(() => {
     // @@ 화면 진입 시, 동작 안하도록

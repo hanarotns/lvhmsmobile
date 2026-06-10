@@ -15,6 +15,7 @@ import {
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
+import { useRefreshStore } from '@/src/stores/refreshStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
@@ -70,6 +71,7 @@ const LEA010201 = () => {
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
+  const setLeaveRefresh = useRefreshStore((state) => state.setLeaveRefresh);
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
@@ -325,6 +327,7 @@ const LEA010201 = () => {
     const param = { ...commonInfo, ...etcInfo, ...hd, ...config };
 
     const result = await Action.saveApproval(param, infoList, approvalLine);
+    setLeaveRefresh(true);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {

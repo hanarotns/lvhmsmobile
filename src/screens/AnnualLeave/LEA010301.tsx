@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
+import { useRefreshStore } from '@/src/stores/refreshStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
@@ -44,6 +45,7 @@ const LEA010301 = () => {
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
+  const setLeaveRefresh = useRefreshStore((state) => state.setLeaveRefresh);
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
@@ -103,6 +105,7 @@ const LEA010301 = () => {
     };
     setLoading(true);
     const result = await Action.recall(payload);
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -121,6 +124,7 @@ const LEA010301 = () => {
     };
     setLoading(true);
     const result = await Action.deleteMobile(payload);
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -134,6 +138,7 @@ const LEA010301 = () => {
   const handleReApprove = async () => {
     setLoading(true);
     const result = await Action.saveApproval(dt, dt?.DETAIL, dt?.APPR_LINE);
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -158,6 +163,7 @@ const LEA010301 = () => {
     const payload2 = [dt];
     setLoading(true);
     const result = await Action.recallForApprover(payload1, payload2);
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -176,6 +182,7 @@ const LEA010301 = () => {
     const payload2 = [{ ...dt, CANCEL_REMARKS: refusalReason }];
     setLoading(true);
     const result = await Action.refusalForApprover(payload1, payload2);
+    setLeaveRefresh(true);
     setLoading(false);
     // 모달 닫기
     if (result.TYPE === 1) {
@@ -196,6 +203,7 @@ const LEA010301 = () => {
     const payload2 = [dt];
     setLoading(true);
     const result = await Action.approveForApprover(payload1, payload2);
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);

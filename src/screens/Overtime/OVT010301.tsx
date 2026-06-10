@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
+import { useRefreshStore } from '@/src/stores/refreshStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
@@ -38,6 +39,7 @@ const OVT010301 = () => {
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
+  const setLeaveRefresh = useRefreshStore((state) => state.setLeaveRefresh);
 
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
@@ -130,6 +132,7 @@ const OVT010301 = () => {
     } else {
       result = await Action.recall('nd', payload);
     }
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -158,6 +161,7 @@ const OVT010301 = () => {
     } else {
       result = await Action.deleteMobile('nd', payload);
     }
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -189,6 +193,7 @@ const OVT010301 = () => {
     } else {
       result = await Action.saveApproval('nd', payload, dt?.APPR_LINE);
     }
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -216,6 +221,7 @@ const OVT010301 = () => {
     } else {
       result = await Action.recallForApprover('nd', payload1, payload2);
     }
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
@@ -243,6 +249,7 @@ const OVT010301 = () => {
     } else {
       result = await Action.refusalForApprover('nd', payload1, payload2);
     }
+    setLeaveRefresh(true);
     setLoading(false);
     // 모달 닫기
     if (result.TYPE === 1) {
@@ -271,6 +278,7 @@ const OVT010301 = () => {
     } else {
       result = await Action.approveForApprover('nd', payload1, payload2);
     }
+    setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);

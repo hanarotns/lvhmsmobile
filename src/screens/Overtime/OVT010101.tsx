@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
+import { useRefreshStore } from '@/src/stores/refreshStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import * as icon from '@/src/assets/images';
@@ -20,7 +21,11 @@ import {
   Text,
 } from '@/src/components';
 import { Util } from '@/src/lib';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as Action from './Action';
@@ -34,6 +39,7 @@ const OVT010101 = () => {
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
+  const { leaveRefresh, setLeaveRefresh } = useRefreshStore();
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -43,10 +49,17 @@ const OVT010101 = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    if (isFocused) {
-      mount();
-    }
-  }, [isFocused, selectedDate]);
+    mount();
+  }, [selectedDate]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (leaveRefresh) {
+        mount();
+        setLeaveRefresh(false);
+      }
+    }, [leaveRefresh]),
+  );
 
   const mount = async () => {
     setLoading(true);
