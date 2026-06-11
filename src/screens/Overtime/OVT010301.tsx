@@ -116,6 +116,17 @@ const OVT010301 = () => {
     setLoading(false);
   };
 
+  /**
+   * 비즈니스 로직 확인용
+   */
+  const checkLogic = async () => {
+    if (Util.isEmpty(refusalReason)) {
+      Util.toastMsg('반려사유를 입력하세요.', 'info');
+      return false;
+    }
+    return true;
+  };
+
   // 상신자
   const handleRecall = async () => {
     const payload = {
@@ -234,6 +245,11 @@ const OVT010301 = () => {
   };
 
   const handleRefusalForApprover = async () => {
+    const isCheck = await checkLogic();
+    if (!isCheck) {
+      return;
+    }
+
     const payload1 = {
       SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
       SS_EMP_ID: empInfo?.EMP_ID,
@@ -543,9 +559,7 @@ const OVT010301 = () => {
             />
           }
           onVisible={setIsVisibleModal}
-          onOk={() => {
-            handleRefusalForApprover();
-          }}
+          onOk={handleRefusalForApprover}
         />
       )}
       {loading && <LVLoadingIndicator />}
