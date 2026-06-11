@@ -1,5 +1,12 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import * as icon from '@/src/assets/images';
 import Text from '@/src/components/CustomText';
@@ -20,6 +27,7 @@ const LVModal = (props: any) => {
   } = props;
   return (
     <View style={styles.bgView}>
+      <Pressable style={StyleSheet.absoluteFill} onPress={Keyboard.dismiss} />
       <View
         style={
           category === 'entire' ? styles.modalEntireView : styles.modalView
@@ -38,19 +46,26 @@ const LVModal = (props: any) => {
             <TouchableOpacity
               style={{ padding: 4 }}
               onPress={() => {
+                Keyboard.dismiss();
                 onVisible(false);
               }}
             >
-              <Image source={icon.ico_close} style={[LVStyles.iconS]} />
+              <Image source={icon.ico_close} style={LVStyles.iconS} />
             </TouchableOpacity>
           )}
         </View>
         {/* 컨텐츠 */}
-        <ScrollView style={styles.contentsScrollView}>{contents}</ScrollView>
+        <ScrollView
+          style={styles.contentsScrollView}
+          keyboardShouldPersistTaps='handled'
+        >
+          <Pressable onPress={Keyboard.dismiss}>{contents}</Pressable>
+        </ScrollView>
+
         <LVButton
           title={buttonText || '저장'}
-          LVButton
           onPress={() => {
+            Keyboard.dismiss();
             onOk(true);
           }}
           buttonStyle={{
