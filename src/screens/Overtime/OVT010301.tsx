@@ -73,7 +73,7 @@ const OVT010301 = () => {
     };
     let detail = {};
     if (
-      !Util.isEmpty(route?.params?.JOB_NO) ||
+      !Util.isEmpty(route?.params?.CONFIRM_JOB_NO) ||
       route?.params?.JOB_NO.indexOf('NC') != -1
     ) {
       detail = await Action.getDetailM('nc', payload);
@@ -84,7 +84,7 @@ const OVT010301 = () => {
     let hours2 = {};
     if (detail) {
       if (
-        !Util.isEmpty(route?.params?.JOB_NO) ||
+        !Util.isEmpty(route?.params?.CONFIRM_JOB_NO) ||
         route?.params?.JOB_NO.indexOf('NC') != -1
       ) {
         hours1 = await Action.getAccumulatedHours('nc', detail);
@@ -126,7 +126,7 @@ const OVT010301 = () => {
     setLoading(true);
     let result = {};
     if (
-      !Util.isEmpty(route?.params?.JOB_NO) ||
+      !Util.isEmpty(route?.params?.CONFIRM_JOB_NO) ||
       route?.params?.JOB_NO.indexOf('NC') != -1
     ) {
       result = await Action.recall('nc', payload);
@@ -155,7 +155,7 @@ const OVT010301 = () => {
     setLoading(true);
     let result = {};
     if (
-      !Util.isEmpty(route?.params?.JOB_NO) ||
+      !Util.isEmpty(route?.params?.CONFIRM_JOB_NO) ||
       route?.params?.JOB_NO.indexOf('NC') != -1
     ) {
       result = await Action.deleteMobile('nc', payload);
@@ -187,7 +187,7 @@ const OVT010301 = () => {
     };
     setLoading(true);
     if (
-      !Util.isEmpty(route?.params?.JOB_NO) ||
+      !Util.isEmpty(route?.params?.CONFIRM_JOB_NO) ||
       route?.params?.JOB_NO.indexOf('NC') != -1
     ) {
       result = await Action.saveApproval('nc', payload, dt?.APPR_LINE);
@@ -215,7 +215,7 @@ const OVT010301 = () => {
     setLoading(true);
     let result = {};
     if (
-      !Util.isEmpty(route?.params?.JOB_NO) ||
+      !Util.isEmpty(route?.params?.CONFIRM_JOB_NO) ||
       route?.params?.JOB_NO.indexOf('NC') != -1
     ) {
       result = await Action.recallForApprover('nc', payload1, payload2);
@@ -242,7 +242,7 @@ const OVT010301 = () => {
     setLoading(true);
     let result = {};
     if (
-      !Util.isEmpty(route?.params?.JOB_NO) ||
+      !Util.isEmpty(route?.params?.CONFIRM_JOB_NO) ||
       route?.params?.JOB_NO.indexOf('NC') != -1
     ) {
       result = await Action.refusalForApprover('nc', payload1, payload2);
@@ -271,7 +271,7 @@ const OVT010301 = () => {
     setLoading(true);
     let result = {};
     if (
-      !Util.isEmpty(route?.params?.JOB_NO) ||
+      !Util.isEmpty(route?.params?.CONFIRM_JOB_NO) ||
       route?.params?.JOB_NO.indexOf('NC') != -1
     ) {
       result = await Action.approveForApprover('nc', payload1, payload2);
