@@ -287,10 +287,16 @@ const LEA010201 = () => {
 
   /**
    * 비즈니스 로직 확인용
-   * * @returns {Boolean}
    */
   const checkLogic = async () => {
-    // @@ 로직 더 넣고, 다른화면에도 추가 필요함.
+    if (Util.isEmpty(approvalLine)) {
+      Util.toastMsg('결재선을 선택하세요', 'info');
+      return false;
+    }
+    if (Util.isEmpty(infoList)) {
+      Util.toastMsg('신청정보를 선택하세요', 'info');
+      return false;
+    }
     if (Util.isEmpty(hd?.REASON)) {
       Util.toastMsg('휴가 신청 내용을 입력하세요', 'info');
       return false;
