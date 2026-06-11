@@ -8,6 +8,7 @@ import React, {
 import {
   ActivityIndicator,
   Alert,
+  Modal,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -878,75 +879,88 @@ const ContentsOfInfo = forwardRef((props: any, ref) => {
       </View>
       {/* 신청정보_휴가종류 션택영역 */}
       {isVisibleVaTypeModal && (
-        <LVModal
-          title={'종류를 선택하세요'}
-          buttonText={'선택'}
-          contents={
-            <View style={styles.modalView}>
-              {grid.map((row, rowIdx) => {
-                return (
-                  <View key={rowIdx} style={styles.modalInsideView}>
-                    {row.map((item, colIdx) =>
-                      item ? (
-                        <TouchableOpacity
-                          key={item?.HQCODE || colIdx}
-                          onPress={() => {
-                            if (selectedInfo?.date) {
-                              setSelectedInfo({
-                                ...selectedInfo,
-                                ...item,
-                                PERIOD: item.DAY_01, // @@ 좋은방식인지 생각해보기
-                                VA_PERIOD: item.DAY_02, // @@ 좋은방식인지 생각해보기
-                                VA_TYPE: item.HQCODE, // @@ 좋은방식인지 생각해보기
-                                VA_TYPE_NAME: item.HQNAME, // @@ 좋은방식인지 생각해보기
-                              });
-                            } else {
-                              Util.toastMsg('휴가일자를 선택하세요!', 'info');
-                            }
-                          }}
-                          activeOpacity={0.8}
-                          style={{
-                            marginRight: colIdx < columnCount - 1 ? 8 : 0,
-                          }}
-                        >
-                          <LVChip
-                            category='type'
-                            content={item?.HQNAME_02}
-                            subContent={item?.HQNAME_01}
-                            chipStyle={{
-                              width: 60,
-                              borderColor:
-                                selectedInfo?.HQCODE === item?.HQCODE
-                                  ? '#39CCCC'
-                                  : '#6A727B',
-                            }}
-                            textStyle={{
-                              color:
-                                selectedInfo?.HQCODE === item?.HQCODE
-                                  ? '#39CCCC'
-                                  : '#6A727B',
-                            }}
-                          />
-                        </TouchableOpacity>
-                      ) : (
-                        // 마지막 줄이 비는 경우, 빈 뷰로 공간 맞추기
-                        <View
-                          key={colIdx}
-                          style={{
-                            width: 60,
-                            marginRight: colIdx < columnCount - 1 ? 8 : 0,
-                          }}
-                        />
-                      ),
-                    )}
-                  </View>
-                );
-              })}
-            </View>
-          }
-          onVisible={setIsVisibleVaTypeModal}
-          onOk={() => {}}
-        />
+        <Modal
+          transparent
+          animationType='fade'
+          onRequestClose={() => {
+            setIsVisibleVaTypeModal(false);
+          }}
+        >
+          <View style={styles.overlay}>
+            <LVModal
+              title={'종류를 선택하세요'}
+              buttonText={'선택'}
+              contents={
+                <View style={styles.modalView}>
+                  {grid.map((row, rowIdx) => {
+                    return (
+                      <View key={rowIdx} style={styles.modalInsideView}>
+                        {row.map((item, colIdx) =>
+                          item ? (
+                            <TouchableOpacity
+                              key={item?.HQCODE || colIdx}
+                              onPress={() => {
+                                if (selectedInfo?.date) {
+                                  setSelectedInfo({
+                                    ...selectedInfo,
+                                    ...item,
+                                    PERIOD: item.DAY_01, // @@ 좋은방식인지 생각해보기
+                                    VA_PERIOD: item.DAY_02, // @@ 좋은방식인지 생각해보기
+                                    VA_TYPE: item.HQCODE, // @@ 좋은방식인지 생각해보기
+                                    VA_TYPE_NAME: item.HQNAME, // @@ 좋은방식인지 생각해보기
+                                  });
+                                } else {
+                                  Util.toastMsg(
+                                    '휴가일자를 선택하세요!',
+                                    'info',
+                                  );
+                                }
+                              }}
+                              activeOpacity={0.8}
+                              style={{
+                                marginRight: colIdx < columnCount - 1 ? 8 : 0,
+                              }}
+                            >
+                              <LVChip
+                                category='type'
+                                content={item?.HQNAME_02}
+                                subContent={item?.HQNAME_01}
+                                chipStyle={{
+                                  width: 60,
+                                  borderColor:
+                                    selectedInfo?.HQCODE === item?.HQCODE
+                                      ? '#39CCCC'
+                                      : '#6A727B',
+                                }}
+                                textStyle={{
+                                  color:
+                                    selectedInfo?.HQCODE === item?.HQCODE
+                                      ? '#39CCCC'
+                                      : '#6A727B',
+                                }}
+                              />
+                            </TouchableOpacity>
+                          ) : (
+                            // 마지막 줄이 비는 경우, 빈 뷰로 공간 맞추기
+                            <View
+                              key={colIdx}
+                              style={{
+                                width: 60,
+                                marginRight: colIdx < columnCount - 1 ? 8 : 0,
+                              }}
+                            />
+                          ),
+                        )}
+                      </View>
+                    );
+                  })}
+                </View>
+              }
+              onVisible={setIsVisibleVaTypeModal}
+              onOk={() => {}}
+            />
+          </View>
+        </Modal>
       )}
     </View>
   );
@@ -1381,5 +1395,11 @@ const styles = StyleSheet.create({
     color: '#373747',
     minHeight: 100,
     textAlignVertical: 'top', // Android에서 상단 정렬
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
