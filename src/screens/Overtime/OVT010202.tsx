@@ -23,6 +23,7 @@ import {
 } from '@/src/components';
 import { Util } from '@/src/lib';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -213,19 +214,6 @@ const OVT010202 = () => {
               title={'내용'}
               children={<Text style={{ fontWeight: '700' }}>{dt?.REASON}</Text>}
             />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-              }}
-            >
-              <LVCheckBox
-                label='시간변경'
-                value={isChange}
-                onChange={setIsChange}
-              />
-            </View>
             <LVFormOfContents
               title={'시작일시'}
               children={
@@ -264,6 +252,31 @@ const OVT010202 = () => {
                 </Text>
               }
             />
+            <View style={{ height: 48, padding: 8 }}>
+              <LVCheckBox
+                label='확정시간변경'
+                value={isChange}
+                onChange={setIsChange}
+              />
+            </View>
+            {isChange && (
+              <LVFormOfContents
+                title={'변경사유'}
+                children={
+                  <Input
+                    placeholder='변경사유를 입력하세요.'
+                    value={changeReason}
+                    onChangeText={(p) => {
+                      setChangeReason(p);
+                    }}
+                    size='large'
+                    style={{ backgroundColor: '#FFF' }}
+                    textStyle={styles.multilineInput}
+                    multiline={true}
+                  />
+                }
+              />
+            )}
           </View>
         </ScrollView>
         <View style={LVStyles.bottomButtonView}>
@@ -361,5 +374,10 @@ const styles = StyleSheet.create({
     borderColor: '#FF9E3C',
     backgroundColor: '#FFF7EF',
     maxWidth: 100,
+  },
+  multilineInput: {
+    color: '#373747',
+    minHeight: 100,
+    textAlignVertical: 'top', // Android에서 상단 정렬
   },
 });
