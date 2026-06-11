@@ -88,6 +88,12 @@ const OVT010202 = () => {
       ...route?.params,
       ...detail,
       APPR_LINE: sortedApprLine,
+      ND_TYPE: detail?.ND_TYPE,
+      ND_TYPE_NAME: detail?.ND_TYPE_NAME,
+      ND_DATE: detail?.APPLY_START_DATE,
+      START_TIME: detail?.APPLY_START_TIME,
+      CLOSING_DATE: detail?.APPLY_END_DATE,
+      CLOSING_TIME: detail?.APPLY_END_TIME,
     };
 
     setFromDateTime(
@@ -124,6 +130,14 @@ const OVT010202 = () => {
       return;
     }
 
+    const changeInfo = {
+      NC_CHANGE_REASON: isChange ? changeReason : '',
+      ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
+      START_TIME: dayjs(fromDateTime).format('HHmm'),
+      CLOSING_DATE: dayjs(toDateTime).format('YYYYMMDD'),
+      CLOSING_TIME: dayjs(toDateTime).format('HHmm'),
+    };
+
     const payload = {
       ...dt,
       APPLY_WEEK_HOUR: String(
@@ -133,7 +147,7 @@ const OVT010202 = () => {
         accumulatedHours?.NC_MONTH_HOUR + otHours?.OVER_TIME,
       ),
       APPLY_HOUR_W: String(otHours?.OVER_TIME),
-      NC_CHANGE_REASON: isChange ? changeReason : '',
+      ...(isChange ? changeInfo : {}),
     };
     setLoading(true);
     const result = await Action.saveApproval('nc', payload, approvalLine);
