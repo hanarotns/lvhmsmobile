@@ -157,6 +157,7 @@ const LVApprLineForm = (props: any) => {
                   return;
                 }
                 // 2. approvalLine에 추가 (상신자 정보는 하드코딩)
+                setApprovalInfo(selectedAppr);
                 setApprovalLine([...selectedAppr?.DETAILS]);
                 // 3. 모달 닫기
                 setIsVisibleApprovalModal(false);
