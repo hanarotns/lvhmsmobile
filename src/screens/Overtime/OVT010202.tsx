@@ -7,6 +7,7 @@ import { useRefreshStore } from '@/src/stores/refreshStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
+  KeyboardAwareScrollView,
   LVApprLineForm,
   LVButton,
   LVCheckBox,
@@ -18,7 +19,6 @@ import {
   LVStyles,
   RefreshControl,
   SafeAreaView,
-  ScrollView,
   Text,
 } from '@/src/components';
 import { Util } from '@/src/lib';
@@ -137,7 +137,11 @@ const OVT010202 = () => {
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
-        <ScrollView
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps='handled'
+          enableOnAndroid
+          extraScrollHeight={150}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
@@ -278,7 +282,7 @@ const OVT010202 = () => {
               />
             )}
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
         <View style={LVStyles.bottomButtonView}>
           <LVButton
             title={'취소'}
@@ -339,6 +343,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderTopWidth: 1,
     borderColor: '#D5DCE5',
+    marginBottom: 200,
   },
   iconWrap: {
     marginLeft: 8,
