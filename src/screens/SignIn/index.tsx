@@ -70,11 +70,12 @@ const SignIn = ({ navigation }) => {
         Platform.OS === 'android'
           ? Application.getAndroidId()
           : await Application.getIosIdForVendorAsync(),
-
       modelName: Device.modelName,
       osName: Device.osName,
       osVersion: Device.osVersion,
     };
+    await AsyncStorage.setItem('deviceInfo', JSON.stringify(deviceInfo));
+    await AsyncStorage.setItem('deviceId', deviceInfo?.deviceId);
   };
 
   const signIn = () => {

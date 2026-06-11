@@ -10,6 +10,7 @@ import {
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as icon from '@/src/assets/images';
 import {
@@ -242,6 +243,9 @@ const MYH010101 = ({ navigation }) => {
   };
 
   const saveM = async (checkType: string) => {
+    const deviceInfo = await AsyncStorage.getItem('deviceInfo');
+    const deviceId = await AsyncStorage.getItem('deviceId');
+
     const payload = {
       EMP_ID: empInfo?.EMP_ID,
       WA_LOG_DATETIME: dayjs(new Date()).format('YYYYMMDDHHmmss'),
@@ -257,7 +261,8 @@ const MYH010101 = ({ navigation }) => {
           : offsiteInfo.WAT_AREA_NAME,
       WAT_AREA_SEQ: nearestOffice.ET_SEQ_NO,
       WAT_STATUS: nearestOffice.ET_STATUS,
-      // MOBILE_TOKEN: token,
+      MOBILE_INFO: deviceInfo,
+      MOBILE_TOKEN: deviceId,
       // 외근인 경우만.
       OOO_REASON:
         checkType === 'O'
