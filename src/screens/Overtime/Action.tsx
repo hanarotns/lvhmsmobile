@@ -24,6 +24,21 @@ const getListM = async (body: object) => {
   return result.PORU010301G1;
 };
 
+/**
+ * 유저의 정규 출퇴근 정보 조회
+ */
+const getUserWSEInfo = async (body: object) => {
+  const result = await Fetch.request('PORU010301SVC', 'getUserWSEInfo', {
+    body: JSON.stringify({
+      PORU010301F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010301F1;
+};
+
 const getAccumulatedHours = async (type: string, body: object) => {
   if (type === 'nd') {
     const result1 = await Fetch.request('PORU010301SVC', 'calTime', {
@@ -320,6 +335,7 @@ export {
   // 통계, 리스트 조회
   getInfoM,
   getListM,
+  getUserWSEInfo,
   recall,
   recallForApprover,
   refusalForApprover,

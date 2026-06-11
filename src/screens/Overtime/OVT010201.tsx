@@ -43,6 +43,7 @@ const OVT010201 = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [otEmpInfo, setOtEmpInfo] = useState({});
+  const [regularEmpInfo, setRegularEmpInfo] = useState({});
   const [accumulatedHours, setAccumulatedHours] = useState({});
   const [approvalLine, setApprovalLine] = useState([]);
   const [fromDateTime, setFromDateTime] = useState<Date>(new Date());
@@ -92,6 +93,9 @@ const OVT010201 = () => {
       });
       setOvertimeTypeList(res3);
     }
+
+    const res3 = await Action.getUserWSEInfo(payload1);
+    setRegularEmpInfo(res3);
 
     setLoading(false);
   };
