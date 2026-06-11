@@ -102,7 +102,28 @@ const OVT010202 = () => {
     setLoading(false);
   };
 
+  /**
+   * 비즈니스 로직 확인용
+   */
+  const checkLogic = async () => {
+    if (Util.isEmpty(approvalLine)) {
+      Util.toastMsg('결재선을 선택하세요', 'info');
+      return false;
+    }
+    if (isChange && Util.isEmpty(changeReason)) {
+      Util.toastMsg('변경사유를 입력하세요', 'info');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async () => {
+    const isCheck = await checkLogic();
+    if (!isCheck) {
+      return;
+    }
+
     const payload = {
       ...dt,
       APPLY_WEEK_HOUR: String(
@@ -257,7 +278,13 @@ const OVT010202 = () => {
                 </Text>
               }
             />
-            <View style={{ height: 48, padding: 8 }}>
+            <View
+              style={{
+                height: 48,
+                justifyContent: 'center',
+                width: '50%',
+              }}
+            >
               <LVCheckBox
                 label='확정시간변경'
                 value={isChange}
