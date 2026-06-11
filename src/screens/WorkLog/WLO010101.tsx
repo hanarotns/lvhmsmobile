@@ -28,6 +28,7 @@ const WLO010101 = () => {
   const [loading, setLoading] = useState(true);
 
   const [calDispList, setCalDispList] = useState({});
+  const [calList, setCalList] = useState([]);
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [selectedInfo, setSelectedInfo] = useState({
@@ -79,6 +80,7 @@ const WLO010101 = () => {
     };
     let obj = {};
     const res = await Action.getInfoM(payload); // @@ 달력 변경 데이터 넣기
+    setCalList(res?.HD);
     res?.HD?.filter((item) => ['CHECK'].includes(item.M_TYPE))
       .map((item) => item.M_DATE)
       .forEach(
@@ -121,9 +123,8 @@ const WLO010101 = () => {
         <Calendar
           onDayPress={(day: any) => {
             const date = day.dateString;
-            setSelectedInfo({
-              date,
-            });
+            const dateInfo = calList.find((e) => date === e?.M_DATE);
+            setSelectedInfo({ date, ...dateInfo });
           }}
           onMonthChange={(month: any) => {
             const date = month.dateString;
@@ -154,8 +155,16 @@ const WLO010101 = () => {
       {/* (선택된 일자, 필터의) 리스트 조회 */}
       <View style={styles.workLogListSection}>
         <View style={[LVStyles.row]}>
-          <Text style={styles.text}>
-            {selectedInfo.date} ({dayjs(selectedInfo.date).format('ddd')})
+          <Text
+            style={{
+              ...styles.text,
+              color: ['WEEKEND', 'HOLIDAY'].includes(selectedInfo?.M_TYPE)
+                ? '#FF585B'
+                : '#1E2125',
+            }}
+          >
+            {selectedInfo.date} ({dayjs(selectedInfo.date).format('ddd')}){' '}
+            {selectedInfo?.HOLIDAY_NAME}
           </Text>
           <Text style={styles.text}>{filteredList?.length} 건</Text>
         </View>
