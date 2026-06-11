@@ -32,6 +32,7 @@ import { Util } from '@/src/lib';
 import env from '@/src/lib/env';
 import { useNavigation } from '@react-navigation/native';
 import * as Application from 'expo-application';
+import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Action from './Action';
 
@@ -65,6 +66,7 @@ const SignIn = ({ navigation }) => {
 
   const mount = async () => {
     await AsyncStorage.setItem('url', fetchURL);
+    const version = Constants.expoConfig?.version ?? '-';
     const deviceInfo = {
       deviceId:
         Platform.OS === 'android'
@@ -73,6 +75,9 @@ const SignIn = ({ navigation }) => {
       modelName: Device.modelName,
       osName: Device.osName,
       osVersion: Device.osVersion,
+      deviceType: Device.deviceType ? 'Y' : 'N',
+      isDevice: Device.isDevice,
+      appVersion: version,
     };
     await AsyncStorage.setItem('deviceInfo', JSON.stringify(deviceInfo));
     await AsyncStorage.setItem('deviceId', deviceInfo?.deviceId);
