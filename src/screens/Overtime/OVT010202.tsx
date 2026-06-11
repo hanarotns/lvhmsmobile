@@ -112,6 +112,7 @@ const OVT010202 = () => {
         accumulatedHours?.NC_MONTH_HOUR + otHours?.OVER_TIME,
       ),
       APPLY_HOUR_W: String(otHours?.OVER_TIME),
+      NC_CHANGE_REASON: isChange ? changeReason : '',
     };
     setLoading(true);
     const result = await Action.saveApproval('nc', payload, approvalLine);
