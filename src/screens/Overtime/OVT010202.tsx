@@ -68,11 +68,6 @@ const OVT010202 = () => {
   const mount = async () => {
     setLoading(true);
     const detail = await Action.getDetailM('nc', route?.params);
-    const hours1 = await Action.getAccumulatedHours('nc', detail);
-    setAccumulatedHours(hours1);
-    const hours2 = await Action.calTime(detail);
-    setOtHours(hours2);
-
     let apprLine = await Action.getApproval33(detail);
     apprLine = apprLine.map((e) => ({
       ...e,
@@ -95,7 +90,13 @@ const OVT010202 = () => {
       CLOSING_DATE: detail?.APPLY_END_DATE,
       CLOSING_TIME: detail?.APPLY_END_TIME,
     };
+    setDt(res);
+    setApprovalLine(res?.APPR_LINE);
 
+    const hours1 = await Action.getAccumulatedHours('nc', res);
+    setAccumulatedHours(hours1);
+    const hours2 = await Action.calTime(res);
+    setOtHours(hours2);
     setFromDateTime(
       dayjs(res?.ND_DATE + res?.START_TIME, 'YYYYMMDDHHmm').toDate(),
     );
@@ -103,11 +104,53 @@ const OVT010202 = () => {
       dayjs(res?.CLOSING_DATE + res?.CLOSING_TIME, 'YYYYMMDDHHmm').toDate(),
     );
 
-    setDt(res);
-    setApprovalLine(res?.APPR_LINE);
     setLoading(false);
   };
 
+  /* 시간 체크 */
+  const changeFrom = async (value) => {
+    const appStart = dayjs(
+      dt?.ND_DATE + dt?.START_TIME,
+      'YYYYMMDDHHmm',
+    ).toDate();
+
+    if (appStart > value) {
+      Util.toastMsg('변경전 시간보다 빠를 수 없습니다.', 'info');
+    } else {
+      setFromDateTime(value);
+      const payload = {
+        ...dt,
+        ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
+        START_TIME: dayjs(fromDateTime).format('HHmm'),
+        CLOSING_DATE: dayjs(toDateTime).format('YYYYMMDD'),
+        CLOSING_TIME: dayjs(toDateTime).format('HHmm'),
+      };
+      const hours2 = await Action.calTime(payload);
+      setOtHours(hours2);
+    }
+  };
+
+  const changeTo = async (value) => {
+    const appEnd = dayjs(
+      dt?.CLOSING_DATE + dt?.CLOSING_TIME,
+      'YYYYMMDDHHmm',
+    ).toDate();
+
+    if (appEnd < value) {
+      Util.toastMsg('변경전 시간보다 늦을 수 없습니다.', 'info');
+    } else {
+      setToDateTime(value);
+      const payload = {
+        ...dt,
+        ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
+        START_TIME: dayjs(fromDateTime).format('HHmm'),
+        CLOSING_DATE: dayjs(toDateTime).format('YYYYMMDD'),
+        CLOSING_TIME: dayjs(toDateTime).format('HHmm'),
+      };
+      const hours2 = await Action.calTime(payload);
+      setOtHours(hours2);
+    }
+  };
   /**
    * 비즈니스 로직 확인용
    */
@@ -260,7 +303,7 @@ const OVT010202 = () => {
                 isChange ? (
                   <LVDateTimePicker
                     date={fromDateTime}
-                    setDate={setFromDateTime}
+                    setDate={(e) => changeFrom(e)}
                   />
                 ) : (
                   <Text style={styles.dateTimeText}>
@@ -273,7 +316,10 @@ const OVT010202 = () => {
               title={'종료일시'}
               children={
                 isChange ? (
-                  <LVDateTimePicker date={toDateTime} setDate={setToDateTime} />
+                  <LVDateTimePicker
+                    date={toDateTime}
+                    setDate={(e) => changeTo(e)}
+                  />
                 ) : (
                   <Text style={styles.dateTimeText}>
                     {Util.convertDateTime(dt?.CLOSING_DATE, dt?.CLOSING_TIME) ||
