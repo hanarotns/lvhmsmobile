@@ -283,7 +283,8 @@ const DocuPreviewContent = (props: any) => {
           <Text numberOfLines={1} style={styles.mainText}>
             <Text numberOfLines={1} style={styles.mainText}>
               {Util.convertDateTime(elem?.VAC_START)} (
-              {dayjs(elem?.VAC_START).format('ddd')})
+              {dayjs(elem?.VAC_START).format('ddd')}){' '}
+              {elem?.CNT > 1 ? `외 ${elem?.CNT - 1} 건` : ``}
             </Text>
           </Text>
         </View>
