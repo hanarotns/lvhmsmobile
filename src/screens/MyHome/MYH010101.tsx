@@ -259,7 +259,10 @@ const MYH010101 = ({ navigation }) => {
       WAT_STATUS: nearestOffice.ET_STATUS,
       // MOBILE_TOKEN: token,
       // 외근인 경우만.
-      OOO_REASON: ` ${offsiteInfo?.OOO_COMPANY} / ${offsiteInfo?.OOO_REASON}`,
+      OOO_REASON:
+        checkType === 'O'
+          ? `${offsiteInfo?.OOO_COMPANY} / ${offsiteInfo?.OOO_REASON}`
+          : '',
     };
     const result = await WLOAction.saveM(payload);
     // 사용자 알림 메시지
