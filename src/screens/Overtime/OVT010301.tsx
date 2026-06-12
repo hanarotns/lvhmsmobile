@@ -67,8 +67,8 @@ const OVT010301 = () => {
   const mount = async () => {
     setLoading(true);
     const payload = {
-      COMPANY_CODE: empInfo?.COMPANY_CODE,
-      EMP_ID: empInfo?.EMP_ID,
+      COMPANY_CODE: route?.params?.COMPANY_CODE || empInfo?.COMPANY_CODE,
+      EMP_ID: route?.params?.RQ_EMP_ID || empInfo?.EMP_ID,
       ...route?.params,
     };
     let detail = {};
