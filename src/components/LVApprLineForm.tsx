@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
+import * as icon from '@/src/assets/images';
 import {
   Icon,
   LVApprLine,
@@ -164,6 +165,17 @@ const LVApprLineForm = (props: any) => {
               }}
             />
           </View>
+          {/* 생성 버튼 (플로팅) */}
+          <View style={styles.floatingButton}>
+            <TouchableOpacity
+              style={styles.addIconButton}
+              onPress={() => {
+                movingScreen.navigate('PAL010201');
+              }}
+            >
+              <Image source={icon.ico_add} style={LVStyles.iconS} />
+            </TouchableOpacity>
+          </View>
         </Modal>
       )}
     </>
@@ -263,6 +275,19 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 82,
+    right: 32,
+  },
+  addIconButton: {
+    width: 48,
+    height: 48,
+    backgroundColor: '#27A7FF',
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
