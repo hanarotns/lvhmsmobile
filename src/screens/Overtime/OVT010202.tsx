@@ -253,12 +253,17 @@ const OVT010202 = () => {
               children={
                 <Text style={styles.dateTimeText}>
                   {Util.convertDateTime(
-                    dt?.ND_DATE,
-                    dt?.ND_TYPE !== 'OT' ? dt?.START_TIME : dt?.NORMAL_OFF_TIME,
+                    route?.params?.ND_DATE,
+                    route?.params?.ND_TYPE !== 'OT'
+                      ? route?.params?.START_TIME
+                      : route?.params?.NORMAL_OFF_TIME,
                     //@@ ND_TYPE = 'OT' 인 경우 연장시작시간 가져오는 로직으로 수정 필요!!!
                   )}
                   {'~'}
-                  {Util.convertDateTime(dt?.CLOSING_DATE, dt?.CLOSING_TIME)}
+                  {Util.convertDateTime(
+                    route?.params?.CLOSING_DATE,
+                    route?.params?.CLOSING_TIME,
+                  )}
                 </Text>
               }
             />
