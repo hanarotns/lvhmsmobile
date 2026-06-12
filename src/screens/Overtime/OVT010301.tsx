@@ -106,7 +106,11 @@ const OVT010301 = () => {
       APPROVAL_EMP_DEPT_NAME: e?.AP_DEPT_NAME,
     }));
 
-    const apprLineDisp = await Action.getApprLine(detail);
+    const apprLineDisp = await Action.getApprLine({
+      ...detail,
+      JOB_NO: detail?.CONFIRM_JOB_NO || detail?.JOB_NO,
+      APPROVAL_NO: detail?.CONFIRM_APPROVAL_NO || detail?.APPROVAL_NO,
+    });
     const sortedApprLineDisp = [...apprLineDisp].sort(
       (a, b) => a.LINE_ID - b.LINE_ID,
     );
