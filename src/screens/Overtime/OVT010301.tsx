@@ -95,9 +95,8 @@ const OVT010301 = () => {
       }
       setAccumulatedHours(hours1);
     }
-
+    // API payload 용
     let apprLine = await Action.getApproval33(detail);
-
     apprLine = apprLine.map((e) => ({
       ...e,
       LINE_ID: e?.LINE_NO,
@@ -106,12 +105,17 @@ const OVT010301 = () => {
       APPROVAL_EMP_DEPT_CODE: e?.AP_DEPT_CODE,
       APPROVAL_EMP_DEPT_NAME: e?.AP_DEPT_NAME,
     }));
-    const sortedApprLine = [...apprLine].sort((a, b) => a.LINE_ID - b.LINE_ID);
 
+    const apprLineDisp = await Action.getApprLine(detail);
+    const sortedApprLineDisp = [...apprLineDisp].sort(
+      (a, b) => a.LINE_ID - b.LINE_ID,
+    );
+    // display 용
     setDt({
       ...route?.params,
       ...detail,
-      APPR_LINE: sortedApprLine,
+      APPR_LINE: apprLine,
+      APPR_LINE_DISP: sortedApprLineDisp,
     });
     setLoading(false);
   };
@@ -466,18 +470,15 @@ const OVT010301 = () => {
               title={'결재선'}
               children={
                 <View style={LVStyles.row}>
-                  {!Util.isEmpty(dt?.APPR_LINE) ? (
-                    <View
-                      style={{
-                        ...LVStyles.row,
-                        justifyContent: 'flex-start',
-                        flexWrap: 'wrap',
-                      }}
-                    >
-                      <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
+                  {!Util.isEmpty(dt?.APPR_LINE_DISP) ? (
+                    <View style={styles.apprLineView}>
+                      <LVApprLine
+                        data={dt?.APPR_LINE_DISP}
+                        mainColor='#ABBACD'
+                      />
                     </View>
                   ) : (
-                    <Text>내 결재선관리에서 결재선을 생성하세요.</Text>
+                    <></>
                   )}
                 </View>
               }
@@ -656,5 +657,10 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
+  },
+  apprLineView: {
+    ...LVStyles.row,
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
   },
 });
