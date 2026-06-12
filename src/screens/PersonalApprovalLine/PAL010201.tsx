@@ -87,10 +87,14 @@ const PAL010201 = () => {
     if (!isCheck) {
       return;
     }
+    const approvalLineDtAdd = approvalLineDt?.map((e, i) => ({
+      ...e,
+      LINE_NO: i + 1,
+    }));
     setLoading(true);
     const result = await Action.saveMobile(
       { ...approvalLine, ...empInfo },
-      approvalLineDt,
+      approvalLineDtAdd,
     );
     setLoading(false);
     if (result.TYPE === 1) {
@@ -171,7 +175,6 @@ const PAL010201 = () => {
                     index: i,
                     COMPANY_CODE: empInfo?.COMPANY_CODE,
                     H_COMPANY_CODE: empInfo?.COMPANY_CODE,
-                    LINE_NO: String(i + 1),
                     AP_DEPT_CODE: e?.DEPT_CODE,
                     AP_DEPT_NAME: e?.DEPT_NAME,
                     AP_EMP_ID: e?.EMP_ID,
@@ -279,7 +282,7 @@ const PAL010201 = () => {
               return;
             }
             // 2. approvalLineDt에 추가
-            setApprovalLineDt([...approvalLineDt, selectedAppr]);
+            setApprovalLineDt((prev) => [...prev, selectedAppr]);
             // 3. 모달 닫기
             setIsVisibleApprovalModal(false);
           }}
