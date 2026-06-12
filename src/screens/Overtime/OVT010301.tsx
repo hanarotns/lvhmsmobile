@@ -533,24 +533,30 @@ const OVT010301 = () => {
           dt?.EMP_ID !== empInfo?.EMP_ID && (
             // 결재자 사용
             <View style={LVStyles.bottomButtonView}>
-              <LVButton
-                title={'회수'}
-                onPress={handleRecallForApprover}
-                buttonStyle={styles.recallButton}
-                textStyle={styles.recallButtonText}
-              />
-              <LVButton
-                title={'반려'}
-                onPress={() => {
-                  setIsVisibleModal(true);
-                }}
-                buttonStyle={styles.cancelButton}
-              />
-              <LVButton
-                title={'결재'}
-                onPress={handleApproveForApprover}
-                buttonStyle={styles.reApproveButton}
-              />
+              {dt?.LAST_ID === empInfo?.EMP_ID && (
+                <LVButton
+                  title={'회수'}
+                  onPress={handleRecallForApprover}
+                  buttonStyle={styles.recallButton}
+                  textStyle={styles.recallButtonText}
+                />
+              )}
+              {dt?.NEXT_ID === empInfo?.EMP_ID && (
+                <LVButton
+                  title={'반려'}
+                  onPress={() => {
+                    setIsVisibleModal(true);
+                  }}
+                  buttonStyle={styles.cancelButton}
+                />
+              )}
+              {dt?.NEXT_ID === empInfo?.EMP_ID && (
+                <LVButton
+                  title={'결재'}
+                  onPress={handleApproveForApprover}
+                  buttonStyle={styles.reApproveButton}
+                />
+              )}
             </View>
           )}
       </View>
