@@ -62,8 +62,7 @@ const PAL010201 = () => {
     const resOfApprRole = await COMAction.getCode('code', 'PC0001', {
       GCODE: 'AP_TYPE',
     });
-    const res = resOfApprRole?.filter((e) => ['AP', 'RE'].includes(e.HQCODE)); // @@ 역할 중 결재자만 사용하여 하드코딩 처리
-    console.log('@@ res', res);
+    const res = resOfApprRole?.filter((e) => ['AP', 'RE'].includes(e.HQCODE));
     setApprRoleList(res);
     setLoading(false);
   };
@@ -88,12 +87,12 @@ const PAL010201 = () => {
     if (!isCheck) {
       return;
     }
-
+    setLoading(true);
     const result = await Action.saveMobile(
       { ...approvalLine, ...empInfo },
       approvalLineDt,
     );
-
+    setLoading(false);
     if (result.TYPE === 1) {
       setConfirming(true);
       setTimeout(() => {
@@ -223,17 +222,6 @@ const PAL010201 = () => {
             style={{ backgroundColor: '#FFF', marginTop: 8 }}
             textStyle={{ color: '#373747', fontSize: 14 }}
           />
-          {/* <Input
-          placeholder="이 결재선에 대한 메모를 작성하세요."
-          placeholderTextColor="#939DAA"
-          value={approvalLine.APPR_LINE_COMMENT}
-          onChangeText={value => {
-            setApprovalLine({...approvalLine, APPR_LINE_COMMENT: value});
-          }}
-          size="large"
-          style={{backgroundColor: '#FFF', marginTop: 8}}
-          textStyle={{color: '#373747', fontSize: 14}}
-        /> */}
         </View>
         <ScrollView
           refreshControl={
@@ -282,7 +270,6 @@ const PAL010201 = () => {
             // 1. 자식에서 선택값 가져오기
             const { selectedAppr } =
               approvalLineRef.current.getSelectedValues();
-            console.log('@@ selectedAppr', selectedAppr);
             if (selectedAppr?.EMP_ID === empInfo?.EMP_ID) {
               Util.toastMsg('나를 결재자로 추가할 수 없습니다.', 'info');
               return;
@@ -307,7 +294,6 @@ export default PAL010201;
 
 const PersonalForm = (props: any) => {
   const { elem, apprRoleList, onSelect, onDelete } = props;
-  console.log('@@ elem', elem);
   return (
     <View style={styles.personalFormView}>
       <Text style={styles.indexText}>{elem?.index}</Text>
