@@ -266,8 +266,13 @@ const DocuPreviewContent = (props: any) => {
   return (
     <>
       <View style={LVStyles.row}>
-        <Text style={styles.labelText}>{elem?.VA_TYPE_NAME}</Text>
-        <Text style={styles.labelText}>{elem?.JOB_NO}</Text>
+        <View style={{ ...LVStyles.row, gap: 8 }}>
+          <Text style={styles.labelText}>{elem?.VA_TYPE_NAME}</Text>
+          {elem?.CGRQ_JOB_NO && <Text style={styles.changeText}>{'변경'}</Text>}
+        </View>
+        <Text style={styles.labelText}>
+          {elem?.JOB_NO} {elem?.CGRQ_JOB_NO ? ' / ' + elem?.CGRQ_JOB_NO : ''}
+        </Text>
       </View>
       <View style={{ height: 16 }} />
       <View style={LVStyles.row}>
@@ -380,5 +385,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 24,
     right: 32,
+  },
+  changeText: {
+    color: '#FF676A',
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#FF676A',
+    paddingHorizontal: 8,
   },
 });

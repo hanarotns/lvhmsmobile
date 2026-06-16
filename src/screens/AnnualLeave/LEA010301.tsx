@@ -317,19 +317,60 @@ const LEA010301 = () => {
                           leftText={`${Util.convertDateTime(e?.VA_DATE)} (${dayjs(e?.VA_DATE, 'YYYYMMDD').locale('ko').format('ddd')})`}
                           rightText={`${e?.HQNAME_03} (${e?.DAY_02})`}
                           i={i}
-                          chipStyle={{ marginBottom: 0 }}
+                          chipStyle={
+                            dt?.CGRQ_JOB_NO
+                              ? {
+                                  marginBottom: 0,
+                                  borderColor: '#6A727B',
+                                  backgroundColor: '#FFF',
+                                }
+                              : {}
+                          }
+                          textStyle={
+                            dt?.CGRQ_JOB_NO ? { color: '#6A727B' } : {}
+                          }
                         />
                       </View>
                     ))}
-                    <View style={styles.totalCntView}>
-                      <Text style={styles.totalCntText}>
-                        {`총 ${dt?.PERIOD || '0'} 일`}
-                      </Text>
-                    </View>
+                    {Util.isEmpty(dt?.CGRQ_JOB_NO) && (
+                      <View style={styles.totalCntView}>
+                        <Text style={styles.totalCntText}>
+                          {`총 ${dt?.PERIOD || '0'} 일`}
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 </View>
               }
             />
+            {dt?.CGRQ_JOB_NO && (
+              <LVFormOfContents
+                title={'변경정보'}
+                children={
+                  <View style={styles.infoView}>
+                    <View>
+                      {dt?.DETAIL?.map((e, i) => (
+                        <View style={styles.detailView}>
+                          <LVChip
+                            category='info'
+                            leftText={`${Util.convertDateTime(e?.AF_VA_DATE)} (${dayjs(e?.AF_VA_DATE, 'YYYYMMDD').locale('ko').format('ddd')})`}
+                            rightText={`${e?.AF_VA_TYPE_NAME} (${e?.AF_VA_PERIOD})`}
+                            i={i}
+                            chipStyle={{ marginBottom: 0 }}
+                          />
+                        </View>
+                      ))}
+                      <View style={styles.totalCntView}>
+                        <Text style={styles.totalCntText}>
+                          {`총 ${dt?.PERIOD || '0'} 일`}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                }
+              />
+            )}
+
             <LVFormOfContents
               title={'첨부파일'}
               children={
@@ -402,7 +443,7 @@ const LEA010301 = () => {
         {dt?.EMP_ID && dt?.EMP_ID === empInfo?.EMP_ID && (
           // 상신자 사용, 결재완료 상태에서 변경 / 취소 가능함 추가
           <View style={LVStyles.bottomButtonView}>
-            {dt?.AP_STATUS === 'A' && (
+            {dt?.AP_STATUS === 'A' && Util.isEmpty(dt?.CGRQ_JOB_NO) && (
               <LVButton
                 title={'변경'}
                 onPress={handleAgain}

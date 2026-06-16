@@ -105,7 +105,7 @@ const LVChip = (props: any) => {
       </View>
     );
   } else if (category === 'info') {
-    const { leftText, rightText, onPress, chipStyle, i } = props;
+    const { leftText, rightText, onPress, chipStyle, textStyle, i } = props;
     return (
       <View
         key={i}
@@ -128,6 +128,7 @@ const LVChip = (props: any) => {
             color: '#39CCCC',
             fontWeight: '700',
             fontSize: 14,
+            ...textStyle,
           }}
         >
           {leftText}
@@ -138,6 +139,7 @@ const LVChip = (props: any) => {
             fontWeight: '700',
             fontSize: 14,
             marginLeft: 8,
+            ...textStyle,
           }}
         >
           {rightText}
