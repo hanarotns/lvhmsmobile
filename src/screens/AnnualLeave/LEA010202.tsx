@@ -348,7 +348,8 @@ const LEA010202 = () => {
     const etcInfo = Util.isEmpty(selectedOfficialLeaveType)
       ? general
       : official;
-    const param = { ...commonInfo, ...etcInfo, ...reqInfo, ...config };
+    let param = { ...commonInfo, ...etcInfo, ...reqInfo, ...config };
+    param = convertNumbersToStrings(param);
 
     setLoading(true);
 
@@ -381,6 +382,27 @@ const LEA010202 = () => {
         movingScreen.goBack();
       }, 1200);
     }
+  };
+
+  const convertNumbersToStrings = (value) => {
+    if (typeof value === 'number') {
+      return String(value);
+    }
+
+    if (Array.isArray(value)) {
+      return value.map(convertNumbersToStrings);
+    }
+
+    if (value !== null && typeof value === 'object') {
+      return Object.fromEntries(
+        Object.entries(value).map(([key, val]) => [
+          key,
+          convertNumbersToStrings(val),
+        ]),
+      );
+    }
+
+    return value;
   };
 
   const handleRefresh = () => {
