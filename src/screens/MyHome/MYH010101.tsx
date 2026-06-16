@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
+  AppState,
+  AppStateStatus,
   Image,
+  Linking,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -36,6 +41,7 @@ import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import * as IntentLauncher from 'expo-intent-launcher';
 import * as Location from 'expo-location';
 import * as WLOAction from '../WorkLog/Action'; // API통신 (공통)
 import * as Action from './Action';
@@ -70,6 +76,29 @@ const MYH010101 = ({ navigation }) => {
 
   useEffect(() => {
     mount();
+  }, []);
+
+  const appState = useRef(AppState.currentState);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener(
+      'change',
+      async (nextAppState: AppStateStatus) => {
+        // 설정 화면에서 앱으로 다시 돌아온 경우
+        if (
+          appState.current.match(/inactive|background/) &&
+          nextAppState === 'active'
+        ) {
+          await checkLocationService();
+        }
+
+        appState.current = nextAppState;
+      },
+    );
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   // 위치(position)가 세팅되면 그때 사무소 조회하기
@@ -198,24 +227,92 @@ const MYH010101 = ({ navigation }) => {
 
   const getLocation = async () => {
     try {
-      const serviceEnabled = await Location.hasServicesEnabledAsync();
-      console.log('위치 서비스 ON 여부:', serviceEnabled);
-
-      if (!serviceEnabled) {
-        console.log('기기 위치 서비스가 꺼져 있음');
+      // 기기 위치서비스 활성화 확인
+      const locationService = await checkLocationService();
+      if (!locationService) {
         return;
       }
 
-      const permission = await Location.requestForegroundPermissionsAsync();
-      console.log('권한:', permission.status);
-
-      if (permission.status !== 'granted') {
-        console.log('앱 위치 권한 거부됨');
+      // 앱 위치권한 설정 확인
+      const locationPermission = await checkLoactionPermission();
+      if (!locationPermission) {
         return;
       }
     } catch (e) {
       console.log('위치 조회 에러:', e);
     }
+  };
+
+  const checkLocationService = async () => {
+    const serviceEnabled = await Location.hasServicesEnabledAsync();
+
+    console.log('위치 서비스 ON 여부:', serviceEnabled);
+
+    if (!serviceEnabled) {
+      if (Platform.OS === 'android') {
+        Alert.alert(
+          '위치 서비스',
+          '기기의 위치 서비스를 켜주세요.',
+          [
+            {
+              text: '설정으로 이동',
+              onPress: async () => {
+                // Android 위치 서비스 설정 화면
+                await IntentLauncher.startActivityAsync(
+                  IntentLauncher.ActivityAction.LOCATION_SOURCE_SETTINGS,
+                );
+              },
+            },
+          ],
+          { cancelable: false },
+        );
+      } else {
+        Alert.alert(
+          '위치 서비스',
+          '기기의 위치 서비스를 켜주세요.\n\n설정 > 개인정보 보호 및 보안 > 위치 서비스에서 위치 서비스를 켜주세요.',
+          [
+            {
+              text: '설정으로 이동',
+              onPress: async () => {
+                // iOS 앱 설정 화면
+                await Linking.openSettings();
+              },
+            },
+          ],
+        );
+      }
+
+      return false;
+    }
+
+    return true;
+  };
+
+  const checkLoactionPermission = async () => {
+    const permission = await Location.requestForegroundPermissionsAsync();
+    console.log('권한:', permission.status);
+
+    if (permission.status !== 'granted') {
+      Alert.alert(
+        '위치 권한',
+        Platform.OS === 'ios'
+          ? '출퇴근 기능을 사용하려면 위치 권한이 필요합니다.\n\n설정 > 앱 > 위치에서 권한을 허용해주세요.'
+          : '출퇴근 기능을 사용하려면 위치 권한이 필요합니다.',
+        [
+          {
+            text: '설정으로 이동',
+            onPress: () => {
+              Linking.openSettings();
+            },
+          },
+        ],
+        Platform.OS === 'android' ? { cancelable: false } : undefined,
+      );
+
+      return false;
+    }
+
+    return true;
   };
 
   const getNearOfficeM = async () => {
