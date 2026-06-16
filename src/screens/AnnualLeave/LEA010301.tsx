@@ -22,12 +22,7 @@ import {
   Text,
 } from '@/src/components';
 import { Util } from '@/src/lib';
-import {
-  RouteProp,
-  StackActions,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
@@ -184,8 +179,10 @@ const LEA010301 = () => {
   };
 
   const handleAgain = async () => {
-    if (empInfo) return; // @@ 버튼 무효화
-    movingScreen.dispatch(StackActions.replace('LEA010201'), dt);
+    const data = { ...route?.params, ...dt };
+    movingScreen.navigate('LEA010202', data);
+    // @@ 잘못사용하는 건가...?
+    // movingScreen.dispatch(StackActions.replace('LEA010201'), data);
   };
 
   // 결재자
@@ -405,14 +402,13 @@ const LEA010301 = () => {
         {dt?.EMP_ID && dt?.EMP_ID === empInfo?.EMP_ID && (
           // 상신자 사용, 결재완료 상태에서 변경 / 취소 가능함 추가
           <View style={LVStyles.bottomButtonView}>
-            {dt?.AP_STATUS === 'A' &&
-              false && ( // @@ 버튼 임시 비활성화
-                <LVButton
-                  title={'변경'}
-                  onPress={handleAgain}
-                  buttonStyle={styles.reApproveButton}
-                />
-              )}
+            {dt?.AP_STATUS === 'A' && (
+              <LVButton
+                title={'변경'}
+                onPress={handleAgain}
+                buttonStyle={styles.reApproveButton}
+              />
+            )}
           </View>
         )}
         {dt?.EMP_ID &&

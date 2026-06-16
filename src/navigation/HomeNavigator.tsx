@@ -14,6 +14,7 @@ import WLO010101 from '../screens/WorkLog/WLO010101';
 // 휴가
 import LEA010101 from '../screens/AnnualLeave/LEA010101';
 import LEA010201 from '../screens/AnnualLeave/LEA010201';
+import LEA010202 from '../screens/AnnualLeave/LEA010202';
 import LEA010301 from '../screens/AnnualLeave/LEA010301';
 // 시간외
 import OVT010101 from '../screens/Overtime/OVT010101';
@@ -88,6 +89,11 @@ export const HomeNavigator = (props) => (
       name='LEA010201'
       component={LEA010201}
       options={{ title: '휴가 신청하기' }}
+    />
+    <Stack.Screen
+      name='LEA010202'
+      component={LEA010202}
+      options={{ title: '휴가 변경취소하기' }}
     />
     <Stack.Screen
       name='LEA010301'

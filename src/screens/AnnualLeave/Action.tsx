@@ -231,20 +231,90 @@ const approveForApprover = async (body1: object, body2: object) => {
   return result;
 };
 
+/**
+ * 변경취소 시, 조회
+ */
+const getOfChange = async (body: object) => {
+  const result = await Fetch.request('PORU010303SVC', 'get', {
+    body: JSON.stringify({
+      PORU010303F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010303F3126[0];
+};
+
+/**
+ * 변경취소 시, 결재라인 조회
+ */
+const getApproval33OfChange = async (body: object) => {
+  const result = await Fetch.request('PORU010303SVC', 'getApproval33', {
+    body: JSON.stringify({
+      PORU010303G33: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010303G33;
+};
+
+/**
+ * 변경취소 시, 휴가원DT조회
+ */
+const getDtOfChange = async (body: object) => {
+  const result = await Fetch.request('PORU010303SVC', 'getDetail35', {
+    body: JSON.stringify({
+      PORU010303G1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010303G35;
+};
+
+/**
+ * 변경취소 시, 상신
+ */
+const saveApprovalOfChange = async (
+  body1: object,
+  body2: object,
+  body3: object,
+) => {
+  const result = await Fetch.request('PORU010303SVC', 'save', {
+    body: JSON.stringify({
+      PORU010303F3126: body1, // 휴가원HD
+      PORU010303G35: { data: body2 }, // 휴가원DT
+      PORU010303G33: { data: body3 }, // 결재라인
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
 export {
   approveForApprover,
   deleteMobile,
   deleteRow,
   getApprLine,
   getApproval33,
+  getApproval33OfChange,
   getClearInfo,
   getDetailM,
   getDt,
+  getDtOfChange,
   getInfoM,
   getListM,
+  getOfChange,
   getPTHR_DGMD,
   recall,
   recallForApprover,
   refusalForApprover,
   saveApproval,
+  saveApprovalOfChange,
 };
