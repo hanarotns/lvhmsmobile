@@ -29,7 +29,7 @@ const LVHeaderInfo = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.url} numberOfLines={1}>
-        {fetchURL.indexOf('qa') !== -1 ? 'BETA' : ''}
+        {fetchURL?.indexOf('qa') !== -1 ? 'BETA' : ''}
       </Text>
       <Text style={styles.info}>
         {Platform.OS} / v{version}
