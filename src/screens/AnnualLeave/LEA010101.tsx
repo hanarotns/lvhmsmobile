@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -15,7 +15,6 @@ import {
   LVFilter,
   LVFilterBottomSheet,
   LVLoadingIndicator,
-  LVModal,
   LVMovingDateOfArrow,
   LVNoData,
   LVStyles,
@@ -55,8 +54,6 @@ const LEA010101 = () => {
   const [filteredList, setFilteredList] = useState([]);
   const [apprFilter, setApprFilter] = useState([]);
   const [selectedApprType, setSelectedApprType] = useState('ALL');
-
-  const [isVisibleModal, setIsVisibleModal] = useState(false);
 
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
@@ -129,7 +126,11 @@ const LEA010101 = () => {
       setList(res2);
       setFilteredList(res2);
     } else {
-      setIsVisibleModal(true);
+      Alert.alert(
+        '기초데이터 미설정',
+        '연차부여일이 미설정되었습니다.\n인사팀에 문의하세요.',
+        [{ text: '확인' }],
+      );
     }
     setLoading(false);
   };
@@ -203,17 +204,6 @@ const LEA010101 = () => {
         </TouchableOpacity>
       </View> */}
       <LVFilterBottomSheet ref={bottomSheetRef} />
-      {isVisibleModal && (
-        <LVModal
-          title={'기초데이터 미설정'}
-          contents={<ContentsOfAlert />}
-          onVisible={setIsVisibleModal}
-          onOk={() => {
-            setIsVisibleModal(false);
-          }}
-          buttonText={'확인'}
-        />
-      )}
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>
   );
@@ -309,16 +299,6 @@ const DocuPreviewContent = (props: any) => {
         </Text>
       </View>
     </>
-  );
-};
-
-const ContentsOfAlert = (props: any) => {
-  return (
-    <View style={styles.alertView}>
-      <Text style={styles.alertText}>
-        {`연차부여일이 미설정되었습니다.\n인사팀에 문의하세요`}
-      </Text>
-    </View>
   );
 };
 
