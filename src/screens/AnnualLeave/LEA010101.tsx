@@ -214,7 +214,7 @@ const LayoutOfStats = (props: any) => {
   const { stats } = props;
   return (
     <View style={{ marginTop: 16 }}>
-      <View style={LVStyles.row}>
+      <View style={{ ...LVStyles.row, gap: 8 }}>
         <LVCard
           category='stat'
           label={'적용 일수'}
@@ -222,7 +222,6 @@ const LayoutOfStats = (props: any) => {
           cardStyle={{ backgroundColor: '#F7F8FB' }}
           valueStyle={{ color: '#6A727B' }}
         />
-        <View style={{ width: 8 }} />
         <LVCard
           category='stat'
           label={'사용 일수'}
@@ -230,7 +229,6 @@ const LayoutOfStats = (props: any) => {
           cardStyle={{ backgroundColor: '#EFFBFB' }}
           valueStyle={{ color: '#39CCCC' }}
         />
-        <View style={{ width: 8 }} />
         <LVCard
           category='stat'
           label={'잔여 일수'}
@@ -238,7 +236,6 @@ const LayoutOfStats = (props: any) => {
           cardStyle={{ backgroundColor: '#EEF8FF' }}
           valueStyle={{ color: '#27A7FF' }}
         />
-        <View style={{ width: 8 }} />
         <LVCard
           category='stat'
           label={'신청 일수'}

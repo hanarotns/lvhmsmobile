@@ -228,7 +228,7 @@ export default APR010101;
 const LayoutOfStats = (props: any) => {
   const { stats, toggleCard, selectedCards } = props;
   return (
-    <View style={[LVStyles.row, { marginTop: 8 }]}>
+    <View style={{ ...LVStyles.row, gap: 8 }}>
       <LVCard
         category='stat'
         label={'완료 문서'}
@@ -242,7 +242,6 @@ const LayoutOfStats = (props: any) => {
         }}
         valueStyle={{ color: '#939DAA' }}
       />
-      <View style={{ width: 8 }} />
       <LVCard
         category='stat'
         label={'결재할 문서'}
@@ -256,7 +255,6 @@ const LayoutOfStats = (props: any) => {
         }}
         valueStyle={{ color: '#27A7FF' }}
       />
-      <View style={{ width: 8 }} />
       <LVCard
         category='stat'
         label={'진행 문서'}

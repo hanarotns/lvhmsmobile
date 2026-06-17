@@ -172,8 +172,8 @@ export default OVT010101;
 const LayoutOfStats = (props: any) => {
   const { stats } = props;
   return (
-    <View style={{ marginTop: 16 }}>
-      <View style={LVStyles.row}>
+    <View style={{ marginTop: 16, gap: 8 }}>
+      <View style={{ ...LVStyles.row, gap: 8 }}>
         <LVCard
           category='stat'
           label={'연장'}
@@ -181,7 +181,6 @@ const LayoutOfStats = (props: any) => {
           cardStyle={{ backgroundColor: '#FFF7EF', height: 60 }}
           valueStyle={{ color: '#FF9E3C', marginBottom: 4, fontSize: 24 }}
         />
-        <View style={{ width: 8 }} />
         <LVCard
           category='stat'
           label={'추가연장'}
@@ -189,7 +188,6 @@ const LayoutOfStats = (props: any) => {
           cardStyle={{ backgroundColor: '#FFF7FF', height: 60 }}
           valueStyle={{ color: '#FF9E99', marginBottom: 4, fontSize: 24 }}
         />
-        <View style={{ width: 8 }} />
         <LVCard
           category='stat'
           label={'조출'}
@@ -198,7 +196,7 @@ const LayoutOfStats = (props: any) => {
           valueStyle={{ color: '#BCAF7F', marginBottom: 4, fontSize: 24 }}
         />
       </View>
-      <View style={[LVStyles.row, { marginTop: 8 }]}>
+      <View style={{ ...LVStyles.row, gap: 8 }}>
         <LVCard
           category='stat'
           label={'휴일'}
@@ -206,7 +204,6 @@ const LayoutOfStats = (props: any) => {
           cardStyle={{ backgroundColor: '#EBF9F2', height: 60 }}
           valueStyle={{ color: '#00B25F', marginBottom: 4, fontSize: 24 }}
         />
-        <View style={{ width: 8 }} />
         <LVCard
           category='stat'
           label={'재택'}
@@ -214,7 +211,6 @@ const LayoutOfStats = (props: any) => {
           cardStyle={{ backgroundColor: '#F6F0EE', height: 60 }}
           valueStyle={{ color: '#924529', marginBottom: 4, fontSize: 24 }}
         />
-        <View style={{ width: 8 }} />
         <LVCard
           category='stat'
           label={'당직'}
