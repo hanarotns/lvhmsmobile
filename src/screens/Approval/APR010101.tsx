@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
@@ -9,6 +9,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 import {
   LVCard,
   LVChip,
+  LVFilterBottomSheet,
   LVLoadingIndicator,
   LVNoData,
   LVProfileImage,
@@ -19,6 +20,7 @@ import {
   Text,
 } from '@/src/components';
 import { Util } from '@/src/lib';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import {
   useFocusEffect,
   useIsFocused,
@@ -26,6 +28,7 @@ import {
 } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import { SlidersHorizontal } from 'lucide-react-native';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action';
 dayjs.locale('ko');
@@ -52,6 +55,15 @@ const APR010101 = () => {
   const [apprFilter, setApprFilter] = useState([]);
   const [selectedApprType, setSelectedApprType] = useState('ALL');
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
+  const [fromDate, setFromDate] = useState<Date>(new Date());
+  const [toDate, setToDate] = useState<Date>(new Date());
+
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const openFilter = () => {
+    console.log('ref:', bottomSheetRef.current);
+    bottomSheetRef.current?.present();
+  };
 
   const toggleCard = (key: string) => {
     setSelectedCards([key]);
@@ -92,6 +104,12 @@ const APR010101 = () => {
 
   const mount = async () => {
     setLoading(true);
+
+    const dateS = selectedDate.add(-3, 'month').toDate();
+    const dateE = selectedDate.toDate();
+    setFromDate(dateS);
+    setToDate(dateE);
+
     // 결재 타입 조회
     let resOfApprType = await COMAction.getCode('code', 'PC0001', {
       GCODE: 'RQ_TYPE',
@@ -113,12 +131,19 @@ const APR010101 = () => {
       S_ADD_DATE_TO: selectedDate.format('YYYYMMDD'),
     };
     const res1 = await Action.getInfoM(payload1);
+
     getList();
     setStats(res1);
     setLoading(false);
   };
 
-  const getList = async () => {
+  const handelResearch = async () => {
+    setLoading(true);
+    await getList(fromDate, toDate);
+    setLoading(false);
+  };
+
+  const getList = async (fDate?: Date, tDate?: Date) => {
     let commonInfo = {
       S_AP_STATUS_MULTI: ['S'],
       S_LINE_STATUS: 'C',
@@ -145,8 +170,12 @@ const APR010101 = () => {
     const payload2 = {
       ...commonInfo,
       S_RQ_TYPE_MULTI: sortedArr,
-      S_ADD_DATE_FROM: selectedDate.add(-3, 'month').format('YYYYMMDD'),
-      S_ADD_DATE_TO: selectedDate.format('YYYYMMDD'),
+      S_ADD_DATE_FROM: fDate
+        ? dayjs(fDate).format('YYYYMMDD')
+        : selectedDate.add(-3, 'month').format('YYYYMMDD'),
+      S_ADD_DATE_TO: tDate
+        ? dayjs(tDate).format('YYYYMMDD')
+        : selectedDate.format('YYYYMMDD'),
       // @@ 스크롤에 따른 문서 개수 조정
       PAGE_NO_FROM: 1,
       PAGE_NO_TO: 100,
@@ -219,6 +248,19 @@ const APR010101 = () => {
           )}
         </View>
       </ScrollView>
+      <View style={styles.floatingButton}>
+        <TouchableOpacity style={styles.filterIconButton} onPress={openFilter}>
+          <SlidersHorizontal size={24} color='#FFF' />
+        </TouchableOpacity>
+      </View>
+      <LVFilterBottomSheet
+        ref={bottomSheetRef}
+        onSearch={handelResearch}
+        fromDate={fromDate}
+        setFromDate={setFromDate}
+        toDate={toDate}
+        setToDate={setToDate}
+      />
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>
   );
@@ -389,5 +431,18 @@ const styles = StyleSheet.create({
     color: '#1E2125',
     fontSize: 14,
     fontWeight: '800',
+  },
+  filterIconButton: {
+    width: 48,
+    height: 48,
+    backgroundColor: '#27A7FF',
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  floatingButton: {
+    position: 'absolute',
+    top: 24,
+    right: 32,
   },
 });

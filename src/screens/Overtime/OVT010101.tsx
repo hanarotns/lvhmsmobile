@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -11,6 +11,7 @@ import {
   LVButton,
   LVCard,
   LVChip,
+  LVFilterBottomSheet,
   LVLoadingIndicator,
   LVMovingDateOfArrow,
   LVNoData,
@@ -21,6 +22,7 @@ import {
   Text,
 } from '@/src/components';
 import { Util } from '@/src/lib';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import {
   useFocusEffect,
   useIsFocused,
@@ -28,6 +30,7 @@ import {
 } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import { SlidersHorizontal } from 'lucide-react-native';
 import * as Action from './Action';
 
 const OVT010101 = () => {
@@ -47,6 +50,15 @@ const OVT010101 = () => {
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
   const [stats, setStats] = useState({});
   const [list, setList] = useState([]);
+  const [fromDate, setFromDate] = useState<Date>(new Date());
+  const [toDate, setToDate] = useState<Date>(new Date());
+
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const openFilter = () => {
+    console.log('ref:', bottomSheetRef.current);
+    bottomSheetRef.current?.present();
+  };
 
   useEffect(() => {
     mount();
@@ -63,6 +75,13 @@ const OVT010101 = () => {
 
   const mount = async () => {
     setLoading(true);
+
+    const yyyymm = selectedDate.format('YYYYMM');
+    const dateS = dayjs(yyyymm + '01', 'YYYYMMDD').toDate();
+    const dateE = dayjs(yyyymm + '31', 'YYYYMMDD').toDate();
+    setFromDate(dateS);
+    setToDate(dateE);
+
     const payload1 = {
       YEAR_MONTH: selectedDate.format('YYYYMM'),
     };
@@ -87,6 +106,30 @@ const OVT010101 = () => {
     setStats(res1);
     const res2 = await Action.getListM(payload2);
     setList(res2);
+    setLoading(false);
+  };
+
+  const handelResearch = async () => {
+    setLoading(true);
+    const payload = {
+      S_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      // S_DEPT_CODE: '',
+      // S_EMP_NAME: '',
+      // S_EMP_ID: '',
+      S_EMP_FLAG: 'Y',
+      DATE_GUBUN: 'OT_DATE',
+      S_ADD_DATE_FROM: dayjs(fromDate).format('YYYYMMDD'),
+      S_ADD_DATE_TO: dayjs(toDate).format('YYYYMMDD'),
+      S_LINE_STATUS: '',
+      SS_EMP_ID: empInfo?.EMP_ID,
+      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      SS_USER_ROLE: 'U',
+      // AUTH_PORGA: 'Y',
+      // AUTH_PORAM: 'Y',
+    };
+
+    const res = await Action.getListM(payload);
+    setList(res);
     setLoading(false);
   };
 
@@ -163,6 +206,19 @@ const OVT010101 = () => {
           )}
         </View>
       </ScrollView>
+      <View style={styles.floatingButton}>
+        <TouchableOpacity style={styles.filterIconButton} onPress={openFilter}>
+          <SlidersHorizontal size={24} color='#FFF' />
+        </TouchableOpacity>
+      </View>
+      <LVFilterBottomSheet
+        ref={bottomSheetRef}
+        onSearch={handelResearch}
+        fromDate={fromDate}
+        setFromDate={setFromDate}
+        toDate={toDate}
+        setToDate={setToDate}
+      />
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>
   );
@@ -336,5 +392,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  confReqButtonText: { color: '#27A7FF', fontSize: 14 },
+  confReqButtonText: {
+    color: '#27A7FF',
+    fontSize: 14,
+  },
+  filterIconButton: {
+    width: 48,
+    height: 48,
+    backgroundColor: '#27A7FF',
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  floatingButton: {
+    position: 'absolute',
+    top: 24,
+    right: 32,
+  },
 });

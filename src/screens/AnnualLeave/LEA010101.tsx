@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -32,6 +32,7 @@ import {
 } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import { SlidersHorizontal } from 'lucide-react-native';
 import * as Action from './Action';
 
 const LEA010101 = () => {
@@ -54,6 +55,8 @@ const LEA010101 = () => {
   const [filteredList, setFilteredList] = useState([]);
   const [apprFilter, setApprFilter] = useState([]);
   const [selectedApprType, setSelectedApprType] = useState('ALL');
+  const [fromDate, setFromDate] = useState<Date>(new Date());
+  const [toDate, setToDate] = useState<Date>(new Date());
 
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
@@ -115,6 +118,10 @@ const LEA010101 = () => {
     };
     const res1 = await Action.getInfoM(payload1);
     if (res1) {
+      const dateS = dayjs(res1?.APPLY_S_DATE, 'YYYYMMDD').toDate();
+      const dateE = dayjs(res1?.APPLY_E_DATE, 'YYYYMMDD').toDate();
+      setFromDate(dateS);
+      setToDate(dateE);
       const payload2 = {
         ...commonInfo,
         DATE_GUBUN: 'VA_DATE',
@@ -132,6 +139,21 @@ const LEA010101 = () => {
         [{ text: '확인' }],
       );
     }
+    setLoading(false);
+  };
+
+  const handelResearch = async () => {
+    setLoading(true);
+    const payload = {
+      ...commonInfo,
+      DATE_GUBUN: 'VA_DATE',
+      S_ADD_DATE_FROM: dayjs(fromDate).format('YYYYMMDD'),
+      S_ADD_DATE_TO: dayjs(toDate).format('YYYYMMDD'),
+    };
+
+    const res = await Action.getListM(payload);
+    setList(res);
+    setFilteredList(res);
     setLoading(false);
   };
 
@@ -198,12 +220,19 @@ const LEA010101 = () => {
           )}
         </View>
       </ScrollView>
-      {/* <View style={styles.floatingButton}>
+      <View style={styles.floatingButton}>
         <TouchableOpacity style={styles.filterIconButton} onPress={openFilter}>
           <SlidersHorizontal size={24} color='#FFF' />
         </TouchableOpacity>
-      </View> */}
-      <LVFilterBottomSheet ref={bottomSheetRef} />
+      </View>
+      <LVFilterBottomSheet
+        ref={bottomSheetRef}
+        onSearch={handelResearch}
+        fromDate={fromDate}
+        setFromDate={setFromDate}
+        toDate={toDate}
+        setToDate={setToDate}
+      />
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>
   );
