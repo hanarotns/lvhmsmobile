@@ -15,9 +15,14 @@ import {
 type Props = {
   date: Date;
   setDate: (date: Date) => void;
+  useTime?: boolean;
 };
 
-const LVDateTimePicker: React.FC<Props> = ({ date, setDate }) => {
+const LVDateTimePicker: React.FC<Props> = ({
+  date,
+  setDate,
+  useTime = true,
+}) => {
   const [mode, setMode] = useState<'date' | 'time'>('date');
   const [showPicker, setShowPicker] = useState(false);
 
@@ -55,14 +60,15 @@ const LVDateTimePicker: React.FC<Props> = ({ date, setDate }) => {
         </Text>
         <Icon name='calendar' color='#6A727B' />
       </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.selectButton}
-        onPress={() => openPicker('time')}
-      >
-        <Text style={styles.buttonText}>{dayjs(date).format('HH:mm')}</Text>
-        <Icon name='clock-outline' color='#6A727B' />
-      </TouchableOpacity>
+      {useTime && (
+        <TouchableOpacity
+          style={styles.selectButton}
+          onPress={() => openPicker('time')}
+        >
+          <Text style={styles.buttonText}>{dayjs(date).format('HH:mm')}</Text>
+          <Icon name='clock-outline' color='#6A727B' />
+        </TouchableOpacity>
+      )}
 
       {Platform.OS === 'android' && showPicker && (
         <DateTimePicker
