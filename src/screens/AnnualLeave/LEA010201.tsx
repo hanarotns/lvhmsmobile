@@ -85,6 +85,7 @@ const LEA010201 = () => {
   // 휴가 HD
   const [hd, setHd] = useState({
     REM_VC_QTY: route?.params?.REM_VC_QTY,
+    VALID_VA_QTY: route?.params?.VALID_VA_QTY,
     PERIOD: 0,
   });
   // 휴가 DT
@@ -411,14 +412,20 @@ const LEA010201 = () => {
                 <View style={[LVStyles.row, { flex: 1, marginVertical: 12 }]}>
                   <LeaveDayItem
                     label='잔여 연차'
-                    value={route?.params?.REM_VC_QTY}
+                    value={
+                      route?.params?.REM_VC_QTY - route?.params?.VALID_VA_QTY
+                    }
                   />
                   <Text style={styles.operatorText}>-</Text>
                   <LeaveDayItem label='신청 연차' value={hd?.PERIOD} />
                   <Text style={styles.operatorText}>=</Text>
                   <LeaveDayItem
                     label='이후 연차'
-                    value={route?.params?.REM_VC_QTY - hd?.PERIOD}
+                    value={
+                      route?.params?.REM_VC_QTY -
+                      route?.params?.VALID_VA_QTY -
+                      hd?.PERIOD
+                    }
                   />
                 </View>
               }
