@@ -111,7 +111,7 @@ const ETC010201 = () => {
           }}
           keyboardShouldPersistTaps='handled'
           enableOnAndroid
-          extraScrollHeight={20}
+          extraScrollHeight={150}
         >
           <View>
             <View style={styles.container}>

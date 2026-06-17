@@ -21,6 +21,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
   Icon,
+  KeyboardAwareScrollView,
   LVApprLineForm,
   LVButton,
   LVChip,
@@ -357,7 +358,11 @@ const LEA010201 = () => {
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
-        <ScrollView
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps='handled'
+          enableOnAndroid
+          extraScrollHeight={180}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
@@ -482,7 +487,7 @@ const LEA010201 = () => {
               }
             />
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
         <View style={LVStyles.bottomButtonView}>
           <LVButton
             title={'취소'}

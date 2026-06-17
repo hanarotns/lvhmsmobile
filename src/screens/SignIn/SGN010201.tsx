@@ -753,7 +753,7 @@ const SGN010201 = () => {
           }}
           keyboardShouldPersistTaps='handled'
           enableOnAndroid
-          extraScrollHeight={20}
+          extraScrollHeight={180}
         >
           <View style={styles.container}>
             <View style={{ padding: 8 }}>
