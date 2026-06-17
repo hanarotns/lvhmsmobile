@@ -17,7 +17,6 @@ import {
   KeyboardAwareScrollView,
   LVButton,
   LVCheckBox,
-  LVHeaderInfo,
   LVLoadingIndicator,
   LVModal,
   LVRadioButton,
@@ -133,9 +132,7 @@ const SignIn = ({ navigation }) => {
   ) : (
     <>
       <SafeAreaView style={styles.safeAreaView}>
-        <View style={styles.header}>
-          <LVHeaderInfo />
-        </View>
+        <View style={styles.header}></View>
         <KeyboardAwareScrollView
           contentContainerStyle={{
             flexGrow: 1,

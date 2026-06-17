@@ -1,16 +1,35 @@
 // src/components/HeaderInfo.tsx
 import Text from '@/src/components/CustomText';
-// import { API_BASE_URL } from '@/src/config/env';
 import Constants from 'expo-constants';
 import { Platform, StyleSheet, View } from 'react-native';
+
+import env from '@/src/lib/env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
+
+const envConfig = env();
+let fetchURL = envConfig.fetchURL;
+const settingUrl = async () => {
+  fetchURL = await AsyncStorage.getItem('url');
+};
+settingUrl();
 
 const LVHeaderInfo = () => {
   const version = Constants.expoConfig?.version ?? '-';
 
+  useEffect(() => {
+    const res = func();
+  }, []);
+
+  const func = async () => {
+    fetchURL = await AsyncStorage.getItem('url');
+    return fetchURL;
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.url} numberOfLines={1}>
-        {/* {API_BASE_URL} */}
+        {fetchURL.indexOf('qa') !== -1 ? 'BETA' : ''}
       </Text>
       <Text style={styles.info}>
         {Platform.OS} / v{version}
