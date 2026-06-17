@@ -142,7 +142,10 @@ const MYH010101 = ({ navigation }) => {
           }
 
           const now = dayjs(new Date());
-          const onTimeMin = dayjs('0900', 'HHmm').add(-30, 'minutes');
+          const onTimeMin = dayjs(todayInfo?.ON_TIME, 'HHmm').add(
+            -30,
+            'minutes',
+          );
           const onTimeMax = dayjs(todayInfo?.ON_TIME, 'HHmm').add(
             30,
             'minutes',
