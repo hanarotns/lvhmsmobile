@@ -132,7 +132,7 @@ const APR010101 = () => {
     };
     const res1 = await Action.getInfoM(payload1);
 
-    getList();
+    await getList();
     setStats(res1);
     setLoading(false);
   };
