@@ -116,15 +116,25 @@ const MYH010101 = ({ navigation }) => {
     }
   }, [empInfo]);
 
-  // 외근등록 모달 껐을 때 외근정보 초기화
+  // 모달 종료 됐을 때, 체크 타입 초기화
   useEffect(() => {
     if (!isVisibleModal) {
-      setOffsiteInfo({
-        WAT_AREA_NAME: address,
-      });
       setCheckType('');
+      // 외근인 경우, 외근 정보 초기화
+      if (checkType === 'O') {
+        setOffsiteInfo({
+          WAT_AREA_NAME: address,
+        });
+      }
     }
   }, [isVisibleModal]);
+
+  // 모달 종료 됐을 때, 체크 타입 초기화
+  useEffect(() => {
+    if (!isVisible30mModal) {
+      setCheckType('');
+    }
+  }, [isVisible30mModal]);
 
   useEffect(() => {
     if (checkType) {
