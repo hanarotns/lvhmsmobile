@@ -14,6 +14,7 @@ import {
   TextField,
 } from '@/src/components';
 import { Util } from '@/src/lib';
+import * as ETCAction from '@/src/screens/Etc/Action'; // API통신 (설정)
 import {
   StackActions,
   useIsFocused,
@@ -44,6 +45,19 @@ const ACC010101 = () => {
     });
   };
 
+  const checkPw = async () => {
+    const payload1 = {
+      C_PW: password,
+    };
+    const result1 = await ETCAction.checkPw(payload1);
+    if (result1.TYPE !== 1) {
+      Util.toastMsg('비밀번호가 일치하지 않습니다.', 'error');
+      return;
+    } else {
+      movingScreen.dispatch(StackActions.replace('ACC010201'));
+    }
+  };
+
   return (
     <View style={styles.basicView}>
       <ScrollView>
@@ -67,7 +81,7 @@ const ACC010101 = () => {
           }
           value={password}
         />
-        <LVButton title={'확인'} onPress={handleSubmit} />
+        <LVButton title={'확인'} onPress={checkPw} />
       </ScrollView>
     </View>
   );
