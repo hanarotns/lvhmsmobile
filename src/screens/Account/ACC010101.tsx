@@ -6,7 +6,13 @@ import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { LVButton, ShowPasswordIcon, Text, TextField } from '@/src/components';
+import {
+  LVButton,
+  ScrollView,
+  ShowPasswordIcon,
+  Text,
+  TextField,
+} from '@/src/components';
 import { Util } from '@/src/lib';
 import {
   StackActions,
@@ -40,7 +46,7 @@ const ACC010101 = () => {
 
   return (
     <View style={styles.basicView}>
-      <View>
+      <ScrollView>
         <Text style={styles.hdText}>
           {`급여리스트 확인을 위한 \n${empInfo?.EMP_NAME_LC}님의 비밀번호를 인증하세요`}
         </Text>
@@ -62,7 +68,7 @@ const ACC010101 = () => {
           value={password}
         />
         <LVButton title={'확인'} onPress={handleSubmit} />
-      </View>
+      </ScrollView>
     </View>
   );
 };
