@@ -98,10 +98,6 @@ const getClearInfo = async (body) => {
 
 /**
  * 상신
- * @param body1
- * @param body2
- * @param body3
- * @returns
  */
 const saveApproval = async (body1: object, body2: object, body3: object) => {
   const result = await Fetch.request('PORU010302SVC', 'saveApproval', {
@@ -119,8 +115,6 @@ const saveApproval = async (body1: object, body2: object, body3: object) => {
 
 /**
  * 회수
- * @param body
- * @returns
  */
 const recall = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'Collect', {
@@ -136,8 +130,6 @@ const recall = async (body: object) => {
 
 /**
  * 삭제
- * @param body
- * @returns
  */
 const deleteMobile = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'delete', {
@@ -153,8 +145,6 @@ const deleteMobile = async (body: object) => {
 
 /**
  * 휴가DT 삭제
- * @param body
- * @returns
  */
 const deleteRow = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'deleterow', {
@@ -170,9 +160,6 @@ const deleteRow = async (body: object) => {
 
 /**
  * 회수 (결재자)
- * @param body1
- * @param body2
- * @returns
  */
 const recallForApprover = async (body1: object, body2: object) => {
   const result = await Fetch.request('PORU010302SVC', 'GCollect', {
@@ -191,9 +178,6 @@ const recallForApprover = async (body1: object, body2: object) => {
 
 /**
  * 반려 (결재자)
- * @param body1
- * @param body2
- * @returns
  */
 const refusalForApprover = async (body1: object, body2: object) => {
   const result = await Fetch.request('PORU010302SVC', 'GApprovalCancel', {
@@ -212,9 +196,6 @@ const refusalForApprover = async (body1: object, body2: object) => {
 
 /**
  * 결재 (결재자)
- * @param body1
- * @param body2
- * @returns
  */
 const approveForApprover = async (body1: object, body2: object) => {
   const result = await Fetch.request('PORU010302SVC', 'GApproval', {

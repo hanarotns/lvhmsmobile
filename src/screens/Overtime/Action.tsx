@@ -150,9 +150,6 @@ const getClearInfo = async (body: object) => {
 
 /**
  * 상신
- * @param body1
- * @param body2
- * @returns
  */
 const saveApproval = async (type: string, body1: object, body2: object) => {
   if (type === 'nd') {
@@ -182,8 +179,6 @@ const saveApproval = async (type: string, body1: object, body2: object) => {
 
 /**
  * 회수
- * @param body
- * @returns
  */
 const recall = async (type: string, body: object) => {
   let serviceName = 'PORU0103';
@@ -205,8 +200,6 @@ const recall = async (type: string, body: object) => {
 
 /**
  * 삭제
- * @param body
- * @returns
  */
 const deleteMobile = async (type: string, body: object) => {
   let serviceName = 'PORU0103';
@@ -228,9 +221,6 @@ const deleteMobile = async (type: string, body: object) => {
 
 /**
  * 회수 (결재자)
- * @param body1
- * @param body2
- * @returns
  */
 const recallForApprover = async (
   type: string,
@@ -259,9 +249,6 @@ const recallForApprover = async (
 
 /**
  * 반려 (결재자)
- * @param body1
- * @param body2
- * @returns
  */
 const refusalForApprover = async (
   type: string,
@@ -290,9 +277,6 @@ const refusalForApprover = async (
 
 /**
  * 결재 (결재자)
- * @param body1
- * @param body2
- * @returns
  */
 const approveForApprover = async (
   type: string,
