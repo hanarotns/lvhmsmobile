@@ -145,25 +145,21 @@ const APR010101 = () => {
 
   const getList = async (fDate?: Date, tDate?: Date) => {
     let commonInfo = {
-      S_AP_STATUS_MULTI: ['S'],
-      S_LINE_STATUS: 'C',
+      APPR_STATUS_CHECK: 'PENDING',
     };
     if (selectedCards.includes('complete')) {
       commonInfo = {
-        S_AP_STATUS_MULTI: ['A', 'R'],
-        S_LINE_STATUS: '',
+        APPR_STATUS_CHECK: 'COMPLETE',
       };
     }
     if (selectedCards.includes('pending')) {
       commonInfo = {
-        S_AP_STATUS_MULTI: ['S'],
-        S_LINE_STATUS: 'C',
+        APPR_STATUS_CHECK: 'PENDING',
       };
     }
     if (selectedCards.includes('progress')) {
       commonInfo = {
-        S_AP_STATUS_MULTI: ['S'],
-        S_LINE_STATUS: '',
+        APPR_STATUS_CHECK: 'PROGRESS',
       };
     }
 
