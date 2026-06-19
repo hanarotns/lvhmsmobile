@@ -233,21 +233,33 @@ const LayoutOfStats = (props: any) => {
         <LVCard
           category='stat'
           label={'연장'}
-          value={!Util.isEmpty(stats?.OT_HOURS) ? stats?.OT_HOURS + `h` : `0h`}
+          value={
+            !Util.isEmpty(stats?.OT_HOURS)
+              ? Math.floor(stats?.OT_HOURS) + `h`
+              : `0h`
+          }
           cardStyle={{ backgroundColor: '#FFF7EF', height: 60 }}
           valueStyle={{ color: '#FF9E3C', marginBottom: 4, fontSize: 24 }}
         />
         <LVCard
           category='stat'
           label={'추가연장'}
-          value={!Util.isEmpty(stats?.BO_HOURS) ? stats?.BO_HOURS + `h` : `0h`}
+          value={
+            !Util.isEmpty(stats?.BO_HOURS)
+              ? Math.floor(stats?.BO_HOURS) + `h`
+              : `0h`
+          }
           cardStyle={{ backgroundColor: '#FFF7FF', height: 60 }}
           valueStyle={{ color: '#FF9E99', marginBottom: 4, fontSize: 24 }}
         />
         <LVCard
           category='stat'
           label={'조출'}
-          value={!Util.isEmpty(stats?.XX_HOURS) ? stats?.XX_HOURS + `h` : `0h`}
+          value={
+            !Util.isEmpty(stats?.XX_HOURS)
+              ? Math.floor(stats?.XX_HOURS) + `h`
+              : `0h`
+          }
           cardStyle={{ backgroundColor: '#FAF9F5', height: 60 }}
           valueStyle={{ color: '#BCAF7F', marginBottom: 4, fontSize: 24 }}
         />
@@ -256,21 +268,33 @@ const LayoutOfStats = (props: any) => {
         <LVCard
           category='stat'
           label={'휴일'}
-          value={!Util.isEmpty(stats?.HO_HOURS) ? stats?.HO_HOURS + `h` : `0h`}
+          value={
+            !Util.isEmpty(stats?.HO_HOURS)
+              ? Math.floor(stats?.HO_HOURS) + `h`
+              : `0h`
+          }
           cardStyle={{ backgroundColor: '#EBF9F2', height: 60 }}
           valueStyle={{ color: '#00B25F', marginBottom: 4, fontSize: 24 }}
         />
         <LVCard
           category='stat'
           label={'재택'}
-          value={!Util.isEmpty(stats?.HM_HOURS) ? stats?.HM_HOURS + `h` : `0h`}
+          value={
+            !Util.isEmpty(stats?.HM_HOURS)
+              ? Math.floor(stats?.HM_HOURS) + `h`
+              : `0h`
+          }
           cardStyle={{ backgroundColor: '#F6F0EE', height: 60 }}
           valueStyle={{ color: '#924529', marginBottom: 4, fontSize: 24 }}
         />
         <LVCard
           category='stat'
           label={'당직'}
-          value={!Util.isEmpty(stats?.DU_HOURS) ? stats?.DU_HOURS + `h` : `0h`}
+          value={
+            !Util.isEmpty(stats?.DU_HOURS)
+              ? Math.floor(stats?.DU_HOURS) + `h`
+              : `0h`
+          }
           cardStyle={{ backgroundColor: '#EBF5F3', height: 60 }}
           valueStyle={{ color: '#008066', marginBottom: 4, fontSize: 24 }}
         />
