@@ -320,6 +320,17 @@ const LEA010202 = () => {
       Util.toastMsg('휴가 신청 내용을 입력하세요', 'info');
       return false;
     }
+    const firstVaType = infoList?.[0]?.VA_TYPE;
+    if (categoryOfVaType.O.includes(firstVaType)) {
+      if (Util.isEmpty(selectedOfficialLeaveType)) {
+        Util.toastMsg('공가종류를 선택하세요', 'info');
+        return false;
+      }
+      if (Util.isEmpty(hd?.ATTACH_NO)) {
+        Util.toastMsg('첨부파일을 추가하세요', 'info');
+        return false;
+      }
+    }
     return true;
   };
 

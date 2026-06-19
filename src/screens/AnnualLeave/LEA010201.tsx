@@ -304,6 +304,17 @@ const LEA010201 = () => {
       Util.toastMsg('휴가 신청 내용을 입력하세요', 'info');
       return false;
     }
+    const firstVaType = infoList?.[0]?.VA_TYPE;
+    if (categoryOfVaType.O.includes(firstVaType)) {
+      if (Util.isEmpty(selectedOfficialLeaveType)) {
+        Util.toastMsg('공가종류를 선택하세요', 'info');
+        return false;
+      }
+      if (Util.isEmpty(hd?.ATTACH_NO)) {
+        Util.toastMsg('첨부파일을 추가하세요', 'info');
+        return false;
+      }
+    }
     return true;
   };
 
@@ -328,7 +339,11 @@ const LEA010201 = () => {
       // @@ 하드코딩 반드시 수정!
       etcInfo = { R_VA_TYPE: 'V', REASON_TYPE: 'P', REASON_CODE: 'P1' };
     } else if (categoryOfVaType.O.includes(firstVaType)) {
-      etcInfo = { R_VA_TYPE: 'O', REASON_TYPE: 'O', REASON_CODE: 'O1' };
+      etcInfo = {
+        R_VA_TYPE: 'O',
+        REASON_TYPE: 'O',
+        REASON_CODE: selectedOfficialLeaveType || 'O1',
+      };
     } else if (categoryOfVaType.VO.includes(firstVaType)) {
       etcInfo = { R_VA_TYPE: 'V', REASON_TYPE: 'E', REASON_CODE: 'E1' };
     }
