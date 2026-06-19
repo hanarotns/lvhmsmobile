@@ -164,9 +164,12 @@ const LEA010301 = () => {
       S_EMP_ID: empInfo?.EMP_ID,
       S_EMP_FLAG: 'Y',
     };
-    const param = { ...commonInfo, ...dt };
+    let param = { ...commonInfo, ...dt };
+    param = convertNumbersToStrings(param);
+    let detail = convertNumbersToStrings(dt?.DETAIL);
     setLoading(true);
-    const result = await Action.saveApproval(param, dt?.DETAIL, dt?.APPR_LINE);
+
+    const result = await Action.saveApproval(param, detail, dt?.APPR_LINE);
     setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
@@ -176,6 +179,27 @@ const LEA010301 = () => {
         movingScreen.goBack();
       }, 1200);
     }
+  };
+
+  const convertNumbersToStrings = (value) => {
+    if (typeof value === 'number') {
+      return String(value);
+    }
+
+    if (Array.isArray(value)) {
+      return value.map(convertNumbersToStrings);
+    }
+
+    if (value !== null && typeof value === 'object') {
+      return Object.fromEntries(
+        Object.entries(value).map(([key, val]) => [
+          key,
+          convertNumbersToStrings(val),
+        ]),
+      );
+    }
+
+    return value;
   };
 
   const handleAgain = async () => {
