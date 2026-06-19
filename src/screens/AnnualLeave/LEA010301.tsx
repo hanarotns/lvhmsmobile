@@ -437,7 +437,8 @@ const LEA010301 = () => {
         </ScrollView>
         {dt?.EMP_ID &&
           dt?.AP_STATUS !== 'A' &&
-          dt?.EMP_ID === empInfo?.EMP_ID && (
+          dt?.EMP_ID === empInfo?.EMP_ID &&
+          Util.isEmpty(dt?.CGRQ_JOB_NO) && (
             // 상신자 사용
             <View style={LVStyles.bottomButtonView}>
               {dt?.AP_STATUS === 'S' && (
