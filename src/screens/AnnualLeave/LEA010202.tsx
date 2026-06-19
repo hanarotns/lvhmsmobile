@@ -1073,6 +1073,7 @@ const sortedArr = [
   'OA',
   'VH',
   'VE',
+  'XX',
 ];
 
 const customVaType = {
@@ -1111,10 +1112,10 @@ const customVaType = {
     DAY_01: 0,
     DAY_02: 0,
   },
-  AA: {
+  XX: {
     HQNAME_01: '',
-    HQNAME_02: '조퇴',
-    HQNAME_03: '조퇴',
+    HQNAME_02: '취소',
+    HQNAME_03: '취소',
     DAY_01: 0,
     DAY_02: 0,
   },
