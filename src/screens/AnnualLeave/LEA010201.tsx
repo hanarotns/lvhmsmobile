@@ -320,20 +320,19 @@ const LEA010201 = () => {
       S_EMP_ID: empInfo?.EMP_ID,
       S_EMP_FLAG: 'Y',
     };
-    const general = {
-      R_VA_TYPE: 'V',
-      REASON_TYPE: 'P',
-      REASON_CODE: 'P1',
-    };
-    const official = {
-      R_VA_TYPE: 'O',
-      REASON_TYPE: 'O',
-      REASON_CODE: 'O1',
-    };
-    const etcInfo = Util.isEmpty(selectedOfficialLeaveType)
-      ? general
-      : official;
-    const param = { ...commonInfo, ...etcInfo, ...hd, ...config };
+
+    let etcInfo = {};
+    const firstVaType = infoList?.[0]?.VA_TYPE;
+
+    if (categoryOfVaType.V.includes(firstVaType)) {
+      // @@ 하드코딩 반드시 수정!
+      etcInfo = { R_VA_TYPE: 'V', REASON_TYPE: 'P', REASON_CODE: 'P1' };
+    } else if (categoryOfVaType.O.includes(firstVaType)) {
+      etcInfo = { R_VA_TYPE: 'O', REASON_TYPE: 'O', REASON_CODE: 'O1' };
+    } else if (categoryOfVaType.VO.includes(firstVaType)) {
+      etcInfo = { R_VA_TYPE: 'V', REASON_TYPE: 'E', REASON_CODE: 'E1' };
+    }
+    const param = { ...commonInfo, ...hd, ...config, ...etcInfo };
 
     setLoading(true);
     const result = await Action.saveApproval(param, infoList, approvalLine);
@@ -1077,6 +1076,12 @@ const customVaType = {
     DAY_01: 0.5,
     DAY_02: 0,
   },
+};
+
+const categoryOfVaType = {
+  V: ['VY', 'VM', 'VA', 'VH', 'VE'], // 연차
+  O: ['OD', 'OM', 'OA'], // 공가
+  VO: ['VO', 'VOM', 'VOD'], // 대휴
 };
 
 const COLORS = {
