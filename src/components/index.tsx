@@ -16,6 +16,7 @@ import LVFilterBottomSheet from './LVFilterBottomSheet';
 import LVFlag from './LVFlag'; // @@ 사용하는 곳 없음.
 import LVFormOfContents from './LVFormOfContents';
 import LVHeaderInfo from './LVHeaderInfo';
+import LVImage from './LVImage';
 import LVLoadingIndicator from './LVLoadingIndicator';
 import LVModal from './LVModal';
 import LVMovingDateOfArrow from './LVMovingDateOfArrow';
@@ -102,6 +103,7 @@ export {
   LVFlag,
   LVFormOfContents,
   LVHeaderInfo,
+  LVImage,
   LVLoadingIndicator,
   LVModal,
   LVMovingDateOfArrow,

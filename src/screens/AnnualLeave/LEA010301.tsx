@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -7,11 +7,13 @@ import { useRefreshStore } from '@/src/stores/refreshStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
+  Icon,
   LVApprLine,
   LVButton,
   LVChip,
   LVConfirmIndicator,
   LVFormOfContents,
+  LVImage,
   LVLoadingIndicator,
   LVModal,
   LVProfileImage,
@@ -21,7 +23,7 @@ import {
   ScrollView,
   Text,
 } from '@/src/components';
-import { Util } from '@/src/lib';
+import { Fetch, Util } from '@/src/lib';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
@@ -49,8 +51,10 @@ const LEA010301 = () => {
 
   const [dt, setDt] = useState({});
   const [refusalReason, setRefusalReason] = useState('');
+  const [fileList, setFileList] = useState([]);
 
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [isVisibleAttachModal, setIsVisibleAttachModal] = useState(false);
 
   useEffect(() => {
     mount();
@@ -104,6 +108,14 @@ const LEA010301 = () => {
       APPR_LINE_DISP: sortedApprLineDisp,
     });
 
+    const payloadFile = {
+      REF_NO: res?.ATTACH_NO,
+      REF_TYPE: 'PT',
+      S_FUNC_CODE: 'PT',
+    };
+    const resFile = await Fetch.getFileList(payloadFile);
+    setFileList(resFile.data);
+
     setLoading(false);
   };
 
@@ -116,6 +128,11 @@ const LEA010301 = () => {
       return false;
     }
     return true;
+  };
+
+  /** 미리보기 */
+  const handlePreView = async () => {
+    setIsVisibleAttachModal(true);
   };
 
   // 상신자
@@ -398,9 +415,23 @@ const LEA010301 = () => {
             <LVFormOfContents
               title={'첨부파일'}
               children={
-                <Text style={{ fontWeight: '500' }}>
-                  {dt?.ATTACH_NO || `-`}
-                </Text>
+                <View>
+                  <View style={{ ...LVStyles.row, flex: 1 }}>
+                    <View style={{ flex: 1 }}>
+                      <Text numberOfLines={1} style={{ fontWeight: '500' }}>
+                        {dt?.ATTACH_NO || `-`}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handlePreView();
+                      }}
+                      style={styles.iconWrap}
+                    >
+                      <Icon name='image-album' color='#27A7FF' />
+                    </TouchableOpacity>
+                  </View>
+                </View>
               }
             />
             <LVFormOfContents
@@ -522,6 +553,16 @@ const LEA010301 = () => {
           onOk={handleRefusalForApprover}
         />
       )}
+      {isVisibleAttachModal && (
+        <LVModal
+          title={'첨부파일 미리보기'}
+          isUseSaveButton={false}
+          contents={<ContentsOfAttach fileList={fileList} />}
+          onVisible={setIsVisibleAttachModal}
+          onOk={handleRefusalForApprover}
+        />
+      )}
+
       {loading && <LVLoadingIndicator />}
       {confirming && <LVConfirmIndicator />}
     </SafeAreaView>
@@ -544,6 +585,23 @@ const ContentsOfRefusal = (props: any) => {
         textStyle={styles.multilineInput}
         multiline={true}
       />
+    </View>
+  );
+};
+const ContentsOfAttach = (props: any) => {
+  const { fileList } = props;
+  const height = Dimensions.get('window').height * 0.7;
+  return (
+    <View>
+      {fileList?.map((e, i) => (
+        <LVImage
+          path={`${e?.COMPANY_CODE}/${e?.S_FUNC_CODE}/${e?.FILE_MGT_CODE}`}
+          imgStyle={{
+            borderRadius: 8,
+            height: height,
+          }}
+        />
+      ))}
     </View>
   );
 };
@@ -692,5 +750,18 @@ const styles = StyleSheet.create({
     ...LVStyles.row,
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
+  },
+  previewButton: {
+    padding: 0,
+  },
+  iconWrap: {
+    marginLeft: 8,
+    width: 32,
+    height: 32,
+    borderWidth: 2,
+    borderColor: '#27A7FF',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
