@@ -105,6 +105,7 @@ const ACC010201 = () => {
                 label={e.label}
                 value={salary?.[e?.value]}
                 unit={e?.unit}
+                hideYn={e?.hideYn}
               />
             ))}
             {data2 ? (
@@ -139,6 +140,12 @@ const ACC010201 = () => {
     {
       label: '직급수당',
       value: 'POSITION_ALLOWANCE',
+      hideYn: 'Y',
+    },
+    {
+      label: '지게차수당',
+      value: 'FORKLIFT_ALLOWANCE',
+      hideYn: 'Y',
     },
     {
       label: '연장근로수당',
@@ -213,6 +220,10 @@ const ACC010201 = () => {
     {
       label: '요양보험정산',
       value: 'RECUPERATION_INSURANCE_ACC',
+    },
+    {
+      label: '근태공제',
+      value: 'LATE_EARLY_LEAVE_AMT',
     },
   ];
 
@@ -380,23 +391,27 @@ const ACC010201 = () => {
 export default ACC010201;
 
 const FormOfContents = (props: any) => {
-  const { label, value, unit, subContent } = props;
-  return (
-    <View style={{ paddingVertical: 8 }}>
-      <View style={[LVStyles.row]}>
-        <Text style={styles.labelText}>{label}</Text>
-        <Text style={styles.valueText}>
-          {Util.formatNumber(value)}
-          {unit || `원`}
-        </Text>
-      </View>
-      {subContent?.map((e) => (
-        <View style={[LVStyles.row, { paddingLeft: 16, paddingTop: 8 }]}>
-          <Text style={styles.subContentText}>{e}</Text>
+  const { label, value, unit, subContent, hideYn } = props;
+  if (hideYn === 'Y' && (Util.isEmpty(value) || value == 0)) {
+    return <></>;
+  } else {
+    return (
+      <View style={{ paddingVertical: 8 }}>
+        <View style={[LVStyles.row]}>
+          <Text style={styles.labelText}>{label}</Text>
+          <Text style={styles.valueText}>
+            {Util.formatNumber(value)}
+            {unit || `원`}
+          </Text>
         </View>
-      ))}
-    </View>
-  );
+        {subContent?.map((e) => (
+          <View style={[LVStyles.row, { paddingLeft: 16, paddingTop: 8 }]}>
+            <Text style={styles.subContentText}>{e}</Text>
+          </View>
+        ))}
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
