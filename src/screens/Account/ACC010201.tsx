@@ -35,7 +35,9 @@ const ACC010201 = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
+  const [selectedDate, setSelectedDate] = useState(
+    dayjs(new Date()).add(-1, 'month'),
+  );
   const [salary, setSalary] = useState({});
 
   useEffect(() => {
