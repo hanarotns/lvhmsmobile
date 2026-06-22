@@ -58,7 +58,6 @@ const SGN030101 = ({ navigation }) => {
   const [touched, setTouched] = useState<TouchedFields>({});
   const [isPhoneAuthRequested, setIsPhoneAuthRequested] = useState(false);
   const [isPhoneAuthVerified, setIsPhoneAuthVerified] = useState(false);
-  const [phoneAuthCode, setPhoneAuthCode] = useState('');
   const [phoneAuthMessage, setPhoneAuthMessage] = useState('');
 
   useEffect(() => {
@@ -100,9 +99,6 @@ const SGN030101 = ({ navigation }) => {
       case 'id':
         if (!value) {
           return '아이디를 입력하세요.';
-        }
-        if (!idRegex.test(value)) {
-          return '영문 소문자로 시작하는 5~20자의 영문/숫자만 가능합니다.';
         }
         return '';
 
@@ -229,9 +225,9 @@ const SGN030101 = ({ navigation }) => {
       [key]: validateField(key, memberInfo[key]),
     }));
   };
+
   // 휴대폰 인증 레이아웃용 핸들러
   const requestPhoneAuthCode = async () => {
-    console.log('@@ isPhoneAuthVerified', isPhoneAuthVerified);
     if (!isPhoneFormatValid) {
       return;
     }
@@ -242,7 +238,14 @@ const SGN030101 = ({ navigation }) => {
     }));
     setIsPhoneAuthRequested(true);
     try {
-      const result = await Action.sendSMSForCP(memberInfo?.phoneNumber);
+      const payload = {
+        OPEN_API_YN: 'Y',
+        PW_CHECK_YN: 'Y',
+        USER_ID: memberInfo.id,
+        USER_NAME: memberInfo.name,
+        USER_CP: memberInfo?.phoneNumber,
+      };
+      const result = await Action.sendSMSForCP(payload);
       if (result.TYPE === 1) {
         Util.toastMsg('인증번호가 발송되었습니다.', 'info');
       }
@@ -253,10 +256,12 @@ const SGN030101 = ({ navigation }) => {
   };
 
   const confirmPhoneAuthCode = async () => {
-    const result = await Action.checkAuthNumber(
-      memberInfo?.phoneNumber,
-      phoneAuthCode,
-    );
+    const payload = {
+      OPEN_API_YN: 'Y',
+      USER_CP: memberInfo?.phoneNumber,
+      AUTH_CODE: memberInfo.authCode,
+    };
+    const result = await Action.checkAuthNumber(payload);
     if (result?.AUTH_YN === 'Y') {
       setIsPhoneAuthVerified(true);
       setIsPhoneAuthRequested(false);
@@ -511,17 +516,20 @@ const SGN030101 = ({ navigation }) => {
                       <LVButton
                         title='확인'
                         onPress={
-                          phoneAuthCode.length === 6
+                          memberInfo.authCode.length === 6
                             ? confirmPhoneAuthCode
                             : undefined
                         }
                         buttonStyle={[
                           styles.button,
-                          phoneAuthCode.length !== 6 && styles.buttonDisabled,
+                          memberInfo.authCode.length !== 6 &&
+                            styles.buttonDisabled,
                         ]}
                         textStyle={{
                           color:
-                            phoneAuthCode.length === 6 ? '#27A7FF' : '#AEB6BF',
+                            memberInfo.authCode.length === 6
+                              ? '#27A7FF'
+                              : '#AEB6BF',
                         }}
                       />
                     </View>
@@ -542,7 +550,7 @@ const SGN030101 = ({ navigation }) => {
               )}
             </View>
 
-            {isPhoneAuthRequested && (
+            {isPhoneAuthVerified && (
               <View style={styles.sectionBox}>
                 <View style={styles.labelRow}>
                   <Text style={styles.label}>새 비밀번호</Text>
