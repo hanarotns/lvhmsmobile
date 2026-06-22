@@ -192,18 +192,18 @@ const SignIn = ({ navigation }) => {
                 value={loginInfo.isRememberLogin}
                 onChange={(value) => onChangeValue(value, 'isRememberLogin')}
               />
-              <LVCheckBox
+              {/* <LVCheckBox
                 label='입사지원'
                 value={loginInfo.isPreHire}
                 onChange={(value) => onChangeValue(value, 'isPreHire')}
-              />
+              /> */}
             </View>
             <LVButton
               title={'로그인'}
               onPress={signIn}
               buttonStyle={{ backgroundColor: '#27A7FF' }}
             />
-            <View style={[LVStyles.row]}>
+            <View style={{ ...LVStyles.row, justifyContent: 'flex-end' }}>
               <LVButton
                 title={'비밀번호 찾기'}
                 onPress={() => {
@@ -215,7 +215,7 @@ const SignIn = ({ navigation }) => {
                   paddingHorizontal: 0,
                 }}
               />
-              <LVButton
+              {/* <LVButton
                 title={'회원가입'}
                 onPress={() => {
                   movingScreen.navigate('SGN010101');
@@ -225,7 +225,7 @@ const SignIn = ({ navigation }) => {
                   backgroundColor: 'transparent',
                   paddingHorizontal: 0,
                 }}
-              />
+              /> */}
             </View>
             <Text style={[styles.errorText]}>{loginError}</Text>
             <TouchableOpacity onPress={onConfirm} style={styles.terms}>
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   subContainer: {
     height: 25,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     marginBottom: 12,
   },
