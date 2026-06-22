@@ -24,6 +24,7 @@ const LVModal = (props: any) => {
     onOk,
     buttonText,
     isCancelDisabled,
+    isUseSaveButton = true,
   } = props;
   return (
     <View style={styles.bgView}>
@@ -61,21 +62,22 @@ const LVModal = (props: any) => {
         >
           <Pressable onPress={Keyboard.dismiss}>{contents}</Pressable>
         </ScrollView>
-
-        <LVButton
-          title={buttonText || '저장'}
-          onPress={() => {
-            Keyboard.dismiss();
-            onOk(true);
-          }}
-          buttonStyle={{
-            borderRadius: 4,
-          }}
-          textStyle={{
-            fontSize: 20,
-            fontWeight: '600',
-          }}
-        />
+        {isUseSaveButton && (
+          <LVButton
+            title={buttonText || '저장'}
+            onPress={() => {
+              Keyboard.dismiss();
+              onOk(true);
+            }}
+            buttonStyle={{
+              borderRadius: 4,
+            }}
+            textStyle={{
+              fontSize: 20,
+              fontWeight: '600',
+            }}
+          />
+        )}
       </View>
     </View>
   );
