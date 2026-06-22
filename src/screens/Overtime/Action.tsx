@@ -199,6 +199,21 @@ const recall = async (type: string, body: object) => {
 };
 
 /**
+ * 예정 취소
+ */
+const cancelSchedule = async (body: object) => {
+  const result = await Fetch.request('PORU010301SVC', 'cancel', {
+    body: JSON.stringify({
+      PORU010301F23: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
  * 삭제
  */
 const deleteMobile = async (type: string, body: object) => {
@@ -306,6 +321,7 @@ const approveForApprover = async (
 export {
   approveForApprover,
   calTime,
+  cancelSchedule,
   deleteMobile,
   // 문서 기준의 주, 월 누적시간 조회
   getAccumulatedHours,

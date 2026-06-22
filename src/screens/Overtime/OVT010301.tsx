@@ -224,6 +224,20 @@ const OVT010301 = () => {
     }
   };
 
+  const handleCancelSchedule = async () => {
+    setLoading(true);
+    const result = await Action.cancelSchedule(dt);
+    setLeaveRefresh(true);
+    setLoading(false);
+    if (result.TYPE === 1) {
+      setConfirming(true);
+      setTimeout(() => {
+        setConfirming(false);
+        movingScreen.goBack();
+      }, 1200);
+    }
+  };
+
   // 결재자
   const handleRecallForApprover = async () => {
     const payload1 = {
@@ -526,6 +540,18 @@ const OVT010301 = () => {
               )}
             </View>
           )}
+        {dt?.EMP_ID && (
+          <View style={LVStyles.bottomButtonView}>
+            {Util.isEmpty(dt?.CONFIRM_JOB_NO) && dt?.AP_STATUS === 'A' && (
+              <LVButton
+                title={'예정취소'}
+                onPress={handleCancelSchedule}
+                buttonStyle={styles.cancelScheduleButton}
+              />
+            )}
+          </View>
+        )}
+
         {dt?.EMP_ID &&
           (dt?.CONFIRM_JOB_NO
             ? dt?.CONFIRM_P_STATUS !== 'A'
@@ -655,6 +681,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#939DAA',
   },
   reApproveButton: {
+    flex: 1,
+    backgroundColor: '#27A7FF',
+  },
+  cancelScheduleButton: {
     flex: 1,
     backgroundColor: '#27A7FF',
   },
