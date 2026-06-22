@@ -360,13 +360,15 @@ const ACC010201 = () => {
               data1={sal3}
               data2={sal2}
             />
-            <SalaryAccordion
-              title={'계산 내역'}
-              totalValue={''}
-              salary={salary}
-              data1={etc1}
-              data2={etc2}
-            />
+            {salary?.DISPLAY_YN === 'Y' && (
+              <SalaryAccordion
+                title={'계산 내역'}
+                totalValue={''}
+                salary={salary}
+                data1={etc1}
+                data2={etc2}
+              />
+            )}
           </ScrollView>
         )}
         {Util.isEmpty(salary) && <LVNoData />}
