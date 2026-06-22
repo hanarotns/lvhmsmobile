@@ -84,7 +84,7 @@ const getApproval33 = async (body: object) => {
   return result.PORU010302G33;
 };
 
-const getClearInfo = async (body) => {
+const getClearInfo = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'getClearInfo', {
     body: JSON.stringify({
       PORU010302F1: body,
@@ -149,7 +149,9 @@ const deleteMobile = async (body: object) => {
 const deleteRow = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'deleterow', {
     body: JSON.stringify({
-      PORU010302G35: body,
+      PORU010302G35: {
+        data: body,
+      },
     }),
   });
   if (result.TYPE === -1) {
@@ -278,24 +280,231 @@ const saveApprovalOfChange = async (
   return result;
 };
 
+const getInfoMOfSchedule = async (body: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'getInfoM', {
+    body: JSON.stringify({
+      PORU010304F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010304F1;
+};
+
+const getListMOfSchedule = async (body: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'getListM', {
+    body: JSON.stringify({
+      PORU010304F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010304G1;
+};
+
+const getDetailMOfSchedule = async (body: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'getDetailM', {
+    body: JSON.stringify({
+      PORU010304F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010304F1;
+};
+
+const getDtOfSchedule = async (body: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'getDetail35', {
+    body: JSON.stringify({
+      PORU010304G1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010304G35;
+};
+
+const getApproval33OfSchedule = async (body: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'getApproval33', {
+    body: JSON.stringify({
+      PORU010304G33: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010304G33;
+};
+
+const getClearInfoOfSchedule = async (body) => {
+  const result = await Fetch.request('PORU010304SVC', 'getClearInfo', {
+    body: JSON.stringify({
+      PORU010304F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010304F23;
+};
+
+/**
+ * 연차사용예정 시, 상신
+ */
+const saveApprovalOfSchedule = async (
+  body1: object,
+  body2: object,
+  body3: object,
+) => {
+  const result = await Fetch.request('PORU010304SVC', 'saveApproval', {
+    body: JSON.stringify({
+      PORU010304F236: body1, // 휴가원HD
+      PORU010304G35: { data: body2 }, // 휴가원DT
+      PORU010304G33: { data: body3 }, // 결재라인
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 연차사용예정 시, 회수
+ */
+const recallOfSchedule = async (body: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'Collect', {
+    body: JSON.stringify({
+      PORU010304F236: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 연차사용예정 시, 삭제
+ */
+const deleteMobileOfSchedule = async (body: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'delete', {
+    body: JSON.stringify({
+      PORU010304F236: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 연차사용예정 시, 휴가DT 삭제
+ */
+const deleteRowOfSchedule = async (body: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'deleterow', {
+    body: JSON.stringify({
+      PORU010304G35: {
+        data: body,
+      },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 연차사용예정 시, 회수 (결재자)
+ */
+const recallForApproverOfSchedule = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'GCollect', {
+    body: JSON.stringify({
+      PORU010304F1: body1,
+      PORU010304G1: {
+        data: body2,
+      },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 연차사용예정 시, 반려 (결재자)
+ */
+const refusalForApproverOfSchedule = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'GApprovalCancel', {
+    body: JSON.stringify({
+      PORU010304F1: body1,
+      PORU010304G1: {
+        data: body2,
+      },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 연차사용예정 시, 결재 (결재자)
+ */
+const approveForApproverOfSchedule = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'GApproval', {
+    body: JSON.stringify({
+      PORU010304F1: body1,
+      PORU010304G1: {
+        data: body2,
+      },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
 export {
   approveForApprover,
+  approveForApproverOfSchedule,
   deleteMobile,
+  deleteMobileOfSchedule,
   deleteRow,
+  deleteRowOfSchedule,
   getApprLine,
   getApproval33,
   getApproval33OfChange,
+  getApproval33OfSchedule,
   getClearInfo,
+  getClearInfoOfSchedule,
   getDetailM,
+  getDetailMOfSchedule,
   getDt,
   getDtOfChange,
+  getDtOfSchedule,
   getInfoM,
+  getInfoMOfSchedule,
   getListM,
+  getListMOfSchedule,
   getOfChange,
   getPTHR_DGMD,
   recall,
   recallForApprover,
+  recallForApproverOfSchedule,
+  recallOfSchedule,
   refusalForApprover,
+  refusalForApproverOfSchedule,
   saveApproval,
   saveApprovalOfChange,
+  saveApprovalOfSchedule,
 };

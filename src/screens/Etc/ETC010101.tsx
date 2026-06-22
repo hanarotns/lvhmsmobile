@@ -94,17 +94,16 @@ const ETC010101 = () => {
               <Text style={styles.menuText}>비밀번호 변경</Text>
             </TouchableOpacity>
             <Divider />
-            {/* @@ 화면 미완성으로 인한 미사용상태 */}
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={() => {
-                movingScreen.navigate('LEA010101');
+                movingScreen.navigate('LEA020101');
               }}
               style={styles.menuButton}
             >
               <Icon name='view-grid-outline' color='#373747' />
               <Text style={styles.menuText}>연차촉진제</Text>
             </TouchableOpacity>
-            <Divider /> */}
+            <Divider />
             <TouchableOpacity
               onPress={() => {
                 movingScreen.navigate('PAL010101');
