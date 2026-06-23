@@ -404,15 +404,6 @@ const LEA020301 = () => {
                 }
               />
             )}
-
-            <LVFormOfContents
-              title={'첨부파일'}
-              children={
-                <Text style={{ fontWeight: '500' }}>
-                  {dt?.ATTACH_NO || `-`}
-                </Text>
-              }
-            />
             <LVFormOfContents
               title={'내용'}
               children={
