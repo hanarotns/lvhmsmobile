@@ -78,8 +78,9 @@ const MYH010101 = ({ navigation }) => {
     mount();
   }, []);
 
+  // 환경설정 후 화면 돌아왔을 때 한 번 더 체크
+  // @@ 앱권한 추가 시, 계속 호출해서 일단 제거
   const appState = useRef(AppState.currentState);
-
   useEffect(() => {
     const subscription = AppState.addEventListener(
       'change',
@@ -180,10 +181,14 @@ const MYH010101 = ({ navigation }) => {
     setLoading(true);
     await getEmpInfoM();
     await getInfoM();
+    await checkAboutLocation();
     await getLatLon();
     setLoading(false);
   };
 
+  /**
+   * 연차촉진 1,2차 / 노무수령거부 조회
+   */
   const getLaborInfo = async () => {
     const payload = {
       S_COMPANY_CODE: empInfo?.COMPANY_CODE,
@@ -202,6 +207,9 @@ const MYH010101 = ({ navigation }) => {
     }
   };
 
+  /**
+   * 사원정보 조회
+   */
   const getEmpInfoM = async () => {
     const payload = {
       COMPANY_CODE: sessionInfo?.COMPANY_CODE,
@@ -211,6 +219,9 @@ const MYH010101 = ({ navigation }) => {
     setEmpInfo(result);
   };
 
+  /**
+   * 출퇴근 정보 조회
+   */
   const getInfoM = async () => {
     const payload = {
       WORK_DATE: dayjs(new Date()).format('YYYYMMDD'),
@@ -220,8 +231,10 @@ const MYH010101 = ({ navigation }) => {
     setTodayInfo(result);
   };
 
+  /**
+   * 위경도 가져오기
+   */
   const getLatLon = async () => {
-    await getLocation();
     const position = await Location.getCurrentPositionAsync({
       accuracy: Location.Accuracy.Low,
     });
@@ -232,15 +245,15 @@ const MYH010101 = ({ navigation }) => {
     setPosition(latLon);
   };
 
-  const getLocation = async () => {
+  /**
+   * 위치 관련 체크 (기기, 앱권한)
+   */
+  const checkAboutLocation = async () => {
     try {
-      // 기기 위치서비스 활성화 확인
       const locationService = await checkLocationService();
       if (!locationService) {
         return;
       }
-
-      // 앱 위치권한 설정 확인
       const locationPermission = await checkLoactionPermission();
       if (!locationPermission) {
         return;
@@ -250,6 +263,9 @@ const MYH010101 = ({ navigation }) => {
     }
   };
 
+  /**
+   * 기기 위치서비스 활성화 확인
+   */
   const checkLocationService = async () => {
     const serviceEnabled = await Location.hasServicesEnabledAsync();
 
@@ -295,6 +311,9 @@ const MYH010101 = ({ navigation }) => {
     return true;
   };
 
+  /**
+   * 앱 위치권한 설정 확인
+   */
   const checkLoactionPermission = async () => {
     const permission = await Location.requestForegroundPermissionsAsync();
     console.log('권한:', permission.status);
@@ -322,6 +341,9 @@ const MYH010101 = ({ navigation }) => {
     return true;
   };
 
+  /**
+   * 가장 가까운 사무소 조회
+   */
   const getNearOfficeM = async () => {
     const payload = {
       WA_LAT: position?.lat,
@@ -346,6 +368,9 @@ const MYH010101 = ({ navigation }) => {
     setTimeout(() => setNearestOffice(result), 300);
   };
 
+  /**
+   * 출퇴근 저장
+   */
   const saveM = async (checkType: string) => {
     const deviceInfo = await AsyncStorage.getItem('deviceInfo');
     const deviceId = await AsyncStorage.getItem('deviceId');
@@ -390,7 +415,10 @@ const MYH010101 = ({ navigation }) => {
     await getInfoM();
   };
 
-  const handleSave = async () => {
+  /**
+   * 비즈니스 로직 확인용
+   */
+  const checkLogic = async () => {
     if (checkType === 'O') {
       if (
         !(
@@ -403,7 +431,16 @@ const MYH010101 = ({ navigation }) => {
         return false;
       }
     }
-    // 모달 닫기
+    return true;
+  };
+
+  /**
+   * 출퇴근 저장 관련 모든 것!
+   */
+  const handleSave = async () => {
+    const isCheck = await checkLogic();
+    if (!isCheck) return;
+
     setIsVisibleModal(false);
     setIsVisible30mModal(false);
     await saveM(checkType);
@@ -469,7 +506,7 @@ const MYH010101 = ({ navigation }) => {
             <Icon
               onPress={() => {
                 setNearestOffice({});
-                getNearOfficeM();
+                getLatLon();
               }}
               name='refresh'
               color='#B0B9C1'
