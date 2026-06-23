@@ -136,6 +136,7 @@ const MYH010101 = ({ navigation }) => {
     }
   }, [isVisible30mModal]);
 
+  // 출퇴근 관련 모달 메시지 띄우기 여부
   useEffect(() => {
     if (checkType) {
       if (['S', 'E'].includes(checkType)) {
@@ -152,19 +153,12 @@ const MYH010101 = ({ navigation }) => {
           }
 
           const now = dayjs(new Date());
-          const onTimeMin = dayjs(todayInfo?.ON_TIME, 'HHmm').add(
-            -30,
-            'minutes',
-          );
-          const onTimeMax = dayjs(todayInfo?.ON_TIME, 'HHmm').add(
-            30,
-            'minutes',
-          );
-          const offTimeMin = dayjs(todayInfo?.OFF_TIME, 'HHmm').add(
-            -30,
-            'minutes',
-          );
-          const offTimeMax = dayjs(todayInfo?.OFF_TIME, 'HHmm');
+          const onTime = todayInfo?.ON_TIME;
+          const offTime = todayInfo?.OFF_TIME;
+          const onTimeMin = dayjs(onTime, 'HHmm').add(-30, 'minutes');
+          const onTimeMax = dayjs(onTime, 'HHmm').add(30, 'minutes');
+          const offTimeMin = dayjs(offTime, 'HHmm').add(-30, 'minutes');
+          const offTimeMax = dayjs(offTime, 'HHmm').add(30, 'minutes');
           if (
             (checkType === 'S' && (onTimeMin > now || onTimeMax < now)) ||
             (checkType === 'E' && (offTimeMin > now || offTimeMax < now))
