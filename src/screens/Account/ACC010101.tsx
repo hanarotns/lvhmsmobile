@@ -4,7 +4,6 @@ import { StyleSheet, View } from 'react-native';
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   LVButton,
@@ -34,16 +33,6 @@ const ACC010101 = () => {
 
   const [password, setPassword] = useState('');
   const [visiblePwd, setVisiblePwd] = useState(false);
-
-  const handleSubmit = () => {
-    AsyncStorage.getItem('loginPwd').then((p) => {
-      if (password === p) {
-        movingScreen.dispatch(StackActions.replace('ACC010201'));
-      } else {
-        Util.toastMsg('비밀번호가 일치하지 않습니다.', 'info');
-      }
-    });
-  };
 
   const checkPw = async () => {
     const payload1 = {
