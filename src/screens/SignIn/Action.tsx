@@ -80,6 +80,17 @@ const applyOfSignUp = async (body: object) => {
   return result;
 };
 
+// 비밀번호 변경
+const resetPassword = async (body: object) => {
+  const result = await Fetch.request('apicall', 'resetPassword', {
+    body: JSON.stringify(body),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
 export {
   // 회원가입 신청
   applyOfSignUp,
@@ -87,6 +98,8 @@ export {
   checkAuthNumber,
   // ID 중복체크
   checkDuplicateId,
+  // 비밀번호 변경
+  resetPassword,
   // 인증요청
   sendSMSForCP,
   // 로그인 처리

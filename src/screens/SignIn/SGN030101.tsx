@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -236,18 +236,21 @@ const SGN030101 = ({ navigation }) => {
       ...prev,
       phoneNumber: true,
     }));
-    setIsPhoneAuthRequested(true);
     try {
       const payload = {
         OPEN_API_YN: 'Y',
         PW_CHECK_YN: 'Y',
         USER_ID: memberInfo.id,
-        USER_NAME: memberInfo.name,
+        USER_NAME_LOC: memberInfo.name,
         USER_CP: memberInfo?.phoneNumber,
       };
       const result = await Action.sendSMSForCP(payload);
       if (result.TYPE === 1) {
         Util.toastMsg('인증번호가 발송되었습니다.', 'info');
+        setIsPhoneAuthRequested(true);
+      }
+      if (result.TYPE === -1 && result.STATUS === 200) {
+        Alert.alert('알림', `${result.MSG}\n관리자에게 문의하세요.`);
       }
     } catch (error) {
       Util.toastMsg('인증번호 발송 중 오류가 발생했습니다.', 'error');
@@ -264,7 +267,7 @@ const SGN030101 = ({ navigation }) => {
     const result = await Action.checkAuthNumber(payload);
     if (result?.AUTH_YN === 'Y') {
       setIsPhoneAuthVerified(true);
-      setIsPhoneAuthRequested(false);
+      Util.toastMsg('인증번호가 확인되었습니다.', 'success');
     } else {
       setIsPhoneAuthVerified(false);
       setPhoneAuthMessage('인증번호를 정확하게 다시 입력해 주세요.');
@@ -315,10 +318,11 @@ const SGN030101 = ({ navigation }) => {
 
       console.log('@@ reset password payload', payload);
 
-      // await Action.resetPassword(payload);
-
-      Util.toastMsg('비밀번호가 재설정되었습니다.', 'info');
-      navigation.goBack();
+      const res = await Action.resetPassword(payload);
+      if (res.TYPE === 1) {
+        Util.toastMsg('비밀번호가 재설정되었습니다.', 'info');
+        navigation.goBack();
+      }
     } catch (error) {
       Util.toastMsg('비밀번호 재설정 중 오류가 발생했습니다.', 'error');
     } finally {
@@ -420,7 +424,7 @@ const SGN030101 = ({ navigation }) => {
           }}
           keyboardShouldPersistTaps='handled'
           enableOnAndroid
-          extraScrollHeight={20}
+          extraScrollHeight={180}
         >
           <View style={styles.container}>
             <View style={styles.titleBox}>
@@ -436,6 +440,7 @@ const SGN030101 = ({ navigation }) => {
                 {renderLabelMessage('id')}
               </View>
               <TextField
+                disabled={isPhoneAuthRequested}
                 placeholderTextColor='lightgray'
                 style={styles.textFieldSt}
                 autoCapitalize='none'
@@ -449,6 +454,7 @@ const SGN030101 = ({ navigation }) => {
                 {renderLabelMessage('name')}
               </View>
               <TextField
+                disabled={isPhoneAuthRequested}
                 placeholderTextColor='lightgray'
                 style={styles.textFieldSt}
                 autoCapitalize='none'
@@ -465,6 +471,7 @@ const SGN030101 = ({ navigation }) => {
               </View>
               <View style={[LVStyles.row, styles.inlineRow]}>
                 <TextField
+                  disabled={isPhoneAuthRequested}
                   keyboardType='numeric'
                   placeholder='ex. 01012345678'
                   maxLength={11}
@@ -479,19 +486,23 @@ const SGN030101 = ({ navigation }) => {
                 />
                 <LVButton
                   title={isPhoneAuthRequested ? '재전송' : '인증요청'}
-                  disabled={!isPhoneFormatValid}
+                  disabled={!isPhoneFormatValid || isPhoneAuthVerified}
                   onPress={requestPhoneAuthCode}
                   buttonStyle={[
                     styles.button,
-                    !isPhoneFormatValid && styles.buttonDisabled,
+                    (!isPhoneFormatValid || isPhoneAuthVerified) &&
+                      styles.buttonDisabled,
                   ]}
                   textStyle={{
-                    color: isPhoneFormatValid ? '#27A7FF' : '#AEB6BF',
+                    color:
+                      !isPhoneFormatValid || isPhoneAuthVerified
+                        ? '#AEB6BF'
+                        : '#27A7FF',
                   }}
                 />
               </View>
 
-              {isPhoneAuthRequested && (
+              {isPhoneAuthRequested && !isPhoneAuthVerified && (
                 <>
                   <View style={styles.labelRow}>
                     <Text style={styles.label}>인증번호</Text>
@@ -535,14 +546,10 @@ const SGN030101 = ({ navigation }) => {
                     </View>
 
                     <View style={styles.authInfoRow}>
-                      <Text
-                        style={[
-                          styles.authInfoText,
-                          isPhoneAuthVerified && styles.authSuccessText,
-                        ]}
-                      >
-                        {phoneAuthMessage ||
-                          '인증번호를 입력한 뒤 확인 버튼을 눌러주세요.'}
+                      <Text style={[styles.labelErrorText]}>
+                        {memberInfo?.authCode && phoneAuthMessage
+                          ? phoneAuthMessage
+                          : '인증번호를 입력한 뒤 확인 버튼을 눌러주세요.'}
                       </Text>
                     </View>
                   </View>
