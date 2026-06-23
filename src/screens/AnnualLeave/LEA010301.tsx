@@ -107,15 +107,16 @@ const LEA010301 = () => {
       APPR_LINE: apprLine,
       APPR_LINE_DISP: sortedApprLineDisp,
     });
-
-    const payloadFile = {
-      REF_NO: res?.ATTACH_NO,
-      REF_TYPE: 'PT',
-      S_FUNC_CODE: 'PT',
-    };
-    const resFile = await Fetch.getFileList(payloadFile);
-    setFileList(resFile.data);
-
+    // 첨부파일 번호 있어야지만 조회
+    if (res?.ATTACH_NO) {
+      const payloadFile = {
+        REF_NO: res?.ATTACH_NO,
+        REF_TYPE: 'PT',
+        S_FUNC_CODE: 'PT',
+      };
+      const resFile = await Fetch.getFileList(payloadFile);
+      setFileList(resFile.data);
+    }
     setLoading(false);
   };
 
@@ -411,29 +412,31 @@ const LEA010301 = () => {
                 }
               />
             )}
-
-            <LVFormOfContents
-              title={'첨부파일'}
-              children={
-                <View>
-                  <View style={{ ...LVStyles.row, flex: 1 }}>
-                    <View style={{ flex: 1 }}>
-                      <Text numberOfLines={1} style={{ fontWeight: '500' }}>
-                        {dt?.ATTACH_NO || `-`}
-                      </Text>
+            {dt?.ATTACH_NO && (
+              <LVFormOfContents
+                title={'첨부파일'}
+                children={
+                  <View>
+                    <View style={{ ...LVStyles.row, flex: 1 }}>
+                      <View style={{ flex: 1 }}>
+                        <Text numberOfLines={1} style={{ fontWeight: '500' }}>
+                          {dt?.ATTACH_NO || `-`}
+                        </Text>
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          handlePreView();
+                        }}
+                        style={styles.iconWrap}
+                      >
+                        <Icon name='image-album' color='#27A7FF' />
+                      </TouchableOpacity>
                     </View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        handlePreView();
-                      }}
-                      style={styles.iconWrap}
-                    >
-                      <Icon name='image-album' color='#27A7FF' />
-                    </TouchableOpacity>
                   </View>
-                </View>
-              }
-            />
+                }
+              />
+            )}
+
             <LVFormOfContents
               title={'내용'}
               children={
