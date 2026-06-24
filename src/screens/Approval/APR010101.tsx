@@ -322,29 +322,30 @@ const DocuPreviewContent = (props: any) => {
         <Text style={styles.docuPreviewText}>{elem?.JOB_NO}</Text>
       </View>
       <View style={{ height: 16 }} />
-      <View style={{ flex: 1 }}>
-        <View style={LVStyles.row}>
-          <View style={{ ...LVStyles.row, justifyContent: 'flex-start' }}>
-            <LVChip
-              category='apprStatus'
-              title={elem?.AP_STATUS_NAME}
-              code={elem?.AP_STATUS}
-            />
-            <View style={{ width: 8 }} />
-            <View>
-              <Text numberOfLines={1} style={styles.labelText}>
-                {elem?.REASON}
-              </Text>
-            </View>
-          </View>
-          <View style={LVStyles.row}>
-            <LVProfileImage
-              imgStyle={styles.profileImg}
-              path={elem?.PICTURE_PATH}
-            />
-            <View style={{ width: 8 }} />
-            <Text style={styles.mainText}>{elem?.RQ_EMP_NAME}</Text>
-          </View>
+      <View style={{ ...LVStyles.row, flex: 1 }}>
+        <View
+          style={{
+            ...LVStyles.row,
+            flex: 0.7,
+            gap: 8,
+          }}
+        >
+          <LVChip
+            category='apprStatus'
+            title={elem?.AP_STATUS_NAME}
+            code={elem?.AP_STATUS}
+            style={{ flex: 1 }}
+          />
+          <Text numberOfLines={1} ellipsizeMode='tail' style={styles.labelText}>
+            {elem?.REASON}
+          </Text>
+        </View>
+        <View style={{ ...LVStyles.row, flex: 0.3, gap: 8 }}>
+          <LVProfileImage
+            imgStyle={styles.profileImg}
+            path={elem?.PICTURE_PATH}
+          />
+          <Text style={styles.mainText}>{elem?.RQ_EMP_NAME}</Text>
         </View>
       </View>
     </>
@@ -414,6 +415,7 @@ const styles = StyleSheet.create({
   labelText: {
     fontWeight: '600',
     color: '#939DAA',
+    flex: 1,
   },
   mainText: {
     fontWeight: '700',
