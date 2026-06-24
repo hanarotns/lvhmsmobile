@@ -48,6 +48,7 @@ const ETC010101 = () => {
     Fetch.logout().then((result) => {
       if (result) {
         setSessionInfo(null);
+        setEmpInfo(null);
         Util.toastMsg('정상적으로 로그아웃 되었습니다.');
       }
     });
