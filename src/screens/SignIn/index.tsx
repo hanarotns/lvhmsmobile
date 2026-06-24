@@ -228,9 +228,17 @@ const SignIn = ({ navigation }) => {
               /> */}
             </View>
             <Text style={[styles.errorText]}>{loginError}</Text>
-            <TouchableOpacity onPress={onConfirm} style={styles.terms}>
-              <Text>이용약관/개인정보 확인</Text>
-            </TouchableOpacity>
+            <View
+              style={{
+                ...LVStyles.bottomButtonView,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <TouchableOpacity onPress={onConfirm}>
+                <Text>이용약관/개인정보 확인</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </KeyboardAwareScrollView>
         {visibleTerms && Terms({ onConfirm })}
@@ -357,11 +365,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     // bluecolor.basicBlueFontColor,
     fontWeight: 'bold',
-  },
-  terms: {
-    alignItems: 'center',
-    marginTop: 200,
-    justifyContent: 'flex-end',
   },
   errorText: {
     color: '#FF9294',
