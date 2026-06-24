@@ -390,6 +390,12 @@ const MYH010101 = ({ navigation }) => {
     const deviceInfo = await AsyncStorage.getItem('deviceInfo');
     const deviceId = await AsyncStorage.getItem('deviceId');
 
+    // 위치 재설정 중 저장 불가 체크로직 추가
+    if (Util.isEmpty(nearestOffice)) {
+      Alert.alert('알림', `위치 재설정 중입니다.\n잠시후 다시시도해주세요`);
+      return;
+    }
+
     const payload = {
       EMP_ID: empInfo?.EMP_ID,
       WA_LOG_DATETIME: dayjs(new Date()).format('YYYYMMDDHHmmss'),
