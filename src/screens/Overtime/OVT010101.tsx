@@ -76,9 +76,8 @@ const OVT010101 = () => {
   const mount = async () => {
     setLoading(true);
 
-    const yyyymm = selectedDate.format('YYYYMM');
-    const dateS = dayjs(yyyymm + '01', 'YYYYMMDD').toDate();
-    const dateE = dayjs(yyyymm + '31', 'YYYYMMDD').toDate();
+    const dateS = selectedDate.startOf('month').toDate();
+    const dateE = selectedDate.endOf('month').toDate();
     setFromDate(dateS);
     setToDate(dateE);
 
@@ -92,8 +91,8 @@ const OVT010101 = () => {
       // S_EMP_ID: '',
       S_EMP_FLAG: 'Y',
       DATE_GUBUN: 'OT_DATE',
-      S_ADD_DATE_FROM: selectedDate.format('YYYYMM') + '01',
-      S_ADD_DATE_TO: selectedDate.format('YYYYMM') + '31',
+      S_ADD_DATE_FROM: dayjs(dateS).format('YYYYMMDD'),
+      S_ADD_DATE_TO: dayjs(dateE).format('YYYYMMDD'),
       S_LINE_STATUS: '',
       SS_EMP_ID: empInfo?.EMP_ID,
       SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
