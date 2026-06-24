@@ -310,10 +310,11 @@ const SGN030101 = ({ navigation }) => {
       setLoading(true);
 
       const payload = {
-        id: memberInfo.id,
-        name: memberInfo.name,
-        phoneNumber: memberInfo.phoneNumber,
-        pw: memberInfo.pw,
+        OPEN_API_YN: 'Y',
+        USER_ID: memberInfo.id,
+        USER_NAME_LOC: memberInfo.name,
+        USER_CP: memberInfo?.phoneNumber,
+        PW: memberInfo.pw,
       };
 
       console.log('@@ reset password payload', payload);
@@ -518,9 +519,10 @@ const SGN030101 = ({ navigation }) => {
                         placeholderTextColor='lightgray'
                         style={[styles.textFieldSt, styles.inlineInput]}
                         autoCapitalize='none'
-                        onChangeValue={(value: string) =>
-                          updateMemberInfo('authCode', value)
-                        }
+                        onChangeValue={(value: string) => {
+                          updateMemberInfo('authCode', value);
+                          setPhoneAuthMessage('');
+                        }}
                         onBlur={() => handleBlurField('authCode')}
                         value={memberInfo.authCode}
                       />
@@ -547,9 +549,7 @@ const SGN030101 = ({ navigation }) => {
 
                     <View style={styles.authInfoRow}>
                       <Text style={[styles.labelErrorText]}>
-                        {memberInfo?.authCode && phoneAuthMessage
-                          ? phoneAuthMessage
-                          : '인증번호를 입력한 뒤 확인 버튼을 눌러주세요.'}
+                        {phoneAuthMessage}
                       </Text>
                     </View>
                   </View>
