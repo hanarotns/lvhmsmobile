@@ -394,13 +394,13 @@ const MYH010101 = ({ navigation }) => {
       WA_GUBUN: 'GW', // GW(일반)으로 값고정 (나머지 미사용)
       WA_TYPE: checkType,
       FWH_TYPE: 'S', // 간주근로'A' 미사용으로 선택 일반/선택'S' 하드코딩
-      WAT_AREA: nearestOffice.ET_AREA_CODE,
+      WAT_AREA: nearestOffice?.ET_AREA_CODE,
       WAT_AREA_NAME:
         checkType !== 'O'
-          ? nearestOffice.ET_AREA_NAME
-          : offsiteInfo.WAT_AREA_NAME,
-      WAT_AREA_SEQ: nearestOffice.ET_SEQ_NO,
-      WAT_STATUS: nearestOffice.ET_STATUS,
+          ? nearestOffice?.ET_AREA_NAME
+          : offsiteInfo?.WAT_AREA_NAME,
+      WAT_AREA_SEQ: nearestOffice?.ET_SEQ_NO,
+      WAT_STATUS: nearestOffice?.ET_STATUS,
       MOBILE_INFO: deviceInfo,
       MOBILE_TOKEN: deviceId,
       // 외근인 경우만.
