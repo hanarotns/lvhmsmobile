@@ -23,6 +23,18 @@ const getEmpInfoM = async (body: object) => {
   return result.AAAA010101F1;
 };
 
+const saveMobileId = async (body: object) => {
+  const result = await Fetch.request('AAAA010101SVC', 'saveMobileId', {
+    body: JSON.stringify({
+      AAAA010101F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
 const getInfoM = async (body: object) => {
   const result = await Fetch.request('PORM020201SVC', 'getMobile2', {
     body: JSON.stringify({
@@ -235,6 +247,7 @@ export {
   LaborRefusalNotice2,
   // 입사지원
   save,
+  saveMobileId,
   saveRefusalNotice,
   // 파일 업로드
   uploadFile,

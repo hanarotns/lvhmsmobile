@@ -46,6 +46,7 @@ import * as Location from 'expo-location';
 import * as WLOAction from '../WorkLog/Action'; // API통신 (공통)
 import * as Action from './Action';
 import LaborNoticeScreen from './LaborNoticeScreen';
+import SecondAuthScreen from './SecondAuthScreen';
 dayjs.extend(customParseFormat);
 
 const MYH010101 = ({ navigation }) => {
@@ -72,11 +73,12 @@ const MYH010101 = ({ navigation }) => {
   const [laborNotice1, setLaborNotice1] = useState([]);
   const [laborNotice2, setLaborNotice2] = useState([]);
   const [laborRefusal, setLaborRefusal] = useState([]);
+  const [isSecondAuthScreen, setIsSecondAuthScreen] = useState(false);
   const [offsiteInfo, setOffsiteInfo] = useState({});
 
   useEffect(() => {
     mount();
-  }, []);
+  }, [isSecondAuthScreen]);
 
   useEffect(() => {
     if (!isFocused || isVisibleModal) return;
@@ -124,9 +126,24 @@ const MYH010101 = ({ navigation }) => {
   // 사원정보 저장 후, 나머지 정보도 확인.
   useEffect(() => {
     if (!Util.isEmpty(empInfo)) {
-      getLaborInfo();
+      getHome();
     }
   }, [empInfo]);
+
+  const getHome = async () => {
+    const deviceId = await AsyncStorage.getItem('deviceId');
+    if (empInfo?.MOBILE_ID !== deviceId) {
+      setIsSecondAuthScreen(true);
+    } else {
+      setLoading(true);
+      await getLaborInfo();
+      await getInfoM();
+      await checkAboutLocation();
+      await getLatLon();
+      setIsSecondAuthScreen(false);
+      setLoading(false);
+    }
+  };
 
   // 모달 종료 됐을 때, 체크 타입 초기화
   useEffect(() => {
@@ -194,9 +211,6 @@ const MYH010101 = ({ navigation }) => {
   const mount = async () => {
     setLoading(true);
     await getEmpInfoM();
-    await getInfoM();
-    await checkAboutLocation();
-    await getLatLon();
     setLoading(false);
   };
 
@@ -713,148 +727,161 @@ const MYH010101 = ({ navigation }) => {
   return loading ? (
     <LVLoadingIndicator />
   ) : (
-    <SafeAreaView>
-      {/* 헤더 */}
-      <Layout style={styles.entire}>
-        <Image source={icon.ico_logo_htns} style={styles.logo} />
-        <LVHeaderInfo />
-        <TouchableOpacity
-          onPress={() => {
-            movingScreen.navigate('ETC010101');
-          }}
-        >
-          <Image source={icon.ico_account} style={styles.accountIcon} />
-        </TouchableOpacity>
-      </Layout>
-      {/* 본문 */}
-      <Layout>
-        <KeyboardAwareScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps='handled'
-          enableOnAndroid
-          extraScrollHeight={20}
-          style={{ backgroundColor: '#F0F2F6' }}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-          }
-        >
-          {!Util.isEmpty(laborNotice1) &&
-            laborNotice1?.[0]?.LABOR_CHECK === 'N' && (
-              // 연차촉진통지
-              <LaborNoticeScreen
-                type='annual'
-                data={laborNotice1[0]}
-                onConfirm={() => {
-                  console.log('@@ 연차촉진통지 1차');
-                  Action.saveRefusalNotice(laborNotice1[0]);
-                  setLaborNotice1([]);
-                }}
-              />
-            )}
-          {!Util.isEmpty(laborNotice2) &&
-            laborNotice2?.[0]?.LABOR_CHECK === 'N' && (
-              // 연차촉진통지 2차
-              <LaborNoticeScreen
-                type='annual'
-                data={laborNotice2[0]}
-                onConfirm={() => {
-                  console.log('@@ 연차촉진통지 2차');
-                  Action.saveRefusalNotice(laborNotice2[0]);
-                  setLaborNotice2([]);
-                }}
-              />
-            )}
-          {!Util.isEmpty(laborRefusal) &&
-            Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE) && (
-              // 노무수령거부통지
-              <LaborNoticeScreen
-                type='refusal'
-                data={laborRefusal[0]}
-                onConfirm={() => {
-                  console.log('@@ 노무수령거부');
-                  const payload = {
-                    P_COMPANY_CODE: laborRefusal?.[0]?.COMPANY_CODE,
-                    P_EMP_ID: laborRefusal?.[0]?.EMP_ID,
-                    P_VA_DATE: laborRefusal?.[0]?.PLAN_VA_DATE,
-                    P_JOB_NO: laborRefusal?.[0]?.PLAN_JOB_NO,
-                  };
-                  Action.LaborRefusal_confirm(payload);
-                  setLaborRefusal([]);
-                }}
-              />
-            )}
-          {(Util.isEmpty(laborNotice1) ||
-            laborNotice1?.[0]?.LABOR_CHECK === 'Y') &&
-            (Util.isEmpty(laborNotice2) ||
-              laborNotice2?.[0]?.LABOR_CHECK === 'Y') &&
-            (Util.isEmpty(laborRefusal) ||
-              (!Util.isEmpty(laborRefusal) &&
-                !Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE))) && (
-              <>
-                <View style={styles.layout}>
-                  <LayoutOfGreeting />
-                  <LayoutOfTracker />
-                  <LayoutOfCards />
-                </View>
-                {isVisibleModal &&
-                  ['S', 'E'].includes(checkType) &&
-                  nearestOffice?.ET_STATUS === 'N' && (
-                    <LVModal
-                      title={'알림'}
-                      titleIcon={icon.ico_warning}
-                      contents={<ContentsOfNotInside checkType={checkType} />}
-                      onVisible={setIsVisibleModal}
-                      onOk={handleSave}
-                    />
-                  )}
-                {isVisibleModal &&
-                  ((checkType === 'S' && todayInfo?.START_DATETIME) ||
-                    (checkType === 'E' && todayInfo?.END_DATETIME)) && (
-                    <LVModal
-                      title={'알림'}
-                      titleIcon={icon.ico_warning}
-                      contents={
-                        <ContentsOfDuplicatedRecord checkType={checkType} />
-                      }
-                      onVisible={setIsVisibleModal}
-                      onOk={handleSave}
-                    />
-                  )}
-                {isVisible30mModal && (
-                  <LVModal
-                    title={'알림'}
-                    titleIcon={icon.ico_warning}
-                    contents={
-                      <ContentsOfNotIn30m
-                        checkType={checkType}
-                        todayInfo={todayInfo}
-                      />
-                    }
-                    onVisible={setIsVisible30mModal}
-                    onOk={handleSave}
+    <>
+      {isSecondAuthScreen ? (
+        <SafeAreaView edges={['top', 'bottom']} style={LVStyles.safeAreaView}>
+          <SecondAuthScreen setIsSecondAuthScreen={setIsSecondAuthScreen} />
+        </SafeAreaView>
+      ) : (
+        <SafeAreaView>
+          {/* 헤더 */}
+          <Layout style={styles.entire}>
+            <Image source={icon.ico_logo_htns} style={styles.logo} />
+            <LVHeaderInfo />
+            <TouchableOpacity
+              onPress={() => {
+                movingScreen.navigate('ETC010101');
+              }}
+            >
+              <Image source={icon.ico_account} style={styles.accountIcon} />
+            </TouchableOpacity>
+          </Layout>
+          {/* 본문 */}
+          <Layout>
+            <KeyboardAwareScrollView
+              contentContainerStyle={{ flexGrow: 1 }}
+              keyboardShouldPersistTaps='handled'
+              enableOnAndroid
+              extraScrollHeight={20}
+              style={{ backgroundColor: '#F0F2F6' }}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={handleRefresh}
+                />
+              }
+            >
+              {!Util.isEmpty(laborNotice1) &&
+                laborNotice1?.[0]?.LABOR_CHECK === 'N' && (
+                  // 연차촉진통지
+                  <LaborNoticeScreen
+                    type='annual'
+                    data={laborNotice1[0]}
+                    onConfirm={() => {
+                      console.log('@@ 연차촉진통지 1차');
+                      Action.saveRefusalNotice(laborNotice1[0]);
+                      setLaborNotice1([]);
+                    }}
                   />
                 )}
-                {isVisibleModal && checkType === 'O' && (
-                  <LVModal
-                    title={'외근등록'}
-                    titleIcon={icon.ico_out}
-                    contents={
-                      <ContentsOfOffsite
-                        nearestOffice={nearestOffice}
-                        offsiteInfo={offsiteInfo}
-                        setOffsiteInfo={setOffsiteInfo}
-                      />
-                    }
-                    onVisible={setIsVisibleModal}
-                    onOk={handleSave}
+              {!Util.isEmpty(laborNotice2) &&
+                laborNotice2?.[0]?.LABOR_CHECK === 'N' && (
+                  // 연차촉진통지 2차
+                  <LaborNoticeScreen
+                    type='annual'
+                    data={laborNotice2[0]}
+                    onConfirm={() => {
+                      console.log('@@ 연차촉진통지 2차');
+                      Action.saveRefusalNotice(laborNotice2[0]);
+                      setLaborNotice2([]);
+                    }}
                   />
                 )}
-              </>
-            )}
-          <View style={{ height: 100 }} />
-        </KeyboardAwareScrollView>
-      </Layout>
-    </SafeAreaView>
+              {!Util.isEmpty(laborRefusal) &&
+                Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE) && (
+                  // 노무수령거부통지
+                  <LaborNoticeScreen
+                    type='refusal'
+                    data={laborRefusal[0]}
+                    onConfirm={() => {
+                      console.log('@@ 노무수령거부');
+                      const payload = {
+                        P_COMPANY_CODE: laborRefusal?.[0]?.COMPANY_CODE,
+                        P_EMP_ID: laborRefusal?.[0]?.EMP_ID,
+                        P_VA_DATE: laborRefusal?.[0]?.PLAN_VA_DATE,
+                        P_JOB_NO: laborRefusal?.[0]?.PLAN_JOB_NO,
+                      };
+                      Action.LaborRefusal_confirm(payload);
+                      setLaborRefusal([]);
+                    }}
+                  />
+                )}
+              {(Util.isEmpty(laborNotice1) ||
+                laborNotice1?.[0]?.LABOR_CHECK === 'Y') &&
+                (Util.isEmpty(laborNotice2) ||
+                  laborNotice2?.[0]?.LABOR_CHECK === 'Y') &&
+                (Util.isEmpty(laborRefusal) ||
+                  (!Util.isEmpty(laborRefusal) &&
+                    !Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE))) && (
+                  <>
+                    <View style={styles.layout}>
+                      <LayoutOfGreeting />
+                      <LayoutOfTracker />
+                      <LayoutOfCards />
+                    </View>
+                    {isVisibleModal &&
+                      ['S', 'E'].includes(checkType) &&
+                      nearestOffice?.ET_STATUS === 'N' && (
+                        <LVModal
+                          title={'알림'}
+                          titleIcon={icon.ico_warning}
+                          contents={
+                            <ContentsOfNotInside checkType={checkType} />
+                          }
+                          onVisible={setIsVisibleModal}
+                          onOk={handleSave}
+                        />
+                      )}
+                    {isVisibleModal &&
+                      ((checkType === 'S' && todayInfo?.START_DATETIME) ||
+                        (checkType === 'E' && todayInfo?.END_DATETIME)) && (
+                        <LVModal
+                          title={'알림'}
+                          titleIcon={icon.ico_warning}
+                          contents={
+                            <ContentsOfDuplicatedRecord checkType={checkType} />
+                          }
+                          onVisible={setIsVisibleModal}
+                          onOk={handleSave}
+                        />
+                      )}
+                    {isVisible30mModal && (
+                      <LVModal
+                        title={'알림'}
+                        titleIcon={icon.ico_warning}
+                        contents={
+                          <ContentsOfNotIn30m
+                            checkType={checkType}
+                            todayInfo={todayInfo}
+                          />
+                        }
+                        onVisible={setIsVisible30mModal}
+                        onOk={handleSave}
+                      />
+                    )}
+                    {isVisibleModal && checkType === 'O' && (
+                      <LVModal
+                        title={'외근등록'}
+                        titleIcon={icon.ico_out}
+                        contents={
+                          <ContentsOfOffsite
+                            nearestOffice={nearestOffice}
+                            offsiteInfo={offsiteInfo}
+                            setOffsiteInfo={setOffsiteInfo}
+                          />
+                        }
+                        onVisible={setIsVisibleModal}
+                        onOk={handleSave}
+                      />
+                    )}
+                  </>
+                )}
+              <View style={{ height: 100 }} />
+            </KeyboardAwareScrollView>
+          </Layout>
+        </SafeAreaView>
+      )}
+    </>
   );
 };
 export default MYH010101;
