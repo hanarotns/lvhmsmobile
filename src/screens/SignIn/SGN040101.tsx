@@ -6,15 +6,19 @@ import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
+  KeyboardAwareScrollView,
   LVButton,
   LVLoadingIndicator,
+  LVStyles,
   SafeAreaView,
   Text,
 } from '@/src/components';
+import { Util } from '@/src/lib';
 import { useIsFocused } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import * as Action from './Action';
 
 const SGN040101 = () => {
   const isFocused = useIsFocused();
@@ -27,9 +31,9 @@ const SGN040101 = () => {
 
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState({
-    userId: '',
-    userName: '',
-    mobileNo: '',
+    USER_ID: '',
+    USER_NAME_LOC: '',
+    USER_CP: '',
   });
   const [authNo, setAuthNo] = useState('');
   const [isSmsSent, setIsSmsSent] = useState(false);
@@ -42,40 +46,33 @@ const SGN040101 = () => {
       mount();
     }
   }, [isFocused]);
-
+  const tempUserCp = sessionInfo?.USER_CP || '01096501243';
+  //@@ 테스트ㅡ트ㅡ
   const mount = async () => {
     try {
       setLoading(true);
-
-      // 로그인 직후 전달받은 사용자 정보 우선 사용
-      const paramUserInfo = route?.params?.userInfo || {};
-
-      // 필요 시 세션값 사용
-      const nextUserInfo = {
-        userId: paramUserInfo.userId || sessionInfo?.USER_ID || '',
-        userName: paramUserInfo.userName || sessionInfo?.USER_NAME || '',
-        mobileNo: paramUserInfo.mobileNo || sessionInfo?.USER_CP || '',
-      };
-
-      // 필요하면 여기서 사용자 상세 조회 API 추가 가능
-      // const res = await Action.getUserInfo({...});
-      // nextUserInfo.mobileNo = res?.mobileNo || nextUserInfo.mobileNo;
-
-      setUserInfo(nextUserInfo);
+      setUserInfo({
+        USER_ID: sessionInfo?.USER_ID || '',
+        USER_NAME_LOC: sessionInfo?.USER_NAME_LOC || '',
+        USER_CP: tempUserCp || '',
+      });
+      if (!tempUserCp) {
+        Alert.alert('알림', '등록된 휴대폰 번호가 없습니다.');
+        return;
+      }
     } catch (e) {
-      console.log('@@ mount error', e);
-      Alert.alert('알림', '사용자 정보를 불러오지 못했습니다.');
+      Alert.alert('알림', '사용자 정보를 불러오는 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
     }
   };
 
-  const getMaskedPhoneNo = (mobileNo: string) => {
-    if (!mobileNo) {
+  const getMaskedPhoneNo = (USER_CP: string) => {
+    if (!USER_CP) {
       return '';
     }
 
-    const onlyNumber = String(mobileNo).replace(/[^0-9]/g, '');
+    const onlyNumber = String(USER_CP).replace(/[^0-9]/g, '');
 
     if (onlyNumber.length === 11) {
       return `${onlyNumber.substring(0, 3)}-${onlyNumber.substring(
@@ -91,55 +88,30 @@ const SGN040101 = () => {
       )}-${onlyNumber.substring(6, 10)}`;
     }
 
-    return mobileNo;
+    return USER_CP;
   };
 
-  const onPressSendAuthNo = () => {
-    // if (!userInfo.mobileNo) {
-    //   Alert.alert('알림', '등록된 휴대폰 번호가 없습니다.');
-    //   return;
-    // }
-
-    Alert.alert(
-      '2차 인증',
-      `계정에 등록된 휴대폰 번호\n${getMaskedPhoneNo(
-        userInfo.mobileNo,
-      )}\n로 인증번호를 발송하시겠습니까?`,
-      [
-        {
-          text: '취소',
-          style: 'cancel',
-        },
-        {
-          text: '발송',
-          onPress: () => {
-            sendAuthNo();
-          },
-        },
-      ],
-    );
-  };
-
-  const sendAuthNo = async () => {
+  const onPressSendAuthNo = async () => {
     try {
       setSending(true);
 
-      const sParam = {
-        userId: userInfo.userId,
-        mobileNo: userInfo.mobileNo,
+      const payload = {
+        OPEN_API_YN: 'Y',
+        USER_ID: userInfo.USER_ID,
+        USER_CP: userInfo.USER_CP,
         authType: 'LOGIN',
       };
 
-      // 실제 API 예시
-      // const res = await Action.sendLoginAuthNo(sParam);
+      const res = await Action.sendSMSForCP(payload);
 
       await new Promise((resolve) => setTimeout(resolve, 700));
 
       setIsSmsSent(true);
       setSendDateTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
       setAuthNo('');
-
-      Alert.alert('알림', '인증번호를 발송했습니다.');
+      if (res?.TYPE === 1) {
+        Alert.alert('알림', '인증번호를 발송했습니다.');
+      }
     } catch (e) {
       console.log('@@ sendAuthNo error', e);
       Alert.alert('알림', '인증번호 발송 중 오류가 발생했습니다.');
@@ -162,28 +134,22 @@ const SGN040101 = () => {
     try {
       setConfirming(true);
 
-      const sParam = {
-        userId: userInfo.userId,
-        authNo: authNo,
-        authType: 'LOGIN',
+      const payload = {
+        OPEN_API_YN: 'Y',
+        USER_CP: userInfo?.USER_CP,
+        AUTH_CODE: authNo,
       };
+      const res = await Action.checkAuthNumber(payload);
+      if (res.TYPE === 1)
+        await new Promise((resolve) => setTimeout(resolve, 700)); // @@ 이거 머지...?
 
-      // 실제 API 예시
-      // const res = await Action.confirmLoginAuthNo(sParam);
-
-      await new Promise((resolve) => setTimeout(resolve, 700));
-
-      Alert.alert('인증 완료', '2차 인증이 완료되었습니다.', [
-        {
-          text: '확인',
-          onPress: () => {
-            navigation.replace('Home');
-          },
-        },
-      ]);
+      if (res?.AUTH_YN === 'Y') {
+        Util.toastMsg('인증번호가 확인되었습니다.', 'success');
+      } else {
+        Alert.alert('알림', '인증번호가 올바르지 않습니다.');
+      }
     } catch (e) {
-      console.log('@@ onPressConfirmAuthNo error', e);
-      Alert.alert('알림', '인증번호가 올바르지 않습니다.');
+      Alert.alert('알림', '인증번호 확인 중 오류가 발생하였습니다.');
     } finally {
       setConfirming(false);
     }
@@ -193,28 +159,39 @@ const SGN040101 = () => {
     <View style={styles.container}>
       <SafeAreaView edges={['bottom']} style={styles.safeArea}>
         <View style={styles.contents}>
-          <View>
-            <Text style={styles.title}>2차 인증</Text>
-            <Text style={styles.desc}>
-              로그인 보호를 위해{'\n'}
-              등록된 휴대폰 번호로 본인 확인을 진행합니다.
-            </Text>
-
-            <View style={styles.infoBox}>
-              <Text style={styles.infoLabel}>이름</Text>
-              <Text style={styles.infoValue}>{userInfo.userName || '-'}</Text>
-
-              <View style={styles.divider} />
-
-              <Text style={styles.infoLabel}>휴대폰 번호</Text>
-              <Text style={styles.infoValue}>
-                {getMaskedPhoneNo(userInfo.mobileNo) || '-'}
+          <KeyboardAwareScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+            }}
+            keyboardShouldPersistTaps='handled'
+            enableOnAndroid
+            extraScrollHeight={180}
+          >
+            <View>
+              <Text style={styles.title}>2차 인증</Text>
+              <Text style={styles.desc}>
+                {`로그인 보호를 위해\n등록된 휴대폰 번호로 본인 확인을 진행합니다.`}
               </Text>
-            </View>
+              <View style={styles.infoBox}>
+                <View>
+                  <Text style={styles.infoLabel}>휴대폰 번호</Text>
+                  <Text style={styles.infoValue}>
+                    {getMaskedPhoneNo(userInfo.USER_CP) || '-'}
+                  </Text>
+                </View>
+                <LVButton
+                  title={sending ? '발송 중...' : '인증요청'}
+                  onPress={onPressSendAuthNo}
+                  buttonStyle={styles.button}
+                  textStyle={{
+                    color: '#27A7FF',
+                  }}
+                />
+              </View>
 
-            {!isSmsSent ? (
-              <>
-                {/* <View style={styles.guideBox}>
+              {!isSmsSent ? (
+                <>
+                  {/* <View style={styles.guideBox}>
                 <Text style={styles.guideTitle}>
                   위 휴대폰 번호로 인증번호를 발송할까요?
                 </Text>
@@ -222,57 +199,46 @@ const SGN040101 = () => {
                   발송된 인증번호를 입력하면 로그인이 완료됩니다.
                 </Text>
               </View> */}
-              </>
-            ) : (
-              <View style={styles.guideBox}>
-                <Text style={styles.guideTitle}>
-                  인증번호가 발송되었습니다.
-                </Text>
-                <Text style={styles.guideText}>
-                  문자로 받은 인증번호 6자리를 입력해주세요.
-                </Text>
-                <Text style={styles.sendTimeText}>
-                  발송시간 : {sendDateTime}
-                </Text>
+                </>
+              ) : (
+                <View style={styles.guideBox}>
+                  <Text style={styles.guideTitle}>
+                    인증번호가 발송되었습니다.
+                  </Text>
+                  <Text style={styles.guideText}>
+                    문자로 받은 인증번호 6자리를 입력해주세요.
+                  </Text>
+                  <Text style={styles.sendTimeText}>
+                    발송시간 : {sendDateTime}
+                  </Text>
 
-                <Input
-                  value={authNo}
-                  placeholder='인증번호 6자리 입력'
-                  keyboardType='number-pad'
-                  maxLength={6}
-                  onChangeText={(text) => {
-                    const onlyNumber = text.replace(/[^0-9]/g, '');
-                    setAuthNo(onlyNumber);
-                  }}
-                  style={styles.input}
-                />
-              </View>
-            )}
-          </View>
+                  <Input
+                    value={authNo}
+                    placeholder='인증번호 6자리 입력'
+                    keyboardType='number-pad'
+                    maxLength={6}
+                    onChangeText={(text) => {
+                      const onlyNumber = text.replace(/[^0-9]/g, '');
+                      setAuthNo(onlyNumber);
+                    }}
+                    style={styles.input}
+                  />
+                </View>
+              )}
+            </View>
 
-          <View style={styles.bottomArea}>
-            {!isSmsSent ? (
-              <LVButton
-                title={sending ? '발송 중...' : '인증번호 발송'}
-                onPress={onPressSendAuthNo}
-                buttonStyle={styles.mainButton}
-              />
-            ) : (
-              <>
-                <LVButton
-                  title={confirming ? '확인 중...' : '인증 확인'}
-                  onPress={onPressConfirmAuthNo}
-                  buttonStyle={styles.mainButton}
-                />
-                <LVButton
-                  title={sending ? '재발송 중...' : '인증번호 재발송'}
-                  onPress={onPressSendAuthNo}
-                  buttonStyle={styles.subButton}
-                  textStyle={styles.subButtonText}
-                />
-              </>
-            )}
-          </View>
+            <View style={LVStyles.bottomButtonView}>
+              {isSmsSent && (
+                <>
+                  <LVButton
+                    title={confirming ? '확인 중...' : '인증 확인'}
+                    onPress={onPressConfirmAuthNo}
+                    buttonStyle={styles.mainButton}
+                  />
+                </>
+              )}
+            </View>
+          </KeyboardAwareScrollView>
         </View>
       </SafeAreaView>
 
@@ -312,6 +278,7 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
   infoBox: {
+    ...LVStyles.row,
     borderWidth: 1,
     borderColor: '#E9E9E9',
     borderRadius: 16,
@@ -367,6 +334,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
   subButton: {
     height: 52,
@@ -378,5 +346,11 @@ const styles = StyleSheet.create({
   },
   subButtonText: {
     color: '#333',
+  },
+  button: {
+    backgroundColor: '#FFF',
+    borderColor: '#27A7FF',
+    borderWidth: 1,
+    padding: 10,
   },
 });
