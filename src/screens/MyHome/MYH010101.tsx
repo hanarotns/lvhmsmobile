@@ -135,7 +135,10 @@ const MYH010101 = ({ navigation }) => {
       // 외근인 경우, 외근 정보 초기화
       if (checkType === 'O') {
         setOffsiteInfo({
-          WAT_AREA_NAME: address,
+          WAT_AREA_NAME:
+            nearestOffice?.ET_STATUS === 'Y'
+              ? nearestOffice.ET_AREA_NAME
+              : address,
         });
       }
     }
@@ -372,10 +375,11 @@ const MYH010101 = ({ navigation }) => {
       .filter(Boolean)
       .join(' ');
     setAdress(tempAddress);
-    setOffsiteInfo({
-      WAT_AREA_NAME: tempAddress,
-    });
     const result = await WLOAction.getNearOfficeM(payload);
+    setOffsiteInfo({
+      WAT_AREA_NAME:
+        result?.ET_STATUS === 'Y' ? result.ET_AREA_NAME : tempAddress,
+    });
     setTimeout(() => setNearestOffice(result), 300);
   };
 
