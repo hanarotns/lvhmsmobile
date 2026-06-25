@@ -35,6 +35,28 @@ const saveMobileId = async (body: object) => {
   return result;
 };
 
+// 인증요청
+const sendSMSForCP = async (body: object) => {
+  const result = await Fetch.request('AAAA010101SVC', 'sendSMSForCP', {
+    body: JSON.stringify(body),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+// 인증번호 체크
+const checkAuthNumber = async (body: object) => {
+  const result = await Fetch.request('AAAA010101SVC', 'checkAuthNumber', {
+    body: JSON.stringify(body),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.DATA;
+};
+
 const getInfoM = async (body: object) => {
   const result = await Fetch.request('PORM020201SVC', 'getMobile2', {
     body: JSON.stringify({
@@ -230,6 +252,7 @@ const deleteFile = async (
 };
 
 export {
+  checkAuthNumber,
   // 파일 삭제
   deleteFile,
   // 유저정보조회
@@ -249,6 +272,7 @@ export {
   save,
   saveMobileId,
   saveRefusalNotice,
+  sendSMSForCP,
   // 파일 업로드
   uploadFile,
 };

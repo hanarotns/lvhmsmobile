@@ -18,7 +18,6 @@ import { useIsFocused } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import * as SGNAction from '../SignIn/Action'; // API통신 (공통)
 import * as Action from './Action';
 
 const SecondAuthScreen = (props) => {
@@ -100,15 +99,15 @@ const SecondAuthScreen = (props) => {
   const onPressSendAuthNo = async () => {
     try {
       setSending(true);
-
+      const deviceId = await AsyncStorage.getItem('deviceId');
       const payload = {
-        OPEN_API_YN: 'Y',
+        MOBILE_ID: deviceId,
         USER_ID: userInfo.USER_ID,
         USER_CP: userInfo.USER_CP,
-        authType: 'LOGIN',
+        REQ_SCREEN: 'LOGIN',
       };
 
-      const res = await SGNAction.sendSMSForCP(payload);
+      const res = await Action.sendSMSForCP(payload);
 
       await new Promise((resolve) => setTimeout(resolve, 700));
 
@@ -139,18 +138,17 @@ const SecondAuthScreen = (props) => {
 
     try {
       setConfirming(true);
-
+      const deviceId = await AsyncStorage.getItem('deviceId');
       const payload = {
-        OPEN_API_YN: 'Y',
+        MOBILE_ID: deviceId,
         USER_CP: userInfo?.USER_CP,
         AUTH_CODE: authNo,
       };
-      const res = await SGNAction.checkAuthNumber(payload);
+      const res = await Action.checkAuthNumber(payload);
       if (res.TYPE === 1)
         await new Promise((resolve) => setTimeout(resolve, 700)); // @@ 이거 머지...?
 
       if (res?.AUTH_YN === 'Y') {
-        const deviceId = await AsyncStorage.getItem('deviceId');
         const payload2 = {
           EMP_ID: empInfo?.EMP_ID || '',
           COMPANY_CODE: empInfo?.COMPANY_CODE || '',
@@ -246,18 +244,15 @@ const SecondAuthScreen = (props) => {
               </View>
             )}
           </View>
-
-          <View style={LVStyles.bottomButtonView}>
-            {isSmsSent && (
-              <>
-                <LVButton
-                  title={confirming ? '확인 중...' : '인증 확인'}
-                  onPress={onPressConfirmAuthNo}
-                  buttonStyle={styles.mainButton}
-                />
-              </>
-            )}
-          </View>
+          {isSmsSent && (
+            <>
+              <LVButton
+                title={confirming ? '확인 중...' : '인증 확인'}
+                onPress={onPressConfirmAuthNo}
+                buttonStyle={styles.mainButton}
+              />
+            </>
+          )}
         </KeyboardAwareScrollView>
       </View>
       {(loading || sending || confirming) && <LVLoadingIndicator />}
@@ -348,9 +343,9 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   mainButton: {
+    marginTop: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
   },
   subButton: {
     height: 52,
