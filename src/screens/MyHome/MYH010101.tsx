@@ -644,9 +644,7 @@ const MYH010101 = ({ navigation }) => {
             <LVButton
               title={'외근등록'}
               img={icon.ico_out}
-              subtitle={
-                Util.convertDateTime('', todayInfo?.OFFSITE_TIME) || '-'
-              }
+              subtitle={todayInfo?.OFFSTIE_AREA_NAME || '-'}
               textStyle={styles.offsiteBtnText}
               buttonStyle={{ backgroundColor: '#F7FCFF', marginTop: 8 }}
               imgStyle={{ tintColor: '#373747' }}
