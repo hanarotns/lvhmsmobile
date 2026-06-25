@@ -60,7 +60,8 @@ const MYH010101 = ({ navigation }) => {
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
-  const [loading, setLoading] = useState(true);
+  const [coverLoading, setCoverLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const [todayInfo, setTodayInfo] = useState({});
@@ -135,13 +136,13 @@ const MYH010101 = ({ navigation }) => {
     if (empInfo?.MOBILE_ID !== deviceId) {
       setIsSecondAuthScreen(true);
     } else {
-      setLoading(true);
+      setCoverLoading(true);
       await getLaborInfo();
       await getInfoM();
       await checkAboutLocation();
       await getLatLon();
       setIsSecondAuthScreen(false);
-      setLoading(false);
+      setCoverLoading(false);
     }
   };
 
@@ -209,9 +210,9 @@ const MYH010101 = ({ navigation }) => {
   }, [checkType]);
 
   const mount = async () => {
-    setLoading(true);
+    setCoverLoading(true);
     await getEmpInfoM();
-    setLoading(false);
+    setCoverLoading(false);
   };
 
   /**
@@ -401,15 +402,15 @@ const MYH010101 = ({ navigation }) => {
    * 출퇴근 저장
    */
   const saveM = async (checkType: string) => {
-    const deviceInfo = await AsyncStorage.getItem('deviceInfo');
-    const deviceId = await AsyncStorage.getItem('deviceId');
-
     // 위치 재설정 중 저장 불가 체크로직 추가
     if (Util.isEmpty(nearestOffice)) {
       Alert.alert('알림', `위치 재설정 중입니다.\n잠시후 다시시도해주세요`);
       return;
     }
 
+    setLoading(true);
+    const deviceInfo = await AsyncStorage.getItem('deviceInfo');
+    const deviceId = await AsyncStorage.getItem('deviceId');
     const payload = {
       EMP_ID: empInfo?.EMP_ID,
       WA_LOG_DATETIME: dayjs(new Date()).format('YYYYMMDDHHmmss'),
@@ -434,6 +435,7 @@ const MYH010101 = ({ navigation }) => {
           : '',
     };
     const result = await WLOAction.saveM(payload);
+    setLoading(false);
     // 사용자 알림 메시지
     // @@ 공통코드 가져와서 변경 적용.
     if (result.TYPE === 1) {
@@ -722,7 +724,7 @@ const MYH010101 = ({ navigation }) => {
     );
   };
 
-  return loading ? (
+  return coverLoading ? (
     <LVLoadingIndicator />
   ) : (
     <>
@@ -877,6 +879,7 @@ const MYH010101 = ({ navigation }) => {
               <View style={{ height: 100 }} />
             </KeyboardAwareScrollView>
           </Layout>
+          {loading && <LVLoadingIndicator />}
         </SafeAreaView>
       )}
     </>
