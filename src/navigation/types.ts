@@ -8,7 +8,6 @@ export type SignInStackParamList = {
   SGN010101: undefined;
   SGN010201: undefined;
   SGN030101: undefined;
-  SGN040101: undefined;
 };
 
 export type MainTabParamList = {
