@@ -11,6 +11,7 @@ import {
   LVLoadingIndicator,
   LVStyles,
   Text,
+  TextField,
 } from '@/src/components';
 import { Util } from '@/src/lib';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -48,23 +49,21 @@ const SecondAuthScreen = (props) => {
       mount();
     }
   }, [isFocused]);
-  const tempUserCp = sessionInfo?.USER_CP;
-  //@@ 테스트ㅡ트ㅡ
   const mount = async () => {
     try {
       setLoading(true);
-      setUserInfo({
-        USER_ID: sessionInfo?.USER_ID || '',
-        USER_NAME_LOC: sessionInfo?.USER_NAME_LOC || '',
-        USER_CP: tempUserCp || '',
-      });
-      if (!tempUserCp) {
+      if (!sessionInfo?.USER_CP) {
         Alert.alert(
           '알림',
           '등록된 휴대폰 번호가 없습니다.\n관리자에게 문의하세요.',
         );
         return;
       }
+      setUserInfo({
+        USER_ID: sessionInfo?.USER_ID || '',
+        USER_NAME_LOC: sessionInfo?.USER_NAME_LOC || '',
+        USER_CP: '',
+      });
     } catch (e) {
       Alert.alert('알림', '사용자 정보를 불러오는 중 오류가 발생했습니다.');
     } finally {
@@ -72,37 +71,29 @@ const SecondAuthScreen = (props) => {
     }
   };
 
-  const getMaskedPhoneNo = (USER_CP: string) => {
-    if (!USER_CP) {
-      return '';
-    }
-
-    const onlyNumber = String(USER_CP).replace(/[^0-9]/g, '');
-
-    if (onlyNumber.length === 11) {
-      return `${onlyNumber.substring(0, 3)}-${onlyNumber.substring(
-        3,
-        7,
-      )}-${onlyNumber.substring(7, 11)}`;
-    }
-
-    if (onlyNumber.length === 10) {
-      return `${onlyNumber.substring(0, 3)}-${onlyNumber.substring(
-        3,
-        6,
-      )}-${onlyNumber.substring(6, 10)}`;
-    }
-
-    return USER_CP;
-  };
-
   const onPressSendAuthNo = async () => {
     try {
-      setSending(true);
       const deviceId = await AsyncStorage.getItem('deviceId');
+      const phone = sessionInfo?.USER_CP;
+      const onlyNumber = phone.replace(/\D/g, '');
+      if (onlyNumber !== userInfo?.USER_CP) {
+        console.log(
+          '@@ sessionInfo?.USER_CP',
+          sessionInfo?.USER_CP,
+          userInfo?.USER_CP,
+        );
+        Alert.alert(
+          '알림',
+          '계정에 등록된 휴대폰번호와 상이합니다.\n관리자에게 문의하세요.',
+        );
+        return;
+      }
+      setSending(true);
       const payload = {
         MOBILE_ID: deviceId,
+        PW_CHECK_YN: 'Y',
         USER_ID: userInfo.USER_ID,
+        USER_NAME_LOC: userInfo.USER_NAME_LOC,
         USER_CP: userInfo.USER_CP,
         REQ_SCREEN: 'LOGIN',
       };
@@ -191,20 +182,36 @@ const SecondAuthScreen = (props) => {
               {`로그인 보호를 위해\n등록된 휴대폰 번호로 본인 확인을 진행합니다.`}
             </Text>
             <View style={styles.infoBox}>
-              <View>
-                <Text style={styles.infoLabel}>휴대폰 번호</Text>
-                <Text style={styles.infoValue}>
-                  {getMaskedPhoneNo(userInfo.USER_CP) || '-'}
-                </Text>
+              <View style={styles.labelRow}>
+                <Text style={styles.label}>휴대폰 번호</Text>
               </View>
-              <LVButton
-                title={sending ? '발송 중...' : '인증요청'}
-                onPress={onPressSendAuthNo}
-                buttonStyle={styles.button}
-                textStyle={{
-                  color: '#27A7FF',
-                }}
-              />
+              <View style={[LVStyles.row, styles.inlineRow]}>
+                <TextField
+                  // disabled={isPhoneAuthRequested}
+                  keyboardType='numeric'
+                  placeholder='ex. 01012345678'
+                  maxLength={11}
+                  placeholderTextColor='lightgray'
+                  style={[styles.textFieldSt, styles.inlineInput]}
+                  autoCapitalize='none'
+                  onChangeValue={(value: string) => {
+                    setUserInfo((prev) => ({
+                      ...prev,
+                      USER_CP: value,
+                    }));
+                  }}
+                  // onBlur={() => handleBlurField('phoneNumber')}
+                  // value={memberInfo.phoneNumber}
+                />
+                <LVButton
+                  title={sending ? '발송 중...' : '인증요청'}
+                  onPress={onPressSendAuthNo}
+                  buttonStyle={styles.button}
+                  textStyle={{
+                    color: '#27A7FF',
+                  }}
+                />
+              </View>
             </View>
 
             {!isSmsSent ? (
@@ -291,7 +298,6 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
   infoBox: {
-    ...LVStyles.row,
     borderWidth: 1,
     borderColor: '#E9E9E9',
     borderRadius: 16,
@@ -303,11 +309,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#888',
     marginBottom: 6,
-  },
-  infoValue: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#111',
   },
   divider: {
     height: 1,
@@ -363,5 +364,31 @@ const styles = StyleSheet.create({
     borderColor: '#27A7FF',
     borderWidth: 1,
     padding: 10,
+  },
+  textFieldSt: {
+    flex: 1,
+    marginBottom: 10,
+    backgroundColor: 'transparent',
+    borderColor: 'lightgray',
+    borderRadius: 8,
+  },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 24,
+    marginBottom: 4,
+  },
+  label: {
+    color: '#373747',
+    fontSize: 16,
+  },
+  inlineRow: {
+    marginBottom: 10,
+  },
+  inlineInput: {
+    marginBottom: 0,
+    flex: 1,
+    marginRight: 8,
   },
 });
