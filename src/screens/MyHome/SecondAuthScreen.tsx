@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
+  Icon,
   KeyboardAwareScrollView,
   LVButton,
   LVLoadingIndicator,
@@ -13,7 +14,7 @@ import {
   Text,
   TextField,
 } from '@/src/components';
-import { Util } from '@/src/lib';
+import { Fetch, Util } from '@/src/lib';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
@@ -165,6 +166,16 @@ const SecondAuthScreen = (props) => {
     }
   };
 
+  const logout = async () => {
+    Fetch.logout().then((result) => {
+      if (result) {
+        setSessionInfo(null);
+        setEmpInfo(null);
+        Util.toastMsg('정상적으로 로그아웃 되었습니다.');
+      }
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.contents}>
@@ -261,6 +272,12 @@ const SecondAuthScreen = (props) => {
             </>
           )}
         </KeyboardAwareScrollView>
+        <View style={styles.floatingButton}>
+          <TouchableOpacity onPress={logout} style={styles.menuButton}>
+            <Icon name='power-standby' color='#373747' />
+            <Text style={styles.menuText}>로그아웃</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       {(loading || sending || confirming) && <LVLoadingIndicator />}
     </View>
@@ -390,5 +407,22 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     flex: 1,
     marginRight: 8,
+  },
+  menuButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginVertical: 12,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  menuText: {
+    fontWeight: '600',
+    fontSize: 16,
+    marginLeft: 4,
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 0,
+    right: 32,
   },
 });
