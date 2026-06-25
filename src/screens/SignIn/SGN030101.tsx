@@ -243,6 +243,7 @@ const SGN030101 = ({ navigation }) => {
         USER_ID: memberInfo.id,
         USER_NAME_LOC: memberInfo.name,
         USER_CP: memberInfo?.phoneNumber,
+        REQ_SCREEN: 'FINDPW',
       };
       const result = await Action.sendSMSForCP(payload);
       if (result.TYPE === 1) {

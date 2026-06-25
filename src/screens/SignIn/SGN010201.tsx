@@ -435,6 +435,7 @@ const SGN010201 = () => {
       const payload = {
         OPEN_API_YN: 'Y',
         USER_CP: memberInfo?.phoneNumber,
+        REQ_SCREEN: 'SIGNUP',
       };
       const result = await Action.sendSMSForCP(payload);
       if (result.TYPE === 1) {
