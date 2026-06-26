@@ -78,7 +78,9 @@ const MYH010101 = ({ navigation }) => {
   const [offsiteInfo, setOffsiteInfo] = useState({});
 
   useEffect(() => {
-    mount();
+    if (!isSecondAuthScreen) {
+      mount();
+    }
   }, [isSecondAuthScreen]);
 
   useEffect(() => {
