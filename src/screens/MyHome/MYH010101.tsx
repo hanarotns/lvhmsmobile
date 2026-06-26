@@ -770,7 +770,6 @@ const MYH010101 = ({ navigation }) => {
                     type='annual'
                     data={laborNotice1[0]}
                     onConfirm={() => {
-                      console.log('@@ 연차촉진통지 1차');
                       Action.saveRefusalNotice(laborNotice1[0]);
                       setLaborNotice1([]);
                     }}
@@ -783,7 +782,6 @@ const MYH010101 = ({ navigation }) => {
                     type='annual'
                     data={laborNotice2[0]}
                     onConfirm={() => {
-                      console.log('@@ 연차촉진통지 2차');
                       Action.saveRefusalNotice(laborNotice2[0]);
                       setLaborNotice2([]);
                     }}
@@ -796,7 +794,6 @@ const MYH010101 = ({ navigation }) => {
                     type='refusal'
                     data={laborRefusal[0]}
                     onConfirm={() => {
-                      console.log('@@ 노무수령거부');
                       const payload = {
                         P_COMPANY_CODE: laborRefusal?.[0]?.COMPANY_CODE,
                         P_EMP_ID: laborRefusal?.[0]?.EMP_ID,
