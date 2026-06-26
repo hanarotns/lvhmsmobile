@@ -57,7 +57,7 @@ const WLO010101 = () => {
     setFilteredList(tempList);
   }, [selectedInfo, selectedCheckType]);
 
-  const mount = async (yearMonthParam: string) => {
+  const mount = async (yearMonthParam: string, yearMonthDayParam?: string) => {
     setLoading(true);
     let resOfCheckType = await COMAction.getCode('code', 'PC0001', {
       GCODE: 'WA_TYPE',
@@ -103,7 +103,9 @@ const WLO010101 = () => {
     setCalDispList(obj);
     // 리스트 가져오기 (선택된 날의 raw 데이터)
     setList(res?.DT);
-    const compareDate = selectedInfo.date.replace(/-/g, '').replace(/-/g, '');
+    const compareDate = yearMonthDayParam
+      ? yearMonthDayParam
+      : selectedInfo.date.replace(/-/g, '').replace(/-/g, '');
     let tempList;
     if (selectedCheckType === 'A') {
       tempList = res?.DT.filter((item) => item.WA_LOG_DATE === compareDate);
@@ -132,7 +134,8 @@ const WLO010101 = () => {
               date,
             });
             const yearMonth = date.replace(/-/g, '').substring(0, 6);
-            mount(yearMonth);
+            const yearMonthDay = date.replace(/-/g, '').replace(/-/g, '');
+            mount(yearMonth, yearMonthDay);
           }}
           markingType='custom'
           markedDates={{
