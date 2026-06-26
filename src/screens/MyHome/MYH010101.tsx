@@ -82,7 +82,7 @@ const MYH010101 = ({ navigation }) => {
   }, [isSecondAuthScreen]);
 
   useEffect(() => {
-    if (!isFocused || isVisibleModal) return;
+    if (isSecondAuthScreen || !isFocused || isVisibleModal) return;
     const interval = setInterval(async () => {
       await getLatLon();
     }, 30000);
@@ -90,7 +90,7 @@ const MYH010101 = ({ navigation }) => {
     return () => {
       clearInterval(interval);
     };
-  }, [isFocused, isVisibleModal]);
+  }, [isSecondAuthScreen, isFocused, isVisibleModal]);
 
   // 환경설정 후 화면 돌아왔을 때 한 번 더 체크
   // @@ 앱권한 추가 시, 계속 호출해서 일단 제거
