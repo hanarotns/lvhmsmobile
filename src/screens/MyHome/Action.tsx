@@ -105,6 +105,9 @@ const save = async (body: object) => {
   return result;
 };
 
+/**
+ * 연차촉진 1차 공지
+ */
 const LaborRefusalNotice = async (body: object) => {
   const result = await Fetch.request('PORM020113SVC', 'LaborRefusalNotice', {
     body: JSON.stringify({
@@ -117,6 +120,9 @@ const LaborRefusalNotice = async (body: object) => {
   return result.PORM020113F1;
 };
 
+/**
+ * 연차촉진 2차 공지
+ */
 const LaborRefusalNotice2 = async (body: object) => {
   const result = await Fetch.request('PORM020113SVC', 'LaborRefusalNotice2', {
     body: JSON.stringify({
@@ -129,6 +135,9 @@ const LaborRefusalNotice2 = async (body: object) => {
   return result.PORM020113F1;
 };
 
+/**
+ * 노무수령거부 공지
+ */
 const LaborRefusal_get = async (body: object) => {
   const result = await Fetch.request('PORM020113SVC', 'LaborRefusal_get', {
     body: JSON.stringify({
@@ -141,6 +150,9 @@ const LaborRefusal_get = async (body: object) => {
   return result.PORM020113F1;
 };
 
+/**
+ * 연차촉진 1,2차 공지 확인 일시 저장.
+ */
 const saveRefusalNotice = async (body: object) => {
   const result = await Fetch.request('PORM020113SVC', 'save', {
     body: JSON.stringify({
@@ -153,6 +165,9 @@ const saveRefusalNotice = async (body: object) => {
   return result;
 };
 
+/**
+ * 노무수령거부 공지 확인 일시 저장.
+ */
 const LaborRefusal_confirm = async (body: object) => {
   const result = await Fetch.request('PORM020113SVC', 'LaborRefusal_confirm', {
     body: JSON.stringify(body),
