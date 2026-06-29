@@ -6,9 +6,9 @@ import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
-  Icon,
   KeyboardAwareScrollView,
   LVButton,
+  LVColors,
   LVLoadingIndicator,
   LVStyles,
   Text,
@@ -171,7 +171,6 @@ const SecondAuthScreen = (props) => {
       if (result) {
         setSessionInfo(null);
         setEmpInfo(null);
-        Util.toastMsg('정상적으로 로그아웃 되었습니다.');
       }
     });
   };
@@ -274,8 +273,7 @@ const SecondAuthScreen = (props) => {
         </KeyboardAwareScrollView>
         <View style={styles.floatingButton}>
           <TouchableOpacity onPress={logout} style={styles.menuButton}>
-            <Icon name='power-standby' color='#373747' />
-            <Text style={styles.menuText}>로그아웃</Text>
+            <Text style={styles.menuText}>취소</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -419,10 +417,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
     marginLeft: 4,
+    color: LVColors.primary,
   },
   floatingButton: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 50,
     right: 32,
   },
 });
