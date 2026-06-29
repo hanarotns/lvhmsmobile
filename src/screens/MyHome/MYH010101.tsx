@@ -723,9 +723,9 @@ const MYH010101 = ({ navigation }) => {
           <SecondAuthScreen setIsSecondAuthScreen={setIsSecondAuthScreen} />
         </SafeAreaView>
       ) : (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
           {/* 헤더 */}
-          <Layout style={styles.entire}>
+          <Layout style={styles.header}>
             <Image source={icon.ico_logo_htns} style={styles.logo} />
             <LVHeaderInfo />
             <TouchableOpacity
@@ -735,13 +735,13 @@ const MYH010101 = ({ navigation }) => {
             </TouchableOpacity>
           </Layout>
           {/* 본문 */}
-          <Layout>
+          <Layout style={{ flex: 1 }}>
             <KeyboardAwareScrollView
               contentContainerStyle={{ flexGrow: 1 }}
               keyboardShouldPersistTaps='handled'
               enableOnAndroid
               extraScrollHeight={20}
-              style={{ backgroundColor: '#F0F2F6' }}
+              style={{ backgroundColor: '#F0F2F6', flex: 1 }}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}
@@ -861,7 +861,6 @@ const MYH010101 = ({ navigation }) => {
                     )}
                   </>
                 )}
-              <View style={{ height: 100 }} />
             </KeyboardAwareScrollView>
           </Layout>
           {loading && <LVLoadingIndicator />}
@@ -990,7 +989,7 @@ const ContentsOfNotIn30m = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-  entire: {
+  header: {
     ...LVStyles.row,
     marginVertical: 8,
     backgroundColor: 'transparent',
