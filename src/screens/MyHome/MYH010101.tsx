@@ -581,9 +581,7 @@ const MYH010101 = ({ navigation }) => {
             title={'휴가'}
             img={icon.img_annualleave}
             imgStyle={{ width: 30, height: 86 }}
-            onPress={() => {
-              movingScreen.navigate('LEA010101');
-            }}
+            onPress={() => movingScreen.navigate('LEA010101')}
             touchable
           />
           <View style={{ height: 12 }} />
@@ -591,9 +589,7 @@ const MYH010101 = ({ navigation }) => {
             title={'시간외'}
             img={icon.img_overtime}
             imgStyle={{ width: 29, height: 40 }}
-            onPress={() => {
-              movingScreen.navigate('OVT010101');
-            }}
+            onPress={() => movingScreen.navigate('OVT010101')}
             touchable
           />
           <View style={{ height: 12 }} />
@@ -606,9 +602,7 @@ const MYH010101 = ({ navigation }) => {
             }}
             img={icon.img_approval}
             imgStyle={{ width: 96, height: 52 }}
-            onPress={() => {
-              movingScreen.navigate('APR010101');
-            }}
+            onPress={() => movingScreen.navigate('APR010101')}
             touchable
           />
         </View>
@@ -616,9 +610,7 @@ const MYH010101 = ({ navigation }) => {
           <Card
             touchable={false}
             title={'캘린더'}
-            onClick={() => {
-              movingScreen.navigate('WLO010101');
-            }}
+            onClick={() => movingScreen.navigate('WLO010101')}
             cardStyle={{ minHeight: 272, backgroundColor: '#AADDFF' }}
             moreView={icon.ico_arrow_right}
           >
@@ -630,9 +622,7 @@ const MYH010101 = ({ navigation }) => {
               textStyle={styles.startBtnText}
               subTextStyle={{ color: '#1E2125' }}
               imgStyle={{ tintColor: '#27A7FF' }}
-              onPress={() => {
-                setCheckType('S');
-              }}
+              onPress={() => setCheckType('S')}
             />
             <LVButton
               title={'퇴근하기'}
@@ -641,9 +631,7 @@ const MYH010101 = ({ navigation }) => {
               textStyle={styles.endBtnText}
               buttonStyle={{ backgroundColor: '#D5ECFF', marginTop: 8 }}
               imgStyle={{ tintColor: '#003282' }}
-              onPress={() => {
-                setCheckType('E');
-              }}
+              onPress={() => setCheckType('E')}
             />
             <LVButton
               title={'외근등록'}
@@ -656,9 +644,7 @@ const MYH010101 = ({ navigation }) => {
               textStyle={styles.offsiteBtnText}
               buttonStyle={{ backgroundColor: '#F7FCFF', marginTop: 8 }}
               imgStyle={{ tintColor: '#373747' }}
-              onPress={() => {
-                setCheckType('O');
-              }}
+              onPress={() => setCheckType('O')}
             />
           </Card>
           <View style={{ height: 12 }} />
@@ -667,9 +653,7 @@ const MYH010101 = ({ navigation }) => {
             cardStyle={{ minHeight: 110, flex: 1 }}
             img={icon.img_pay}
             imgStyle={{ width: 68, height: 40 }}
-            onPress={() => {
-              movingScreen.navigate('ACC010101');
-            }}
+            onPress={() => movingScreen.navigate('ACC010101')}
             touchable
           />
         </View>
@@ -745,9 +729,7 @@ const MYH010101 = ({ navigation }) => {
             <Image source={icon.ico_logo_htns} style={styles.logo} />
             <LVHeaderInfo />
             <TouchableOpacity
-              onPress={() => {
-                movingScreen.navigate('ETC010101');
-              }}
+              onPress={() => movingScreen.navigate('ETC010101')}
             >
               <Image source={icon.ico_account} style={styles.accountIcon} />
             </TouchableOpacity>
