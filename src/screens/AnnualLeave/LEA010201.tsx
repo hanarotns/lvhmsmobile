@@ -549,7 +549,7 @@ const LEA010201 = () => {
       {isVisibleAttachModal && (
         <LVModal
           title={'첨부파일을 선택하세요.'}
-          buttonText={'선택'}
+          buttonText={'완료'}
           contents={
             <>
               <View style={LVStyles.row}>
