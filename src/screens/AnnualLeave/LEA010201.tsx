@@ -444,29 +444,26 @@ const LEA010201 = () => {
                 </View>
               }
             />
-            {/* @@ 휴가종류에 '공가'가 포함된 경우만 공가 종류 선택 기능 추가*/}
             {!Util.isEmpty(officialLeaveType) &&
-            infoList.find((e) => ['OD', 'OM', 'OA'].includes(e.HQCODE)) ? (
-              <View>
-                <LVFormOfContents
-                  title={'공가종류'}
-                  children={
-                    <View style={styles.selectBoxWrap}>
-                      <LVSelectBox
-                        onChange={(value: string) => {
-                          setSelectedOfficialLeaveType(value);
-                        }}
-                        data={officialLeaveType}
-                        displayField={'HQNAME'}
-                        valueField={'HQCODE'}
-                      />
-                    </View>
-                  }
-                />
-              </View>
-            ) : (
-              <></>
-            )}
+              infoList?.find((e) => ['OD', 'OM', 'OA'].includes(e.HQCODE)) && (
+                <View>
+                  <LVFormOfContents
+                    title={'공가종류'}
+                    children={
+                      <View style={styles.selectBoxWrap}>
+                        <LVSelectBox
+                          onChange={(value: string) => {
+                            setSelectedOfficialLeaveType(value);
+                          }}
+                          data={officialLeaveType}
+                          displayField={'HQNAME'}
+                          valueField={'HQCODE'}
+                        />
+                      </View>
+                    }
+                  />
+                </View>
+              )}
             <LVFormOfContents
               title={'첨부파일'}
               children={
