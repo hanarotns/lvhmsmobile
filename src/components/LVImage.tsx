@@ -9,6 +9,7 @@ import React, { useEffect } from 'react';
 import env from '@/src/lib/env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';
+import Icon from './Icon';
 import LVButton from './LVButton';
 
 const envConfig = env();
@@ -91,15 +92,22 @@ const LVImage = (props: any) => {
           contentFit='contain'
         />
       ) : (
-        <View
-          style={{
-            height,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Text>{fileName}</Text>
-          <LVButton title='파일 다운로드' onPress={downloadFile} />
+        <View style={{ ...styles.docuView, height }}>
+          <View style={styles.docuContentsView}>
+            <Icon name='file-document-outline' color='lightgray' size={192} />
+            <Text style={styles.fileText}>{fileName}</Text>
+            <View style={{ height: 16 }} />
+            <Text style={styles.guideText}>
+              ※ 이 문서는 다운로드하여 확인할 수 있습니다.
+            </Text>
+          </View>
+          <View style={styles.buttonView}>
+            <LVButton
+              title='다운로드하여 확인'
+              onPress={downloadFile}
+              buttonStyle={{ flex: 1 }}
+            />
+          </View>
         </View>
       )}
 
@@ -113,5 +121,26 @@ const styles = StyleSheet.create({
   imageView: {
     borderRadius: 4,
     width: '100%',
+  },
+  docuView: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  docuContentsView: {
+    alignItems: 'center',
+  },
+  fileText: {
+    fontSize: 20,
+  },
+  guideText: {
+    fontSize: 16,
+    color: '#FF676A',
+  },
+  buttonView: {
+    flexDirection: 'row',
+    padding: 16,
+    width: '100%',
+    bottom: 0,
+    gap: 8,
   },
 });
