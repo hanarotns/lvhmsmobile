@@ -614,9 +614,7 @@ const ContentsOfAttach = ({ fileList }: any) => {
 
   return (
     <View>
-      <LVImage
-        path={`${currentFile.COMPANY_CODE}/${currentFile.S_FUNC_CODE}/${currentFile.FILE_MGT_CODE}`}
-      />
+      <LVImage currentFile={currentFile} />
       <View style={styles.moving}>
         <TouchableOpacity onPress={prev} disabled={currentIndex === 0}>
           <Icon name='chevron-left' color='#727283' size={28} />
