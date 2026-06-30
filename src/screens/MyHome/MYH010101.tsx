@@ -85,6 +85,10 @@ const MYH010101 = ({ navigation }) => {
 
   useEffect(() => {
     if (isSecondAuthScreen || !isFocused || isVisibleModal) return;
+    // @@ mount일 때 제외 (중복 동작하지 않도록)
+    if (!Util.isEmpty(empInfo)) {
+      getLatLon();
+    }
     const interval = setInterval(async () => {
       await getLatLon();
     }, 30000);
