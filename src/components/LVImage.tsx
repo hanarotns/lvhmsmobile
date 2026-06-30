@@ -1,6 +1,6 @@
 import * as icon from '@/src/assets/images';
 import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 import { Image } from 'expo-image';
 
@@ -21,6 +21,8 @@ const LVImage = (props: any) => {
     func();
   }, []);
 
+  const height = Dimensions.get('window').height * 0.7;
+
   const func = async () => {
     fetchURL = await AsyncStorage.getItem('url');
     return fetchURL;
@@ -30,7 +32,7 @@ const LVImage = (props: any) => {
 
   return (
     <Image
-      style={{ ...imgStyle }}
+      style={{ ...styles.imageView, height, ...imgStyle }}
       source={
         tempURL
           ? {
@@ -43,9 +45,15 @@ const LVImage = (props: any) => {
             }
           : icon.ico_profile
       }
+      contentFit='contain'
     />
   );
 };
 export default LVImage;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  imageView: {
+    borderRadius: 4,
+    width: '100%',
+  },
+});

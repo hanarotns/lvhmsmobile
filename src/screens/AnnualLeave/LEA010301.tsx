@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -558,6 +558,7 @@ const LEA010301 = () => {
       )}
       {isVisibleAttachModal && (
         <LVModal
+          category='entire'
           title={'첨부파일 미리보기'}
           isUseSaveButton={false}
           contents={<ContentsOfAttach fileList={fileList} />}
@@ -591,20 +592,45 @@ const ContentsOfRefusal = (props: any) => {
     </View>
   );
 };
-const ContentsOfAttach = (props: any) => {
-  const { fileList } = props;
-  const height = Dimensions.get('window').height * 0.7;
+
+const ContentsOfAttach = ({ fileList }: any) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const currentFile = fileList?.[currentIndex];
+
+  const prev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const next = () => {
+    if (currentIndex < fileList.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  if (!currentFile) return null;
+
   return (
     <View>
-      {fileList?.map((e, i) => (
-        <LVImage
-          path={`${e?.COMPANY_CODE}/${e?.S_FUNC_CODE}/${e?.FILE_MGT_CODE}`}
-          imgStyle={{
-            borderRadius: 8,
-            height: height,
-          }}
-        />
-      ))}
+      <LVImage
+        path={`${currentFile.COMPANY_CODE}/${currentFile.S_FUNC_CODE}/${currentFile.FILE_MGT_CODE}`}
+      />
+      <View style={styles.moving}>
+        <TouchableOpacity onPress={prev} disabled={currentIndex === 0}>
+          <Icon name='chevron-left' color='#727283' size={28} />
+        </TouchableOpacity>
+        <Text>
+          {currentIndex + 1} / {fileList.length}
+        </Text>
+        <TouchableOpacity
+          onPress={next}
+          disabled={currentIndex === fileList.length - 1}
+        >
+          <Icon name='chevron-right' color='#373747' size={28} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -766,5 +792,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  moving: {
+    ...LVStyles.row,
+    marginTop: 12,
+    paddingHorizontal: 20,
   },
 });
