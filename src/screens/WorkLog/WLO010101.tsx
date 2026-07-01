@@ -223,21 +223,21 @@ const Form = (props: any) => {
             backgroundColor: bg2,
           }}
         >
-          <View style={{ flex: 0.2 }}>
+          <View style={{ width: '20%' }}>
             <Text style={styles.label}>시간</Text>
             <Text style={styles.value}>
               {Util.convertDateTime('', elem?.WA_LOG_TIME).trim() || '-'}
             </Text>
           </View>
-          <View style={{ flex: 0.2 }}>
+          <View style={{ width: '20%' }}>
             <Text style={styles.label}>구분</Text>
             <Text style={styles.value}>{elem?.WA_TYPE_NM || '-'}</Text>
           </View>
-          <View style={{ flex: 0.2 }}>
+          <View style={{ width: '20%' }}>
             <Text style={styles.label}>반경여부</Text>
             <Text style={styles.value}>{elem?.WAT_STATUS_NM || '-'}</Text>
           </View>
-          <View style={{ flex: 0.4 }}>
+          <View style={{ width: '40%' }}>
             <Text style={styles.label}>지점명</Text>
             <Text style={styles.value} numberOfLines={1}>
               {elem?.WAT_STATUS === 'Y' ? elem?.WAT_AREA_NAME : '-'}
@@ -253,17 +253,17 @@ const Form = (props: any) => {
           }}
         >
           <View style={styles.offsiteCardLine1}>
-            <View style={{ flex: 0.2 }}>
+            <View style={{ width: '20%' }}>
               <Text style={styles.label}>시간</Text>
               <Text style={styles.value}>
                 {Util.convertDateTime('', elem?.WA_LOG_TIME).trim() || '-'}
               </Text>
             </View>
-            <View style={{ flex: 0.2 }}>
+            <View style={{ width: '20%' }}>
               <Text style={styles.label}>구분</Text>
               <Text style={styles.value}>{elem?.WA_TYPE_NM || '-'}</Text>
             </View>
-            <View style={{ flex: 0.6 }}>
+            <View style={{ width: '60%' }}>
               <Text style={styles.label}>지역</Text>
               <Text style={styles.value} numberOfLines={1}>
                 {elem?.WAT_AREA_NAME || '-'}
@@ -271,7 +271,7 @@ const Form = (props: any) => {
             </View>
           </View>
           <View style={styles.offsiteCardLine2}>
-            <View style={{ flex: 1 }}>
+            <View style={{ width: '100%' }}>
               <Text style={styles.label}>업체명 / 내용</Text>
               <Text style={styles.value} numberOfLines={1}>
                 {elem?.OOO_REASON || '-'}
