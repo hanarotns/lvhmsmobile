@@ -316,8 +316,10 @@ const DocuPreviewContent = (props: any) => {
     <>
       <View style={LVStyles.row}>
         <Text style={styles.mainText}>
-          {Util.convertDateTime(elem?.RQ_DATE)} (
-          {dayjs(elem?.RQ_DATE).format('ddd')}) | {elem?.RQ_TYPE_NAME}
+          {elem?.EXEC_DATE
+            ? `${Util.convertDateTime(elem?.EXEC_DATE)} (${dayjs(elem?.EXEC_DATE).format('ddd')})`
+            : `${Util.convertDateTime(elem?.RQ_DATE)} (${dayjs(elem?.RQ_DATE).format('ddd')})`}
+          {` | ${elem?.RQ_TYPE_NAME}`}
         </Text>
         <Text style={styles.docuPreviewText}>{elem?.JOB_NO}</Text>
       </View>
