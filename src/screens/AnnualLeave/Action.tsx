@@ -1,4 +1,5 @@
 import { Fetch, Util } from '@/src/lib';
+import { Alert } from 'react-native';
 
 const getInfoM = async (body: object) => {
   const result = await Fetch.request('PORU010302SVC', 'getInfoM', {
@@ -108,6 +109,7 @@ const saveApproval = async (body1: object, body2: object, body3: object) => {
     }),
   });
   if (result.TYPE === -1) {
+    Alert.alert('알림', result.MSG);
     Util.toastMsg(result.MSG, 'error');
   }
   return result;
@@ -275,7 +277,7 @@ const saveApprovalOfChange = async (
     }),
   });
   if (result.TYPE === -1) {
-    Util.toastMsg(result.MSG, 'error');
+    Alert.alert('알림', result.MSG);
   }
   return result;
 };
@@ -368,7 +370,7 @@ const saveApprovalOfSchedule = async (
     }),
   });
   if (result.TYPE === -1) {
-    Util.toastMsg(result.MSG, 'error');
+    Alert.alert('알림', result.MSG);
   }
   return result;
 };

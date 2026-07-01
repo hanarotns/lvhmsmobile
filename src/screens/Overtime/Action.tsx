@@ -1,4 +1,5 @@
 import { Fetch, Util } from '@/src/lib';
+import { Alert } from 'react-native';
 
 const getInfoM = async (body: object) => {
   const result = await Fetch.request('PORU010301SVC', 'getInfoM', {
@@ -160,7 +161,7 @@ const saveApproval = async (type: string, body1: object, body2: object) => {
       }),
     });
     if (result.TYPE === -1) {
-      Util.toastMsg(result.MSG, 'error');
+      Alert.alert('알림', result.MSG);
     }
     return result;
   } else if (type === 'nc') {
@@ -171,7 +172,7 @@ const saveApproval = async (type: string, body1: object, body2: object) => {
       }),
     });
     if (result.TYPE === -1) {
-      Util.toastMsg(result.MSG, 'error');
+      Alert.alert('알림', result.MSG);
     }
     return result;
   }
