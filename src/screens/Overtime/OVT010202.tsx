@@ -109,47 +109,29 @@ const OVT010202 = () => {
 
   /* 시간 체크 */
   const changeFrom = async (value) => {
-    const appStart = dayjs(
-      dt?.ND_DATE + dt?.START_TIME,
-      'YYYYMMDDHHmm',
-    ).toDate();
-
-    if (appStart > value) {
-      Util.toastMsg('변경전 시간보다 빠를 수 없습니다.', 'info');
-    } else {
-      setFromDateTime(value);
-      const payload = {
-        ...dt,
-        ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
-        START_TIME: dayjs(fromDateTime).format('HHmm'),
-        CLOSING_DATE: dayjs(toDateTime).format('YYYYMMDD'),
-        CLOSING_TIME: dayjs(toDateTime).format('HHmm'),
-      };
-      const hours2 = await Action.calTime(payload);
-      setOtHours(hours2);
-    }
+    setFromDateTime(value);
+    const payload = {
+      ...dt,
+      ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
+      START_TIME: dayjs(fromDateTime).format('HHmm'),
+      CLOSING_DATE: dayjs(toDateTime).format('YYYYMMDD'),
+      CLOSING_TIME: dayjs(toDateTime).format('HHmm'),
+    };
+    const hours2 = await Action.calTime(payload);
+    setOtHours(hours2);
   };
 
   const changeTo = async (value) => {
-    const appEnd = dayjs(
-      dt?.CLOSING_DATE + dt?.CLOSING_TIME,
-      'YYYYMMDDHHmm',
-    ).toDate();
-
-    if (appEnd < value) {
-      Util.toastMsg('변경전 시간보다 늦을 수 없습니다.', 'info');
-    } else {
-      setToDateTime(value);
-      const payload = {
-        ...dt,
-        ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
-        START_TIME: dayjs(fromDateTime).format('HHmm'),
-        CLOSING_DATE: dayjs(toDateTime).format('YYYYMMDD'),
-        CLOSING_TIME: dayjs(toDateTime).format('HHmm'),
-      };
-      const hours2 = await Action.calTime(payload);
-      setOtHours(hours2);
-    }
+    setToDateTime(value);
+    const payload = {
+      ...dt,
+      ND_DATE: dayjs(fromDateTime).format('YYYYMMDD'),
+      START_TIME: dayjs(fromDateTime).format('HHmm'),
+      CLOSING_DATE: dayjs(toDateTime).format('YYYYMMDD'),
+      CLOSING_TIME: dayjs(toDateTime).format('HHmm'),
+    };
+    const hours2 = await Action.calTime(payload);
+    setOtHours(hours2);
   };
   /**
    * 비즈니스 로직 확인용
