@@ -172,6 +172,29 @@ const OVT010201 = () => {
     setToDateTime(value);
   };
 
+  const handleSelected = async (p) => {
+    setSelectedType(p);
+    // 연장 구분에 따른 시작 종료 일시 초기값 설정하기
+    if (regularEmpInfo?.NORMAL_ON_TIME && regularEmpInfo?.NORMAL_OFF_TIME) {
+      const onTime = dayjs(
+        regularEmpInfo?.NORMAL_ON_TIME,
+        'YYYYMMDDHHmm',
+      ).toDate();
+      const offTime = dayjs(
+        regularEmpInfo?.NORMAL_OFF_TIME,
+        'YYYYMMDDHHmm',
+      ).toDate();
+      if (p?.HQCODE === 'XX') {
+        const onTimeBefore30min = new Date(onTime.getTime() - 30 * 60 * 1000);
+        setFromDateTime(onTimeBefore30min);
+        setToDateTime(onTime);
+      } else {
+        setFromDateTime(onTime);
+        setToDateTime(offTime);
+      }
+    }
+  };
+
   const handleRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -203,11 +226,7 @@ const OVT010201 = () => {
               children={
                 <View style={styles.typeListView}>
                   {overtimeTypeList?.map((e: any) => (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setSelectedType(e);
-                      }}
-                    >
+                    <TouchableOpacity onPress={() => handleSelected(e)}>
                       <LVChip
                         category='type'
                         content={e.HQNAME}
