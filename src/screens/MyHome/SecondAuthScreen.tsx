@@ -77,12 +77,11 @@ const SecondAuthScreen = (props) => {
       const deviceId = await AsyncStorage.getItem('deviceId');
       const phone = sessionInfo?.USER_CP;
       const onlyNumber = phone.replace(/\D/g, '');
+      if (Util.isEmpty(userInfo?.USER_CP)) {
+        Alert.alert('알림', '휴대폰 번호를 입력하세요.');
+        return;
+      }
       if (onlyNumber !== userInfo?.USER_CP) {
-        console.log(
-          '@@ sessionInfo?.USER_CP',
-          sessionInfo?.USER_CP,
-          userInfo?.USER_CP,
-        );
         Alert.alert(
           '알림',
           '계정에 등록된 휴대폰번호와 상이합니다.\n관리자에게 문의하세요.',
@@ -197,7 +196,7 @@ const SecondAuthScreen = (props) => {
               </View>
               <View style={[LVStyles.row, styles.inlineRow]}>
                 <TextField
-                  // disabled={isPhoneAuthRequested}
+                  disabled={isSmsSent}
                   keyboardType='numeric'
                   placeholder='ex. 01012345678'
                   maxLength={11}
@@ -210,8 +209,6 @@ const SecondAuthScreen = (props) => {
                       USER_CP: value,
                     }));
                   }}
-                  // onBlur={() => handleBlurField('phoneNumber')}
-                  // value={memberInfo.phoneNumber}
                 />
                 <LVButton
                   title={sending ? '발송 중...' : '인증요청'}
@@ -224,52 +221,39 @@ const SecondAuthScreen = (props) => {
               </View>
             </View>
 
-            {!isSmsSent ? (
+            {isSmsSent && (
               <>
-                {/* <View style={styles.guideBox}>
-                <Text style={styles.guideTitle}>
-                  위 휴대폰 번호로 인증번호를 발송할까요?
-                </Text>
-                <Text style={styles.guideText}>
-                  발송된 인증번호를 입력하면 로그인이 완료됩니다.
-                </Text>
-              </View> */}
-              </>
-            ) : (
-              <View style={styles.guideBox}>
-                <Text style={styles.guideTitle}>
-                  인증번호가 발송되었습니다.
-                </Text>
-                <Text style={styles.guideText}>
-                  문자로 받은 인증번호 6자리를 입력해주세요.
-                </Text>
-                <Text style={styles.sendTimeText}>
-                  발송시간 : {sendDateTime}
-                </Text>
+                <View style={styles.guideBox}>
+                  <Text style={styles.guideTitle}>
+                    인증번호가 발송되었습니다.
+                  </Text>
+                  <Text style={styles.guideText}>
+                    문자로 받은 인증번호 6자리를 입력해주세요.
+                  </Text>
+                  <Text style={styles.sendTimeText}>
+                    발송시간 : {sendDateTime}
+                  </Text>
 
-                <Input
-                  value={authNo}
-                  placeholder='인증번호 6자리 입력'
-                  keyboardType='number-pad'
-                  maxLength={6}
-                  onChangeText={(text) => {
-                    const onlyNumber = text.replace(/[^0-9]/g, '');
-                    setAuthNo(onlyNumber);
-                  }}
-                  style={styles.input}
+                  <Input
+                    value={authNo}
+                    placeholder='인증번호 6자리 입력'
+                    keyboardType='number-pad'
+                    maxLength={6}
+                    onChangeText={(text) => {
+                      const onlyNumber = text.replace(/[^0-9]/g, '');
+                      setAuthNo(onlyNumber);
+                    }}
+                    style={styles.input}
+                  />
+                </View>
+                <LVButton
+                  title={confirming ? '확인 중...' : '인증 확인'}
+                  onPress={onPressConfirmAuthNo}
+                  buttonStyle={styles.mainButton}
                 />
-              </View>
+              </>
             )}
           </View>
-          {isSmsSent && (
-            <>
-              <LVButton
-                title={confirming ? '확인 중...' : '인증 확인'}
-                onPress={onPressConfirmAuthNo}
-                buttonStyle={styles.mainButton}
-              />
-            </>
-          )}
         </KeyboardAwareScrollView>
         <View style={styles.floatingButton}>
           <TouchableOpacity onPress={logout} style={styles.menuButton}>
