@@ -867,9 +867,9 @@ const MYH010101 = ({ navigation }) => {
                 )}
             </KeyboardAwareScrollView>
           </Layout>
-          {loading && <LVLoadingIndicator />}
         </SafeAreaView>
       )}
+      {loading && <LVLoadingIndicator />}
     </>
   );
 };
