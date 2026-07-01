@@ -660,7 +660,7 @@ const customVaType = {
     HQNAME_02: '보건',
     HQNAME_03: '보건',
     DAY_01: 1,
-    DAY_02: 1,
+    DAY_02: 0,
   },
   VE: {
     HQNAME_01: '',
