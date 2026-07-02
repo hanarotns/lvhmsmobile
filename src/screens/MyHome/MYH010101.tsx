@@ -143,8 +143,8 @@ const MYH010101 = ({ navigation }) => {
       setIsSecondAuthScreen(true);
     } else {
       setCoverLoading(true);
-      await getLaborInfo();
       await getInfoM();
+      await getLaborInfo();
       await checkAboutLocation();
       await getLatLon();
       setIsSecondAuthScreen(false);
@@ -720,15 +720,19 @@ const MYH010101 = ({ navigation }) => {
     );
   };
 
-  return coverLoading ? (
-    <LVLoadingIndicator />
-  ) : (
-    <>
-      {isSecondAuthScreen ? (
-        <SafeAreaView edges={['top', 'bottom']} style={LVStyles.safeAreaView}>
-          <SecondAuthScreen setIsSecondAuthScreen={setIsSecondAuthScreen} />
-        </SafeAreaView>
-      ) : (
+  if (coverLoading) {
+    return <LVLoadingIndicator />;
+  }
+  if (isSecondAuthScreen) {
+    return (
+      <SafeAreaView edges={['top', 'bottom']} style={LVStyles.safeAreaView}>
+        <SecondAuthScreen setIsSecondAuthScreen={setIsSecondAuthScreen} />
+      </SafeAreaView>
+    );
+  }
+  if (!isSecondAuthScreen && !Util.isEmpty(todayInfo)) {
+    return (
+      <>
         <SafeAreaView style={{ flex: 1 }}>
           {/* 헤더 */}
           <Layout style={styles.header}>
@@ -806,7 +810,7 @@ const MYH010101 = ({ navigation }) => {
                     !Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE))) && (
                   <>
                     <View style={styles.layout}>
-                      <LayoutOfGreeting />
+                      {LayoutOfGreeting()}
                       <LayoutOfTracker />
                       <LayoutOfCards />
                     </View>
@@ -870,10 +874,10 @@ const MYH010101 = ({ navigation }) => {
             </KeyboardAwareScrollView>
           </Layout>
         </SafeAreaView>
-      )}
-      {loading && <LVLoadingIndicator />}
-    </>
-  );
+        {loading && <LVLoadingIndicator />}
+      </>
+    );
+  }
 };
 export default MYH010101;
 
