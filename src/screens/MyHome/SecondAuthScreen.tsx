@@ -9,6 +9,7 @@ import {
   KeyboardAwareScrollView,
   LVButton,
   LVColors,
+  LVHeaderInfo,
   LVLoadingIndicator,
   LVStyles,
   Text,
@@ -186,6 +187,9 @@ const SecondAuthScreen = (props) => {
           extraScrollHeight={180}
         >
           <View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <LVHeaderInfo />
+            </View>
             <Text style={styles.title}>2차 인증</Text>
             <Text style={styles.desc}>
               {`로그인 보호를 위해\n등록된 휴대폰 번호로 본인 확인을 진행합니다.`}
