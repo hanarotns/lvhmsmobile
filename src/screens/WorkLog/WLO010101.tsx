@@ -49,6 +49,10 @@ const WLO010101 = () => {
     let tempList;
     if (selectedCheckType === 'A') {
       tempList = list?.filter((item) => item.WA_LOG_DATE === compareDate);
+    } else if (selectedCheckType === 'ETC') {
+      tempList = list
+        .filter((item) => item.WA_LOG_DATE === compareDate)
+        .filter((item) => !['S', 'E', 'O'].includes(item.WA_TYPE));
     } else {
       tempList = list
         .filter((item) => item.WA_LOG_DATE === compareDate)
@@ -72,7 +76,7 @@ const WLO010101 = () => {
       (a, b) => sortedArr.indexOf(a.HQCODE) - sortedArr.indexOf(b.HQCODE),
     );
 
-    setCheckFilter([allFilter, ...sorted]);
+    setCheckFilter([allFilter, ...sorted, etcFilter]);
     // 캘린더 가져오기
     const payload = {
       YEAR_MONTH: yearMonthParam,
@@ -109,6 +113,10 @@ const WLO010101 = () => {
     let tempList;
     if (selectedCheckType === 'A') {
       tempList = res?.DT.filter((item) => item.WA_LOG_DATE === compareDate);
+    } else if (selectedCheckType === 'ETC') {
+      tempList = list
+        .filter((item) => item.WA_LOG_DATE === compareDate)
+        .filter((item) => !['S', 'E', 'O'].includes(item.WA_TYPE));
     } else {
       tempList = res?.DT.filter(
         (item) => item.WA_LOG_DATE === compareDate,
@@ -207,15 +215,18 @@ const Form = (props: any) => {
   } else if (elem.WA_TYPE === 'E') {
     bg1 = '#003282';
     bg2 = '#EBEFF5';
-  } else {
+  } else if (elem.WA_TYPE === 'O') {
     bg1 = '#26B6A4';
     bg2 = '#EEF9F8';
+  } else {
+    bg1 = '#FF5F25';
+    bg2 = '#FFF2EE';
   }
 
   return (
     <View style={styles.entireCardView}>
       <View style={{ ...styles.cardSignature, backgroundColor: bg1 }} />
-      {elem?.WA_TYPE !== 'O' ? (
+      {['S', 'E'].includes(elem?.WA_TYPE) && (
         // 출퇴근 카드 폼
         <View
           style={{
@@ -244,7 +255,8 @@ const Form = (props: any) => {
             </Text>
           </View>
         </View>
-      ) : (
+      )}
+      {['O'].includes(elem?.WA_TYPE) && (
         // 외근 카드 폼
         <View
           style={{
@@ -278,6 +290,17 @@ const Form = (props: any) => {
               </Text>
             </View>
           </View>
+        </View>
+      )}
+      {!['S', 'E', 'O'].includes(elem?.WA_TYPE) && (
+        // 그 외
+        <View
+          style={{
+            ...styles.generalCardForm,
+            backgroundColor: bg2,
+          }}
+        >
+          <Text style={styles.value}>{elem?.WA_TYPE_NM || '-'}</Text>
         </View>
       )}
     </View>
@@ -316,6 +339,11 @@ const Filter = (props: any) => {
 const allFilter = {
   HQCODE: 'A',
   HQNAME: '전체',
+};
+
+const etcFilter = {
+  HQCODE: 'ETC',
+  HQNAME: '기타',
 };
 
 const styles = StyleSheet.create({
