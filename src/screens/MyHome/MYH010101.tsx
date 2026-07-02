@@ -246,9 +246,11 @@ const MYH010101 = ({ navigation }) => {
    * 사원정보 조회
    */
   const getEmpInfoM = async () => {
+    const deviceInfo = await AsyncStorage.getItem('deviceInfo');
     const payload = {
       COMPANY_CODE: sessionInfo?.COMPANY_CODE,
       EMP_ID: sessionInfo?.EMP_ID,
+      DEVICE_INFO: deviceInfo,
     };
     const result = await Action.getEmpInfoM(payload);
     setEmpInfo(result);
