@@ -11,6 +11,7 @@ import {
   LVColors,
   LVHeaderInfo,
   LVLoadingIndicator,
+  LVModal,
   LVStyles,
   Text,
   TextField,
@@ -40,26 +41,26 @@ const SecondAuthScreen = (props) => {
     USER_NAME_LOC: '',
     USER_CP: '',
   });
+  const [phoneNo, setPhoneNo] = useState('');
   const [authNo, setAuthNo] = useState('');
   const [isSmsSent, setIsSmsSent] = useState(false);
   const [sendDateTime, setSendDateTime] = useState('');
   const [sending, setSending] = useState(false);
   const [confirming, setConfirming] = useState(false);
 
+  const [isModal, setIsModal] = useState(false);
+
   useEffect(() => {
     if (isFocused) {
       mount();
     }
   }, [isFocused]);
+
   const mount = async () => {
     try {
       setLoading(true);
       if (!sessionInfo?.USER_CP) {
-        Alert.alert(
-          '알림',
-          '등록된 휴대폰 번호가 없습니다.\n관리자에게 문의하세요.',
-        );
-        return;
+        setIsModal(true);
       }
       setUserInfo({
         USER_ID: sessionInfo?.USER_ID || '',
@@ -73,10 +74,24 @@ const SecondAuthScreen = (props) => {
     }
   };
 
+  const handleSavePhoneNo = async () => {
+    console.log('@@ handleSvafdsajk adfs');
+    const payload = {
+      USER_CP: phoneNo,
+    };
+    const res = await Action.saveUserCp(payload);
+    if (res.TYPE === 1) {
+      Alert.alert('알림', '정상정으로 저장되었습니다.');
+      setIsModal(false);
+    } else {
+      Alert.alert('알림', res.MSG);
+    }
+  };
+
   const onPressSendAuthNo = async () => {
     try {
       const deviceId = await AsyncStorage.getItem('deviceId');
-      const phone = sessionInfo?.USER_CP;
+      const phone = sessionInfo?.USER_CP || phoneNo;
       const onlyNumber = phone.replace(/\D/g, '');
       if (Util.isEmpty(userInfo?.USER_CP)) {
         Alert.alert('알림', '휴대폰 번호를 입력하세요.');
@@ -103,10 +118,10 @@ const SecondAuthScreen = (props) => {
 
       await new Promise((resolve) => setTimeout(resolve, 700));
 
-      setIsSmsSent(true);
-      setSendDateTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
-      setAuthNo('');
       if (res?.TYPE === 1) {
+        setIsSmsSent(true);
+        setSendDateTime(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+        setAuthNo('');
         Alert.alert('알림', '인증번호를 발송했습니다.');
       }
     } catch (e) {
@@ -265,6 +280,36 @@ const SecondAuthScreen = (props) => {
           </TouchableOpacity>
         </View>
       </View>
+      {isModal && (
+        <LVModal
+          title={'알림'}
+          isCancelDisabled={true}
+          isUseSaveButton={false}
+          contents={
+            <View style={{ gap: 16 }}>
+              <Text style={styles.modalText}>휴대전화번호를 등록하세요.</Text>
+              <TextField
+                keyboardType='numeric'
+                placeholder='ex. 01012345678'
+                maxLength={11}
+                placeholderTextColor='lightgray'
+                style={[styles.textFieldSt, styles.inlineInput]}
+                autoCapitalize='none'
+                onChangeValue={(value: string) => {
+                  setPhoneNo(value);
+                }}
+              />
+              <LVButton title='등록' onPress={handleSavePhoneNo} />
+              <View style={styles.modalCancelButton}>
+                <TouchableOpacity onPress={logout} style={styles.menuButton}>
+                  <Text style={styles.menuText}>취소</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          }
+          onVisible={setIsModal}
+        />
+      )}
       {(loading || sending || confirming) && <LVLoadingIndicator />}
     </View>
   );
@@ -411,5 +456,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 50,
     right: 32,
+  },
+  modalText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#373747',
+  },
+  modalCancelButton: {
+    alignItems: 'flex-end',
+    paddingRight: 16,
   },
 });
