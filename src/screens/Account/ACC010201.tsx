@@ -99,29 +99,37 @@ const ACC010201 = () => {
 
         {isOpen && (
           <View style={styles.salaryAccordionInside}>
-            {data1?.map((e) => (
-              <FormOfContents
-                key={e.value}
-                label={e.label}
-                value={salary?.[e?.value]}
-                unit={e?.unit}
-                hideYn={e?.hideYn}
-              />
-            ))}
+            {data1?.map((e) => {
+              if (salary?.[e?.value]) {
+                return (
+                  <FormOfContents
+                    key={e.value}
+                    label={e.label}
+                    value={salary?.[e?.value]}
+                    unit={e?.unit}
+                    hideYn={e?.hideYn}
+                  />
+                );
+              }
+            })}
             {data2 ? (
               <>
                 <Divider
                   style={{ marginVertical: 8, backgroundColor: 'lightgray' }}
                 />
-                {data2?.map((e: object) => (
-                  <FormOfContents
-                    key={e?.value}
-                    label={e?.label}
-                    value={salary?.[e?.value]}
-                    unit={e?.unit}
-                    subContent={e?.subContent}
-                  />
-                ))}
+                {data2?.map((e: object) => {
+                  if (salary?.[e?.value]) {
+                    return (
+                      <FormOfContents
+                        key={e?.value}
+                        label={e?.label}
+                        value={salary?.[e?.value]}
+                        unit={e?.unit}
+                        subContent={e?.subContent}
+                      />
+                    );
+                  }
+                })}
               </>
             ) : (
               <></>
