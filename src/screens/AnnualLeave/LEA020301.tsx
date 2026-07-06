@@ -206,13 +206,6 @@ const LEA020301 = () => {
     return value;
   };
 
-  const handleAgain = async () => {
-    const data = { ...route?.params, ...dt };
-    movingScreen.navigate('LEA010202', data);
-    // @@ 잘못사용하는 건가...?
-    // movingScreen.dispatch(StackActions.replace('LEA010201'), data);
-  };
-
   // 결재자
   const handleRecallForApprover = async () => {
     const payload1 = {
@@ -466,18 +459,6 @@ const LEA020301 = () => {
               )}
             </View>
           )}
-        {dt?.EMP_ID && dt?.EMP_ID === empInfo?.EMP_ID && (
-          // 상신자 사용, 결재완료 상태에서 변경 / 취소 가능함 추가
-          <View style={LVStyles.bottomButtonView}>
-            {dt?.AP_STATUS === 'A' && Util.isEmpty(dt?.CGRQ_JOB_NO) && (
-              <LVButton
-                title={'변경'}
-                onPress={handleAgain}
-                buttonStyle={styles.reApproveButton}
-              />
-            )}
-          </View>
-        )}
         {dt?.EMP_ID &&
           dt?.AP_STATUS !== 'A' &&
           dt?.EMP_ID !== empInfo?.EMP_ID && (
