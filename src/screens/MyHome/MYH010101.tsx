@@ -426,6 +426,9 @@ const MYH010101 = ({ navigation }) => {
     setLoading(true);
     const deviceInfo = await AsyncStorage.getItem('deviceInfo');
     const deviceId = await AsyncStorage.getItem('deviceId');
+    const offsiteReason = offsiteInfo?.OOO_COMPANY
+      ? `${offsiteInfo.OOO_COMPANY} / ${offsiteInfo.OOO_REASON}`
+      : offsiteInfo?.OOO_REASON;
     const payload = {
       EMP_ID: empInfo?.EMP_ID,
       WA_LOG_DATETIME: dayjs(new Date()).format('YYYYMMDDHHmmss'),
@@ -444,10 +447,7 @@ const MYH010101 = ({ navigation }) => {
       MOBILE_INFO: deviceInfo,
       MOBILE_TOKEN: deviceId,
       // 외근인 경우만.
-      OOO_REASON:
-        checkType === 'O'
-          ? `${offsiteInfo?.OOO_COMPANY} / ${offsiteInfo?.OOO_REASON}`
-          : '',
+      OOO_REASON: checkType === 'O' ? offsiteReason : '',
     };
     const result = await WLOAction.saveM(payload);
     setLoading(false);
@@ -472,15 +472,22 @@ const MYH010101 = ({ navigation }) => {
    */
   const checkLogic = async () => {
     if (checkType === 'O') {
-      if (
-        !(
-          offsiteInfo?.WAT_AREA_NAME &&
-          offsiteInfo?.OOO_COMPANY &&
-          offsiteInfo?.OOO_REASON
-        )
-      ) {
-        Util.toastMsg('입력란을 모두 작성하세요.', 'info');
-        return false;
+      if (nearestOffice?.ET_STATUS === 'Y') {
+        if (!(offsiteInfo?.WAT_AREA_NAME && offsiteInfo?.OOO_REASON)) {
+          Util.toastMsg('입력란을 모두 작성하세요.', 'info');
+          return false;
+        }
+      } else {
+        if (
+          !(
+            offsiteInfo?.WAT_AREA_NAME &&
+            offsiteInfo?.OOO_COMPANY &&
+            offsiteInfo?.OOO_REASON
+          )
+        ) {
+          Util.toastMsg('입력란을 모두 작성하세요.', 'info');
+          return false;
+        }
       }
     }
     return true;
@@ -889,7 +896,7 @@ const MYH010101 = ({ navigation }) => {
 export default MYH010101;
 
 const ContentsOfOffsite = (props: any) => {
-  const { offsiteInfo, setOffsiteInfo } = props;
+  const { nearestOffice, offsiteInfo, setOffsiteInfo } = props;
   return (
     <View>
       {Util.isEmpty(offsiteInfo?.WAT_AREA_NAME) ? (
@@ -909,20 +916,21 @@ const ContentsOfOffsite = (props: any) => {
       ) : (
         <Input value={offsiteInfo?.WAT_AREA_NAME} disabled size='large' />
       )}
-      {/* @@ 외근업체 컬럼 없음 */}
-      <Input
-        placeholder='외근 업체명을 입력하세요.'
-        value={offsiteInfo?.OOO_COMPANY}
-        onChangeText={(p) => {
-          setOffsiteInfo({
-            ...offsiteInfo,
-            OOO_COMPANY: p,
-          });
-        }}
-        size='large'
-        style={{ backgroundColor: '#FFF', marginTop: 8 }}
-        textStyle={{ color: '#373747' }}
-      />
+      {nearestOffice?.ET_STATUS !== 'Y' && (
+        <Input
+          placeholder='외근 업체명을 입력하세요.'
+          value={offsiteInfo?.OOO_COMPANY}
+          onChangeText={(p) => {
+            setOffsiteInfo({
+              ...offsiteInfo,
+              OOO_COMPANY: p,
+            });
+          }}
+          size='large'
+          style={{ backgroundColor: '#FFF', marginTop: 8 }}
+          textStyle={{ color: '#373747' }}
+        />
+      )}
       <Input
         placeholder='외근 내용을 입력하세요.'
         value={offsiteInfo?.OOO_REASON}
