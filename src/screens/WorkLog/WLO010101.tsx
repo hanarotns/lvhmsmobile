@@ -27,102 +27,88 @@ const WLO010101 = () => {
 
   const [loading, setLoading] = useState(true);
 
+  const today = dayjs().format('YYYY-MM-DD');
+  const [selectedInfo, setSelectedInfo] = useState({ date: today });
   const [calDispList, setCalDispList] = useState({});
   const [calList, setCalList] = useState([]);
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [selectedInfo, setSelectedInfo] = useState({
-    date: dayjs().format('YYYY-MM-DD'),
-  });
   const [checkFilter, setCheckFilter] = useState([]);
-  const [selectedCheckType, setSelectedCheckType] = useState('A');
+  const [selectedCheckType, setSelectedCheckType] = useState('ALL');
 
   useEffect(() => {
-    if (isFocused) {
-      const initYearMonth = selectedInfo.date.replace(/-/g, '').substring(0, 6);
-      mount(initYearMonth);
-    }
-  }, [isFocused]);
+    mount();
+  }, []);
 
   useEffect(() => {
     const compareDate = selectedInfo.date.replace(/-/g, '');
-    let tempList;
-    if (selectedCheckType === 'A') {
-      tempList = list?.filter((item) => item.WA_LOG_DATE === compareDate);
-    } else if (selectedCheckType === 'ETC') {
-      tempList = list
-        .filter((item) => item.WA_LOG_DATE === compareDate)
-        .filter((item) => !['S', 'E', 'O'].includes(item.WA_TYPE));
-    } else {
-      tempList = list
-        .filter((item) => item.WA_LOG_DATE === compareDate)
-        .filter((item) => item.WA_TYPE === selectedCheckType);
+    let tempList = list?.filter((item) => item.WA_LOG_DATE === compareDate);
+    if (['S', 'E', 'O'].includes(selectedCheckType)) {
+      tempList = tempList?.filter((item) => item.WA_TYPE === selectedCheckType);
+    } else if (['ETC'].includes(selectedCheckType)) {
+      tempList = tempList?.filter(
+        (item) => !['S', 'E', 'O'].includes(item.WA_TYPE),
+      );
     }
     setFilteredList(tempList);
   }, [selectedInfo, selectedCheckType]);
 
-  const mount = async (yearMonthParam: string, yearMonthDayParam?: string) => {
+  const mount = async () => {
     setLoading(true);
-    let resOfCheckType = await COMAction.getCode('code', 'PC0001', {
-      GCODE: 'WA_TYPE',
-    });
 
-    const sortedArr = ['S', 'E', 'O'];
-    resOfCheckType = resOfCheckType.filter((e) => {
-      return sortedArr.includes(e?.HQCODE);
-    });
+    // 공통코드 가져오기
+    let res = await COMAction.getCode('code', 'PC0001', { GCODE: 'WA_TYPE' });
+    res = [...res, ...addCheckType];
+    res = res
+      .filter((e) => sort.includes(e?.HQCODE))
+      .sort((a, b) => sort.indexOf(a.HQCODE) - sort.indexOf(b.HQCODE));
+    setCheckFilter(res);
+    // 캘린더 정보 가져오기
+    await getInfoM();
 
-    const sorted = resOfCheckType.sort(
-      (a, b) => sortedArr.indexOf(a.HQCODE) - sortedArr.indexOf(b.HQCODE),
-    );
+    setLoading(false);
+  };
 
-    setCheckFilter([allFilter, ...sorted, etcFilter]);
-    // 캘린더 가져오기
+  const getInfoM = async (yearMonthDayParam?: string) => {
+    setLoading(true);
+
+    // 오늘자로 초기 설정.
+    let yearMonthDay = dayjs().format('YYYYMMDD');
+    let yearMonth = dayjs().format('YYYYMM');
+    if (yearMonthDayParam) {
+      yearMonthDay = yearMonthDayParam;
+      yearMonth = yearMonthDayParam.substring(0, 6);
+    }
     const payload = {
-      YEAR_MONTH: yearMonthParam,
+      YEAR_MONTH: yearMonth,
       WA_GUBUN: 'GW', // GW(일반)으로 값고정 (나머지 미사용)
     };
-    let obj = {};
-    const res = await Action.getInfoM(payload); // @@ 달력 변경 데이터 넣기
+    const res = await Action.getInfoM(payload);
     setCalList(res?.HD);
+    //  정상 및 공휴일 스타일 적용
+    let obj = {};
     res?.HD?.filter((item) => ['CHECK'].includes(item.M_TYPE))
       .map((item) => item.M_DATE)
-      .forEach(
-        (key: string, i: number) =>
-          (obj[key] = {
-            customStyles: {
-              container: { borderWidth: 1, borderColor: LVColors.primary },
-            },
-          }),
-      );
+      .forEach((key: string, i: number) => (obj[key] = circleTheme));
     res?.HD?.filter((item) => ['HOLIDAY', 'WEEKEND'].includes(item.M_TYPE))
       .map((item) => item.M_DATE)
       .forEach(
-        (key: string, i: number) =>
-          (obj[key] = {
-            ...obj[key],
-            customStyles: { text: { color: '#FF585B' } },
-          }),
+        (key: string, i: number) => (obj[key] = { ...obj[key], ...redTheme }),
       );
     setCalDispList(obj);
     // 리스트 가져오기 (선택된 날의 raw 데이터)
     setList(res?.DT);
-    const compareDate = yearMonthDayParam
-      ? yearMonthDayParam
-      : selectedInfo.date.replace(/-/g, '').replace(/-/g, '');
-    let tempList;
-    if (selectedCheckType === 'A') {
-      tempList = res?.DT.filter((item) => item.WA_LOG_DATE === compareDate);
-    } else if (selectedCheckType === 'ETC') {
-      tempList = list
-        .filter((item) => item.WA_LOG_DATE === compareDate)
-        .filter((item) => !['S', 'E', 'O'].includes(item.WA_TYPE));
-    } else {
-      tempList = res?.DT.filter(
-        (item) => item.WA_LOG_DATE === compareDate,
-      ).filter((item) => item.WA_TYPE === selectedCheckType);
+    const compareDate = yearMonthDay || selectedInfo.date.replace(/-/g, '');
+    let tempList = res?.DT.filter((item) => item.WA_LOG_DATE === compareDate);
+    if (['S', 'E', 'O'].includes(selectedCheckType)) {
+      tempList = tempList?.filter((item) => item.WA_TYPE === selectedCheckType);
+    } else if (['ETC'].includes(selectedCheckType)) {
+      tempList = tempList?.filter(
+        (item) => !['S', 'E', 'O'].includes(item.WA_TYPE),
+      );
     }
     setFilteredList(tempList);
+
     setLoading(false);
   };
 
@@ -138,12 +124,9 @@ const WLO010101 = () => {
           }}
           onMonthChange={(month: any) => {
             const date = month.dateString;
-            setSelectedInfo({
-              date,
-            });
-            const yearMonth = date.replace(/-/g, '').substring(0, 6);
-            const yearMonthDay = date.replace(/-/g, '').replace(/-/g, '');
-            mount(yearMonth, yearMonthDay);
+            setSelectedInfo({ date });
+            const yearMonthDay = date.replace(/-/g, '');
+            getInfoM(yearMonthDay);
           }}
           markingType='custom'
           markedDates={{
@@ -165,7 +148,7 @@ const WLO010101 = () => {
       </View>
       {/* (선택된 일자, 필터의) 리스트 조회 */}
       <View style={styles.workLogListSection}>
-        <View style={[LVStyles.row]}>
+        <View style={LVStyles.row}>
           <Text
             style={{
               ...styles.text,
@@ -208,7 +191,6 @@ const Form = (props: any) => {
 
   let bg1 = LVColors.primary;
   let bg2 = '#F0F6FA';
-
   if (elem.WA_TYPE === 'S') {
     bg1 = LVColors.primary;
     bg2 = '#F0F6FA';
@@ -336,14 +318,26 @@ const Filter = (props: any) => {
   );
 };
 
-const allFilter = {
-  HQCODE: 'A',
-  HQNAME: '전체',
-};
+const sort = ['ALL', 'S', 'E', 'O', 'ETC'];
 
-const etcFilter = {
-  HQCODE: 'ETC',
-  HQNAME: '기타',
+const addCheckType = [
+  {
+    HQCODE: 'ALL',
+    HQNAME: '전체',
+  },
+  {
+    HQCODE: 'ETC',
+    HQNAME: '기타',
+  },
+];
+
+const circleTheme = {
+  customStyles: {
+    container: { borderWidth: 1, borderColor: LVColors.primary },
+  },
+};
+const redTheme = {
+  customStyles: { text: { color: '#FF585B' } },
 };
 
 const styles = StyleSheet.create({
