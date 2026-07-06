@@ -29,6 +29,7 @@ const WLO010101 = () => {
 
   const today = dayjs().format('YYYY-MM-DD');
   const [selectedInfo, setSelectedInfo] = useState({ date: today });
+  const [calendarKey, setCalendarKey] = useState(0);
   const [calDispList, setCalDispList] = useState({});
   const [calList, setCalList] = useState([]);
   const [list, setList] = useState([]);
@@ -112,11 +113,20 @@ const WLO010101 = () => {
     setLoading(false);
   };
 
+  const movingToday = async () => {
+    const date = dayjs().format('YYYY-MM-DD');
+    setSelectedInfo({ date });
+    setCalendarKey((prev) => prev + 1);
+    getInfoM();
+  };
+
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       {/* 캘린더 */}
       <View style={{ marginVertical: 8 }}>
         <Calendar
+          key={calendarKey}
+          current={selectedInfo?.date}
           onDayPress={(day: any) => {
             const date = day.dateString;
             const dateInfo = calList.find((e) => date === e?.M_DATE);
@@ -179,6 +189,14 @@ const WLO010101 = () => {
           )}
           {Util.isEmpty(filteredList) && <LVNoData />}
         </ScrollView>
+      </View>
+      <View style={styles.iconWrap}>
+        <Icon
+          name='calendar-today-outline'
+          color='#FFF'
+          size={24}
+          onPress={movingToday}
+        />
       </View>
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>
@@ -399,5 +417,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginTop: 8,
+  },
+  iconWrap: {
+    position: 'absolute',
+    bottom: 32,
+    right: 16,
+    padding: 12,
+    borderRadius: 50,
+    backgroundColor: '#27A7FF',
   },
 });
