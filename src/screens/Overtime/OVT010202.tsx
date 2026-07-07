@@ -241,7 +241,7 @@ const OVT010202 = () => {
                       : route?.params?.NORMAL_OFF_TIME,
                     //@@ ND_TYPE = 'OT' 인 경우 연장시작시간 가져오는 로직으로 수정 필요!!!
                   )}
-                  {'~'}
+                  {' ~ '}
                   {Util.convertDateTime(
                     route?.params?.CLOSING_DATE,
                     route?.params?.CLOSING_TIME,
@@ -283,6 +283,17 @@ const OVT010202 = () => {
             <LVFormOfContents
               title={'내용'}
               children={<Text style={{ fontWeight: '700' }}>{dt?.REASON}</Text>}
+            />
+
+            <LVFormOfContents
+              title={'앱출퇴근'}
+              children={
+                <Text style={styles.dateTimeText}>
+                  {Util.convertDateTime(dt?.WA_START_DATE, dt?.WA_START_TIME)}
+                  {' ~ '}
+                  {Util.convertDateTime(dt?.WA_END_DATE, dt?.WA_END_TIME)}
+                </Text>
+              }
             />
             <LVFormOfContents
               title={'시작일시'}
