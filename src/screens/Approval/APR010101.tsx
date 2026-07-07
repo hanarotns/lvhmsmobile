@@ -399,17 +399,6 @@ const allFilter = {
   HQNAME: '전체',
 };
 
-let restFilter = [
-  {
-    HQCODE: ['VY', 'VM', 'VA', 'VH', 'VE'],
-    HQNAME: '연차',
-  },
-  {
-    HQCODE: ['OD', 'OM', 'OA', 'VO', 'VOM', 'VOD'], // @@ 대체휴가는 공가가 아님
-    HQNAME: '공가',
-  },
-];
-
 const styles = StyleSheet.create({
   header: {
     padding: 32,
