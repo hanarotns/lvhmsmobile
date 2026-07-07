@@ -30,9 +30,11 @@ import {
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { SlidersHorizontal } from 'lucide-react-native';
-import * as COMAction from '../Common/Action'; // API통신 (공통)
+import * as COMAction from '../Common/Action';
 import * as Action from './Action';
 dayjs.locale('ko');
+
+const PAGE_SIZE = 100;
 
 const APR010101 = () => {
   const isFocused = useIsFocused();
@@ -48,6 +50,10 @@ const APR010101 = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
   const [stats, setStats] = useState({});
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
@@ -59,6 +65,7 @@ const APR010101 = () => {
   const [toDate, setToDate] = useState<Date>(new Date());
 
   const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const isFirstRender = useRef(true);
 
   const openFilter = () => {
     console.log('ref:', bottomSheetRef.current);
@@ -87,7 +94,11 @@ const APR010101 = () => {
   );
 
   useEffect(() => {
-    // @@ 화면 진입 시, 동작 안하도록
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     getList();
   }, [selectedCards]);
 
@@ -100,7 +111,7 @@ const APR010101 = () => {
       }
     });
     setFilteredList(res);
-  }, [selectedApprType]);
+  }, [selectedApprType, list]);
 
   const mount = async () => {
     setLoading(true);
@@ -132,18 +143,30 @@ const APR010101 = () => {
     };
     const res1 = await Action.getInfoM(payload1);
 
-    await getList();
+    await getList(dateS, dateE, 1);
     setStats(res1);
     setLoading(false);
   };
 
   const handelResearch = async () => {
     setLoading(true);
-    await getList(fromDate, toDate);
+    await getList(fromDate, toDate, 1);
     setLoading(false);
   };
 
-  const getList = async (fDate?: Date, tDate?: Date) => {
+  const getList = async (fDate?: Date, tDate?: Date, nextPage = 1) => {
+    if (loadingMore) return;
+
+    const isMore = nextPage > 1;
+
+    if (isMore) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+      setPage(1);
+      setHasMore(true);
+    }
+
     let commonInfo = {
       APPR_STATUS_CHECK: 'PENDING',
     };
@@ -172,20 +195,30 @@ const APR010101 = () => {
       S_ADD_DATE_TO: tDate
         ? dayjs(tDate).format('YYYYMMDD')
         : selectedDate.format('YYYYMMDD'),
-      // @@ 스크롤에 따른 문서 개수 조정
-      PAGE_NO_FROM: 1,
-      PAGE_NO_TO: 100,
+      PAGE_NO_FROM: (nextPage - 1) * PAGE_SIZE + 1,
+      PAGE_NO_TO: nextPage * PAGE_SIZE,
       S_COMPANY_CODE: empInfo?.COMPANY_CODE,
       SS_EMP_ID: empInfo?.EMP_ID,
       SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
       ADMIN_AUTH_CHK: 'N',
     };
-    setLoading(true);
+
     const res2 = await Action.getListM(payload2);
-    setList(res2);
-    setFilteredList(res2);
-    setSelectedApprType('ALL');
+
+    if (isMore) {
+      setList((prev) => [...prev, ...res2]);
+      setFilteredList((prev) => [...prev, ...res2]);
+    } else {
+      setList(res2);
+      setFilteredList(res2);
+      setSelectedApprType('ALL');
+    }
+
+    setPage(nextPage);
+    setHasMore(res2?.length === PAGE_SIZE);
+
     setLoading(false);
+    setLoadingMore(false);
   };
 
   const handleRefresh = () => {
@@ -203,6 +236,18 @@ const APR010101 = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
+        onScroll={({ nativeEvent }) => {
+          const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
+
+          const isBottom =
+            layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - 30;
+
+          if (isBottom && hasMore && !loading && !loadingMore) {
+            getList(fromDate, toDate, page + 1);
+          }
+        }}
+        scrollEventThrottle={16}
       >
         <View style={styles.header}>
           <Text style={styles.headerText}>
@@ -225,6 +270,7 @@ const APR010101 = () => {
             <View>
               {filteredList?.map((e, i) => (
                 <LVCard
+                  key={`${e?.JOB_NO}_${i}`}
                   category='docuPreview'
                   onPress={() => {
                     if (['ND', 'NC'].includes(e.RQ_TYPE)) {
@@ -238,6 +284,11 @@ const APR010101 = () => {
                   contents={<DocuPreviewContent elem={e} key={i} />}
                 />
               ))}
+              {loadingMore && (
+                <View style={styles.loadingMoreView}>
+                  <Text style={styles.loadingMoreText}>불러오는 중...</Text>
+                </View>
+              )}
             </View>
           ) : (
             <LVNoData />
@@ -368,6 +419,7 @@ const Filter = (props: any) => {
       <View style={{ flexDirection: 'row' }}>
         {apprFilter.map((e) => (
           <TouchableOpacity
+            key={e?.HQCODE}
             onPress={() => {
               setSelectedApprType(e.HQCODE);
             }}
@@ -452,6 +504,14 @@ const styles = StyleSheet.create({
     right: 32,
   },
   flagText: {
-    fontWeight: 600,
+    fontWeight: '600',
+  },
+  loadingMoreView: {
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
+  loadingMoreText: {
+    color: '#939DAA',
+    fontWeight: '600',
   },
 });
