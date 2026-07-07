@@ -540,7 +540,7 @@ const OVT010301 = () => {
               )}
             </View>
           )}
-        {dt?.EMP_ID && (
+        {dt?.EMP_ID && dt?.EMP_ID === empInfo?.EMP_ID && (
           <View style={LVStyles.bottomButtonView}>
             {Util.isEmpty(dt?.CONFIRM_JOB_NO) && dt?.AP_STATUS === 'A' && (
               <LVButton
