@@ -3,19 +3,26 @@ import LVChip from '@/src/components/LVChip';
 import LVStyles from '@/src/components/LVStyles';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const LVFilter = (props: any) => {
   const { apprFilter, selectedApprType, setSelectedApprType, filteredList } =
     props;
   return (
-    <View style={[LVStyles.row, { marginTop: 16 }]}>
-      <View style={{ flexDirection: 'row' }}>
+    <View style={[LVStyles.row, { marginTop: 16, gap: 16 }]}>
+      <ScrollView
+        nestedScrollEnabled
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingRight: 8,
+        }}
+        style={{ flex: 1 }}
+      >
         {apprFilter.map((e) => (
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedApprType(e.HQCODE);
-            }}
-          >
+          <TouchableOpacity onPress={() => setSelectedApprType(e.HQCODE)}>
             <LVChip
               category='type'
               content={e.HQNAME}
@@ -30,19 +37,17 @@ const LVFilter = (props: any) => {
             />
           </TouchableOpacity>
         ))}
-      </View>
-      <Text
-        style={{
-          color: '#1E2125',
-          fontSize: 14,
-          fontWeight: '800',
-        }}
-      >
-        {filteredList?.length} 건
-      </Text>
+      </ScrollView>
+      <Text style={styles.text}>{filteredList?.length} 건</Text>
     </View>
   );
 };
 export default LVFilter;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  text: {
+    color: '#1E2125',
+    fontSize: 14,
+    fontWeight: '800',
+  },
+});
