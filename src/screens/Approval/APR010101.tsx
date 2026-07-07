@@ -9,6 +9,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 import {
   LVCard,
   LVChip,
+  LVFilter,
   LVFilterBottomSheet,
   LVLoadingIndicator,
   LVNoData,
@@ -50,7 +51,6 @@ const APR010101 = () => {
   const [stats, setStats] = useState({});
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [cardFilter, setCardFilter] = useState([]);
   const [selectedCards, setSelectedCards] = useState<string[]>(['pending']);
   const [apprFilter, setApprFilter] = useState([]);
   const [selectedApprType, setSelectedApprType] = useState('ALL');
@@ -213,7 +213,7 @@ const APR010101 = () => {
             toggleCard={toggleCard}
             selectedCards={selectedCards}
           />
-          <Filter
+          <LVFilter
             apprFilter={apprFilter}
             selectedApprType={selectedApprType}
             setSelectedApprType={setSelectedApprType}
@@ -229,10 +229,10 @@ const APR010101 = () => {
                   onPress={() => {
                     if (['ND', 'NC'].includes(e.RQ_TYPE)) {
                       movingScreen.navigate('OVT010301', e);
-                    } else if (['VA', 'NC'].includes(e.RQ_TYPE)) {
+                    } else if (['VA'].includes(e.RQ_TYPE)) {
                       movingScreen.navigate('LEA010301', e);
-                    } else {
-                      //@@
+                    } else if (['VS'].includes(e.RQ_TYPE)) {
+                      movingScreen.navigate('LEA020301', e);
                     }
                   }}
                   contents={<DocuPreviewContent elem={e} key={i} />}
@@ -386,12 +386,12 @@ const Filter = (props: any) => {
   );
 };
 
+const sortedArr = ['VA', 'ND', 'NC', 'VS'];
+
 const allFilter = {
   HQCODE: 'ALL',
   HQNAME: '전체',
 };
-
-const sortedArr = ['VA', 'ND', 'NC'];
 
 const styles = StyleSheet.create({
   header: {
