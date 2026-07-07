@@ -1,4 +1,4 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
 import Home from '../screens/MyHome';
@@ -39,7 +39,7 @@ import PAL010301 from '../screens/PersonalApprovalLine/PAL010301';
 // import ImageView from '../components/ImageView';
 // import PhotoList from '../components/PhotoList';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export const HomeNavigator = (props) => (
   <Stack.Navigator
