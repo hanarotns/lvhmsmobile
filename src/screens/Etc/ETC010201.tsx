@@ -122,7 +122,11 @@ const ETC010201 = () => {
                 <Form label='사원번호' value={userInfo?.F_EMP_ID} />
                 <Form
                   label='이름'
-                  value={`${userInfo?.F_USER_NAME_LOC} ( ${userInfo?.F_USER_NAME_ENG} )`}
+                  value={
+                    userInfo?.F_USER_NAME_LOC
+                      ? `${userInfo?.F_USER_NAME_LOC} ( ${userInfo?.F_USER_NAME_ENG} )`
+                      : ``
+                  }
                 />
                 <Form label='직급' value={userInfo?.POSITION_NAME} />
                 <Form label='직책' value={userInfo?.DUTY_NAME} />
