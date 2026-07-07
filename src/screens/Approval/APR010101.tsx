@@ -338,6 +338,12 @@ const DocuPreviewContent = (props: any) => {
             code={elem?.AP_STATUS}
             style={{ flex: 1 }}
           />
+          <Text style={styles.flagText}>
+            {elem?.VA_TYPE &&
+              (['OD', 'OM', 'OA', 'VO', 'VOM', 'VOD'].includes(elem?.VA_TYPE)
+                ? '공가'
+                : '연차')}
+          </Text>
           <Text numberOfLines={1} ellipsizeMode='tail' style={styles.labelText}>
             {elem?.REASON}
           </Text>
@@ -393,6 +399,17 @@ const allFilter = {
   HQNAME: '전체',
 };
 
+let restFilter = [
+  {
+    HQCODE: ['VY', 'VM', 'VA', 'VH', 'VE'],
+    HQNAME: '연차',
+  },
+  {
+    HQCODE: ['OD', 'OM', 'OA', 'VO', 'VOM', 'VOD'], // @@ 대체휴가는 공가가 아님
+    HQNAME: '공가',
+  },
+];
+
 const styles = StyleSheet.create({
   header: {
     padding: 32,
@@ -444,5 +461,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 24,
     right: 32,
+  },
+  flagText: {
+    fontWeight: 600,
   },
 });
