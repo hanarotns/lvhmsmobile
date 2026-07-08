@@ -673,7 +673,11 @@ const MYH010101 = ({ navigation }) => {
             cardStyle={{ minHeight: 110, flex: 1 }}
             img={icon.img_pay}
             imgStyle={{ width: 68, height: 40 }}
-            onPress={() => movingScreen.navigate('ACC010101')}
+            onPress={() => {
+              Alert.alert('알림', '서비스 준비중입니다.');
+              // @@ 연봉테이블 작업 후 다시 진행.
+              // movingScreen.navigate('ACC010101')
+            }}
             touchable
           />
         </View>
