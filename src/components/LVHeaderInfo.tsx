@@ -43,6 +43,7 @@ export default LVHeaderInfo;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'flex-end',
+    paddingRight: 12,
     maxWidth: 220,
   },
   url: {
