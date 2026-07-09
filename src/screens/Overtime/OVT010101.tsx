@@ -11,6 +11,7 @@ import {
   LVButton,
   LVCard,
   LVChip,
+  LVFilter,
   LVFilterBottomSheet,
   LVLoadingIndicator,
   LVMovingDateOfArrow,
@@ -50,6 +51,9 @@ const OVT010101 = () => {
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
   const [stats, setStats] = useState({});
   const [list, setList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [apprFilter, setApprFilter] = useState([]);
+  const [selectedApprType, setSelectedApprType] = useState('ALL');
   const [fromDate, setFromDate] = useState<Date>(new Date());
   const [toDate, setToDate] = useState<Date>(new Date());
 
@@ -81,8 +85,22 @@ const OVT010101 = () => {
     }, []),
   );
 
+  useEffect(() => {
+    const res = list?.filter((e) => {
+      if (selectedApprType === 'ALL') {
+        return true;
+      } else if (selectedApprType === 'ND') {
+        return Util.isEmpty(e?.CONFIRM_JOB_NO);
+      } else if (selectedApprType === 'NC') {
+        return !Util.isEmpty(e?.CONFIRM_JOB_NO);
+      }
+    });
+    setFilteredList(res);
+  }, [selectedApprType]);
+
   const mount = async () => {
     setLoading(true);
+    setApprFilter([allFilter, ...restFilter]);
 
     const dateS = selectedDate.startOf('month').toDate();
     const dateE = selectedDate.endOf('month').toDate();
@@ -113,6 +131,7 @@ const OVT010101 = () => {
     setStats(res1);
     const res2 = await Action.getListM(payload2);
     setList(res2);
+    setFilteredList(res2);
     setLoading(false);
   };
 
@@ -137,6 +156,7 @@ const OVT010101 = () => {
 
     const res = await Action.getListM(payload);
     setList(res);
+    setFilteredList(res);
     setLoading(false);
   };
 
@@ -179,11 +199,17 @@ const OVT010101 = () => {
             rightImg={icon.ico_open}
             buttonStyle={{ marginTop: 24, borderRadius: 28 }}
           />
+          <LVFilter
+            apprFilter={apprFilter}
+            selectedApprType={selectedApprType}
+            setSelectedApprType={setSelectedApprType}
+            filteredList={filteredList}
+          />
         </View>
         <View style={styles.body}>
-          {!Util.isEmpty(list) ? (
+          {!Util.isEmpty(filteredList) ? (
             <View>
-              {list?.map((e, i) => (
+              {filteredList?.map((e, i) => (
                 <LVCard
                   category='docuPreview'
                   onPress={() => {
@@ -332,10 +358,25 @@ const DocuPreviewContent = (props: any) => {
   );
 };
 
+const allFilter = {
+  HQCODE: 'ALL',
+  HQNAME: '전체',
+};
+
+let restFilter = [
+  {
+    HQCODE: 'ND',
+    HQNAME: '예정',
+  },
+  {
+    HQCODE: 'NC',
+    HQNAME: '확정',
+  },
+];
 const styles = StyleSheet.create({
   header: {
     padding: 32,
-    paddingBottom: 24,
+    paddingBottom: 10,
     backgroundColor: '#FFF',
   },
   headerText: {
