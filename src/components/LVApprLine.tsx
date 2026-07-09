@@ -28,7 +28,7 @@ const LVApprLine = (props: any) => {
               {
                 flexDirection: 'row',
                 justifyContent: 'center',
-                flex: 1 / 3,
+                width: '33%',
               },
             ]}
           >
