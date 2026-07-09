@@ -78,6 +78,14 @@ const LEA010101 = () => {
     }, [leaveRefresh]),
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        bottomSheetRef.current?.dismiss();
+      };
+    }, []),
+  );
+
   useEffect(() => {
     const res = list?.filter((e) => {
       if (selectedApprType === 'ALL') {

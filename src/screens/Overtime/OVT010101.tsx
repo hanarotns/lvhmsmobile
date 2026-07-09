@@ -73,6 +73,14 @@ const OVT010101 = () => {
     }, [leaveRefresh]),
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        bottomSheetRef.current?.dismiss();
+      };
+    }, []),
+  );
+
   const mount = async () => {
     setLoading(true);
 

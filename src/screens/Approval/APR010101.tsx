@@ -93,6 +93,14 @@ const APR010101 = () => {
     }, [leaveRefresh]),
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        bottomSheetRef.current?.dismiss();
+      };
+    }, []),
+  );
+
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
