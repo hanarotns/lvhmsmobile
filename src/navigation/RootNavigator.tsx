@@ -28,6 +28,12 @@ export default function RootNavigator() {
       if (field == 'autoLogin' && value == null) {
         value = 'true';
       }
+      if (field == 'isRememberLogin' && value == null) {
+        value = 'true';
+      }
+      if (field == 'isPreHire' && value == null) {
+        value = 'false';
+      }
       return value;
     };
     setStorageValue('loginId').then((value) => {
@@ -37,7 +43,6 @@ export default function RootNavigator() {
         setStorageValue('autoLogin').then((value) => {
           const autoLogin = value;
           setStorageValue('isRememberLogin').then((value) => {
-            console.log('@@ isRememberLogin value', value);
             const isRememberLogin = JSON.parse(value);
             setStorageValue('isPreHire').then((value) => {
               const isPreHire = JSON.parse(value);
