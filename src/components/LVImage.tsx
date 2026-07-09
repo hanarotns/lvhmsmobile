@@ -50,12 +50,13 @@ const LVImage = (props: any) => {
   const downloadFile = async () => {
     try {
       const destination = new Directory(Paths.cache, 'downloads');
-      const safeFileName = `${dayjs().format('YYYYMMDDHHmmss')}_${fileName}`;
-      const targetFile = new File(destination, safeFileName);
 
       if (!destination.exists) {
-        destination.create();
+        destination.create({ idempotent: true });
       }
+
+      const safeFileName = `${dayjs().format('YYYYMMDDHHmmss')}_${fileName}`;
+      const targetFile = new File(destination, safeFileName);
 
       const result = await File.downloadFileAsync(downloadUrl, targetFile, {
         headers: {
@@ -64,8 +65,17 @@ const LVImage = (props: any) => {
         },
       });
 
+      const downloadedFile = new File(result.uri);
+
+      if (!downloadedFile.exists) {
+        console.log(
+          '파일이 아직 존재하지 않습니다. 미리보기 창을 껐다가 다시 시도해주세요.',
+        );
+        return;
+      }
+
       if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(result.uri);
+        await Sharing.shareAsync(downloadedFile.uri);
       }
     } catch (e) {
       console.log('파일 다운로드 실패', e);
