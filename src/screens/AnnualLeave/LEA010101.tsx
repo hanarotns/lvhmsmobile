@@ -290,10 +290,11 @@ const DocuPreviewContent = (props: any) => {
   return (
     <>
       <View style={LVStyles.row}>
-        <View style={{ ...LVStyles.row, gap: 8 }}>
-          <Text style={styles.labelText}>{elem?.VA_TYPE_NAME}</Text>
-          {elem?.CGRQ_JOB_NO && <Text style={styles.changeText}>{'변경'}</Text>}
-        </View>
+        <LVChip
+          category='apprStatus'
+          title={elem?.AP_STATUS_NAME}
+          code={elem?.AP_STATUS}
+        />
         <Text style={styles.labelText}>
           {elem?.JOB_NO} {elem?.CGRQ_JOB_NO ? ' / ' + elem?.CGRQ_JOB_NO : ''}
         </Text>
@@ -303,18 +304,17 @@ const DocuPreviewContent = (props: any) => {
         <View
           style={{ ...LVStyles.row, justifyContent: 'flex-start', flex: 1 }}
         >
-          <LVChip
-            category='apprStatus'
-            title={elem?.AP_STATUS_NAME}
-            code={elem?.AP_STATUS}
-          />
           <View style={{ width: 8 }} />
           <Text numberOfLines={1} style={styles.mainText}>
-            <Text numberOfLines={1} style={styles.mainText}>
-              {Util.convertDateTime(elem?.VAC_START)} (
-              {dayjs(elem?.VAC_START).format('ddd')}){' '}
-              {elem?.CNT > 1 ? `외 ${elem?.CNT - 1} 건` : ``}
-            </Text>
+            {Util.convertDateTime(elem?.VAC_START)} (
+            {dayjs(elem?.VAC_START).format('ddd')}) {elem?.VA_TYPE_NAME}{' '}
+          </Text>
+          {elem?.CGRQ_JOB_NO && <Text style={styles.changeText}>{'변경'}</Text>}
+          <View style={{ ...LVStyles.row, gap: 8 }}>
+            <Text style={styles.labelText}></Text>
+          </View>
+          <Text numberOfLines={1} style={styles.mainText}>
+            {elem?.CNT > 1 ? `외 ${elem?.CNT - 1} 건` : ``}
           </Text>
         </View>
         <Text
@@ -355,7 +355,7 @@ let restFilter = [
 const styles = StyleSheet.create({
   header: {
     padding: 32,
-    paddingBottom: 24,
+    paddingBottom: 10,
     backgroundColor: '#FFF',
   },
   headerText: {

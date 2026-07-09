@@ -287,9 +287,11 @@ const DocuPreviewContent = (props: any) => {
   return (
     <>
       <View style={LVStyles.row}>
-        <View style={{ ...LVStyles.row, gap: 8 }}>
-          <Text style={styles.labelText}>{'연차예정'}</Text>
-        </View>
+        <LVChip
+          category='apprStatus'
+          title={elem?.AP_STATUS_NAME}
+          code={elem?.AP_STATUS}
+        />
         <Text style={styles.labelText}>{elem?.JOB_NO}</Text>
       </View>
       <View style={{ height: 16 }} />
@@ -297,18 +299,16 @@ const DocuPreviewContent = (props: any) => {
         <View
           style={{ ...LVStyles.row, justifyContent: 'flex-start', flex: 1 }}
         >
-          <LVChip
-            category='apprStatus'
-            title={elem?.AP_STATUS_NAME}
-            code={elem?.AP_STATUS}
-          />
           <View style={{ width: 8 }} />
           <Text numberOfLines={1} style={styles.mainText}>
-            <Text numberOfLines={1} style={styles.mainText}>
-              {Util.convertDateTime(elem?.VA_START)} (
-              {dayjs(elem?.VA_START).format('ddd')}){' '}
-              {elem?.CNT > 1 ? `외 ${elem?.CNT - 1} 건` : ``}
-            </Text>
+            {Util.convertDateTime(elem?.VA_START)} (
+            {dayjs(elem?.VA_START).format('ddd')}) {'연차예정 '}
+          </Text>
+          <View style={{ ...LVStyles.row, gap: 8 }}>
+            <Text style={styles.labelText}></Text>
+          </View>
+          <Text numberOfLines={1} style={styles.mainText}>
+            {elem?.CNT > 1 ? `외 ${elem?.CNT - 1} 건` : ``}
           </Text>
         </View>
         <Text

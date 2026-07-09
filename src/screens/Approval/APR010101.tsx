@@ -374,12 +374,16 @@ const DocuPreviewContent = (props: any) => {
   return (
     <>
       <View style={LVStyles.row}>
-        <Text style={styles.mainText}>
-          {elem?.EXEC_DATE
-            ? `${Util.convertDateTime(elem?.EXEC_DATE)} (${dayjs(elem?.EXEC_DATE).format('ddd')})`
-            : `${Util.convertDateTime(elem?.RQ_DATE)} (${dayjs(elem?.RQ_DATE).format('ddd')})`}
-          {` | ${elem?.RQ_TYPE_NAME}`}
-        </Text>
+        <View style={LVStyles.row}>
+          <LVChip
+            category='apprStatus'
+            title={elem?.AP_STATUS_NAME}
+            code={elem?.AP_STATUS}
+            style={{ flex: 1 }}
+          />
+          <View style={{ width: 8 }} />
+          <Text style={styles.mainText}>{`${elem?.RQ_TYPE_NAME}`}</Text>
+        </View>
         <Text style={styles.docuPreviewText}>{elem?.JOB_NO}</Text>
       </View>
       <View style={{ height: 16 }} />
@@ -391,12 +395,11 @@ const DocuPreviewContent = (props: any) => {
             gap: 8,
           }}
         >
-          <LVChip
-            category='apprStatus'
-            title={elem?.AP_STATUS_NAME}
-            code={elem?.AP_STATUS}
-            style={{ flex: 1 }}
-          />
+          <Text style={styles.mainText}>
+            {elem?.EXEC_DATE
+              ? `${Util.convertDateTime(elem?.EXEC_DATE)} (${dayjs(elem?.EXEC_DATE).format('ddd')})`
+              : `${Util.convertDateTime(elem?.RQ_DATE)} (${dayjs(elem?.RQ_DATE).format('ddd')})`}
+          </Text>
           <Text style={styles.flagText}>
             {elem?.VA_TYPE &&
               (['OD', 'OM', 'OA', 'VO', 'VOM', 'VOD'].includes(elem?.VA_TYPE)
