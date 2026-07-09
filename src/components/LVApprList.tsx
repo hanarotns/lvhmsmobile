@@ -17,15 +17,19 @@ const LVApprList = forwardRef((props: any, ref) => {
   return (
     <View>
       {myApprList?.map((e, i) => {
+        const isSelected = selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ;
+
         return (
           <TouchableOpacity
             key={e?.H_TP_SEQ || i}
             style={{
-              ...styles.myApprListView,
-              borderColor:
-                selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ ? '#27A7FF' : '#6A727B',
-              backgroundColor:
-                selectedAppr?.H_TP_SEQ === e?.H_TP_SEQ ? '#EEF8FF' : '#F0F2F6',
+              flexDirection: 'row',
+              padding: 16,
+              borderBottomWidth: isSelected ? 2 : 1,
+              borderBottomColor: isSelected ? '#27A7FF' : '#D5DCE5',
+              borderWidth: isSelected ? 2 : 0,
+              borderColor: isSelected ? '#27A7FF' : '#6A727B',
+              backgroundColor: isSelected ? '#EEF8FF' : '#F0F2F6',
             }}
             onPress={() => {
               setSelectedAppr(e);
