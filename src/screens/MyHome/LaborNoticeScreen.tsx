@@ -31,7 +31,12 @@ const LaborNoticeScreen = ({ type = 'annual', data = {}, onConfirm }) => {
 const AnnualLeaveNotice = ({ data }) => {
   return (
     <View style={styles.noticeBox}>
-      <Text style={styles.title}>미사용 연차유급휴가 사용촉진 통지</Text>
+      <Text style={styles.title}>
+        미사용 연차유급휴가 사용촉진 통지{' '}
+        {data?.LABORREFUSAL_GUBUN === '2'
+          ? `(${data?.LABORREFUSAL_GUBUN}차)`
+          : ''}
+      </Text>
       <Text style={styles.subTitle}>[ 관련 : 근로기준법 제 61조 ]</Text>
 
       <View style={styles.infoTable}>
@@ -200,8 +205,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   title: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '800',
     textAlign: 'center',
     marginBottom: 8,
   },
