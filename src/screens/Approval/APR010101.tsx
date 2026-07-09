@@ -64,14 +64,17 @@ const APR010101 = () => {
   const [fromDate, setFromDate] = useState<Date>(new Date());
   const [toDate, setToDate] = useState<Date>(new Date());
 
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const isFirstRender = useRef(true);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const openFilter = () => {
-    console.log('ref:', bottomSheetRef.current);
-    bottomSheetRef.current?.present();
+  const onPressFilter = () => {
+    if (isFilterOpen) {
+      bottomSheetRef.current?.dismiss();
+    } else {
+      bottomSheetRef.current?.present();
+    }
   };
-
   const toggleCard = (key: string) => {
     setSelectedCards([key]);
     // @@ 임시로
@@ -304,7 +307,10 @@ const APR010101 = () => {
         </View>
       </ScrollView>
       <View style={styles.floatingButton}>
-        <TouchableOpacity style={styles.filterIconButton} onPress={openFilter}>
+        <TouchableOpacity
+          style={styles.filterIconButton}
+          onPress={onPressFilter}
+        >
           <SlidersHorizontal size={24} color='#FFF' />
         </TouchableOpacity>
       </View>
@@ -315,6 +321,7 @@ const APR010101 = () => {
         setFromDate={setFromDate}
         toDate={toDate}
         setToDate={setToDate}
+        onChange={(index) => setIsFilterOpen(index !== -1)}
       />
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>

@@ -14,6 +14,7 @@ interface LVFilterBottomSheetProps {
   setFromDate: (date: Date) => void;
   toDate: Date;
   setToDate: (date: Date) => void;
+  onChange?: () => void;
 }
 
 const LVFilterBottomSheet = forwardRef<
@@ -28,6 +29,7 @@ const LVFilterBottomSheet = forwardRef<
     setFromDate,
     toDate,
     setToDate,
+    onChange,
   } = props;
 
   const snapPoints = useMemo(() => ['50%'], []);
@@ -38,6 +40,7 @@ const LVFilterBottomSheet = forwardRef<
       snapPoints={snapPoints}
       enablePanDownToClose
       style={styles.modalView}
+      onChange={onChange}
     >
       <BottomSheetView style={styles.modalSheetView}>
         <View style={styles.header}>

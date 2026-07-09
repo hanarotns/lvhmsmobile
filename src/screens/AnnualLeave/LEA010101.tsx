@@ -59,10 +59,14 @@ const LEA010101 = () => {
   const [toDate, setToDate] = useState<Date>(new Date());
 
   const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const openFilter = () => {
-    console.log('ref:', bottomSheetRef.current);
-    bottomSheetRef.current?.present();
+  const onPressFilter = () => {
+    if (isFilterOpen) {
+      bottomSheetRef.current?.dismiss();
+    } else {
+      bottomSheetRef.current?.present();
+    }
   };
 
   useEffect(() => {
@@ -229,7 +233,10 @@ const LEA010101 = () => {
         </View>
       </ScrollView>
       <View style={styles.floatingButton}>
-        <TouchableOpacity style={styles.filterIconButton} onPress={openFilter}>
+        <TouchableOpacity
+          style={styles.filterIconButton}
+          onPress={onPressFilter}
+        >
           <SlidersHorizontal size={24} color='#FFF' />
         </TouchableOpacity>
       </View>
@@ -240,6 +247,7 @@ const LEA010101 = () => {
         setFromDate={setFromDate}
         toDate={toDate}
         setToDate={setToDate}
+        onChange={(index) => setIsFilterOpen(index !== -1)}
       />
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>
