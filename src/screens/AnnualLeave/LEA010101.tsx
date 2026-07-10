@@ -318,11 +318,8 @@ const DocuPreviewContent = (props: any) => {
             {dayjs(elem?.VAC_START).format('ddd')}) {elem?.VA_TYPE_NAME}{' '}
           </Text>
           {elem?.CGRQ_JOB_NO && <Text style={styles.changeText}>{'변경'}</Text>}
-          <View style={{ ...LVStyles.row, gap: 8 }}>
-            <Text style={styles.labelText}></Text>
-          </View>
           <Text numberOfLines={1} style={styles.mainText}>
-            {elem?.CNT > 1 ? `외 ${elem?.CNT - 1} 건` : ``}
+            {elem?.CNT > 1 ? ` 외 ${elem?.CNT - 1} 건` : ``}
           </Text>
         </View>
         <Text
