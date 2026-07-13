@@ -171,6 +171,7 @@ const LVApprLineForm = (props: any) => {
               style={styles.addIconButton}
               onPress={() => {
                 movingScreen.navigate('PAL010201');
+                setIsVisibleApprovalModal(false);
               }}
             >
               <Image source={icon.ico_add} style={LVStyles.iconS} />
