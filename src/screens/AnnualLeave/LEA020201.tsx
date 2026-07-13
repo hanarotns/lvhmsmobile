@@ -93,8 +93,27 @@ const LEA020201 = () => {
       TO_YEAR: dayjs(new Date()).format('YYYY'),
     };
 
-    const res = await Action.getClearInfo(payload);
+    const res = await Action.getClearInfoOfSchedule(payload);
     setConfig(res?.[0]);
+    if (res?.[0]?.LOBOR_DATE) {
+      const { loborSdate, loborEdate } = parseLoborDate(res?.[0]?.LOBOR_DATE);
+      const today = dayjs(new Date()).format('YYYYMMDD');
+      const isInRange = today >= loborSdate && today <= loborEdate;
+      if (!isInRange) {
+        Alert.alert(
+          '알림',
+          `오늘(${Util.convertDateTime(today)})은\n신청 가능 기간이 아닙니다.\n\n* 신청 가능 기간: \n${Util.convertDateTime(loborSdate)} ~ ${Util.convertDateTime(loborEdate)}`,
+          [
+            {
+              text: '확인',
+              onPress: () => {
+                movingScreen.goBack();
+              },
+            },
+          ],
+        );
+      }
+    }
 
     // 변경 상신인 경우.
     if (route?.params?.APPR_NO) {
@@ -105,6 +124,17 @@ const LEA020201 = () => {
       setInfoList(route?.params?.DETAIL);
     }
     setLoading(false);
+  };
+
+  const parseLoborDate = (LOBOR_DATE: string) => {
+    const [start, end] = LOBOR_DATE.split('~').map((v) =>
+      v.trim().replaceAll('/', ''),
+    );
+
+    return {
+      loborSdate: start,
+      loborEdate: end,
+    };
   };
 
   useEffect(() => {

@@ -786,6 +786,7 @@ const MYH010101 = ({ navigation }) => {
                     onConfirm={() => {
                       Action.saveRefusalNotice(laborNotice1[0]);
                       setLaborNotice1([]);
+                      movingScreen.navigate('LEA020101');
                     }}
                   />
                 )}
