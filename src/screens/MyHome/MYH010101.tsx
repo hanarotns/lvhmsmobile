@@ -279,12 +279,18 @@ const MYH010101 = ({ navigation }) => {
    * 위경도 가져오기
    */
   const getLatLon = async () => {
-    const position = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.Low,
+    let position = await Location.getLastKnownPositionAsync({
+      maxAge: 30000,
     });
+    if (!position) {
+      position = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+    }
     const latLon = {
       lat: position?.coords?.latitude,
       lon: position?.coords?.longitude,
+      timestamp: position?.timestamp,
     };
     setPosition(latLon);
   };
@@ -392,6 +398,11 @@ const MYH010101 = ({ navigation }) => {
     const payload = {
       WA_LAT: position?.lat,
       WA_LON: position?.lon,
+      // 참고 데이터
+      device: {
+        date: dayjs(new Date()).format('YYYYMMDDHHmmss'),
+        timestamp: position?.timestamp,
+      },
     };
     const reverseGeoInfo = await Location.reverseGeocodeAsync({
       latitude: position?.lat,
