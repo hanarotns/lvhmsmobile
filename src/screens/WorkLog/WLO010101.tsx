@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import {
   Icon,
-  LVChip,
   LVColors,
+  LVFilter,
   LVLoadingIndicator,
   LVNoData,
   LVStyles,
@@ -170,13 +170,12 @@ const WLO010101 = () => {
             {selectedInfo.date} ({dayjs(selectedInfo.date).format('ddd')}){' '}
             {selectedInfo?.HOLIDAY_NAME}
           </Text>
-          <Text style={styles.text}>{filteredList?.length} 건</Text>
         </View>
-        <View style={{ height: 8 }} />
-        <Filter
-          checkFilter={checkFilter}
-          setSelectedCheckType={setSelectedCheckType}
-          selectedCheckType={selectedCheckType}
+        <LVFilter
+          apprFilter={checkFilter}
+          selectedApprType={selectedCheckType}
+          setSelectedApprType={setSelectedCheckType}
+          filteredList={filteredList}
         />
         <View style={{ height: 12 }} />
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -303,35 +302,6 @@ const Form = (props: any) => {
           <Text style={styles.value}>{elem?.WA_TYPE_NM || '-'}</Text>
         </View>
       )}
-    </View>
-  );
-};
-
-const Filter = (props: any) => {
-  const { checkFilter, setSelectedCheckType, selectedCheckType } = props;
-  return (
-    <View style={{ flexDirection: 'row' }}>
-      {checkFilter.map((e) => (
-        <TouchableOpacity
-          onPress={() => {
-            setSelectedCheckType(e?.HQCODE);
-          }}
-        >
-          <LVChip
-            category='type'
-            content={e?.HQNAME}
-            chipStyle={{
-              paddingVertical: 6,
-              borderColor:
-                selectedCheckType === e?.HQCODE ? LVColors.primary : '#6A727B',
-            }}
-            textStyle={{
-              color:
-                selectedCheckType === e?.HQCODE ? LVColors.primary : '#6A727B',
-            }}
-          />
-        </TouchableOpacity>
-      ))}
     </View>
   );
 };
