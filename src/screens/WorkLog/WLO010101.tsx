@@ -129,8 +129,20 @@ const WLO010101 = () => {
           current={selectedInfo?.date}
           onDayPress={(day: any) => {
             const date = day.dateString;
-            const dateInfo = calList.find((e) => date === e?.M_DATE);
-            setSelectedInfo({ date, ...dateInfo });
+            const holidayInfo = calList.find(
+              (e) => date === e?.M_DATE && e?.M_TYPE === 'HOLIDAY',
+            );
+            let planInfo = calList.find(
+              (e) => date === e?.M_DATE && e?.M_TYPE == 'PLAN',
+            );
+            if (planInfo) {
+              planInfo = {
+                SHIFT_WORK_CODE: planInfo?.SHIFT_WORK_CODE,
+                SHIFT_ON_TIME: planInfo?.SHIFT_ON_TIME,
+                SHIFT_OFF_TIME: planInfo?.SHIFT_OFF_TIME,
+              };
+            }
+            setSelectedInfo({ date, ...holidayInfo, ...planInfo });
           }}
           onMonthChange={(month: any) => {
             const date = month.dateString;
@@ -167,8 +179,14 @@ const WLO010101 = () => {
                 : '#1E2125',
             }}
           >
-            {selectedInfo.date} ({dayjs(selectedInfo.date).format('ddd')}){' '}
+            {selectedInfo.date.substring(5)} (
+            {dayjs(selectedInfo.date).format('ddd')}){' '}
             {selectedInfo?.HOLIDAY_NAME}
+          </Text>
+          <Text>
+            {selectedInfo?.SHIFT_ON_TIME
+              ? `${Util.convertDateTime('', selectedInfo?.SHIFT_ON_TIME)}~${Util.convertDateTime('', selectedInfo?.SHIFT_OFF_TIME)}`
+              : ''}
           </Text>
         </View>
         <LVFilter
@@ -355,8 +373,6 @@ const styles = StyleSheet.create({
     borderColor: '#D5DCE5',
   },
   text: {
-    color: '#1E2125',
-    fontSize: 14,
     fontWeight: '800',
   },
   entireCardView: {
