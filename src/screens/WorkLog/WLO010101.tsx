@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import {
   Icon,
@@ -96,6 +96,34 @@ const WLO010101 = () => {
       .forEach(
         (key: string, i: number) => (obj[key] = { ...obj[key], ...redTheme }),
       );
+    res?.HD?.filter(
+      (item) =>
+        ['PLAN'].includes(item.M_TYPE) &&
+        ['N02'].includes(item.SHIFT_WORK_CODE),
+    )
+      .map((item) => item.M_DATE)
+      .forEach(
+        (key: string, i: number) => (obj[key] = { ...obj[key], shift: 'day' }),
+      );
+    res?.HD?.filter(
+      (item) =>
+        ['PLAN'].includes(item.M_TYPE) &&
+        ['N03'].includes(item.SHIFT_WORK_CODE),
+    )
+      .map((item) => item.M_DATE)
+      .forEach(
+        (key: string, i: number) =>
+          (obj[key] = { ...obj[key], shift: 'night' }),
+      );
+    res?.HD?.filter(
+      (item) =>
+        ['PLAN'].includes(item.M_TYPE) &&
+        !['HD', 'N02', 'N03'].includes(item.SHIFT_WORK_CODE),
+    )
+      .map((item) => item.M_DATE)
+      .forEach(
+        (key: string, i: number) => (obj[key] = { ...obj[key], shift: 'diff' }),
+      );
     setCalDispList(obj);
     // 리스트 가져오기 (선택된 날의 raw 데이터)
     setList(res?.DT);
@@ -166,28 +194,123 @@ const WLO010101 = () => {
             />
           )}
           theme={calendarTheme}
+          dayComponent={({ date, state, marking }) => {
+            const customStyles = marking?.customStyles;
+            return (
+              <View style={{ alignItems: 'center' }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    const selectedDate = date.dateString;
+                    const holidayInfo = calList.find(
+                      (e) =>
+                        selectedDate === e?.M_DATE && e?.M_TYPE === 'HOLIDAY',
+                    );
+                    let planInfo = calList.find(
+                      (e) => selectedDate === e?.M_DATE && e?.M_TYPE == 'PLAN',
+                    );
+                    if (planInfo) {
+                      planInfo = {
+                        SHIFT_WORK_CODE: planInfo?.SHIFT_WORK_CODE,
+                        SHIFT_ON_TIME: planInfo?.SHIFT_ON_TIME,
+                        SHIFT_OFF_TIME: planInfo?.SHIFT_OFF_TIME,
+                      };
+                    }
+                    setSelectedInfo({
+                      date: selectedDate,
+                      ...holidayInfo,
+                      ...planInfo,
+                    });
+                  }}
+                  style={[
+                    {
+                      width: 36,
+                      height: 36,
+                      borderRadius: 18,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    },
+                    customStyles?.container, // 기존 customStyles 적용
+                    selectedInfo?.date === date?.dateString && {
+                      backgroundColor: '#27A7FF88',
+                    },
+                  ]}
+                >
+                  <Text
+                    style={{
+                      color: state === 'disabled' ? '#ccc' : '#373747',
+                      ...customStyles?.text, // 기존 customStyles 적용
+                    }}
+                  >
+                    {date.day}
+                  </Text>
+                </TouchableOpacity>
+                {marking?.shift && (
+                  <>
+                    <View
+                      style={{
+                        width: 18,
+                        height: 3,
+                        backgroundColor:
+                          marking?.shift == 'day' ? '#27A7FF' : 'lightgray',
+                        borderRadius: 2,
+                        marginTop: 4,
+                      }}
+                    />
+                    <View
+                      style={{
+                        width: 18,
+                        height: 3,
+                        backgroundColor:
+                          marking?.shift == 'night' ? '#27A7FF' : 'lightgray',
+                        borderRadius: 2,
+                        marginTop: 4,
+                      }}
+                    />
+                  </>
+                )}
+              </View>
+            );
+          }}
         />
       </View>
       {/* (선택된 일자, 필터의) 리스트 조회 */}
       <View style={styles.workLogListSection}>
         <View style={LVStyles.row}>
-          <Text
+          <View style={{ width: '60%' }}>
+            <Text
+              style={{
+                ...styles.text,
+                color: ['WEEKEND', 'HOLIDAY'].includes(selectedInfo?.M_TYPE)
+                  ? '#FF585B'
+                  : '#1E2125',
+              }}
+            >
+              {selectedInfo.date.substring(5)} (
+              {dayjs(selectedInfo.date).format('ddd')}){' '}
+              {selectedInfo?.HOLIDAY_NAME}
+            </Text>
+          </View>
+
+          <View
             style={{
-              ...styles.text,
-              color: ['WEEKEND', 'HOLIDAY'].includes(selectedInfo?.M_TYPE)
-                ? '#FF585B'
-                : '#1E2125',
+              width: '40%',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
             }}
           >
-            {selectedInfo.date.substring(5)} (
-            {dayjs(selectedInfo.date).format('ddd')}){' '}
-            {selectedInfo?.HOLIDAY_NAME}
-          </Text>
-          <Text>
-            {selectedInfo?.SHIFT_ON_TIME
-              ? `${Util.convertDateTime('', selectedInfo?.SHIFT_ON_TIME)}~${Util.convertDateTime('', selectedInfo?.SHIFT_OFF_TIME)}`
-              : ''}
-          </Text>
+            <Text
+              style={{
+                color: '#888',
+                borderRadius: 12,
+                paddingHorizontal: 8,
+                paddingVertical: 2,
+              }}
+            >
+              {selectedInfo?.SHIFT_ON_TIME
+                ? `${Util.convertDateTime('', selectedInfo?.SHIFT_ON_TIME)}~${Util.convertDateTime('', selectedInfo?.SHIFT_OFF_TIME)}`
+                : ''}
+            </Text>
+          </View>
         </View>
         <LVFilter
           apprFilter={checkFilter}
