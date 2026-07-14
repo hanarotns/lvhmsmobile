@@ -418,11 +418,12 @@ const LEA010301 = () => {
                 children={
                   <View>
                     <View style={{ ...LVStyles.row, flex: 1 }}>
-                      <View style={{ flex: 1 }}>
+                      {/* @@ 암호화 첨부번호 의미없으므로 삭제 */}
+                      {/* <View style={{ flex: 1 }}>
                         <Text numberOfLines={1} style={{ fontWeight: '500' }}>
                           {dt?.ATTACH_NO || `-`}
                         </Text>
-                      </View>
+                      </View> */}
                       <TouchableOpacity
                         onPress={() => {
                           handlePreView();
