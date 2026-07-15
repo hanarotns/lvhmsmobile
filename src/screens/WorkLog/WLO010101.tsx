@@ -236,10 +236,15 @@ const WLO010101 = () => {
                   ]}
                 >
                   <Text
-                    style={{
-                      color: state === 'disabled' ? '#ccc' : '#373747',
-                      ...customStyles?.text, // 기존 customStyles 적용
-                    }}
+                    style={[
+                      {
+                        color: state === 'disabled' ? '#ccc' : '#373747',
+                        ...customStyles?.text, // 기존 customStyles 적용
+                      },
+                      selectedInfo?.date === date?.dateString && {
+                        color: '#FFF',
+                      },
+                    ]}
                   >
                     {date.day}
                   </Text>
@@ -248,22 +253,16 @@ const WLO010101 = () => {
                   <>
                     <View
                       style={{
-                        width: 18,
-                        height: 3,
+                        ...styles.bar,
                         backgroundColor:
                           marking?.shift == 'day' ? '#27A7FF' : 'lightgray',
-                        borderRadius: 2,
-                        marginTop: 4,
                       }}
                     />
                     <View
                       style={{
-                        width: 18,
-                        height: 3,
+                        ...styles.bar,
                         backgroundColor:
                           marking?.shift == 'night' ? '#27A7FF' : 'lightgray',
-                        borderRadius: 2,
-                        marginTop: 4,
                       }}
                     />
                   </>
@@ -330,14 +329,9 @@ const WLO010101 = () => {
           {Util.isEmpty(filteredList) && <LVNoData />}
         </ScrollView>
       </View>
-      <View style={styles.iconWrap}>
-        <Icon
-          name='calendar-today-outline'
-          color='#FFF'
-          size={24}
-          onPress={movingToday}
-        />
-      </View>
+      <TouchableOpacity style={styles.iconWrap} onPress={movingToday}>
+        <Text style={{ color: '#FFF' }}>오늘</Text>
+      </TouchableOpacity>
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>
   );
@@ -531,8 +525,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 32,
     right: 16,
-    padding: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     borderRadius: 50,
-    backgroundColor: '#27A7FF',
+    backgroundColor: '#27A7FF88',
+  },
+  bar: {
+    width: 18,
+    height: 3,
+    borderRadius: 2,
+    marginTop: 4,
   },
 });
