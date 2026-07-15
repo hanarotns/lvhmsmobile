@@ -482,13 +482,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
   },
-  iconOfarrow: {
-    ...LVStyles.iconS,
-    tintColor: '#454D58',
-    borderRadius: 4,
-    borderWidth: 0.75,
-    borderColor: '#D5DCE5',
-  },
   text: {
     fontWeight: '800',
   },
@@ -510,7 +503,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  offsiteCardForm: { flex: 1, borderRadius: 4, padding: 16 },
+  offsiteCardForm: {
+    flex: 1,
+    borderRadius: 4,
+    padding: 16,
+  },
   offsiteCardLine1: {
     flex: 1,
     flexDirection: 'row',
