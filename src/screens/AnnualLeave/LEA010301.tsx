@@ -115,6 +115,7 @@ const LEA010301 = () => {
         S_FUNC_CODE: 'PT',
       };
       const resFile = await Fetch.getFileList(payloadFile);
+      console.log('@@ resFile', resFile);
       setFileList(resFile.data);
     }
     setLoading(false);
@@ -418,16 +419,17 @@ const LEA010301 = () => {
                 children={
                   <View>
                     <View style={{ ...LVStyles.row, flex: 1 }}>
-                      {/* @@ 암호화 첨부번호 의미없으므로 삭제 */}
-                      {/* <View style={{ flex: 1 }}>
+                      <View style={{ flexDirection: 'row' }}>
                         <Text numberOfLines={1} style={{ fontWeight: '500' }}>
-                          {dt?.ATTACH_NO || `-`}
+                          {fileList?.[0]?.FILE_NAME?.length > 15
+                            ? `${fileList?.[0]?.FILE_NAME.slice(0, 15)}...`
+                            : fileList?.[0]?.FILE_NAME}
                         </Text>
-                      </View> */}
+                        <Text> 외 {fileList?.length - 1}건</Text>
+                      </View>
+
                       <TouchableOpacity
-                        onPress={() => {
-                          handlePreView();
-                        }}
+                        onPress={() => handlePreView()}
                         style={styles.iconWrap}
                       >
                         <Icon name='image-album' color='#27A7FF' />
