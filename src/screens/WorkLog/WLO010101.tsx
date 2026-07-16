@@ -206,13 +206,22 @@ const WLO010101 = () => {
                         selectedDate === e?.M_DATE && e?.M_TYPE === 'HOLIDAY',
                     );
                     let planInfo = calList.find(
-                      (e) => selectedDate === e?.M_DATE && e?.M_TYPE == 'PLAN',
+                      (e) => selectedDate === e?.M_DATE && e?.M_TYPE === 'PLAN',
+                    );
+                    let workInfo = calList.find(
+                      (e) => selectedDate === e?.M_DATE && e?.M_TYPE === 'WORK',
                     );
                     if (planInfo) {
                       planInfo = {
                         SHIFT_WORK_CODE: planInfo?.SHIFT_WORK_CODE,
                         SHIFT_ON_TIME: planInfo?.SHIFT_ON_TIME,
                         SHIFT_OFF_TIME: planInfo?.SHIFT_OFF_TIME,
+                      };
+                    } else {
+                      planInfo = {
+                        SHIFT_WORK_CODE: workInfo?.SHIFT_WORK_CODE,
+                        SHIFT_ON_TIME: workInfo?.SHIFT_ON_TIME,
+                        SHIFT_OFF_TIME: workInfo?.SHIFT_OFF_TIME,
                       };
                     }
                     setSelectedInfo({
