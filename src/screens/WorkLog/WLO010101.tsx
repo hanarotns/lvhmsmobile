@@ -444,6 +444,7 @@ const Form = (props: any) => {
           }}
         >
           <Text style={styles.value}>{elem?.WA_TYPE_NM || '-'}</Text>
+          <Text style={styles.value}>{elem?.OOO_REASON || ''}</Text>
         </View>
       )}
     </View>
