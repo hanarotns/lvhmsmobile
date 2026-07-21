@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
@@ -32,7 +32,7 @@ type RootStackParamList = {
 };
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
 
-const LEA020301 = () => {
+const LEA020301 = ({ navigation }) => {
   const movingScreen = useNavigation();
   const route = useRoute<DetailScreenRouteProp>();
   const loginInfo = useLoginStore((state) => state.loginInfo);
@@ -51,6 +51,14 @@ const LEA020301 = () => {
   const [refusalReason, setRefusalReason] = useState('');
 
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+
+  useLayoutEffect(() => {
+    if (route?.params?.RQ_TYPE_NAME) {
+      navigation.setOptions({
+        title: route?.params?.RQ_TYPE_NAME + ' 상세',
+      });
+    }
+  }, [navigation]);
 
   useEffect(() => {
     mount();
