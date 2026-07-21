@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   labelCell: {
-    backgroundColor: '#c0cdef',
+    backgroundColor: '#27A7FF17',
   },
   emptyCell: {
     borderTopWidth: 0,
