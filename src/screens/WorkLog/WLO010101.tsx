@@ -443,8 +443,12 @@ const Form = (props: any) => {
             backgroundColor: bg2,
           }}
         >
-          <Text style={styles.value}>{elem?.WA_TYPE_NM || '-'}</Text>
-          <Text style={styles.value}>{elem?.OOO_REASON || ''}</Text>
+          <View style={{ width: '20%' }}>
+            <Text style={styles.value}>{elem?.WA_TYPE_NM || '-'}</Text>
+          </View>
+          <View style={{ width: '80%' }}>
+            <Text style={styles.value}>{elem?.OOO_REASON || '-'}</Text>
+          </View>
         </View>
       )}
     </View>
