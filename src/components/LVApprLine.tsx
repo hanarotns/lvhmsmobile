@@ -33,33 +33,11 @@ const LVApprLine = (props: any) => {
             ]}
           >
             <View style={{ flex: 1 }}>
-              {/* 결재자 이름, 화살표*/}
-              <View
-                style={[
-                  {
-                    height: 48,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  },
-                ]}
-              >
-                <Text
-                  style={{
-                    color: util.isEmpty(e?.CONFIRM_DATE)
-                      ? '#373747'
-                      : mainColor,
-                    fontWeight: '700',
-                    fontSize: 14,
-                  }}
-                >
-                  {e?.NAME_LOC || e?.AP_EMP_NAME || e?.APPROVAL_EMP_NAME}
-                </Text>
+              {/* 결재타입 */}
+              <View style={styles.centerView}>
                 {e?.AP_TYPE_NAME ? (
                   <View
                     style={{
-                      position: 'absolute',
-                      top: -8,
-                      right: -12,
                       borderColor: LVColors.border,
                       backgroundColor: '#FFF',
                       borderWidth: 1,
@@ -83,20 +61,33 @@ const LVApprLine = (props: any) => {
                   <></>
                 )}
               </View>
+              {/* 결재자 이름, 화살표*/}
+              <View
+                style={{
+                  ...styles.centerView,
+                }}
+              >
+                <Text
+                  style={{
+                    color: util.isEmpty(e?.CONFIRM_DATE)
+                      ? '#373747'
+                      : mainColor,
+                    fontWeight: '700',
+                    fontSize: 14,
+                  }}
+                >
+                  {e?.NAME_LOC || e?.AP_EMP_NAME || e?.APPROVAL_EMP_NAME}
+                </Text>
+              </View>
               {/* 결재 시간 */}
               {e?.JOB_NO && !reqApproval ? (
                 <View
                   style={{
-                    height: 32,
                     justifyContent: 'center',
                     flex: 1,
                   }}
                 >
-                  <View
-                    style={{
-                      alignItems: 'center',
-                    }}
-                  >
+                  <View style={{ alignItems: 'center' }}>
                     <Text
                       style={{
                         color: '#ABBACD',
@@ -123,7 +114,6 @@ const LVApprLine = (props: any) => {
             </View>
             <View
               style={{
-                height: 48,
                 justifyContent: 'center',
               }}
             >
@@ -151,4 +141,9 @@ const LVApprLine = (props: any) => {
 };
 export default LVApprLine;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  centerView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
