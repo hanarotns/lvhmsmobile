@@ -61,9 +61,7 @@ const ETC010101 = () => {
         <View style={{ flex: 1, paddingBottom: insets.bottom }}>
           <View style={styles.section}>
             <TouchableOpacity
-              onPress={() => {
-                movingScreen.navigate('ETC010201');
-              }}
+              onPress={() => movingScreen.navigate('ETC010201')}
               style={styles.profileCard}
             >
               <View style={styles.profileLeft}>
@@ -86,9 +84,7 @@ const ETC010101 = () => {
           </View>
           <View style={styles.section}>
             <TouchableOpacity
-              onPress={() => {
-                movingScreen.navigate('ETC010301');
-              }}
+              onPress={() => movingScreen.navigate('ETC010301')}
               style={styles.menuButton}
             >
               <Icon name='view-grid-outline' color='#373747' />
@@ -96,9 +92,7 @@ const ETC010101 = () => {
             </TouchableOpacity>
             <Divider />
             <TouchableOpacity
-              onPress={() => {
-                movingScreen.navigate('LEA020101');
-              }}
+              onPress={() => movingScreen.navigate('LEA020101')}
               style={styles.menuButton}
             >
               <Icon name='view-grid-outline' color='#373747' />
@@ -106,9 +100,7 @@ const ETC010101 = () => {
             </TouchableOpacity>
             <Divider />
             <TouchableOpacity
-              onPress={() => {
-                movingScreen.navigate('PAL010101');
-              }}
+              onPress={() => movingScreen.navigate('PAL010101')}
               style={styles.menuButton}
             >
               <Icon name='view-grid-outline' color='#373747' />
