@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#FFF',
     borderColor: '#27A7FF',
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 10,
   },
   selectedDisp: {
