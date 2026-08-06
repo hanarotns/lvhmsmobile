@@ -174,10 +174,7 @@ const ETC010201 = () => {
           <LVButton
             title='저장'
             onPress={handleSave}
-            buttonStyle={{
-              flex: 1,
-              backgroundColor: '#27A7FF',
-            }}
+            buttonStyle={LVStyles.defaultButton}
           />
         </View>
       </View>
