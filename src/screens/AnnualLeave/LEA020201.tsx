@@ -923,13 +923,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.text,
   },
-  datepicker: {
-    height: 48,
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.border,
-    borderRadius: 8,
-    justifyContent: 'center',
-  },
   input: {
     minHeight: 58,
     backgroundColor: COLORS.white,
@@ -949,30 +942,6 @@ const styles = StyleSheet.create({
   remarkInputText: {
     minHeight: 68,
     textAlignVertical: 'top',
-  },
-  bottomMainButton: {
-    flex: 1,
-    height: 48,
-    borderRadius: 8,
-  },
-  bottomMainButtonText: {
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  bottomSubButton: {
-    flex: 1,
-    height: 48,
-    borderRadius: 8,
-    backgroundColor: '#FFF',
-    borderColor: '#27A7FF',
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bottomSubButtonText: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#27A7FF',
   },
   searchIconButton: {
     marginLeft: 8,
