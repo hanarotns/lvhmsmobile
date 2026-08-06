@@ -534,7 +534,7 @@ const OVT010301 = ({ navigation }) => {
                 <LVButton
                   title={'삭제'}
                   onPress={handleDelete}
-                  buttonStyle={styles.cancelButton}
+                  buttonStyle={LVStyles.deleteButton}
                 />
               )}
               {(dt?.CONFIRM_JOB_NO
@@ -581,7 +581,7 @@ const OVT010301 = ({ navigation }) => {
                   onPress={() => {
                     setIsVisibleModal(true);
                   }}
-                  buttonStyle={styles.cancelButton}
+                  buttonStyle={LVStyles.rejectButton}
                 />
               )}
               {dt?.NEXT_ID === empInfo?.EMP_ID && (
@@ -683,10 +683,6 @@ const styles = StyleSheet.create({
   },
   recallButtonText: {
     color: '#373747',
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: '#939DAA',
   },
   reApproveButton: {
     flex: 1,

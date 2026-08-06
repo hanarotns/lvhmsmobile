@@ -27,6 +27,14 @@ const LVStyles = StyleSheet.create({
   cancelButtonText: {
     color: '#373747',
   },
+  deleteButton: {
+    flex: 1,
+    backgroundColor: '#939DAA',
+  },
+  rejectButton: {
+    flex: 1,
+    backgroundColor: '#939DAA',
+  },
   iconXS: {
     width: 18,
     height: 18,
