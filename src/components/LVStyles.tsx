@@ -91,5 +91,15 @@ const LVStyles = StyleSheet.create({
     top: 24,
     right: 32,
   },
+  iconWrap: {
+    marginLeft: 8,
+    width: 32,
+    height: 32,
+    borderWidth: 2,
+    borderColor: '#27A7FF',
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 export default LVStyles;

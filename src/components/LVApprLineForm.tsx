@@ -111,7 +111,7 @@ const LVApprLineForm = (props: any) => {
             onPress={() => {
               setIsVisibleApprovalModal(true);
             }}
-            style={styles.iconWrap}
+            style={LVStyles.iconWrap}
           >
             <Icon name='text-box-edit-outline' color='#27A7FF' />
           </TouchableOpacity>
@@ -190,16 +190,6 @@ const styles = StyleSheet.create({
     borderColor: '#27A7FF',
     borderWidth: 2,
     padding: 10,
-  },
-  iconWrap: {
-    marginLeft: 8,
-    width: 32,
-    height: 32,
-    borderWidth: 2,
-    borderColor: '#27A7FF',
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   floatingButton: {
     position: 'absolute',

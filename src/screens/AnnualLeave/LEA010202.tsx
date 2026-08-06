@@ -737,7 +737,7 @@ const AddNEditIconButton = (props) => {
       onPress={() => {
         onVisible(true);
       }}
-      style={styles.iconWrap}
+      style={LVStyles.iconWrap}
     >
       <Icon
         name={Util.isEmpty(data) ? 'plus' : 'text-box-edit-outline'}
@@ -1204,16 +1204,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderTopWidth: 1,
     borderColor: '#D5DCE5',
-  },
-  iconWrap: {
-    marginLeft: 8,
-    width: 32,
-    height: 32,
-    borderWidth: 2,
-    borderColor: '#27A7FF',
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   infoListView: {
     height: 48,

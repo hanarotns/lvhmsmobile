@@ -438,7 +438,7 @@ const LEA010301 = ({ navigation }) => {
 
                       <TouchableOpacity
                         onPress={() => handlePreView()}
-                        style={styles.iconWrap}
+                        style={LVStyles.iconWrap}
                       >
                         <Icon name='image-album' color='#27A7FF' />
                       </TouchableOpacity>
@@ -771,16 +771,6 @@ const styles = StyleSheet.create({
     ...LVStyles.row,
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
-  },
-  iconWrap: {
-    marginLeft: 8,
-    width: 32,
-    height: 32,
-    borderWidth: 2,
-    borderColor: '#27A7FF',
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   moving: {
     ...LVStyles.row,
