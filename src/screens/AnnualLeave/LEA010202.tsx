@@ -981,7 +981,7 @@ const ContentsOfInfo = forwardRef((props: any, ref) => {
             setIsVisibleVaTypeModal(false);
           }}
         >
-          <View style={styles.overlay}>
+          <View style={LVStyles.overlay}>
             <LVModal
               title={'종류를 선택하세요'}
               buttonText={'선택'}
@@ -1267,12 +1267,6 @@ const styles = StyleSheet.create({
     color: '#373747',
     minHeight: 100,
     textAlignVertical: 'top', // Android에서 상단 정렬
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   infoView: {
     flex: 1,

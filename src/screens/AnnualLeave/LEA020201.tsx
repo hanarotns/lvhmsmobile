@@ -586,7 +586,7 @@ const ContentsOfInfo = forwardRef((props: any, ref) => {
             setIsVisibleVaTypeModal(false);
           }}
         >
-          <View style={styles.overlay}>
+          <View style={LVStyles.overlay}>
             <LVModal
               title={'종류를 선택하세요'}
               buttonText={'선택'}
@@ -768,11 +768,5 @@ const styles = StyleSheet.create({
   operatorText: {
     fontSize: 20,
     fontWeight: '700',
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

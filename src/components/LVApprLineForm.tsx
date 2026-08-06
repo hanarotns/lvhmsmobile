@@ -137,7 +137,7 @@ const LVApprLineForm = (props: any) => {
             setIsVisibleApprovalModal(false);
           }}
         >
-          <View style={styles.overlay}>
+          <View style={LVStyles.overlay}>
             <LVModal
               title={'내 결재선을 선택하세요!'}
               buttonText={'선택'}
@@ -239,12 +239,6 @@ const styles = StyleSheet.create({
   modalInsideView: {
     flexDirection: 'row',
     marginBottom: 8,
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   floatingButton: {
     position: 'absolute',

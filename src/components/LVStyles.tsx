@@ -62,5 +62,11 @@ const LVStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 export default LVStyles;
