@@ -753,11 +753,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  selectBoxWrap: {
-    flex: 1,
-    width: '70%',
-    justifyContent: 'center',
-  },
   modalInsideView: {
     flexDirection: 'row',
     marginBottom: 8,
@@ -773,95 +768,6 @@ const styles = StyleSheet.create({
   operatorText: {
     fontSize: 20,
     fontWeight: '700',
-  },
-
-  infoRow: {
-    flexDirection: 'row',
-    marginBottom: 12,
-  },
-  infoRowNoMargin: {
-    flexDirection: 'row',
-  },
-  infoCol: {
-    flex: 1,
-    marginRight: 10,
-  },
-  infoColLast: {
-    marginRight: 0,
-  },
-  infoColFull: {
-    flex: 1,
-  },
-  infoLabel1: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: COLORS.subText,
-    marginBottom: 6,
-    width: '30%',
-  },
-  infoLabel2: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: COLORS.subText,
-    marginBottom: 6,
-  },
-  infoValueBox: {
-    minHeight: 48,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 8,
-    backgroundColor: COLORS.white,
-    justifyContent: 'center',
-    paddingHorizontal: 12,
-  },
-  infoTitleText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: COLORS.text,
-  },
-  infoValueText: {
-    fontSize: 14,
-    color: COLORS.text,
-  },
-  input: {
-    minHeight: 58,
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.border,
-    borderRadius: 12,
-  },
-  inputText: {
-    minHeight: 28,
-    textAlignVertical: 'top',
-  },
-  remarkInput: {
-    minHeight: 92,
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.border,
-    borderRadius: 12,
-  },
-  remarkInputText: {
-    minHeight: 68,
-    textAlignVertical: 'top',
-  },
-  searchIconButton: {
-    marginLeft: 8,
-    padding: 4,
-    aspectRatio: 1,
-    borderWidth: 2,
-    borderColor: '#27A7FF',
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  deleteIconWrap: {
-    padding: 8,
-    borderRadius: 4,
-    backgroundColor: '#FF3D71',
-  },
-  multilineInput: {
-    color: '#373747',
-    minHeight: 100,
-    textAlignVertical: 'top', // Android에서 상단 정렬
   },
   overlay: {
     flex: 1,
