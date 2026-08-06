@@ -524,8 +524,8 @@ const OVT010301 = ({ navigation }) => {
                 <LVButton
                   title={'회수'}
                   onPress={handleRecall}
-                  buttonStyle={LVStyles.recallButton}
-                  textStyle={LVStyles.recallButtonText}
+                  buttonStyle={LVStyles.whiteBgButton}
+                  textStyle={LVStyles.whiteBgButtonText}
                 />
               )}
               {(dt?.CONFIRM_JOB_NO
@@ -534,7 +534,7 @@ const OVT010301 = ({ navigation }) => {
                 <LVButton
                   title={'삭제'}
                   onPress={handleDelete}
-                  buttonStyle={LVStyles.deleteButton}
+                  buttonStyle={LVStyles.grayBgButton}
                 />
               )}
               {(dt?.CONFIRM_JOB_NO
@@ -543,7 +543,7 @@ const OVT010301 = ({ navigation }) => {
                 <LVButton
                   title={'상신'}
                   onPress={handleReApprove}
-                  buttonStyle={LVStyles.approveButton}
+                  buttonStyle={LVStyles.defaultButton}
                 />
               )}
             </View>
@@ -554,7 +554,7 @@ const OVT010301 = ({ navigation }) => {
               <LVButton
                 title={'예정취소'}
                 onPress={handleCancelSchedule}
-                buttonStyle={LVStyles.approveButton}
+                buttonStyle={LVStyles.defaultButton}
               />
             )}
           </View>
@@ -571,8 +571,8 @@ const OVT010301 = ({ navigation }) => {
                 <LVButton
                   title={'회수'}
                   onPress={handleRecallForApprover}
-                  buttonStyle={LVStyles.recallButton}
-                  textStyle={LVStyles.recallButtonText}
+                  buttonStyle={LVStyles.whiteBgButton}
+                  textStyle={LVStyles.whiteBgButtonText}
                 />
               )}
               {dt?.NEXT_ID === empInfo?.EMP_ID && (
@@ -581,14 +581,14 @@ const OVT010301 = ({ navigation }) => {
                   onPress={() => {
                     setIsVisibleModal(true);
                   }}
-                  buttonStyle={LVStyles.rejectButton}
+                  buttonStyle={LVStyles.grayBgButton}
                 />
               )}
               {dt?.NEXT_ID === empInfo?.EMP_ID && (
                 <LVButton
                   title={'결재'}
                   onPress={handleApproveForApprover}
-                  buttonStyle={LVStyles.approveButton}
+                  buttonStyle={LVStyles.defaultButton}
                 />
               )}
             </View>

@@ -572,8 +572,8 @@ const WRK010201 = () => {
           <LVButton
             title='취소'
             onPress={onPressCancel}
-            buttonStyle={LVStyles.cancelButton}
-            textStyle={LVStyles.cancelButtonText}
+            buttonStyle={LVStyles.whiteBgButton}
+            textStyle={LVStyles.whiteBgButtonText}
           />
           <LVButton
             title='지원'

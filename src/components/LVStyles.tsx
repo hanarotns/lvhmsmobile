@@ -18,33 +18,20 @@ const LVStyles = StyleSheet.create({
     bottom: 0,
     gap: 8,
   },
-  cancelButton: {
+  whiteBgButton: {
     flex: 1,
     backgroundColor: '#FFF',
     borderWidth: 1,
     borderColor: '#D5DCE5',
   },
-  cancelButtonText: {
+  whiteBgButtonText: {
     color: '#373747',
   },
-  deleteButton: {
+  grayBgButton: {
     flex: 1,
     backgroundColor: '#939DAA',
   },
-  rejectButton: {
-    flex: 1,
-    backgroundColor: '#939DAA',
-  },
-  recallButton: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: '#D5DCE5',
-  },
-  recallButtonText: {
-    color: '#373747',
-  },
-  approveButton: {
+  defaultButton: {
     flex: 1,
   },
   iconXS: {

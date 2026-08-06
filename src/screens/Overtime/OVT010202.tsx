@@ -373,8 +373,8 @@ const OVT010202 = () => {
           <LVButton
             title={'취소'}
             onPress={movingScreen.goBack}
-            buttonStyle={LVStyles.cancelButton}
-            textStyle={LVStyles.cancelButtonText}
+            buttonStyle={LVStyles.whiteBgButton}
+            textStyle={LVStyles.whiteBgButtonText}
           />
           {/* 최초 상신 */}
           <LVButton
