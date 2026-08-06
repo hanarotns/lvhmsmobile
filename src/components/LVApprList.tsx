@@ -76,15 +76,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: '#D5DCE5',
-  },
-  cancelButtonText: {
-    color: '#373747',
-  },
   iconOfarrow: {
     ...LVStyles.iconS,
     tintColor: '#454D58',
