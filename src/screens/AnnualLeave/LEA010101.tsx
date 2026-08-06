@@ -232,9 +232,9 @@ const LEA010101 = () => {
           )}
         </View>
       </ScrollView>
-      <View style={styles.floatingButton}>
+      <View style={LVStyles.filterIconButtonView}>
         <TouchableOpacity
-          style={styles.filterIconButton}
+          style={LVStyles.filterIconButton}
           onPress={onPressFilter}
         >
           <SlidersHorizontal size={24} color='#FFF' />
@@ -380,19 +380,6 @@ const styles = StyleSheet.create({
   mainText: {
     fontWeight: '700',
     fontSize: 14,
-  },
-  filterIconButton: {
-    width: 48,
-    height: 48,
-    backgroundColor: '#27A7FF',
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  floatingButton: {
-    position: 'absolute',
-    top: 24,
-    right: 32,
   },
   changeText: {
     color: '#FF676A',

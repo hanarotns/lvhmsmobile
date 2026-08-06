@@ -68,5 +68,18 @@ const LVStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  filterIconButton: {
+    width: 48,
+    height: 48,
+    backgroundColor: '#27A7FF',
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  filterIconButtonView: {
+    position: 'absolute',
+    top: 24,
+    right: 32,
+  },
 });
 export default LVStyles;
