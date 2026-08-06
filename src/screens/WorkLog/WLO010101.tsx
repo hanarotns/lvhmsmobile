@@ -338,7 +338,7 @@ const WLO010101 = () => {
           {Util.isEmpty(filteredList) && <LVNoData />}
         </ScrollView>
       </View>
-      <TouchableOpacity style={styles.iconWrap} onPress={movingToday}>
+      <TouchableOpacity style={styles.todayButton} onPress={movingToday}>
         <Text style={{ color: '#FFF' }}>오늘</Text>
       </TouchableOpacity>
       {loading && <LVLoadingIndicator />}
@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 8,
   },
-  iconWrap: {
+  todayButton: {
     position: 'absolute',
     bottom: 32,
     right: 16,

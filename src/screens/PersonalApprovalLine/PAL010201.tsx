@@ -322,7 +322,7 @@ const PersonalForm = (props: any) => {
           />
         </View>
       </View>
-      <TouchableOpacity onPress={onDelete} style={styles.iconWrap}>
+      <TouchableOpacity onPress={onDelete} style={styles.closeButton}>
         <Icon name='close' color='gray' />
       </TouchableOpacity>
     </View>
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 0.4,
   },
-  iconWrap: {
+  closeButton: {
     marginLeft: 8,
     justifyContent: 'center',
     alignItems: 'center',
