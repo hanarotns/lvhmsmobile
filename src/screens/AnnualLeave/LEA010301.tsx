@@ -785,9 +785,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
   },
-  previewButton: {
-    padding: 0,
-  },
   iconWrap: {
     marginLeft: 8,
     width: 32,
