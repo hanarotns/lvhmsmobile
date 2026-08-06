@@ -391,7 +391,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#939DAA',
   },
-  mainText: { fontWeight: '700', fontSize: 14 },
+  mainText: {
+    fontWeight: '700',
+    fontSize: 14,
+  },
   confReqButton: {
     borderColor: '#ABBACD',
     borderWidth: 1,

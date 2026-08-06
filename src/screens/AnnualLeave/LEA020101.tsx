@@ -352,22 +352,4 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 14,
   },
-  alertView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  alertText: {
-    marginTop: 8,
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#373747',
-  },
-  changeText: {
-    color: '#FF676A',
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: '#FF676A',
-    paddingHorizontal: 8,
-  },
 });

@@ -475,11 +475,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#F1F1F1',
   },
-  profileImg: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-  },
   labelText: {
     fontWeight: '600',
     color: '#939DAA',
@@ -488,6 +483,11 @@ const styles = StyleSheet.create({
   mainText: {
     fontWeight: '700',
     fontSize: 16,
+  },
+  profileImg: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
   },
   docuPreviewText: {
     fontWeight: '600',
