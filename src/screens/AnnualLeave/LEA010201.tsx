@@ -1183,19 +1183,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  inlineFieldRow: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 8,
-  },
-  inlineLabel: {
-    width: 52,
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.subText,
-    marginRight: 10,
-  },
   selectWrap: {
     flex: 1,
   },
