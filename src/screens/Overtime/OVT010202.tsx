@@ -405,16 +405,6 @@ const styles = StyleSheet.create({
     borderColor: '#D5DCE5',
     marginBottom: 200,
   },
-  iconWrap: {
-    marginLeft: 8,
-    width: 32,
-    height: 32,
-    borderWidth: 2,
-    borderColor: '#27A7FF',
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   dateTimeText: {
     fontWeight: '700',
     color: '#ABBACD',
