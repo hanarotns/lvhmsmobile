@@ -578,7 +578,7 @@ const WRK010201 = () => {
           <LVButton
             title='지원'
             onPress={onPressSubmit}
-            buttonStyle={{ flex: 1 }}
+            buttonStyle={LVStyles.defaultButton}
           />
         </View>
       </View>

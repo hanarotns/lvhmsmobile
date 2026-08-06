@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';
 import Icon from './Icon';
 import LVButton from './LVButton';
+import LVStyles from './LVStyles';
 
 const envConfig = env();
 let fetchURL = envConfig.fetchURL;
@@ -115,7 +116,7 @@ const LVImage = (props: any) => {
             <LVButton
               title='다운로드하여 확인'
               onPress={downloadFile}
-              buttonStyle={{ flex: 1 }}
+              buttonStyle={LVStyles.defaultButton}
             />
           </View>
         </View>

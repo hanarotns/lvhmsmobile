@@ -21,7 +21,7 @@ const LaborNoticeScreen = ({ type = 'annual', data = {}, onConfirm }) => {
         <LVButton
           title={'확인'}
           onPress={onConfirm}
-          buttonStyle={{ flex: 1 }}
+          buttonStyle={LVStyles.defaultButton}
         />
       </View>
     </View>

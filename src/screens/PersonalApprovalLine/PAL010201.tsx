@@ -259,7 +259,7 @@ const PAL010201 = () => {
           <LVButton
             title={'저장'}
             onPress={handleSave}
-            buttonStyle={{ flex: 1 }}
+            buttonStyle={LVStyles.defaultButton}
           />
         </View>
       </View>

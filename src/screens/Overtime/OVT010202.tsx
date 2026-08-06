@@ -380,7 +380,7 @@ const OVT010202 = () => {
           <LVButton
             title={'상신'}
             onPress={handleSubmit}
-            buttonStyle={{ flex: 1 }}
+            buttonStyle={LVStyles.defaultButton}
           />
         </View>
       </View>
