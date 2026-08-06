@@ -8,6 +8,16 @@ const LVStyles = StyleSheet.create({
   container: {
     padding: 16,
   },
+  header: {
+    padding: 32,
+    paddingBottom: 10,
+    backgroundColor: '#FFF',
+  },
+  headerText: {
+    fontWeight: '700',
+    fontSize: 24,
+    marginBottom: 24,
+  },
   bottomButtonView: {
     flexDirection: 'row',
     justifyContent: 'space-between',

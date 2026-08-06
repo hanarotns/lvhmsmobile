@@ -183,8 +183,8 @@ const LEA020101 = () => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <View style={styles.header}>
-          <Text style={styles.headerText}>
+        <View style={LVStyles.header}>
+          <Text style={LVStyles.headerText}>
             {empInfo?.EMP_NAME_LC}님 연차예정 현황입니다.
           </Text>
           <LVMovingDateOfArrow
@@ -339,16 +339,6 @@ const DocuPreviewContent = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    padding: 32,
-    paddingBottom: 24,
-    backgroundColor: '#FFF',
-  },
-  headerText: {
-    fontWeight: '700',
-    fontSize: 24,
-    marginBottom: 24,
-  },
   body: {
     flex: 1,
     borderTopWidth: 1,

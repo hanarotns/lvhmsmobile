@@ -180,8 +180,8 @@ const OVT010101 = () => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        <View style={styles.header}>
-          <Text style={styles.headerText}>
+        <View style={LVStyles.header}>
+          <Text style={LVStyles.headerText}>
             {empInfo?.EMP_NAME_LC}님 시간외 현황입니다.
           </Text>
           <LVMovingDateOfArrow
@@ -382,16 +382,6 @@ let restFilter = [
   },
 ];
 const styles = StyleSheet.create({
-  header: {
-    padding: 32,
-    paddingBottom: 10,
-    backgroundColor: '#FFF',
-  },
-  headerText: {
-    fontWeight: '700',
-    fontSize: 24,
-    marginBottom: 24,
-  },
   body: {
     flex: 1,
     borderTopWidth: 1,
