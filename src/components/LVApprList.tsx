@@ -76,13 +76,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
-  myApprListView: {
-    display: 'flex',
-    flexDirection: 'row',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#D5DCE5',
-  },
   myApprListTitleView: {
     display: 'flex',
     flexDirection: 'row',
