@@ -847,21 +847,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.text,
   },
-  smallOutlineButton: {
-    borderRadius: 8,
-    backgroundColor: '#FFF',
-    borderColor: '#27A7FF',
-    borderWidth: 1,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  smallOutlineButtonText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#27A7FF',
-  },
   infoRow: {
     flexDirection: 'row',
     marginBottom: 12,
