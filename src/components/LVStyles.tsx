@@ -18,6 +18,15 @@ const LVStyles = StyleSheet.create({
     bottom: 0,
     gap: 8,
   },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  cancelButtonText: {
+    color: '#373747',
+  },
   iconXS: {
     width: 18,
     height: 18,

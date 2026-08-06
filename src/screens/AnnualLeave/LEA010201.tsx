@@ -510,8 +510,8 @@ const LEA010201 = () => {
           <LVButton
             title={'취소'}
             onPress={movingScreen.goBack}
-            buttonStyle={styles.cancelButton}
-            textStyle={styles.cancelButtonText}
+            buttonStyle={LVStyles.cancelButton}
+            textStyle={LVStyles.cancelButtonText}
           />
           {/* 최초 상신 */}
           <LVButton
@@ -1110,15 +1110,6 @@ const styles = StyleSheet.create({
     borderColor: '#27A7FF',
     borderWidth: 1,
     padding: 10,
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: '#D5DCE5',
-  },
-  cancelButtonText: {
-    color: '#373747',
   },
   iconOfarrow: {
     ...LVStyles.iconS,

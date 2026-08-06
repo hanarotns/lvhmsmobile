@@ -572,8 +572,8 @@ const WRK010201 = () => {
           <LVButton
             title='취소'
             onPress={onPressCancel}
-            buttonStyle={styles.cancelButton}
-            textStyle={styles.cancelButtonText}
+            buttonStyle={LVStyles.cancelButton}
+            textStyle={LVStyles.cancelButtonText}
           />
           <LVButton
             title='지원'
@@ -868,15 +868,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: '#27A7FF',
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: '#D5DCE5',
-  },
-  cancelButtonText: {
-    color: '#373747',
   },
   searchIconButton: {
     marginLeft: 8,
