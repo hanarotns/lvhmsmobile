@@ -381,17 +381,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 14,
   },
-  alertView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  alertText: {
-    marginTop: 8,
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#373747',
-  },
   filterIconButton: {
     width: 48,
     height: 48,
