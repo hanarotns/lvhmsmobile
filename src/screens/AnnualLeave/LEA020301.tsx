@@ -346,7 +346,15 @@ const LEA020301 = ({ navigation }) => {
                 <View style={styles.infoView}>
                   <View>
                     {dt?.DETAIL?.map((e, i) => (
-                      <View style={styles.detailView}>
+                      <View
+                        style={[
+                          styles.detailView,
+                          dt?.DETAIL?.length > 1 && {
+                            marginTop: i === 0 ? 8 : 0,
+                            marginBottom: i === dt?.DETAIL?.length - 1 ? 8 : 2,
+                          },
+                        ]}
+                      >
                         <LVChip
                           category='info'
                           leftText={`${Util.convertDateTime(e?.VA_DATE)} (${dayjs(e?.VA_DATE, 'YYYYMMDD').locale('ko').format('ddd')})`}
@@ -638,7 +646,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   detailView: {
-    height: 48,
     justifyContent: 'center',
   },
   totalCntView: {

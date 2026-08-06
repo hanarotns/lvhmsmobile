@@ -403,7 +403,15 @@ const LEA010201 = () => {
                   ) : (
                     <View style={{ flex: 1 }}>
                       {infoList?.map((e, i) => (
-                        <View style={styles.infoListView}>
+                        <View
+                          style={[
+                            styles.infoListView,
+                            infoList?.length > 1 && {
+                              marginTop: i === 0 ? 8 : 0,
+                              marginBottom: i === infoList?.length - 1 ? 8 : 2,
+                            },
+                          ]}
+                        >
                           <LVChip
                             category='info'
                             leftText={e?.DISP_VA_DATE}
@@ -1133,7 +1141,6 @@ const styles = StyleSheet.create({
     borderColor: '#D5DCE5',
   },
   infoListView: {
-    height: 48,
     justifyContent: 'center',
   },
   leavedayCalculation: {
