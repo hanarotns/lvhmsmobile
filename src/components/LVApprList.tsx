@@ -70,12 +70,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 8,
   },
-  button: {
-    backgroundColor: '#FFF',
-    borderColor: '#27A7FF',
-    borderWidth: 1,
-    padding: 10,
-  },
   myApprListTitleView: {
     display: 'flex',
     flexDirection: 'row',
@@ -85,54 +79,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
     color: '#373747',
-  },
-  selectedDisp: {
-    borderTopWidth: 1,
-    borderTopColor: '#F0F2F6',
-    height: '100%',
-    padding: 8,
-  },
-  chipView: {
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
-  modalView: {
-    padding: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    borderColor: '#D5DCE5',
-  },
-  iconWrap: {
-    marginLeft: 8,
-    width: 32,
-    height: 32,
-    borderWidth: 2,
-    borderColor: '#27A7FF',
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  infoListView: {
-    height: 48,
-    justifyContent: 'center',
-  },
-  leavedayCalculation: {
-    margin: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  selectBoxWrap: {
-    flex: 1,
-    width: '70%',
-    justifyContent: 'center',
-  },
-  modalInsideView: {
-    flexDirection: 'row',
-    marginBottom: 8,
   },
 });

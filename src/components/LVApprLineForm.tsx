@@ -191,27 +191,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     padding: 10,
   },
-  selectedDisp: {
-    borderTopWidth: 1,
-    borderTopColor: '#F0F2F6',
-    height: '100%',
-    padding: 8,
-  },
-  chipView: {
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
-  modalView: {
-    padding: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    borderColor: '#D5DCE5',
-  },
   iconWrap: {
     marginLeft: 8,
     width: 32,
@@ -221,24 +200,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  infoListView: {
-    height: 48,
-    justifyContent: 'center',
-  },
-  leavedayCalculation: {
-    margin: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  selectBoxWrap: {
-    flex: 1,
-    width: '70%',
-    justifyContent: 'center',
-  },
-  modalInsideView: {
-    flexDirection: 'row',
-    marginBottom: 8,
   },
   floatingButton: {
     position: 'absolute',
