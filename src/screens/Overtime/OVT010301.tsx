@@ -524,8 +524,8 @@ const OVT010301 = ({ navigation }) => {
                 <LVButton
                   title={'회수'}
                   onPress={handleRecall}
-                  buttonStyle={styles.recallButton}
-                  textStyle={styles.recallButtonText}
+                  buttonStyle={LVStyles.recallButton}
+                  textStyle={LVStyles.recallButtonText}
                 />
               )}
               {(dt?.CONFIRM_JOB_NO
@@ -543,7 +543,7 @@ const OVT010301 = ({ navigation }) => {
                 <LVButton
                   title={'상신'}
                   onPress={handleReApprove}
-                  buttonStyle={styles.reApproveButton}
+                  buttonStyle={LVStyles.approveButton}
                 />
               )}
             </View>
@@ -554,7 +554,7 @@ const OVT010301 = ({ navigation }) => {
               <LVButton
                 title={'예정취소'}
                 onPress={handleCancelSchedule}
-                buttonStyle={styles.cancelScheduleButton}
+                buttonStyle={LVStyles.approveButton}
               />
             )}
           </View>
@@ -571,8 +571,8 @@ const OVT010301 = ({ navigation }) => {
                 <LVButton
                   title={'회수'}
                   onPress={handleRecallForApprover}
-                  buttonStyle={styles.recallButton}
-                  textStyle={styles.recallButtonText}
+                  buttonStyle={LVStyles.recallButton}
+                  textStyle={LVStyles.recallButtonText}
                 />
               )}
               {dt?.NEXT_ID === empInfo?.EMP_ID && (
@@ -588,7 +588,7 @@ const OVT010301 = ({ navigation }) => {
                 <LVButton
                   title={'결재'}
                   onPress={handleApproveForApprover}
-                  buttonStyle={styles.reApproveButton}
+                  buttonStyle={LVStyles.approveButton}
                 />
               )}
             </View>
@@ -674,23 +674,6 @@ const styles = StyleSheet.create({
     borderColor: '#FF9E3C',
     backgroundColor: '#FFF7EF',
     maxWidth: 100,
-  },
-  recallButton: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: '#D5DCE5',
-  },
-  recallButtonText: {
-    color: '#373747',
-  },
-  reApproveButton: {
-    flex: 1,
-    backgroundColor: '#27A7FF',
-  },
-  cancelScheduleButton: {
-    flex: 1,
-    backgroundColor: '#27A7FF',
   },
   multilineInput: {
     color: '#373747',

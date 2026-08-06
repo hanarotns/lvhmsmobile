@@ -447,8 +447,8 @@ const LEA020301 = ({ navigation }) => {
                 <LVButton
                   title={'회수'}
                   onPress={handleRecall}
-                  buttonStyle={styles.recallButton}
-                  textStyle={styles.recallButtonText}
+                  buttonStyle={LVStyles.recallButton}
+                  textStyle={LVStyles.recallButtonText}
                 />
               )}
               {dt?.AP_STATUS === 'W' && (
@@ -462,7 +462,7 @@ const LEA020301 = ({ navigation }) => {
                 <LVButton
                   title={'상신'}
                   onPress={handleReApprove}
-                  buttonStyle={styles.reApproveButton}
+                  buttonStyle={LVStyles.approveButton}
                 />
               )}
             </View>
@@ -476,8 +476,8 @@ const LEA020301 = ({ navigation }) => {
                 <LVButton
                   title={'회수'}
                   onPress={handleRecallForApprover}
-                  buttonStyle={styles.recallButton}
-                  textStyle={styles.recallButtonText}
+                  buttonStyle={LVStyles.recallButton}
+                  textStyle={LVStyles.recallButtonText}
                 />
               )}
               {dt?.NEXT_ID === empInfo?.EMP_ID && (
@@ -493,7 +493,7 @@ const LEA020301 = ({ navigation }) => {
                 <LVButton
                   title={'결재'}
                   onPress={handleApproveForApprover}
-                  buttonStyle={styles.reApproveButton}
+                  buttonStyle={LVStyles.approveButton}
                 />
               )}
             </View>
@@ -650,19 +650,6 @@ const styles = StyleSheet.create({
     color: '#39CCCC',
     fontWeight: '700',
     fontSize: 14,
-  },
-  recallButton: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: '#D5DCE5',
-  },
-  recallButtonText: {
-    color: '#373747',
-  },
-  reApproveButton: {
-    flex: 1,
-    backgroundColor: '#27A7FF',
   },
   multilineInput: {
     color: '#373747',

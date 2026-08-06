@@ -35,6 +35,18 @@ const LVStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#939DAA',
   },
+  recallButton: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#D5DCE5',
+  },
+  recallButtonText: {
+    color: '#373747',
+  },
+  approveButton: {
+    flex: 1,
+  },
   iconXS: {
     width: 18,
     height: 18,
