@@ -1111,13 +1111,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
-  iconOfarrow: {
-    ...LVStyles.iconS,
-    tintColor: '#454D58',
-    borderRadius: 4,
-    borderWidth: 0.75,
-    borderColor: '#D5DCE5',
-  },
   myApprListView: {
     display: 'flex',
     flexDirection: 'row',

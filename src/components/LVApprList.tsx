@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
-import { LVApprLine, LVChip, LVStyles, Text } from '@/src/components';
+import { LVApprLine, LVChip, Text } from '@/src/components';
 import 'dayjs/locale/ko';
 
 const LVApprList = forwardRef((props: any, ref) => {
@@ -75,13 +75,6 @@ const styles = StyleSheet.create({
     borderColor: '#27A7FF',
     borderWidth: 1,
     padding: 10,
-  },
-  iconOfarrow: {
-    ...LVStyles.iconS,
-    tintColor: '#454D58',
-    borderRadius: 4,
-    borderWidth: 0.75,
-    borderColor: '#D5DCE5',
   },
   myApprListView: {
     display: 'flex',
