@@ -1,15 +1,6 @@
 import { Fetch, Util } from '@/src/lib';
 
 const getInfoM = async (body: object) => {
-  // const result = await Fetch.request('PORM020201SVC', 'getMobileCalendar', {
-  //   body: JSON.stringify({
-  //     PORM020201F1: body,
-  //   }),
-  // });
-  // if (result.TYPE === -1) {
-  //   Util.toastMsg(result.MSG, 'error');
-  // }
-  // return result.PORM020201F1;
   const result = await Fetch.request('PORM020201SVC', 'getInfoM', {
     body: JSON.stringify({
       PORM020201F1: body,
