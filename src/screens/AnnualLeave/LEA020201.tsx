@@ -707,12 +707,6 @@ const categoryOfVaType = {
 };
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#FFF',
-    borderColor: '#27A7FF',
-    borderWidth: 1,
-    padding: 10,
-  },
   selectedDisp: {
     borderTopWidth: 1,
     borderTopColor: '#F0F2F6',

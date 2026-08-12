@@ -392,12 +392,6 @@ const OVT010202 = () => {
 export default OVT010202;
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#FFF',
-    borderColor: '#27A7FF',
-    borderWidth: 1,
-    padding: 10,
-  },
   container: {
     padding: 16,
     borderBottomWidth: 1,
