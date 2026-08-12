@@ -429,39 +429,6 @@ const DocuPreviewContent = (props: any) => {
   );
 };
 
-const Filter = (props: any) => {
-  const { apprFilter, selectedApprType, setSelectedApprType, filteredList } =
-    props;
-  return (
-    <View style={[LVStyles.row, { marginTop: 16 }]}>
-      <View style={{ flexDirection: 'row' }}>
-        {apprFilter.map((e) => (
-          <TouchableOpacity
-            key={e?.HQCODE}
-            onPress={() => {
-              setSelectedApprType(e.HQCODE);
-            }}
-          >
-            <LVChip
-              category='type'
-              content={e.HQNAME}
-              chipStyle={{
-                paddingVertical: 6,
-                borderColor:
-                  selectedApprType === e?.HQCODE ? '#27A7FF' : '#6A727B',
-              }}
-              textStyle={{
-                color: selectedApprType === e?.HQCODE ? '#27A7FF' : '#6A727B',
-              }}
-            />
-          </TouchableOpacity>
-        ))}
-      </View>
-      <Text style={styles.filterText}>{filteredList?.length} 건</Text>
-    </View>
-  );
-};
-
 const sortedArr = ['VA', 'ND', 'NC', 'VS'];
 
 const allFilter = {
@@ -492,11 +459,6 @@ const styles = StyleSheet.create({
   docuPreviewText: {
     fontWeight: '600',
     color: '#939DAA',
-  },
-  filterText: {
-    color: '#1E2125',
-    fontSize: 14,
-    fontWeight: '800',
   },
   flagText: {
     fontWeight: '600',
