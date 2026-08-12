@@ -706,14 +706,6 @@ const categoryOfVaType = {
   VO: ['VO', 'VOM', 'VOD'], // 대휴
 };
 
-const COLORS = {
-  screen: '#F6F7FB',
-  white: '#FFFFFF',
-  border: '#E5E9F0',
-  text: '#222B45',
-  subText: '#8F9BB3',
-};
-
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#FFF',
