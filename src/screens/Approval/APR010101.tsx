@@ -377,7 +377,7 @@ const LayoutOfStats = (props: any) => {
 };
 
 const DocuPreviewContent = (props: any) => {
-  const { elem, onPress } = props;
+  const { elem } = props;
   return (
     <>
       <View style={LVStyles.row}>
