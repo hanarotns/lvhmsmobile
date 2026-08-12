@@ -61,12 +61,4 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#F1F1F1',
   },
-  labelText: {
-    fontWeight: '600',
-    color: '#939DAA',
-  },
-  mainText: {
-    fontWeight: '700',
-    fontSize: 14,
-  },
 });
