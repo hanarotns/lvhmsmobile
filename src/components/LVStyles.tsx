@@ -18,6 +18,11 @@ const LVStyles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 24,
   },
+  body: {
+    flex: 1,
+    borderTopWidth: 1,
+    borderTopColor: '#F1F1F1',
+  },
   bottomButtonView: {
     flexDirection: 'row',
     justifyContent: 'space-between',

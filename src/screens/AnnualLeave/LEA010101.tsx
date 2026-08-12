@@ -214,7 +214,7 @@ const LEA010101 = () => {
             filteredList={filteredList}
           />
         </View>
-        <View style={styles.body}>
+        <View style={LVStyles.body}>
           {!Util.isEmpty(filteredList) ? (
             <View>
               {filteredList?.map((e, i) => (
@@ -358,11 +358,6 @@ let restFilter = [
 ];
 
 const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: '#F1F1F1',
-  },
   labelText: {
     fontWeight: '600',
     color: '#939DAA',
