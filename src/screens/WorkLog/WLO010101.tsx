@@ -479,9 +479,7 @@ const redTheme = {
 
 const styles = StyleSheet.create({
   workLogListSection: {
-    flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: '#F1F1F1',
+    ...LVStyles.body,
     paddingHorizontal: 24,
     paddingTop: 16,
   },
