@@ -14,6 +14,7 @@ import {
   Icon,
   KeyboardAwareScrollView,
   LVButton,
+  LVColors,
   LVConfirmIndicator,
   LVDatePicker,
   LVLoadingIndicator,
@@ -660,14 +661,6 @@ const WRK010201 = () => {
 
 export default WRK010201;
 
-const COLORS = {
-  screen: '#F6F7FB',
-  white: '#FFFFFF',
-  border: '#E5E9F0',
-  text: '#222B45',
-  subText: '#8F9BB3',
-};
-
 const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
@@ -690,23 +683,23 @@ const styles = StyleSheet.create({
     width: 52,
     fontSize: 14,
     fontWeight: '700',
-    color: COLORS.subText,
+    color: LVColors.subText,
     marginRight: 10,
   },
   selectWrap: {
     flex: 1,
   },
   select: {
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.border,
+    backgroundColor: LVColors.white,
+    borderColor: LVColors.border,
     borderRadius: 8,
   },
   card: {
-    backgroundColor: COLORS.white,
+    backgroundColor: LVColors.white,
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: LVColors.border,
     marginBottom: 14,
   },
   selectedCard: {
@@ -720,7 +713,7 @@ const styles = StyleSheet.create({
   blockTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.text,
+    color: LVColors.text,
     marginBottom: 14,
   },
   smallOutlineButton: {
@@ -758,38 +751,38 @@ const styles = StyleSheet.create({
   infoLabel1: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.subText,
+    color: LVColors.subText,
     marginBottom: 6,
     width: '30%',
   },
   infoLabel2: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.subText,
+    color: LVColors.subText,
     marginBottom: 6,
   },
   infoValueBox: {
     minHeight: 48,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: LVColors.border,
     borderRadius: 8,
-    backgroundColor: COLORS.white,
+    backgroundColor: LVColors.white,
     justifyContent: 'center',
     paddingHorizontal: 12,
   },
   infoTitleText: {
     fontSize: 18,
     fontWeight: '700',
-    color: COLORS.text,
+    color: LVColors.text,
   },
   infoValueText: {
     fontSize: 14,
-    color: COLORS.text,
+    color: LVColors.text,
   },
   input: {
     minHeight: 58,
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.border,
+    backgroundColor: LVColors.white,
+    borderColor: LVColors.border,
     borderRadius: 12,
   },
   inputText: {

@@ -1177,14 +1177,6 @@ const categoryOfVaType = {
   VO: ['VO', 'VOM', 'VOD'], // 대휴
 };
 
-const COLORS = {
-  screen: '#F6F7FB',
-  white: '#FFFFFF',
-  border: '#E5E9F0',
-  text: '#222B45',
-  subText: '#8F9BB3',
-};
-
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#FFF',
@@ -1245,15 +1237,15 @@ const styles = StyleSheet.create({
   infoValueBox: {
     minHeight: 48,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: LVColors.border,
     borderRadius: 8,
-    backgroundColor: COLORS.white,
+    backgroundColor: LVColors.white,
     justifyContent: 'center',
     paddingHorizontal: 12,
   },
   infoValueText: {
     fontSize: 14,
-    color: COLORS.text,
+    color: LVColors.text,
   },
   deleteIconWrap: {
     padding: 8,
