@@ -644,10 +644,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#ABBACD',
   },
-  dateTimeView: {
-    justifyContent: 'center',
-    paddingVertical: 16,
-  },
   totalTimeView: {
     flexDirection: 'row',
     alignItems: 'center',

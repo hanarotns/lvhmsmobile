@@ -404,16 +404,6 @@ const ETC010301 = () => {
 export default ETC010301;
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#FFF',
-    borderColor: '#27A7FF',
-    borderWidth: 1,
-    padding: 10,
-  },
-  buttonDisabled: {
-    backgroundColor: '#F3F5F7',
-    borderColor: '#D5DADF',
-  },
   container: {
     marginVertical: 10,
     marginHorizontal: 20,
@@ -452,33 +442,5 @@ const styles = StyleSheet.create({
   },
   labelSuccessText: {
     color: '#27A7FF',
-  },
-  phoneAuthWrapper: {
-    marginTop: -2,
-    marginBottom: 12,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#E5E8EC',
-    borderRadius: 10,
-    backgroundColor: '#FAFBFC',
-  },
-  phoneAuthRow: {
-    marginBottom: 8,
-  },
-  phoneAuthInfoBox: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  phoneAuthInfoText: {
-    flex: 1,
-    fontSize: 12,
-    color: '#6B7280',
-    marginRight: 8,
-  },
-  phoneAuthSubText: {
-    fontSize: 12,
-    color: '#27A7FF',
-    fontWeight: '600',
   },
 });

@@ -718,21 +718,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  authInfoText: {
-    flex: 1,
-    fontSize: 12,
-    color: '#6B7280',
-    marginRight: 8,
-  },
-  authSuccessText: {
-    color: '#27A7FF',
-    fontWeight: '600',
-  },
-  authTimerText: {
-    fontSize: 12,
-    color: '#27A7FF',
-    fontWeight: '600',
-  },
   guideText: {
     fontSize: 12,
     color: '#6B7280',

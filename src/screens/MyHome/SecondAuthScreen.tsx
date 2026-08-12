@@ -321,10 +321,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F0F2F6',
   },
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#F0F2F6',
-  },
   contents: {
     flex: 1,
     justifyContent: 'space-between',
@@ -353,16 +349,6 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 20,
   },
-  infoLabel: {
-    fontSize: 13,
-    color: '#888',
-    marginBottom: 6,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#ECECEC',
-    marginVertical: 16,
-  },
   guideBox: {
     borderRadius: 16,
     backgroundColor: '#F7F8FA',
@@ -388,24 +374,10 @@ const styles = StyleSheet.create({
     marginTop: 16,
     backgroundColor: '#FFF',
   },
-  bottomArea: {
-    marginTop: 24,
-  },
   mainButton: {
     marginTop: 20,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  subButton: {
-    height: 52,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 12,
-    backgroundColor: '#F3F4F6',
-  },
-  subButtonText: {
-    color: '#333',
   },
   button: {
     backgroundColor: '#FFF',

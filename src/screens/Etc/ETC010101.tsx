@@ -131,10 +131,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: LVColors.white,
   },
-  scrollView: {
-    flex: 1,
-    backgroundColor: LVColors.white,
-  },
   profileCard: {
     flexDirection: 'row',
     alignItems: 'center',

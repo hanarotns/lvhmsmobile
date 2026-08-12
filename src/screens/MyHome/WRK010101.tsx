@@ -286,21 +286,6 @@ const styles = StyleSheet.create({
   select: {
     borderRadius: 8,
   },
-  searchButton: {
-    width: 80,
-    height: 44,
-    borderRadius: 8,
-    backgroundColor: '#FFF',
-    borderColor: '#27A7FF',
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  searchButtonText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#27A7FF',
-  },
   fullApplyButton: {
     width: '100%',
     height: 48,
@@ -329,9 +314,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 12,
   },
-  infoRowNoMargin: {
-    flexDirection: 'row',
-  },
   infoCol: {
     flex: 1,
     marginRight: 10,
@@ -342,15 +324,6 @@ const styles = StyleSheet.create({
     color: LVColors.subText,
     marginBottom: 6,
   },
-  infoValueBox: {
-    minHeight: 48,
-    borderWidth: 1,
-    borderColor: LVColors.border,
-    borderRadius: 8,
-    backgroundColor: LVColors.white,
-    justifyContent: 'center',
-    paddingHorizontal: 12,
-  },
   infoTitleText: {
     fontSize: 18,
     fontWeight: '700',
@@ -360,12 +333,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: LVColors.text,
-  },
-  bottomButton: {
-    padding: 32,
-    position: 'absolute',
-    width: '100%',
-    bottom: 0,
   },
   searchIconButton: {
     marginLeft: 8,

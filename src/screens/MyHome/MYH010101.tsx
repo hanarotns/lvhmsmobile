@@ -586,7 +586,7 @@ const MYH010101 = ({ navigation }) => {
           )}
         </View>
         <View style={{ height: 8 }} />
-        <View style={styles.trackerBottmView}>
+        <View style={styles.trackerBottomView}>
           <Text style={styles.trackerRightText}>
             {todayInfo?.WORK_CODE
               ? todayInfo?.ON_TIME
@@ -1060,11 +1060,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#444457',
     paddingHorizontal: 16,
   },
-  trackerLeftText: {
-    fontWeight: '700',
-    fontSize: 14,
-    color: '#373747',
-  },
   trackerRightText: {
     fontWeight: '500',
     fontSize: 14,
@@ -1086,7 +1081,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: LVColors.warning,
   },
-  trackerBottmView: {
+  trackerBottomView: {
     ...LVStyles.row,
     justifyContent: 'flex-end',
     marginHorizontal: 16,
@@ -1140,7 +1135,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#373747',
   },
-  cardImage: { position: 'absolute', right: 12, bottom: 12 },
+  cardImage: {
+    position: 'absolute',
+    right: 12,
+    bottom: 12,
+  },
   cardCover: {
     borderRadius: 8,
     backgroundColor: '#323336BF',

@@ -409,22 +409,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#ABBACD',
   },
-  typeView: {
-    borderColor: '#FF9E3C',
-    backgroundColor: '#FFF7EF',
-    borderWidth: 1,
-    borderRadius: 16,
-    padding: 6,
-    paddingHorizontal: 12,
-    // @@ 크기 유동적으로 수정할 것.
-    width: 100,
-    alignItems: 'center',
-  },
-  typeText: {
-    color: '#FF9E3C',
-    fontSize: 14,
-    fontWeight: '700',
-  },
   typeChip: {
     borderColor: '#FF9E3C',
     backgroundColor: '#FFF7EF',

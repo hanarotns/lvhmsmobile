@@ -701,21 +701,6 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     borderRadius: 8,
   },
-  searchButton: {
-    width: 80,
-    height: 44,
-    borderRadius: 8,
-    backgroundColor: '#FFF',
-    borderColor: '#27A7FF',
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  searchButtonText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#27A7FF',
-  },
   card: {
     backgroundColor: COLORS.white,
     borderRadius: 16,
@@ -732,28 +717,11 @@ const styles = StyleSheet.create({
     borderColor: '#27A7FF',
     marginBottom: 14,
   },
-  cardHeaderRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 14,
-  },
-  cardBottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginTop: 14,
-  },
   blockTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: COLORS.text,
     marginBottom: 14,
-  },
-  blockTitleNoMargin: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: COLORS.text,
   },
   smallOutlineButton: {
     borderRadius: 8,
@@ -827,12 +795,6 @@ const styles = StyleSheet.create({
   inputText: {
     minHeight: 28,
     textAlignVertical: 'top',
-  },
-  remarkInput: {
-    minHeight: 92,
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.border,
-    borderRadius: 12,
   },
   remarkInputText: {
     minHeight: 68,
