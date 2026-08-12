@@ -7,6 +7,7 @@ import { useRefreshStore } from '@/src/stores/refreshStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
+  LVApplicantInfo,
   LVApprLine,
   LVButton,
   LVChip,
@@ -14,7 +15,6 @@ import {
   LVFormOfContents,
   LVLoadingIndicator,
   LVModal,
-  LVProfileImage,
   LVStyles,
   RefreshControl,
   SafeAreaView,
@@ -357,22 +357,14 @@ const OVT010301 = ({ navigation }) => {
               children={
                 <>
                   {!Util.isEmpty(dt) && (
-                    <View
-                      style={[
-                        LVStyles.row,
-                        { flex: 1, justifyContent: 'flex-start', gap: 8 },
-                      ]}
-                    >
-                      <LVProfileImage
-                        imgStyle={styles.profileImg}
-                        path={dt?.PICTURE_PATH}
-                      />
-                      <Text style={{ fontWeight: '500' }}>
-                        {!Util.isEmpty(dt?.DEPT_NAME)
+                    <LVApplicantInfo
+                      imageUrl={dt?.PICTURE_PATH}
+                      info={
+                        !Util.isEmpty(dt?.DEPT_NAME)
                           ? `[${dt?.DEPT_NAME}] ${dt?.EMP_NAME}`
-                          : `[${dt?.RQ_DEPT_NAME}] ${dt?.RQ_EMP_NAME}`}
-                      </Text>
-                    </View>
+                          : `[${dt?.RQ_DEPT_NAME}] ${dt?.RQ_EMP_NAME}`
+                      }
+                    />
                   )}
                 </>
               }
@@ -675,11 +667,6 @@ const styles = StyleSheet.create({
     color: '#373747',
     minHeight: 100,
     textAlignVertical: 'top', // Android에서 상단 정렬
-  },
-  profileImg: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
   },
   apprLineView: {
     ...LVStyles.row,

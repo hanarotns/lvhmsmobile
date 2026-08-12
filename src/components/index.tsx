@@ -1,6 +1,7 @@
 import LVColors from './LVColors';
 import LVStyles from './LVStyles';
 
+import LVApplicantInfo from './LVApplicantInfo';
 import LVApprLine from './LVApprLine';
 import LVApprLineForm from './LVApprLineForm';
 import LVApprList from './LVApprList';
@@ -87,6 +88,7 @@ export {
   KeyboardAwareScrollView,
   Layout,
   List,
+  LVApplicantInfo,
   LVApprLine,
   LVApprLineForm,
   LVApprList,
