@@ -615,6 +615,20 @@ const LEA010202 = () => {
               Util.toastMsg('선택된 신청정보가 없습니다.', 'info');
               return;
             }
+
+            if (reqInfo?.DETAIL?.length !== leaveInfoList?.length) {
+              Util.toastMsg(
+                `기존 신청정보의 건수(${reqInfo?.DETAIL?.length} 건)와 동일해야합니다.`,
+                'info',
+              );
+              return;
+            }
+
+            const result = isSameVacationList(reqInfo?.DETAIL, leaveInfoList);
+            if (result) {
+              Util.toastMsg('변경/취소된 내용이 없습니다.', 'info');
+              return;
+            }
             // 2. infoList에 추가
             setInfoList(leaveInfoList);
             // 3. 모달 닫기
@@ -1175,6 +1189,17 @@ const categoryOfVaType = {
   V: ['VY', 'VM', 'VA', 'VH', 'VE'], // 연차
   O: ['OD', 'OM', 'OA'], // 공가
   VO: ['VO', 'VOM', 'VOD'], // 대휴
+};
+
+const isSameVacationList = (arrA, arrB) => {
+  if (arrA.length !== arrB.length) return false;
+
+  return arrA.every((itemA) =>
+    arrB.some(
+      (itemB) =>
+        itemA.VA_TYPE === itemB.VA_TYPE && itemA.VA_DATE === itemB.VA_DATE,
+    ),
+  );
 };
 
 const styles = StyleSheet.create({
