@@ -162,29 +162,6 @@ const MYH010101 = ({ navigation }) => {
     }
   };
 
-  // 모달 종료 됐을 때, 체크 타입 초기화
-  useEffect(() => {
-    if (!isVisibleModal) {
-      setCheckType('');
-      // 외근인 경우, 외근 정보 초기화
-      if (checkType === 'O') {
-        setOffsiteInfo({
-          WAT_AREA_NAME:
-            nearestOffice?.ET_STATUS === 'Y'
-              ? nearestOffice.ET_AREA_NAME
-              : address,
-        });
-      }
-    }
-  }, [isVisibleModal]);
-
-  // 모달 종료 됐을 때, 체크 타입 초기화
-  useEffect(() => {
-    if (!isVisible30mModal) {
-      setCheckType('');
-    }
-  }, [isVisible30mModal]);
-
   // 출퇴근 관련 모달 메시지 띄우기 여부
   useEffect(() => {
     if (checkType) {
@@ -513,10 +490,23 @@ const MYH010101 = ({ navigation }) => {
   const handleSave = async () => {
     const isCheck = await checkLogic();
     if (!isCheck) return;
+    const currentCheckType = checkType;
+    handleCloseModal();
+    await saveM(currentCheckType);
+  };
 
+  const handleCloseModal = () => {
     setIsVisibleModal(false);
     setIsVisible30mModal(false);
-    await saveM(checkType);
+    // 외근인 경우, 외근 정보 초기화
+    if (checkType === 'O') {
+      setOffsiteInfo({
+        WAT_AREA_NAME:
+          nearestOffice?.ET_STATUS === 'Y'
+            ? nearestOffice.ET_AREA_NAME
+            : address,
+      });
+    }
     // 근태 타입 초기화
     setCheckType('');
   };
@@ -861,7 +851,7 @@ const MYH010101 = ({ navigation }) => {
                           contents={
                             <ContentsOfNotInside checkType={checkType} />
                           }
-                          onVisible={setIsVisibleModal}
+                          onVisible={handleCloseModal}
                           onOk={handleSave}
                         />
                       )}
@@ -874,7 +864,7 @@ const MYH010101 = ({ navigation }) => {
                           contents={
                             <ContentsOfDuplicatedRecord checkType={checkType} />
                           }
-                          onVisible={setIsVisibleModal}
+                          onVisible={handleCloseModal}
                           onOk={handleSave}
                         />
                       )}
@@ -888,7 +878,7 @@ const MYH010101 = ({ navigation }) => {
                             todayInfo={todayInfo}
                           />
                         }
-                        onVisible={setIsVisible30mModal}
+                        onVisible={handleCloseModal}
                         onOk={handleSave}
                       />
                     )}
@@ -903,7 +893,7 @@ const MYH010101 = ({ navigation }) => {
                             setOffsiteInfo={setOffsiteInfo}
                           />
                         }
-                        onVisible={setIsVisibleModal}
+                        onVisible={handleCloseModal}
                         onOk={handleSave}
                       />
                     )}
