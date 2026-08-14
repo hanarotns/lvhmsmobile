@@ -9,6 +9,7 @@ import {
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
+import { useMenuStore } from '@/src/stores/menuStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -47,6 +48,8 @@ const SignIn = ({ navigation }) => {
   const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
   const sessionInfo = useSessionStore((state) => state.sessionInfo);
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const menuInfo = useMenuStore((state) => state.menuInfo);
+  const setMenuInfo = useMenuStore((state) => state.setMenuInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
   const [url, setUrl] = useState(fetchURL);
@@ -98,6 +101,8 @@ const SignIn = ({ navigation }) => {
     Action.signIn(loginInfo).then((data) => {
       if (data) {
         setSessionInfo(data.session);
+        setMenuInfo(data.menu);
+
         // 로그인 id, pwd 지우기
         if (!loginInfo?.isRememberLogin) {
           setLoginInfo({ ...loginInfo, ...{ loginId: '', loginPwd: '' } });

@@ -14,6 +14,7 @@ import {
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
+import { useMenuStore } from '@/src/stores/menuStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -57,6 +58,8 @@ const MYH010101 = ({ navigation }) => {
   const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
   const sessionInfo = useSessionStore((state) => state.sessionInfo);
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const menuInfo = useMenuStore((state) => state.menuInfo);
+  const setMenuInfo = useMenuStore((state) => state.setMenuInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
@@ -685,9 +688,14 @@ const MYH010101 = ({ navigation }) => {
             img={icon.img_pay}
             imgStyle={{ width: 68, height: 40 }}
             onPress={() => {
-              Alert.alert('알림', '서비스 준비중입니다.');
-              // @@ 연봉테이블 작업 후 다시 진행.
-              // movingScreen.navigate('ACC010101')
+              const isCheckMenuPermi = menuInfo.some(
+                (item) => item.CODE === 'MMACC010101',
+              );
+              if (isCheckMenuPermi) {
+                movingScreen.navigate('ACC010101');
+              } else {
+                Alert.alert('알림', '서비스 준비중입니다.');
+              }
             }}
             touchable
           />
