@@ -80,6 +80,18 @@ const MYH010101 = ({ navigation }) => {
   const [isSecondAuthScreen, setIsSecondAuthScreen] = useState(false);
   const [offsiteInfo, setOffsiteInfo] = useState({});
 
+  // 화면 정의하기
+  const notice1 = laborNotice1?.[0];
+  const notice2 = laborNotice2?.[0];
+  const refusal = laborRefusal?.[0];
+  const getHomeViewType = () => {
+    if (notice1?.LABOR_CHECK === 'N') return 'NOTICE_1';
+    if (notice2?.LABOR_CHECK === 'N') return 'NOTICE_2';
+    if (refusal && Util.isEmpty(refusal.CONFIRM_DATE)) return 'REFUSAL';
+    return 'HOME';
+  };
+  const homeViewType = getHomeViewType();
+
   useEffect(() => {
     if (!isSecondAuthScreen) {
       mount();
@@ -511,6 +523,29 @@ const MYH010101 = ({ navigation }) => {
     setCheckType('');
   };
 
+  const handleConfirmNotice1 = async () => {
+    await Action.saveRefusalNotice(notice1);
+    setLaborNotice1([]);
+    movingScreen.navigate('LEA020101');
+  };
+
+  const handleConfirmNotice2 = async () => {
+    await Action.saveRefusalNotice(notice2);
+    setLaborNotice2([]);
+  };
+
+  const handleConfirmRefusal = async () => {
+    const payload = {
+      P_COMPANY_CODE: refusal?.COMPANY_CODE,
+      P_EMP_ID: refusal?.EMP_ID,
+      P_VA_DATE: refusal?.PLAN_VA_DATE,
+      P_JOB_NO: refusal?.PLAN_JOB_NO,
+    };
+
+    await Action.LaborRefusal_confirm(payload);
+    setLaborRefusal([]);
+  };
+
   const handleRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -786,119 +821,90 @@ const MYH010101 = ({ navigation }) => {
                 />
               }
             >
-              {!Util.isEmpty(laborNotice1) &&
-                laborNotice1?.[0]?.LABOR_CHECK === 'N' && (
-                  // 연차촉진통지
-                  <LaborNoticeScreen
-                    type='annual'
-                    data={laborNotice1[0]}
-                    onConfirm={() => {
-                      Action.saveRefusalNotice(laborNotice1[0]);
-                      setLaborNotice1([]);
-                      movingScreen.navigate('LEA020101');
-                    }}
-                  />
-                )}
-              {!Util.isEmpty(laborNotice2) &&
-                laborNotice2?.[0]?.LABOR_CHECK === 'N' && (
-                  // 연차촉진통지 2차
-                  <LaborNoticeScreen
-                    type='annual'
-                    data={laborNotice2[0]}
-                    onConfirm={() => {
-                      Action.saveRefusalNotice(laborNotice2[0]);
-                      setLaborNotice2([]);
-                    }}
-                  />
-                )}
-              {!Util.isEmpty(laborRefusal) &&
-                Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE) && (
-                  // 노무수령거부통지
-                  <LaborNoticeScreen
-                    type='refusal'
-                    data={laborRefusal[0]}
-                    onConfirm={() => {
-                      const payload = {
-                        P_COMPANY_CODE: laborRefusal?.[0]?.COMPANY_CODE,
-                        P_EMP_ID: laborRefusal?.[0]?.EMP_ID,
-                        P_VA_DATE: laborRefusal?.[0]?.PLAN_VA_DATE,
-                        P_JOB_NO: laborRefusal?.[0]?.PLAN_JOB_NO,
-                      };
-                      Action.LaborRefusal_confirm(payload);
-                      setLaborRefusal([]);
-                    }}
-                  />
-                )}
-              {(Util.isEmpty(laborNotice1) ||
-                laborNotice1?.[0]?.LABOR_CHECK === 'Y') &&
-                (Util.isEmpty(laborNotice2) ||
-                  laborNotice2?.[0]?.LABOR_CHECK === 'Y') &&
-                (Util.isEmpty(laborRefusal) ||
-                  (!Util.isEmpty(laborRefusal) &&
-                    !Util.isEmpty(laborRefusal?.[0]?.CONFIRM_DATE))) && (
-                  <>
-                    <View style={styles.layout}>
-                      {LayoutOfGreeting()}
-                      <LayoutOfTracker />
-                      <LayoutOfCards />
-                    </View>
-                    {isVisibleModal &&
-                      ['S', 'E'].includes(checkType) &&
-                      nearestOffice?.ET_STATUS === 'N' && (
-                        <LVModal
-                          title={'알림'}
-                          titleIcon={icon.ico_warning}
-                          contents={
-                            <ContentsOfNotInside checkType={checkType} />
-                          }
-                          onVisible={handleCloseModal}
-                          onOk={handleSave}
-                        />
-                      )}
-                    {isVisibleModal &&
-                      ((checkType === 'S' && todayInfo?.START_DATETIME) ||
-                        (checkType === 'E' && todayInfo?.END_DATETIME)) && (
-                        <LVModal
-                          title={'알림'}
-                          titleIcon={icon.ico_warning}
-                          contents={
-                            <ContentsOfDuplicatedRecord checkType={checkType} />
-                          }
-                          onVisible={handleCloseModal}
-                          onOk={handleSave}
-                        />
-                      )}
-                    {isVisible30mModal && (
+              {homeViewType === 'NOTICE_1' && (
+                <LaborNoticeScreen
+                  type='annual'
+                  data={notice1}
+                  onConfirm={handleConfirmNotice1}
+                />
+              )}
+              {homeViewType === 'NOTICE_2' && (
+                <LaborNoticeScreen
+                  type='annual'
+                  data={notice2}
+                  onConfirm={handleConfirmNotice2}
+                />
+              )}
+              {homeViewType === 'REFUSAL' && (
+                // 노무수령거부통지
+                <LaborNoticeScreen
+                  type='refusal'
+                  data={refusal}
+                  onConfirm={handleConfirmRefusal}
+                />
+              )}
+              {homeViewType === 'HOME' && (
+                <>
+                  <View style={styles.layout}>
+                    {LayoutOfGreeting()}
+                    <LayoutOfTracker />
+                    <LayoutOfCards />
+                  </View>
+                  {isVisibleModal &&
+                    ['S', 'E'].includes(checkType) &&
+                    nearestOffice?.ET_STATUS === 'N' && (
+                      <LVModal
+                        title={'알림'}
+                        titleIcon={icon.ico_warning}
+                        contents={<ContentsOfNotInside checkType={checkType} />}
+                        onVisible={handleCloseModal}
+                        onOk={handleSave}
+                      />
+                    )}
+                  {isVisibleModal &&
+                    ((checkType === 'S' && todayInfo?.START_DATETIME) ||
+                      (checkType === 'E' && todayInfo?.END_DATETIME)) && (
                       <LVModal
                         title={'알림'}
                         titleIcon={icon.ico_warning}
                         contents={
-                          <ContentsOfNotIn30m
-                            checkType={checkType}
-                            todayInfo={todayInfo}
-                          />
+                          <ContentsOfDuplicatedRecord checkType={checkType} />
                         }
                         onVisible={handleCloseModal}
                         onOk={handleSave}
                       />
                     )}
-                    {isVisibleModal && checkType === 'O' && (
-                      <LVModal
-                        title={'외근등록'}
-                        titleIcon={icon.ico_out}
-                        contents={
-                          <ContentsOfOffsite
-                            nearestOffice={nearestOffice}
-                            offsiteInfo={offsiteInfo}
-                            setOffsiteInfo={setOffsiteInfo}
-                          />
-                        }
-                        onVisible={handleCloseModal}
-                        onOk={handleSave}
-                      />
-                    )}
-                  </>
-                )}
+                  {isVisible30mModal && (
+                    <LVModal
+                      title={'알림'}
+                      titleIcon={icon.ico_warning}
+                      contents={
+                        <ContentsOfNotIn30m
+                          checkType={checkType}
+                          todayInfo={todayInfo}
+                        />
+                      }
+                      onVisible={handleCloseModal}
+                      onOk={handleSave}
+                    />
+                  )}
+                  {isVisibleModal && checkType === 'O' && (
+                    <LVModal
+                      title={'외근등록'}
+                      titleIcon={icon.ico_out}
+                      contents={
+                        <ContentsOfOffsite
+                          nearestOffice={nearestOffice}
+                          offsiteInfo={offsiteInfo}
+                          setOffsiteInfo={setOffsiteInfo}
+                        />
+                      }
+                      onVisible={handleCloseModal}
+                      onOk={handleSave}
+                    />
+                  )}
+                </>
+              )}
             </KeyboardAwareScrollView>
           </Layout>
         </SafeAreaView>
