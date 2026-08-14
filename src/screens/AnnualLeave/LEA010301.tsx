@@ -68,13 +68,6 @@ const LEA010301 = ({ navigation }) => {
     mount();
   }, []);
 
-  useEffect(() => {
-    // 반려사유 모달 껐을 때 반려사유 초기화
-    if (!isVisibleModal) {
-      setRefusalReason('');
-    }
-  }, [isVisibleModal]);
-
   const mount = async () => {
     setLoading(true);
     const payload = {
@@ -299,6 +292,11 @@ const LEA010301 = ({ navigation }) => {
         movingScreen.goBack();
       }, 1200);
     }
+  };
+
+  const handleCloseRefusalModal = () => {
+    setIsVisibleModal(false);
+    setRefusalReason('');
   };
 
   const handleRefresh = () => {
@@ -572,7 +570,7 @@ const LEA010301 = ({ navigation }) => {
               setRefusalReason={setRefusalReason}
             />
           }
-          onVisible={setIsVisibleModal}
+          onVisible={handleCloseRefusalModal}
           onOk={handleRefusalForApprover}
         />
       )}

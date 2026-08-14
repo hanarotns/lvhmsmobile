@@ -65,13 +65,6 @@ const OVT010301 = ({ navigation }) => {
     mount();
   }, []);
 
-  useEffect(() => {
-    // 반려내용 모달 껐을 때 반려내용 초기화
-    if (!isVisibleModal) {
-      setRefusalReason('');
-    }
-  }, [isVisibleModal]);
-
   const mount = async () => {
     setLoading(true);
     const payload = {
@@ -335,6 +328,11 @@ const OVT010301 = ({ navigation }) => {
     }
   };
 
+  const handleCloseRefusalModal = () => {
+    setIsVisibleModal(false);
+    setRefusalReason('');
+  };
+
   const handleRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -551,7 +549,6 @@ const OVT010301 = ({ navigation }) => {
             )}
           </View>
         )}
-
         {dt?.EMP_ID &&
           (dt?.CONFIRM_JOB_NO
             ? dt?.CONFIRM_P_STATUS !== 'A'
@@ -595,7 +592,7 @@ const OVT010301 = ({ navigation }) => {
               setRefusalReason={setRefusalReason}
             />
           }
-          onVisible={setIsVisibleModal}
+          onVisible={handleCloseRefusalModal}
           onOk={handleRefusalForApprover}
         />
       )}
