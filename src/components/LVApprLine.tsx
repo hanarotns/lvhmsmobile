@@ -38,17 +38,23 @@ const LVApprLine = (props: any) => {
                   {e?.NAME_LOC || e?.AP_EMP_NAME || e?.APPROVAL_EMP_NAME}
                 </Text>
               </View>
-              {/* 결재 시간 */}
-              {!!(e?.JOB_NO && !reqApproval) && (
-                <View style={styles.centerView}>
-                  <Text style={styles.dateTime}>
-                    {e?.CONFIRM_DATE.substring(2, 10)}
-                  </Text>
-                  <Text style={styles.dateTime}>
-                    {e?.CONFIRM_DATE.substring(11, 16)}
-                  </Text>
-                </View>
-              )}
+              {/* (결재된 경우) 결재 시간 or (반려된 경우) 반려 사유*/}
+              {!!(e?.JOB_NO && !reqApproval) &&
+                (e?.LINE_STATUS === 'X' ? (
+                  <View style={styles.centerView}>
+                    <Text style={styles.reject}>{e?.LINE_STATUS_NAME}</Text>
+                    <Text style={styles.reject}>{e?.REASON_REMARKS}</Text>
+                  </View>
+                ) : (
+                  <View style={styles.centerView}>
+                    <Text style={styles.dateTime}>
+                      {e?.CONFIRM_DATE.substring(2, 10)}
+                    </Text>
+                    <Text style={styles.dateTime}>
+                      {e?.CONFIRM_DATE.substring(11, 16)}
+                    </Text>
+                  </View>
+                ))}
             </View>
             <View style={{ justifyContent: 'center' }}>
               {i !== data.length - 1 ? (
@@ -106,6 +112,11 @@ const styles = StyleSheet.create({
   apEmpName: {
     fontWeight: '700',
     fontSize: 14,
+  },
+  reject: {
+    color: '#FF9294',
+    fontWeight: '700',
+    fontSize: 12,
   },
   dateTime: {
     color: '#ABBACD',
