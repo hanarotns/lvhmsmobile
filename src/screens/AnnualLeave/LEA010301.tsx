@@ -583,7 +583,6 @@ const LEA010301 = ({ navigation }) => {
           isUseSaveButton={false}
           contents={<ContentsOfAttach fileList={fileList} />}
           onVisible={setIsVisibleAttachModal}
-          onOk={handleRefusalForApprover}
         />
       )}
 
