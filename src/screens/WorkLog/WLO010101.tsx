@@ -124,6 +124,12 @@ const WLO010101 = () => {
       .forEach(
         (key: string, i: number) => (obj[key] = { ...obj[key], shift: 'diff' }),
       );
+    res?.HD?.filter((item) => ['OVERTIME'].includes(item.M_TYPE))
+      .map((item) => item.M_DATE)
+      .forEach(
+        (key: string, i: number) =>
+          (obj[key] = { ...obj[key], overtime: 'ot' }),
+      );
     setCalDispList(obj);
     // 리스트 가져오기 (선택된 날의 raw 데이터)
     setList(res?.DT);
@@ -244,6 +250,11 @@ const WLO010101 = () => {
                     },
                   ]}
                 >
+                  {marking?.overtime == 'ot' && (
+                    <View style={styles.clockView}>
+                      <Icon name='clock-outline' size={12} color='#27A7FF' />
+                    </View>
+                  )}
                   <Text
                     style={[
                       {
@@ -544,5 +555,10 @@ const styles = StyleSheet.create({
     height: 3,
     borderRadius: 2,
     marginTop: 4,
+  },
+  clockView: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
   },
 });
