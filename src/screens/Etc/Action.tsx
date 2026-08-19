@@ -118,13 +118,87 @@ const saveUserInfo = async (body: object) => {
   return result;
 };
 
+const getCertificateInfo = async (body: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'getInfoM', {
+    body: JSON.stringify({
+      PORU010203F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010203F1;
+};
+
+const getCertificateList = async (body: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'getListM', {
+    body: JSON.stringify({
+      PORU010203F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010203G1;
+};
+
+const getCertificateEmpInfo = async (body: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'getEmpInfo', {
+    body: JSON.stringify({
+      PORU010203F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010203F3;
+};
+
+const saveCertificate = async (body: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'GMobileSend', {
+    body: JSON.stringify({
+      PORU010203G1: {
+        data: body,
+      },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+const deleteCertificate = async (body: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'GDelete', {
+    body: JSON.stringify({
+      PORU010203G1: {
+        data: body,
+      },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
 export {
   // 계정 비밀번호 변경
   changePw,
   // 계정 비밀번호 동일여부 확인
   checkPw,
+  // 증명서 삭제
+  deleteCertificate,
+  // 증명서 사용자 정보 조회
+  getCertificateEmpInfo,
+  // 증명서 통계 조회
+  getCertificateInfo,
+  // 증명서 리스트 조회
+  getCertificateList,
   // 계정 사용자 정보 조회 & 로그인 히스토리 (로그인 히스토리는 미사용)
   getUserInfoNLoginHistory,
+  // 중명서 저장 및 전송
+  saveCertificate,
   // 계정 사용자 정보 변경
   saveUserInfo,
 };

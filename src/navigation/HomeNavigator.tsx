@@ -9,6 +9,9 @@ import WRK010201 from '../screens/MyHome/WRK010201';
 import ETC010101 from '../screens/Etc/ETC010101';
 import ETC010201 from '../screens/Etc/ETC010201';
 import ETC010301 from '../screens/Etc/ETC010301';
+import ETC010401 from '../screens/Etc/ETC010401';
+import ETC010402 from '../screens/Etc/ETC010402';
+import ETC010403 from '../screens/Etc/ETC010403';
 // 근태
 import WLO010101 from '../screens/WorkLog/WLO010101';
 // 휴가
@@ -77,6 +80,21 @@ export const HomeNavigator = (props) => (
       name='ETC010301'
       component={ETC010301}
       options={{ title: '비밀번호 변경' }}
+    />
+    <Stack.Screen
+      name='ETC010401'
+      component={ETC010401}
+      options={{ title: '증명서 현황' }}
+    />
+    <Stack.Screen
+      name='ETC010402'
+      component={ETC010402}
+      options={{ title: '증명서 신청하기' }}
+    />
+    <Stack.Screen
+      name='ETC010403'
+      component={ETC010403}
+      options={{ title: '증명서 현황 상세' }}
     />
     <Stack.Screen
       name='WLO010101'

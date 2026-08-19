@@ -92,6 +92,14 @@ const ETC010101 = () => {
             </TouchableOpacity>
             <Divider />
             <TouchableOpacity
+              onPress={() => movingScreen.navigate('ETC010401')}
+              style={styles.menuButton}
+            >
+              <Icon name='view-grid-outline' color='#373747' />
+              <Text style={styles.menuText}>증명서 신청</Text>
+            </TouchableOpacity>
+            <Divider />
+            <TouchableOpacity
               onPress={() => movingScreen.navigate('LEA020101')}
               style={styles.menuButton}
             >
