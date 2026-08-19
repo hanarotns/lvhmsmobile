@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
+import { useMenuStore } from '@/src/stores/menuStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
@@ -28,6 +29,8 @@ const ETC010101 = () => {
   const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
   const sessionInfo = useSessionStore((state) => state.sessionInfo);
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const menuInfo = useMenuStore((state) => state.menuInfo);
+  const setMenuInfo = useMenuStore((state) => state.setMenuInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
@@ -92,7 +95,16 @@ const ETC010101 = () => {
             </TouchableOpacity>
             <Divider />
             <TouchableOpacity
-              onPress={() => movingScreen.navigate('ETC010401')}
+              onPress={() => {
+                const isCheckMenuPermi = menuInfo.some(
+                  (item) => item.CODE === 'MMCER010101',
+                );
+                if (isCheckMenuPermi) {
+                  movingScreen.navigate('ETC010401');
+                } else {
+                  Alert.alert('알림', '서비스 준비중입니다.');
+                }
+              }}
               style={styles.menuButton}
             >
               <Icon name='view-grid-outline' color='#373747' />
