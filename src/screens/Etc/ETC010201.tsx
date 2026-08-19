@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
+  Icon,
   KeyboardAwareScrollView,
   LVButton,
   LVLoadingIndicator,
   LVModal,
+  LVProfileImage,
   LVRadioButton,
   LVStyles,
   SafeAreaView,
@@ -115,6 +117,21 @@ const ETC010201 = () => {
           <View>
             <View style={styles.container}>
               <View style={{}}>
+                <View style={styles.centerView}>
+                  <View>
+                    <LVProfileImage
+                      imgStyle={styles.profileImg}
+                      path={empInfo?.PICTURE_PATH}
+                    />
+                    <TouchableOpacity
+                      style={styles.photoButton}
+                      onPress={() => console.log('@@ 이미지첨부 작업')}
+                    >
+                      <Icon name='camera-plus' color='#939DAA88' />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
                 <Form label='법인명' value={userInfo?.COMPANY_NAME} />
                 <Form label='부서명' value={userInfo?.DEPT_NAME} />
                 <Form label='아이디' value={userInfo?.F_USER_ID} />
@@ -350,5 +367,29 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 14,
     color: '#373747',
+  },
+  profileImg: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: '#939DAA88',
+  },
+  photoButton: {
+    position: 'absolute',
+    bottom: -4,
+    right: -4,
+    backgroundColor: '#FFF',
+    width: 35,
+    height: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: '#939DAA88',
+  },
+  centerView: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
