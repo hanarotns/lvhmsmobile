@@ -302,58 +302,6 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
     borderRadius: 8,
   },
-  labelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    minHeight: 24,
-    marginBottom: 4,
-  },
-  label: {
-    color: '#373747',
-    fontSize: 16,
-  },
-  labelMessageText: {
-    fontSize: 12,
-    fontWeight: '600',
-    flexShrink: 1,
-    textAlign: 'right',
-    marginLeft: 12,
-  },
-  labelErrorText: {
-    color: '#FF9294',
-  },
-  labelSuccessText: {
-    color: '#27A7FF',
-  },
-  phoneAuthWrapper: {
-    marginTop: -2,
-    marginBottom: 12,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#E5E8EC',
-    borderRadius: 10,
-    backgroundColor: '#FAFBFC',
-  },
-  phoneAuthRow: {
-    marginBottom: 8,
-  },
-  phoneAuthInfoBox: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  phoneAuthInfoText: {
-    flex: 1,
-    fontSize: 12,
-    color: '#6B7280',
-    marginRight: 8,
-  },
-  phoneAuthSubText: {
-    fontSize: 12,
-    color: '#27A7FF',
-    fontWeight: '600',
-  },
   formLabel: {
     fontWeight: '600',
     fontSize: 14,
