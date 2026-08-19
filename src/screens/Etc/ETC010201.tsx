@@ -1,5 +1,6 @@
+import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -52,6 +53,7 @@ const ETC010201 = () => {
   const [loginHistory, setLoginHistory] = useState([]);
   const [userCp, setUserCp] = useState('');
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [selectedImageUri, setSelectedImageUri] = useState<string | null>(null);
 
   useEffect(() => {
     if (isFocused) {
@@ -103,6 +105,27 @@ const ETC010201 = () => {
     }
   };
 
+  const handleSelectImage = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permissionResult.granted) {
+      Util.toastMsg('사진을 선택하려면 앨범 접근 권한이 필요합니다.', 'info');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: false,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      setSelectedImageUri(result.assets[0].uri);
+    }
+  };
+
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
       <View style={{ flex: 1 }}>
@@ -119,13 +142,20 @@ const ETC010201 = () => {
               <View style={{}}>
                 <View style={styles.centerView}>
                   <View>
-                    <LVProfileImage
-                      imgStyle={styles.profileImg}
-                      path={empInfo?.PICTURE_PATH}
-                    />
+                    {selectedImageUri ? (
+                      <Image
+                        source={{ uri: selectedImageUri }}
+                        style={styles.profileImg}
+                      />
+                    ) : (
+                      <LVProfileImage
+                        imgStyle={styles.profileImg}
+                        path={empInfo?.PICTURE_PATH}
+                      />
+                    )}
                     <TouchableOpacity
                       style={styles.photoButton}
-                      onPress={() => console.log('@@ 이미지첨부 작업')}
+                      onPress={handleSelectImage}
                     >
                       <Icon name='camera-plus' color='#939DAA88' />
                     </TouchableOpacity>
