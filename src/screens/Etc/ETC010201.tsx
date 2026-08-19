@@ -9,6 +9,7 @@ import {
   KeyboardAwareScrollView,
   LVButton,
   LVLoadingIndicator,
+  LVModal,
   LVRadioButton,
   LVStyles,
   SafeAreaView,
@@ -23,11 +24,9 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import * as Action from './Action';
+import AuthScreen from './AuthScreen';
 
 type UserInfo = {};
-
-type ValidationErrors = Partial<Record<keyof UserInfo, string>>;
-type TouchedFields = Partial<Record<keyof UserInfo, boolean>>;
 
 type RootStackParamList = {
   DetailScreen: undefined;
@@ -46,10 +45,11 @@ const ETC010201 = () => {
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
 
   const [loading, setLoading] = useState(true);
-  const [confirming, setConfirming] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
   const [loginHistory, setLoginHistory] = useState([]);
+  const [userCp, setUserCp] = useState('');
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
 
   useEffect(() => {
     if (isFocused) {
@@ -91,8 +91,7 @@ const ETC010201 = () => {
 
   const handleSave = async () => {
     const isCheck = await checkLogic();
-    if (!isCheck) {
-    }
+    if (!isCheck) return;
 
     setLoading(true);
     const result = await Action.saveUserInfo(userInfo);
@@ -155,8 +154,9 @@ const ETC010201 = () => {
                   label='휴대폰번호'
                   fieldKey='F_USER_CP'
                   value={userInfo?.F_USER_CP}
-                  editType={'input'}
+                  editType={'userCp'}
                   onChange={updateUserInfo}
+                  setIsVisibleModal={setIsVisibleModal}
                 />
                 {/* 모바일에서 다국어 기능 지원하지 않으므로 주석처리 */}
                 {/* <Form
@@ -178,6 +178,22 @@ const ETC010201 = () => {
           />
         </View>
       </View>
+      {isVisibleModal && (
+        <LVModal
+          title={'휴대폰번호 변경'}
+          contents={<AuthScreen setUserCp={setUserCp} />}
+          onVisible={setIsVisibleModal}
+          onOk={() => {
+            if (!userCp) {
+              Util.toastMsg('인증이 완료되지 않았습니다.', 'info');
+              return;
+            }
+            updateUserInfo('F_USER_CP', userCp);
+            setIsVisibleModal(false);
+          }}
+          buttonText={'변경'}
+        />
+      )}
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>
   );
@@ -185,7 +201,8 @@ const ETC010201 = () => {
 export default ETC010201;
 
 const Form = (props: any) => {
-  const { label, fieldKey, value, editType, onChange } = props;
+  const { label, fieldKey, value, editType, onChange, setIsVisibleModal } =
+    props;
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', height: 48 }}>
       <View style={{ width: '20%' }}>
@@ -201,6 +218,17 @@ const Form = (props: any) => {
             }}
             value={value}
           />
+        )}
+        {editType === 'userCp' && (
+          <View style={LVStyles.row}>
+            <Text style={styles.formValue}>{value}</Text>
+            <LVButton
+              title='수정'
+              buttonStyle={styles.button}
+              onPress={() => setIsVisibleModal(true)}
+              textStyle={{ color: '#27A7FF' }}
+            />
+          </View>
         )}
         {editType === 'radio' && (
           <View
@@ -234,6 +262,12 @@ const Form = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#FFF',
+    borderColor: '#27A7FF',
+    borderWidth: 1,
+    padding: 10,
+  },
   container: {
     marginVertical: 10,
     marginHorizontal: 20,
@@ -250,6 +284,58 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderColor: 'lightgray',
     borderRadius: 8,
+  },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 24,
+    marginBottom: 4,
+  },
+  label: {
+    color: '#373747',
+    fontSize: 16,
+  },
+  labelMessageText: {
+    fontSize: 12,
+    fontWeight: '600',
+    flexShrink: 1,
+    textAlign: 'right',
+    marginLeft: 12,
+  },
+  labelErrorText: {
+    color: '#FF9294',
+  },
+  labelSuccessText: {
+    color: '#27A7FF',
+  },
+  phoneAuthWrapper: {
+    marginTop: -2,
+    marginBottom: 12,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#E5E8EC',
+    borderRadius: 10,
+    backgroundColor: '#FAFBFC',
+  },
+  phoneAuthRow: {
+    marginBottom: 8,
+  },
+  phoneAuthInfoBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  phoneAuthInfoText: {
+    flex: 1,
+    fontSize: 12,
+    color: '#6B7280',
+    marginRight: 8,
+  },
+  phoneAuthSubText: {
+    fontSize: 12,
+    color: '#27A7FF',
+    fontWeight: '600',
   },
   formLabel: {
     fontWeight: '600',
