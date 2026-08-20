@@ -8,6 +8,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
   KeyboardAwareScrollView,
+  LVApprLine,
   LVButton,
   LVChip,
   LVConfirmIndicator,
@@ -18,6 +19,7 @@ import {
   SafeAreaView,
   Text,
 } from '@/src/components';
+import { Util } from '@/src/lib';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import 'dayjs/locale/ko';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
@@ -165,7 +167,7 @@ const ETC010403 = () => {
                 <Text style={{ fontWeight: '700' }}>{dt?.SUBMIT_PLACE}</Text>
               }
             />
-            {/* <LVFormOfContents
+            <LVFormOfContents
               title={'결재선'}
               children={
                 <View style={LVStyles.row}>
@@ -181,7 +183,7 @@ const ETC010403 = () => {
                   )}
                 </View>
               }
-            /> */}
+            />
           </View>
         </KeyboardAwareScrollView>
         <View style={LVStyles.bottomButtonView}>
