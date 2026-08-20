@@ -105,8 +105,8 @@ const ETC010401 = () => {
     setLoading(true);
     setApprFilter([allFilter, ...restFilter]);
 
-    const dateS = selectedDate.startOf('month').toDate();
-    const dateE = selectedDate.endOf('month').toDate();
+    const dateS = selectedDate.subtract(1, 'year').toDate();
+    const dateE = selectedDate.toDate();
     setFromDate(dateS);
     setToDate(dateE);
 
