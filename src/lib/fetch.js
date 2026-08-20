@@ -41,13 +41,15 @@ const request = async (code, method, config, toastYN) => {
 
     const response = await fetch(`${fetchURL}/api/${code}/${method}`, options);
     const responseJson = await response.json();
+    const logResponse =
+      method === 'getInitNewPortal' ? '로그인API는 길어서 생략' : responseJson;
     console.log(
       '\n🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡🧡\n',
       ` ${code}/${method}`,
       '\n------------------------------------------------------------\n',
       config.body,
       '\n------------------------------------------------------------\n',
-      responseJson,
+      logResponse,
       '\n💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙💙\n',
     );
     const msg = _.get(responseJson, 'MSG');
@@ -100,7 +102,7 @@ const preCheckSignIn = async () => {
   const passed = await Util.checkIsToken();
   console.log('@@ passed', passed);
   const sessionData = await getInit();
-  console.log('@@ sessionData', sessionData);
+  // console.log('@@ sessionData', sessionData);
 
   if (passed && sessionData) {
     return sessionData.session;
