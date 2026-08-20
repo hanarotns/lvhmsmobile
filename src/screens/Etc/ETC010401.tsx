@@ -178,7 +178,7 @@ const ETC010401 = () => {
           <Text style={styles.headerText}>
             {empInfo?.EMP_NAME_LC}님 증명서 현황입니다.
           </Text>
-          <LayoutOfStats stats={stats} />\
+          <LayoutOfStats stats={stats} />
           <LVButton
             title='증명서 신청하기'
             onPress={() => {
