@@ -101,7 +101,7 @@ const SignIn = ({ navigation }) => {
     Action.signIn(loginInfo).then((data) => {
       if (data) {
         setSessionInfo(data.session);
-        setMenuInfo(data.menu);
+        setMenuInfo(data.hMenu);
 
         // 로그인 id, pwd 지우기
         if (!loginInfo?.isRememberLogin) {

@@ -62,7 +62,7 @@ export default function RootNavigator() {
     Fetch.preCheckSignIn().then(async (result) => {
       if (result?.session && loginInfo.autoLogin === 'true') {
         setSessionInfo(result?.session);
-        setMenuInfo(result?.menu);
+        setMenuInfo(result?.hMenu);
       } else {
         AsyncStorage.removeItem('password');
       }
