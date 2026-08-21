@@ -47,7 +47,6 @@ const ETC010403 = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   // mount API 기본 정보
-  const [config, setConfig] = useState({});
   const [approvalLine, setApprovalLine] = useState([]);
   const [certiTypeList, setCertiTypeList] = useState([]);
   const [selectedType, setSelectedType] = useState({});
@@ -62,13 +61,6 @@ const ETC010403 = () => {
     setLoading(true);
     setDt(route?.params);
 
-    // 신청자정보 조회
-    const payload = {
-      EMP_ID: empInfo?.EMP_ID,
-    };
-    let res1 = await Action.getCertificateEmpInfo(payload);
-
-    setConfig(res1?.[0]);
     let res2 = await COMAction.getCode('code', 'PC0001', {
       GCODE: 'PE_TYPE',
     });
@@ -129,7 +121,7 @@ const ETC010403 = () => {
             />
             <LVFormOfContents
               title={'주소'}
-              children={<Text>{config?.EMP_ADDR}</Text>}
+              children={<Text>{dt?.EMP_ADDR}</Text>}
             />
             <LVFormOfContents
               title={'발급번호'}
