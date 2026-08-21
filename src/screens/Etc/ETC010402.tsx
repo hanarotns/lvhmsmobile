@@ -11,6 +11,7 @@ import {
   LVApprLineForm,
   LVButton,
   LVChip,
+  LVColors,
   LVConfirmIndicator,
   LVFormOfContents,
   LVLoadingIndicator,
@@ -159,7 +160,15 @@ const ETC010402 = () => {
             />
             <LVFormOfContents
               title={'주소'}
-              children={<Text>{config?.EMP_ADDR}</Text>}
+              children={
+                <View>
+                  <Text>{config?.EMP_ADDR}</Text>
+                  <Text style={{ color: LVColors.warning }}>
+                    ※ 주소는 인사정보를 가져와 자동입력됩니다. 정보가 다를 경우
+                    인사팀에 요청하시어 정정하시기 바랍니다.
+                  </Text>
+                </View>
+              }
             />
             <LVFormOfContents
               title={'결재선'}
