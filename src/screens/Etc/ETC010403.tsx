@@ -187,11 +187,13 @@ const ETC010403 = () => {
           </View>
         </KeyboardAwareScrollView>
         <View style={LVStyles.bottomButtonView}>
-          <LVButton
-            title={'삭제'}
-            onPress={handleDelete}
-            buttonStyle={LVStyles.grayBgButton}
-          />
+          {dt?.SUBMIT_STATUS === 'W' && (
+            <LVButton
+              title={'삭제'}
+              onPress={handleDelete}
+              buttonStyle={LVStyles.grayBgButton}
+            />
+          )}
         </View>
       </View>
       {loading && <LVLoadingIndicator />}
