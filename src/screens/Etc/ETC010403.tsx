@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -7,22 +7,24 @@ import { useRefreshStore } from '@/src/stores/refreshStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
+  Icon,
   KeyboardAwareScrollView,
   LVApprLine,
   LVButton,
   LVChip,
   LVConfirmIndicator,
   LVFormOfContents,
+  LVImage,
   LVLoadingIndicator,
+  LVModal,
   LVStyles,
   RefreshControl,
   SafeAreaView,
   Text,
 } from '@/src/components';
-import { Util } from '@/src/lib';
+import { Fetch, Util } from '@/src/lib';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import 'dayjs/locale/ko';
-import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action';
 
 type RootStackParamList = {
@@ -47,11 +49,9 @@ const ETC010403 = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   // mount API 기본 정보
-  const [approvalLine, setApprovalLine] = useState([]);
-  const [certiTypeList, setCertiTypeList] = useState([]);
-  const [selectedType, setSelectedType] = useState({});
-  const [certiInfo, setCertiInfo] = useState({});
   const [dt, setDt] = useState({});
+  const [fileList, setFileList] = useState([]);
+  const [isVisibleAttachModal, setIsVisibleAttachModal] = useState(false);
 
   useEffect(() => {
     mount();
@@ -61,10 +61,16 @@ const ETC010403 = () => {
     setLoading(true);
     setDt(route?.params);
 
-    let res2 = await COMAction.getCode('code', 'PC0001', {
-      GCODE: 'PE_TYPE',
-    });
-    setCertiTypeList(res2);
+    // (첨부파일 관련) 발급 번호 있어야지만 조회
+    if (route?.params?.ISSUE_NO) {
+      const payloadFile = {
+        REF_NO: route?.params?.ISSUE_NO,
+        REF_TYPE: 'PT',
+        S_FUNC_CODE: 'PT',
+      };
+      const resFile = await Fetch.getFileList(payloadFile);
+      setFileList(resFile.data);
+    }
     setLoading(false);
   };
 
@@ -86,6 +92,11 @@ const ETC010403 = () => {
         movingScreen.goBack();
       }, 1200);
     }
+  };
+
+  /** 미리보기 */
+  const handlePreView = async () => {
+    setIsVisibleAttachModal(true);
   };
 
   const handleRefresh = () => {
@@ -176,6 +187,34 @@ const ETC010403 = () => {
                 </View>
               }
             />
+            {!Util.isEmpty(fileList) && (
+              <LVFormOfContents
+                title={'첨부파일'}
+                children={
+                  <View>
+                    <View style={{ ...LVStyles.row, flex: 1 }}>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text numberOfLines={1} style={{ fontWeight: '500' }}>
+                          {fileList?.[0]?.FILE_NAME?.length > 15
+                            ? `${fileList?.[0]?.FILE_NAME.slice(0, 15)}...`
+                            : fileList?.[0]?.FILE_NAME}
+                        </Text>
+                        {!!(fileList.length > 1) && (
+                          <Text> 외 {fileList?.length - 1}건</Text>
+                        )}
+                      </View>
+
+                      <TouchableOpacity
+                        onPress={() => handlePreView()}
+                        style={LVStyles.iconWrap}
+                      >
+                        <Icon name='image-album' color='#27A7FF' />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                }
+              />
+            )}
           </View>
         </KeyboardAwareScrollView>
         <View style={LVStyles.bottomButtonView}>
@@ -188,12 +227,62 @@ const ETC010403 = () => {
           )}
         </View>
       </View>
+      {isVisibleAttachModal && (
+        <LVModal
+          category='entire'
+          title={'첨부파일 미리보기'}
+          isUseSaveButton={false}
+          contents={<ContentsOfAttach fileList={fileList} />}
+          onVisible={setIsVisibleAttachModal}
+        />
+      )}
+
       {loading && <LVLoadingIndicator />}
       {confirming && <LVConfirmIndicator />}
     </SafeAreaView>
   );
 };
 export default ETC010403;
+
+const ContentsOfAttach = ({ fileList }: any) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const currentFile = fileList?.[currentIndex];
+
+  const prev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const next = () => {
+    if (currentIndex < fileList.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  if (!currentFile) return null;
+
+  return (
+    <View>
+      <LVImage currentFile={currentFile} />
+      <View style={styles.moving}>
+        <TouchableOpacity onPress={prev} disabled={currentIndex === 0}>
+          <Icon name='chevron-left' color='#727283' size={28} />
+        </TouchableOpacity>
+        <Text>
+          {currentIndex + 1} / {fileList.length}
+        </Text>
+        <TouchableOpacity
+          onPress={next}
+          disabled={currentIndex === fileList.length - 1}
+        >
+          <Icon name='chevron-right' color='#373747' size={28} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -216,5 +305,10 @@ const styles = StyleSheet.create({
     ...LVStyles.row,
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
+  },
+  moving: {
+    ...LVStyles.row,
+    marginTop: 12,
+    paddingHorizontal: 20,
   },
 });
