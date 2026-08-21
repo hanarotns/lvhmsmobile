@@ -2,7 +2,7 @@
   "expo": {
     "name": "LV-HMS",
     "slug": "lvoneportal",
-    "version": "1.0.36",
+    "version": "1.0.37",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "lvoneportal",
@@ -17,7 +17,7 @@
       }
     },
     "android": {
-      "versionCode": 36,
+      "versionCode": 37,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
