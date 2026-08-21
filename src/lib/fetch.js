@@ -105,7 +105,7 @@ const preCheckSignIn = async () => {
   // console.log('@@ sessionData', sessionData);
 
   if (passed && sessionData) {
-    return sessionData.session;
+    return sessionData;
   }
   return null;
 };

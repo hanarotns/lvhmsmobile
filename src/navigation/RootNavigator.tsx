@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
+import { useMenuStore } from '@/src/stores/menuStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,6 +17,8 @@ export default function RootNavigator() {
   const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
   const sessionInfo = useSessionStore((state) => state.sessionInfo);
   const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
+  const menuInfo = useMenuStore((state) => state.menuInfo);
+  const setMenuInfo = useMenuStore((state) => state.setMenuInfo);
   const empInfo = useEmpStore((state) => state.empInfo);
   const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
   const [loading, setLoading] = React.useState(true);
@@ -57,8 +60,9 @@ export default function RootNavigator() {
     });
     setLoading(true);
     Fetch.preCheckSignIn().then(async (result) => {
-      if (result && loginInfo.autoLogin === 'true') {
-        setSessionInfo(result);
+      if (result?.session && loginInfo.autoLogin === 'true') {
+        setSessionInfo(result?.session);
+        setMenuInfo(result?.menu);
       } else {
         AsyncStorage.removeItem('password');
       }
