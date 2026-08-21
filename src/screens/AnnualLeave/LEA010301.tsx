@@ -440,7 +440,9 @@ const LEA010301 = ({ navigation }) => {
                             ? `${fileList?.[0]?.FILE_NAME.slice(0, 15)}...`
                             : fileList?.[0]?.FILE_NAME}
                         </Text>
-                        <Text> 외 {fileList?.length - 1}건</Text>
+                        {!!(fileList.length > 1) && (
+                          <Text> 외 {fileList?.length - 1}건</Text>
+                        )}
                       </View>
 
                       <TouchableOpacity
