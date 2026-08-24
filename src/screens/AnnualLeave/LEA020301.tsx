@@ -26,6 +26,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action';
 type RootStackParamList = {
   DetailScreen: undefined;
@@ -92,7 +93,7 @@ const LEA020301 = ({ navigation }) => {
     }));
 
     // display 용
-    const apprLineDisp = await Action.getApprLine(res);
+    const apprLineDisp = await COMAction.getApprLine(res);
     const sortedApprLineDisp = [...apprLineDisp].sort(
       (a, b) => a.LINE_ID - b.LINE_ID,
     );

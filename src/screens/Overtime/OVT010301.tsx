@@ -24,6 +24,7 @@ import {
 import { Util } from '@/src/lib';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
+import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action';
 
 type RootStackParamList = {
@@ -107,7 +108,7 @@ const OVT010301 = ({ navigation }) => {
       APPROVAL_EMP_DEPT_NAME: e?.AP_DEPT_NAME,
     }));
 
-    const apprLineDisp = await Action.getApprLine({
+    const apprLineDisp = await COMAction.getApprLine({
       ...detail,
       JOB_NO: detail?.CONFIRM_JOB_NO || detail?.JOB_NO,
       APPROVAL_NO: detail?.CONFIRM_APPROVAL_NO || detail?.APPROVAL_NO,

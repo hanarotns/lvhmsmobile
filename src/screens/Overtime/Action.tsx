@@ -113,18 +113,6 @@ const getDetailM = async (type: string, body: object) => {
   }
 };
 
-const getApprLine = async (body: object) => {
-  const result = await Fetch.request('PORU010399SVC', 'get', {
-    body: JSON.stringify({
-      PORU010399F1: body,
-    }),
-  });
-  if (result.TYPE === -1) {
-    Util.toastMsg(result.MSG, 'error');
-  }
-  return result.PORU010399G1;
-};
-
 const getApproval33 = async (body: object) => {
   const result = await Fetch.request('PORU010320SVC', 'getApproval33', {
     body: JSON.stringify({
@@ -326,8 +314,6 @@ export {
   deleteMobile,
   // 문서 기준의 주, 월 누적시간 조회
   getAccumulatedHours,
-  // 결재라인 조회
-  getApprLine,
   getApproval33,
   // 연장관련 사원정보 조회
   getClearInfo,

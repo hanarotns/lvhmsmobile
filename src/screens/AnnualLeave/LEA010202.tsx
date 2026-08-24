@@ -138,7 +138,7 @@ const LEA010202 = () => {
       APPROVAL_EMP_DEPT_NAME: e?.AP_DEPT_NAME,
     }));
     // display 용
-    const apprLineDisp = await Action.getApprLine(payload);
+    const apprLineDisp = await COMAction.getApprLine(payload);
     const sortedApprLineDisp = [...apprLineDisp].sort(
       (a, b) => a.LINE_ID - b.LINE_ID,
     );
