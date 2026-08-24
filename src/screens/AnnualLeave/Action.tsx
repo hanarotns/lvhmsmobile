@@ -220,21 +220,6 @@ const getOfChange = async (body: object) => {
 };
 
 /**
- * 변경취소 시, 결재라인 조회
- */
-const getApproval33OfChange = async (body: object) => {
-  const result = await Fetch.request('PORU010303SVC', 'getApproval33', {
-    body: JSON.stringify({
-      PORU010303G33: body,
-    }),
-  });
-  if (result.TYPE === -1) {
-    Util.toastMsg(result.MSG, 'error');
-  }
-  return result.PORU010303G33;
-};
-
-/**
  * 변경취소 시, 휴가원DT조회
  */
 const getDtOfChange = async (body: object) => {
@@ -316,18 +301,6 @@ const getDtOfSchedule = async (body: object) => {
     Util.toastMsg(result.MSG, 'error');
   }
   return result.PORU010304G35;
-};
-
-const getApproval33OfSchedule = async (body: object) => {
-  const result = await Fetch.request('PORU010304SVC', 'getApproval33', {
-    body: JSON.stringify({
-      PORU010304G33: body,
-    }),
-  });
-  if (result.TYPE === -1) {
-    Util.toastMsg(result.MSG, 'error');
-  }
-  return result.PORU010304G33;
 };
 
 const getClearInfoOfSchedule = async (body) => {
@@ -472,8 +445,6 @@ export {
   deleteRow,
   deleteRowOfSchedule,
   getApproval33,
-  getApproval33OfChange,
-  getApproval33OfSchedule,
   getClearInfo,
   getClearInfoOfSchedule,
   getDetailM,

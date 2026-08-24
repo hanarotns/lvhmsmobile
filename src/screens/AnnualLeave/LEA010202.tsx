@@ -127,7 +127,7 @@ const LEA010202 = () => {
       ...e,
       ...(customVaType[e.VA_TYPE] || {}),
     }));
-    let resApprLine = await Action.getApproval33OfChange(payload);
+    let resApprLine = await Action.getApproval33(payload);
     // API payload 용
     resApprLine = resApprLine.map((e) => ({
       ...e,
