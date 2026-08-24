@@ -83,14 +83,6 @@ const LEA020301 = ({ navigation }) => {
 
     // API payload 용
     let apprLine = await Action.getApproval33(res);
-    apprLine = apprLine.map((e) => ({
-      ...e,
-      LINE_ID: e?.LINE_NO,
-      APPROVAL_EMP_ID: e?.AP_EMP_ID,
-      APPROVAL_EMP_NAME: e?.AP_EMP_NAME,
-      APPROVAL_EMP_DEPT_CODE: e?.AP_DEPT_CODE,
-      APPROVAL_EMP_DEPT_NAME: e?.AP_DEPT_NAME,
-    }));
 
     // display 용
     const apprLineDisp = await COMAction.getApprLine(res);

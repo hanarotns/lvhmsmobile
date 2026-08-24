@@ -69,20 +69,11 @@ const OVT010202 = () => {
     setLoading(true);
     const detail = await Action.getDetailM('nc', route?.params);
     let apprLine = await Action.getApproval33(detail);
-    apprLine = apprLine.map((e) => ({
-      ...e,
-      LINE_ID: e?.LINE_NO,
-      APPROVAL_EMP_ID: e?.AP_EMP_ID,
-      APPROVAL_EMP_NAME: e?.AP_EMP_NAME,
-      APPROVAL_EMP_DEPT_CODE: e?.AP_DEPT_CODE,
-      APPROVAL_EMP_DEPT_NAME: e?.AP_DEPT_NAME,
-    }));
-    const sortedApprLine = [...apprLine].sort((a, b) => a.LINE_ID - b.LINE_ID);
 
     const res = {
       ...route?.params,
       ...detail,
-      APPR_LINE: sortedApprLine,
+      APPR_LINE: apprLine,
       ND_TYPE: detail?.ND_TYPE,
       ND_TYPE_NAME: detail?.ND_TYPE_NAME,
       ND_DATE: detail?.APPLY_START_DATE,
