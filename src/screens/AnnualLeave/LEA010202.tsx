@@ -127,9 +127,9 @@ const LEA010202 = () => {
       ...e,
       ...(customVaType[e.VA_TYPE] || {}),
     }));
-    let resApprLine = await Action.getApproval33(payload);
     // API payload 용
-    resApprLine = resApprLine.map((e) => ({
+    let apprLine = await Action.getApproval33(payload);
+    apprLine = apprLine.map((e) => ({
       ...e,
       LINE_ID: e?.LINE_NO,
       APPROVAL_EMP_ID: e?.AP_EMP_ID,
@@ -145,7 +145,7 @@ const LEA010202 = () => {
     setReqInfo({
       ...resHd,
       DETAIL: resDetail,
-      APPR_LINE: resApprLine,
+      APPR_LINE: apprLine,
       APPR_LINE_DISP: sortedApprLineDisp,
     });
     setLoading(false);
