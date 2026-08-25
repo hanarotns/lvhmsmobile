@@ -65,6 +65,7 @@ const ETC010403 = () => {
   const mount = async () => {
     setLoading(true);
     const payload = {
+      S_COMPANY_CODE: empInfo?.COMPANY_CODE,
       ...route?.params,
     };
 

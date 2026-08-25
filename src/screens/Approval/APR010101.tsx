@@ -290,6 +290,8 @@ const APR010101 = () => {
                       movingScreen.navigate('LEA010301', e);
                     } else if (['VS'].includes(e.RQ_TYPE)) {
                       movingScreen.navigate('LEA020301', e);
+                    } else if (['CT'].includes(e.RQ_TYPE)) {
+                      movingScreen.navigate('ETC010403', e);
                     }
                   }}
                   contents={<DocuPreviewContent elem={e} key={i} />}
@@ -429,7 +431,7 @@ const DocuPreviewContent = (props: any) => {
   );
 };
 
-const sortedArr = ['VA', 'ND', 'NC', 'VS'];
+const sortedArr = ['VA', 'ND', 'NC', 'VS', 'CT'];
 
 const allFilter = {
   HQCODE: 'ALL',
