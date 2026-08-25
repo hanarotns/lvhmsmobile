@@ -39,4 +39,16 @@ const getApprLine = async (body: object) => {
   return result.PORU010399G1;
 };
 
-export { getApprLine, getCode, getPopup };
+const getApprLineM = async (body: object) => {
+  const result = await Fetch.request('PORU010399SVC', 'getApprLineM', {
+    body: JSON.stringify({
+      PORU010399F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010399G1;
+};
+
+export { getApprLine, getApprLineM, getCode, getPopup };
