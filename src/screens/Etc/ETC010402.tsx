@@ -105,16 +105,14 @@ const ETC010402 = () => {
       return;
     }
 
-    const payload = [
-      {
-        ...config,
-        ...certiInfo,
-        PE_TYPE: selectedType?.HQCODE,
-        PE_TYPE_NAME: selectedType?.HQNAME,
-      },
-    ];
+    const payload = {
+      ...config,
+      ...certiInfo,
+      PE_TYPE: selectedType?.HQCODE,
+      PE_TYPE_NAME: selectedType?.HQNAME,
+    };
     setLoading(true);
-    const result = await Action.saveCertificate(payload);
+    const result = await Action.saveApproval(payload, approvalLine);
     setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {

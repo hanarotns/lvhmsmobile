@@ -8,6 +8,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
   Icon,
+  Input,
   KeyboardAwareScrollView,
   LVApprLine,
   LVButton,
@@ -25,6 +26,7 @@ import {
 import { Fetch, Util } from '@/src/lib';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import 'dayjs/locale/ko';
+import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action';
 
 type RootStackParamList = {
@@ -51,6 +53,9 @@ const ETC010403 = () => {
   // mount API 기본 정보
   const [dt, setDt] = useState({});
   const [fileList, setFileList] = useState([]);
+  const [refusalReason, setRefusalReason] = useState('');
+
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [isVisibleAttachModal, setIsVisibleAttachModal] = useState(false);
 
   useEffect(() => {
@@ -59,7 +64,18 @@ const ETC010403 = () => {
 
   const mount = async () => {
     setLoading(true);
-    setDt(route?.params);
+    const payload = {
+      ...route?.params,
+    };
+
+    const res = await Action.getCertificateDetailM(payload);
+
+    const apprLine = await COMAction.getApprLineM(res);
+    setDt({
+      ...res,
+      ...route?.params,
+      APPR_LINE: apprLine,
+    });
 
     // (첨부파일 관련) 발급 번호 있어야지만 조회
     if (route?.params?.ISSUE_NO) {
@@ -74,15 +90,30 @@ const ETC010403 = () => {
     setLoading(false);
   };
 
-  const handleDelete = async () => {
-    const payload = [
-      {
-        COMPANY_CODE: dt?.COMPANY_CODE,
-        JOB_NO: dt?.JOB_NO,
-      },
-    ];
+  /**
+   * 비즈니스 로직 확인용
+   */
+  const checkLogic = async () => {
+    if (Util.isEmpty(refusalReason)) {
+      Util.toastMsg('반려사유를 입력하세요.', 'info');
+      return false;
+    }
+    return true;
+  };
+
+  /** 미리보기 */
+  const handlePreView = async () => {
+    setIsVisibleAttachModal(true);
+  };
+
+  // 상신자
+  const handleRecall = async () => {
+    const payload = {
+      COMPANY_CODE: empInfo?.COMPANY_CODE,
+      JOB_NO: dt?.JOB_NO,
+    };
     setLoading(true);
-    const result = await Action.deleteCertificate(payload);
+    const result = await Action.recall(payload);
     setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
@@ -94,9 +125,139 @@ const ETC010403 = () => {
     }
   };
 
-  /** 미리보기 */
-  const handlePreView = async () => {
-    setIsVisibleAttachModal(true);
+  const handleDelete = async () => {
+    const payload = {
+      COMPANY_CODE: empInfo?.COMPANY_CODE,
+      JOB_NO: dt?.JOB_NO,
+      APPROVAL_NO: dt?.APPROVAL_NO,
+    };
+    setLoading(true);
+    const result = await Action.deleteMobile(payload);
+    setLeaveRefresh(true);
+    setLoading(false);
+    if (result.TYPE === 1) {
+      setConfirming(true);
+      setTimeout(() => {
+        setConfirming(false);
+        movingScreen.goBack();
+      }, 1200);
+    }
+  };
+
+  const convertNumbersToStrings = (value) => {
+    if (typeof value === 'number') {
+      return String(value);
+    }
+
+    if (Array.isArray(value)) {
+      return value.map(convertNumbersToStrings);
+    }
+
+    if (value !== null && typeof value === 'object') {
+      return Object.fromEntries(
+        Object.entries(value).map(([key, val]) => [
+          key,
+          convertNumbersToStrings(val),
+        ]),
+      );
+    }
+
+    return value;
+  };
+
+  const handleReApprove = async () => {
+    const commonInfo = {
+      S_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      S_DEPT_CODE: empInfo?.DEPT_CODE,
+      S_EMP_NAME: empInfo?.EMP_NAME_LC,
+      S_EMP_ID: empInfo?.EMP_ID,
+      S_EMP_FLAG: 'Y',
+    };
+    let param = { ...commonInfo, ...dt };
+    param = convertNumbersToStrings(param);
+    let detail = convertNumbersToStrings(dt?.DETAIL);
+    setLoading(true);
+
+    const result = await Action.saveApproval(param, dt?.APPR_LINE);
+    setLeaveRefresh(true);
+    setLoading(false);
+    if (result.TYPE === 1) {
+      setConfirming(true);
+      setTimeout(() => {
+        setConfirming(false);
+        movingScreen.goBack();
+      }, 1200);
+    }
+  };
+
+  // 결재자
+  const handleRecallForApprover = async () => {
+    const payload1 = {
+      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      SS_EMP_ID: empInfo?.EMP_ID,
+    };
+    const payload2 = [dt];
+    setLoading(true);
+    const result = await Action.recallForApprover(payload1, payload2);
+    setLeaveRefresh(true);
+    setLoading(false);
+    if (result.TYPE === 1) {
+      setConfirming(true);
+      setTimeout(() => {
+        setConfirming(false);
+        movingScreen.goBack();
+      }, 1200);
+    }
+  };
+
+  const handleRefusalForApprover = async () => {
+    const isCheck = await checkLogic();
+    if (!isCheck) {
+      return;
+    }
+
+    const payload1 = {
+      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      SS_EMP_ID: empInfo?.EMP_ID,
+    };
+    const payload2 = [{ ...dt, CANCEL_REMARKS: refusalReason }];
+    setLoading(true);
+    const result = await Action.refusalForApprover(payload1, payload2);
+    setLeaveRefresh(true);
+    setLoading(false);
+    // 모달 닫기
+    if (result.TYPE === 1) {
+      setConfirming(true);
+      setTimeout(() => {
+        setConfirming(false);
+        setIsVisibleModal(false);
+        movingScreen.goBack();
+      }, 1200);
+    }
+  };
+
+  const handleApproveForApprover = async () => {
+    const payload1 = {
+      SS_COMPANY_CODE: empInfo?.COMPANY_CODE,
+      SS_EMP_ID: empInfo?.EMP_ID,
+    };
+    const payload2 = [dt];
+    setLoading(true);
+    const result = await Action.approveForApprover(payload1, payload2);
+    setLeaveRefresh(true);
+    setLoading(false);
+    if (result.TYPE === 1) {
+      setConfirming(true);
+      setTimeout(() => {
+        setConfirming(false);
+        movingScreen.goBack();
+      }, 1200);
+    }
+  };
+
+  const handleCloseRefusalModal = () => {
+    setIsVisibleModal(false);
+    setRefusalReason('');
   };
 
   const handleRefresh = () => {
@@ -174,12 +335,9 @@ const ETC010403 = () => {
               title={'결재선'}
               children={
                 <View style={LVStyles.row}>
-                  {!Util.isEmpty(dt?.APPR_LINE_DISP) ? (
+                  {!Util.isEmpty(dt?.APPR_LINE) ? (
                     <View style={styles.apprLineView}>
-                      <LVApprLine
-                        data={dt?.APPR_LINE_DISP}
-                        mainColor='#ABBACD'
-                      />
+                      <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
                     </View>
                   ) : (
                     <></>
@@ -217,16 +375,80 @@ const ETC010403 = () => {
             )}
           </View>
         </KeyboardAwareScrollView>
-        <View style={LVStyles.bottomButtonView}>
-          {dt?.SUBMIT_STATUS === 'W' && (
-            <LVButton
-              title={'삭제'}
-              onPress={handleDelete}
-              buttonStyle={LVStyles.grayBgButton}
-            />
+        {dt?.EMP_ID &&
+          dt?.AP_STATUS !== 'A' &&
+          dt?.EMP_ID === empInfo?.EMP_ID && (
+            // 상신자 사용
+            <View style={LVStyles.bottomButtonView}>
+              {dt?.AP_STATUS === 'S' && (
+                <LVButton
+                  title={'회수'}
+                  onPress={handleRecall}
+                  buttonStyle={LVStyles.whiteBgButton}
+                  textStyle={LVStyles.whiteBgButtonText}
+                />
+              )}
+              {dt?.AP_STATUS === 'W' && (
+                <LVButton
+                  title={'삭제'}
+                  onPress={handleDelete}
+                  buttonStyle={LVStyles.grayBgButton}
+                />
+              )}
+              {dt?.AP_STATUS === 'W' && (
+                <LVButton
+                  title={'상신'}
+                  onPress={handleReApprove}
+                  buttonStyle={LVStyles.defaultButton}
+                />
+              )}
+            </View>
           )}
-        </View>
+        {dt?.EMP_ID &&
+          dt?.AP_STATUS !== 'A' &&
+          dt?.EMP_ID !== empInfo?.EMP_ID && (
+            // 결재자 사용
+            <View style={LVStyles.bottomButtonView}>
+              {dt?.LAST_ID === empInfo?.EMP_ID && (
+                <LVButton
+                  title={'회수'}
+                  onPress={handleRecallForApprover}
+                  buttonStyle={LVStyles.whiteBgButton}
+                  textStyle={LVStyles.whiteBgButtonText}
+                />
+              )}
+              {dt?.NEXT_ID === empInfo?.EMP_ID && (
+                <LVButton
+                  title={'반려'}
+                  onPress={() => {
+                    setIsVisibleModal(true);
+                  }}
+                  buttonStyle={LVStyles.grayBgButton}
+                />
+              )}
+              {dt?.NEXT_ID === empInfo?.EMP_ID && (
+                <LVButton
+                  title={'결재'}
+                  onPress={handleApproveForApprover}
+                  buttonStyle={LVStyles.defaultButton}
+                />
+              )}
+            </View>
+          )}
       </View>
+      {isVisibleModal && (
+        <LVModal
+          title={'반려'}
+          contents={
+            <ContentsOfRefusal
+              refusalReason={refusalReason}
+              setRefusalReason={setRefusalReason}
+            />
+          }
+          onVisible={handleCloseRefusalModal}
+          onOk={handleRefusalForApprover}
+        />
+      )}
       {isVisibleAttachModal && (
         <LVModal
           category='entire'
@@ -243,6 +465,25 @@ const ETC010403 = () => {
   );
 };
 export default ETC010403;
+
+const ContentsOfRefusal = (props: any) => {
+  const { refusalReason, setRefusalReason } = props;
+  return (
+    <View>
+      <Input
+        placeholder='반려내용을 입력하세요'
+        value={refusalReason}
+        onChangeText={(p) => {
+          setRefusalReason(p);
+        }}
+        size='large'
+        style={{ backgroundColor: '#FFF' }}
+        textStyle={styles.multilineInput}
+        multiline={true}
+      />
+    </View>
+  );
+};
 
 const ContentsOfAttach = ({ fileList }: any) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -300,6 +541,11 @@ const styles = StyleSheet.create({
     borderColor: '#22A55A',
     backgroundColor: '#F1FCF4',
     maxWidth: '80%',
+  },
+  multilineInput: {
+    color: '#373747',
+    minHeight: 100,
+    textAlignVertical: 'top', // Android에서 상단 정렬
   },
   apprLineView: {
     ...LVStyles.row,

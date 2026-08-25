@@ -154,12 +154,26 @@ const getCertificateEmpInfo = async (body: object) => {
   return result.PORU010203F3;
 };
 
-const saveCertificate = async (body: object) => {
-  const result = await Fetch.request('PORU010203SVC', 'GMobileSend', {
+const getCertificateDetailM = async (body: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'getDetailM', {
     body: JSON.stringify({
-      PORU010203G1: {
-        data: body,
-      },
+      PORU010203F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010203F1;
+};
+
+/**
+ * 상신
+ */
+const saveApproval = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'saveApproval', {
+    body: JSON.stringify({
+      PORU010203F1: body1,
+      PORU010203G1: { data: body2 }, // 결재라인
     }),
   });
   if (result.TYPE === -1) {
@@ -168,12 +182,76 @@ const saveCertificate = async (body: object) => {
   return result;
 };
 
-const deleteCertificate = async (body: object) => {
-  const result = await Fetch.request('PORU010203SVC', 'GDelete', {
+/**
+ * 회수
+ */
+const recall = async (body: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'Collect', {
     body: JSON.stringify({
-      PORU010203G1: {
-        data: body,
-      },
+      PORU010203F236: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 삭제
+ */
+const deleteMobile = async (body: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'delete', {
+    body: JSON.stringify({
+      PORU010203F236: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 회수 (결재자)
+ */
+const recallForApprover = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'GCollect', {
+    body: JSON.stringify({
+      PORU010203F1: body1,
+      PORU010203G1: { data: body2 },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 반려 (결재자)
+ */
+const refusalForApprover = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'GApprovalCancel', {
+    body: JSON.stringify({
+      PORU010203F1: body1,
+      PORU010203G1: { data: body2 },
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
+/**
+ * 결재 (결재자)
+ */
+const approveForApprover = async (body1: object, body2: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'GApproval', {
+    body: JSON.stringify({
+      PORU010203F1: body1,
+      PORU010203G1: { data: body2 },
     }),
   });
   if (result.TYPE === -1) {
@@ -183,12 +261,15 @@ const deleteCertificate = async (body: object) => {
 };
 
 export {
+  // 결재 (결재자)
+  approveForApprover,
   // 계정 비밀번호 변경
   changePw,
   // 계정 비밀번호 동일여부 확인
   checkPw,
-  // 증명서 삭제
-  deleteCertificate,
+  deleteMobile,
+  // 증명서 상세 조회
+  getCertificateDetailM,
   // 증명서 사용자 정보 조회
   getCertificateEmpInfo,
   // 증명서 통계 조회
@@ -197,8 +278,13 @@ export {
   getCertificateList,
   // 계정 사용자 정보 조회 & 로그인 히스토리 (로그인 히스토리는 미사용)
   getUserInfoNLoginHistory,
-  // 중명서 저장 및 전송
-  saveCertificate,
+  recall,
+  // 회수 (결재자)
+  recallForApprover,
+  // 반려 (결재자)
+  refusalForApprover,
+  // 증명서 상신
+  saveApproval,
   // 계정 사용자 정보 변경
   saveUserInfo,
 };
