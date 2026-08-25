@@ -73,7 +73,12 @@ const ETC010402 = () => {
     let res2 = await COMAction.getCode('code', 'PC0001', {
       GCODE: 'PE_TYPE',
     });
-    setCertiTypeList(res2);
+
+    const sorted = res2.sort(
+      (a, b) => sortedArr.indexOf(a.HQCODE) - sortedArr.indexOf(b.HQCODE),
+    );
+
+    setCertiTypeList(sorted);
     setLoading(false);
   };
 
@@ -258,6 +263,8 @@ const ETC010402 = () => {
   );
 };
 export default ETC010402;
+
+const sortedArr = ['SL', 'WR', 'PE', 'WC'];
 
 const styles = StyleSheet.create({
   container: {
