@@ -8,7 +8,7 @@ import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
   KeyboardAwareScrollView,
-  LVApprLineForm,
+  LVApprLine,
   LVButton,
   LVChip,
   LVConfirmIndicator,
@@ -177,12 +177,7 @@ const ETC010402 = () => {
             />
             <LVFormOfContents
               title={'결재선'}
-              children={
-                <LVApprLineForm
-                  approvalLine={approvalLine}
-                  setApprovalLine={setApprovalLine}
-                />
-              }
+              children={<LVApprLine data={approvalLine} mainColor='#ABBACD' />}
             />
             <LVFormOfContents
               title={'종류'}
