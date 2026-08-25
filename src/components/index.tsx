@@ -26,6 +26,7 @@ import LVProfileImage from './LVProfileImage';
 import LVRadioButton from './LVRadioButton';
 import LVSection from './LVSection'; // @@ 사용하는 곳 없음.
 import LVSelectBox from './LVSelectBox';
+import LVTooltip from './LVTooltip';
 
 import Text from './CustomText';
 import ShowPasswordIcon from './ShowPasswordIcon';
@@ -115,6 +116,7 @@ export {
   LVSection,
   LVSelectBox,
   LVStyles,
+  LVTooltip,
   Menu,
   MenuItem,
   NavigationContainer,
