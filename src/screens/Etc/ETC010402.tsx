@@ -66,7 +66,7 @@ const ETC010402 = () => {
     const payload = {
       EMP_ID: empInfo?.EMP_ID,
     };
-    let res1 = await Action.getCertificateEmpInfo(payload);
+    let res1 = await Action.getEmpInfoOfCert(payload);
 
     setConfig(res1?.[0]);
     let res2 = await COMAction.getCode('code', 'PC0001', {

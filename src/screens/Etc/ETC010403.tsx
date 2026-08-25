@@ -68,7 +68,7 @@ const ETC010403 = () => {
       ...route?.params,
     };
 
-    const res = await Action.getCertificateDetailM(payload);
+    const res = await Action.getDetailMOfCert(payload);
 
     const apprLine = await COMAction.getApprLineM(res);
     setDt({

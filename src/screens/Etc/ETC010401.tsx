@@ -125,9 +125,9 @@ const ETC010401 = () => {
       // AUTH_GA: 'Y',
       // AUTH_AM: 'Y',
     };
-    const res1 = await Action.getCertificateInfo(payload2);
+    const res1 = await Action.getInfoMOfCert(payload2);
     setStats(res1);
-    const res2 = await Action.getCertificateList(payload2);
+    const res2 = await Action.getListMOfCert(payload2);
     setList(res2);
     setFilteredList(res2);
     setLoading(false);
@@ -150,9 +150,9 @@ const ETC010401 = () => {
       // AUTH_GA: 'Y',
       // AUTH_AM: 'Y',
     };
-    const res1 = await Action.getCertificateInfo(payload2);
+    const res1 = await Action.getInfoMOfCert(payload2);
     setStats(res1);
-    const res2 = await Action.getCertificateList(payload2);
+    const res2 = await Action.getListMOfCert(payload2);
     setList(res2);
     setFilteredList(res2);
     setLoading(false);
