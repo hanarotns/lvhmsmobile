@@ -72,8 +72,8 @@ const ETC010403 = () => {
 
     const apprLine = await COMAction.getApprLineM(res);
     setDt({
-      ...res,
       ...route?.params,
+      ...res,
       APPR_LINE: apprLine,
     });
 
