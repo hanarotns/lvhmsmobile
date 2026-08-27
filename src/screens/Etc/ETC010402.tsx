@@ -186,6 +186,7 @@ const ETC010402 = () => {
                 <LVApprLineForm
                   approvalLine={approvalLine}
                   setApprovalLine={setApprovalLine}
+                  isButtonDisabled={true}
                 />
               }
             />

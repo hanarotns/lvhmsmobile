@@ -38,7 +38,7 @@ const LVApprLineForm = (props: any) => {
 
   const [loading, setLoading] = useState(true);
   const [myApprList, setMyApprList] = useState([]);
-  const { approvalLine, setApprovalLine } = props;
+  const { approvalLine, setApprovalLine, isButtonDisabled } = props;
   const approvalLineRef = useRef<any>(null);
   const [approvalInfo, setApprovalInfo] = useState([]);
 
@@ -107,26 +107,30 @@ const LVApprLineForm = (props: any) => {
             mainColor={'#373747'}
             style={{ width: '80%' }}
           />
-          <TouchableOpacity
-            onPress={() => {
-              setIsVisibleApprovalModal(true);
-            }}
-            style={LVStyles.iconWrap}
-          >
-            <Icon name='text-box-edit-outline' color='#27A7FF' />
-          </TouchableOpacity>
+          {!isButtonDisabled && (
+            <TouchableOpacity
+              onPress={() => {
+                setIsVisibleApprovalModal(true);
+              }}
+              style={LVStyles.iconWrap}
+            >
+              <Icon name='text-box-edit-outline' color='#27A7FF' />
+            </TouchableOpacity>
+          )}
         </View>
       ) : (
         <View style={[LVStyles.row, { width: '100%' }]}>
           <Text>등록된 결재선이 없습니다.</Text>
-          <LVButton
-            title={'결재선 등록'}
-            onPress={() => {
-              movingScreen.navigate('PAL010201');
-            }}
-            buttonStyle={styles.button}
-            textStyle={{ color: '#27A7FF' }}
-          />
+          {!isButtonDisabled && (
+            <LVButton
+              title={'결재선 등록'}
+              onPress={() => {
+                movingScreen.navigate('PAL010201');
+              }}
+              buttonStyle={styles.button}
+              textStyle={{ color: '#27A7FF' }}
+            />
+          )}
         </View>
       )}
       {isVisibleApprovalModal && (
