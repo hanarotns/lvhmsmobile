@@ -4,7 +4,6 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
   Icon,
   LVColors,
-  LVFilter,
   LVLoadingIndicator,
   LVNoData,
   LVStyles,
@@ -18,7 +17,6 @@ import { useIsFocused } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { Calendar } from 'react-native-calendars';
-import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action';
 dayjs.locale('ko');
 
@@ -34,8 +32,6 @@ const WLO010101 = () => {
   const [calList, setCalList] = useState([]);
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [checkFilter, setCheckFilter] = useState([]);
-  const [selectedCheckType, setSelectedCheckType] = useState('ALL');
 
   useEffect(() => {
     mount();
@@ -44,26 +40,12 @@ const WLO010101 = () => {
   useEffect(() => {
     const compareDate = selectedInfo.date.replace(/-/g, '');
     let tempList = list?.filter((item) => item.WA_LOG_DATE === compareDate);
-    if (['S', 'E', 'O'].includes(selectedCheckType)) {
-      tempList = tempList?.filter((item) => item.WA_TYPE === selectedCheckType);
-    } else if (['ETC'].includes(selectedCheckType)) {
-      tempList = tempList?.filter(
-        (item) => !['S', 'E', 'O'].includes(item.WA_TYPE),
-      );
-    }
     setFilteredList(tempList);
-  }, [selectedInfo, selectedCheckType]);
+  }, [selectedInfo]);
 
   const mount = async () => {
     setLoading(true);
 
-    // 공통코드 가져오기
-    let res = await COMAction.getCode('code', 'PC0001', { GCODE: 'WA_TYPE' });
-    res = [...res, ...addCheckType];
-    res = res
-      .filter((e) => sort.includes(e?.HQCODE))
-      .sort((a, b) => sort.indexOf(a.HQCODE) - sort.indexOf(b.HQCODE));
-    setCheckFilter(res);
     // 캘린더 정보 가져오기
     await getInfoM();
 
@@ -135,13 +117,6 @@ const WLO010101 = () => {
     setList(res?.DT);
     const compareDate = yearMonthDay || selectedInfo.date.replace(/-/g, '');
     let tempList = res?.DT.filter((item) => item.WA_LOG_DATE === compareDate);
-    if (['S', 'E', 'O'].includes(selectedCheckType)) {
-      tempList = tempList?.filter((item) => item.WA_TYPE === selectedCheckType);
-    } else if (['ETC'].includes(selectedCheckType)) {
-      tempList = tempList?.filter(
-        (item) => !['S', 'E', 'O'].includes(item.WA_TYPE),
-      );
-    }
     setFilteredList(tempList);
 
     setLoading(false);
@@ -237,13 +212,7 @@ const WLO010101 = () => {
                     });
                   }}
                   style={[
-                    {
-                      width: 36,
-                      height: 36,
-                      borderRadius: 18,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    },
+                    styles.dayView,
                     customStyles?.container, // 기존 customStyles 적용
                     selectedInfo?.date === date?.dateString && {
                       backgroundColor: '#27A7FF88',
@@ -310,33 +279,14 @@ const WLO010101 = () => {
             </Text>
           </View>
 
-          <View
-            style={{
-              width: '40%',
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-            }}
-          >
-            <Text
-              style={{
-                color: '#888',
-                borderRadius: 12,
-                paddingHorizontal: 8,
-                paddingVertical: 2,
-              }}
-            >
+          <View style={styles.regularTimeView}>
+            <Text style={styles.regularTime}>
               {selectedInfo?.SHIFT_ON_TIME
                 ? `${Util.convertDateTime('', selectedInfo?.SHIFT_ON_TIME)}~${Util.convertDateTime('', selectedInfo?.SHIFT_OFF_TIME)}`
                 : ''}
             </Text>
           </View>
         </View>
-        <LVFilter
-          apprFilter={checkFilter}
-          selectedApprType={selectedCheckType}
-          setSelectedApprType={setSelectedCheckType}
-          filteredList={filteredList}
-        />
         <View style={{ height: 12 }} />
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {!Util.isEmpty(filteredList) && (
@@ -466,19 +416,6 @@ const Form = (props: any) => {
   );
 };
 
-const sort = ['ALL', 'S', 'E', 'O', 'ETC'];
-
-const addCheckType = [
-  {
-    HQCODE: 'ALL',
-    HQNAME: '전체',
-  },
-  {
-    HQCODE: 'ETC',
-    HQNAME: '기타',
-  },
-];
-
 const circleTheme = {
   customStyles: {
     container: { borderWidth: 1, borderColor: LVColors.primary },
@@ -560,5 +497,23 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -8,
     right: -8,
+  },
+  dayView: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  regularTimeView: {
+    width: '40%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  regularTime: {
+    color: '#888',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
   },
 });
