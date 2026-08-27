@@ -25,6 +25,7 @@ import {
 } from '@/src/components';
 import { Fetch, Util } from '@/src/lib';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action';
@@ -104,7 +105,20 @@ const ETC010403 = () => {
 
   /** 미리보기 */
   const handlePreView = async () => {
-    setIsVisibleAttachModal(true);
+    const expriredDateTime = dayjs(
+      dt?.EXPR_TO_DATE + dt?.EXPR_TO_TIME,
+      'YYYYMMDDHHmm',
+    );
+    const currnetDateTime = dayjs(
+      dt?.CURRENT_DATE + dt?.CURRENT_TIME,
+      'YYYYMMDDHHmm',
+    );
+
+    if (expriredDateTime <= currnetDateTime) {
+      Util.toastMsg('다운로드기한이 만료되었습니다.', 'info');
+    } else {
+      setIsVisibleAttachModal(true);
+    }
   };
 
   // 상신자
@@ -379,6 +393,20 @@ const ETC010403 = () => {
                       >
                         <Icon name='image-album' color='#27A7FF' />
                       </TouchableOpacity>
+                    </View>
+                    <View>
+                      <Text style={{ color: 'gray' }}>
+                        다운로드 기간:{'\n'}
+                        {Util.convertDateTime(
+                          dt?.EXPR_FROM_DATE,
+                          dt?.EXPR_FROM_TIME,
+                        )}{' '}
+                        ~
+                        {Util.convertDateTime(
+                          dt?.EXPR_TO_DATE,
+                          dt?.EXPR_TO_TIME,
+                        )}
+                      </Text>
                     </View>
                   </View>
                 }
