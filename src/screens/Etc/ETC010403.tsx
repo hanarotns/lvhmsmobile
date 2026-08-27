@@ -340,20 +340,22 @@ const ETC010403 = () => {
                 <Text style={{ fontWeight: '700' }}>{dt?.SUBMIT_PLACE}</Text>
               }
             />
-            <LVFormOfContents
-              title={'결재선'}
-              children={
-                <View style={LVStyles.row}>
-                  {!Util.isEmpty(dt?.APPR_LINE) ? (
-                    <View style={styles.apprLineView}>
-                      <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
-                    </View>
-                  ) : (
-                    <></>
-                  )}
-                </View>
-              }
-            />
+            {!Util.isEmpty(dt?.AP_STATUS) && (
+              <LVFormOfContents
+                title={'결재선'}
+                children={
+                  <View style={LVStyles.row}>
+                    {!Util.isEmpty(dt?.APPR_LINE) ? (
+                      <View style={styles.apprLineView}>
+                        <LVApprLine data={dt?.APPR_LINE} mainColor='#ABBACD' />
+                      </View>
+                    ) : (
+                      <></>
+                    )}
+                  </View>
+                }
+              />
+            )}
             {!Util.isEmpty(fileList) && (
               <LVFormOfContents
                 title={'첨부파일'}
