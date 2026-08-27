@@ -303,11 +303,19 @@ const ETC010403 = () => {
                   <Text style={{ fontWeight: '500' }}>
                     {dt?.ISSUE_NO || '-'}
                   </Text>
-                  <LVChip
-                    category='apprStatus'
-                    title={dt?.SUBMIT_STATUS_NAME}
-                    code={dt?.SUBMIT_STATUS}
-                  />
+                  {dt?.AP_STATUS ? (
+                    <LVChip
+                      category='apprStatus'
+                      title={dt?.AP_STATUS_NAME}
+                      code={dt?.AP_STATUS}
+                    />
+                  ) : (
+                    <LVChip
+                      category='apprStatus'
+                      title={dt?.SUBMIT_STATUS_NAME}
+                      code={dt?.SUBMIT_STATUS}
+                    />
+                  )}
                 </View>
               }
             />

@@ -270,11 +270,19 @@ const DocuPreviewContent = (props: any) => {
   return (
     <>
       <View style={LVStyles.row}>
-        <LVChip
-          category='apprStatus'
-          title={elem?.SUBMIT_STATUS_NAME}
-          code={elem?.SUBMIT_STATUS}
-        />
+        {elem?.AP_STATUS ? (
+          <LVChip
+            category='apprStatus'
+            title={elem?.AP_STATUS_NAME}
+            code={elem?.AP_STATUS}
+          />
+        ) : (
+          <LVChip
+            category='apprStatus'
+            title={elem?.SUBMIT_STATUS_NAME}
+            code={elem?.SUBMIT_STATUS}
+          />
+        )}
         <Text style={styles.labelText}>{elem?.ISSUE_NO}</Text>
       </View>
       <View style={{ height: 16 }} />
