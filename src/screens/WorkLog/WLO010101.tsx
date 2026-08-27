@@ -136,23 +136,6 @@ const WLO010101 = () => {
         <Calendar
           key={calendarKey}
           current={selectedInfo?.date}
-          onDayPress={(day: any) => {
-            const date = day.dateString;
-            const holidayInfo = calList.find(
-              (e) => date === e?.M_DATE && e?.M_TYPE === 'HOLIDAY',
-            );
-            let planInfo = calList.find(
-              (e) => date === e?.M_DATE && e?.M_TYPE == 'PLAN',
-            );
-            if (planInfo) {
-              planInfo = {
-                SHIFT_WORK_CODE: planInfo?.SHIFT_WORK_CODE,
-                SHIFT_ON_TIME: planInfo?.SHIFT_ON_TIME,
-                SHIFT_OFF_TIME: planInfo?.SHIFT_OFF_TIME,
-              };
-            }
-            setSelectedInfo({ date, ...holidayInfo, ...planInfo });
-          }}
           onMonthChange={(month: any) => {
             const date = month.dateString;
             setSelectedInfo({ date });
