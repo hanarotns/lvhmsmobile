@@ -163,10 +163,6 @@ const SGN030101 = ({ navigation }) => {
   const updateMemberInfo = (key: keyof MemberInfo, value: string) => {
     let nextValue = value;
 
-    if (key === 'id') {
-      nextValue = value.trim().toLowerCase();
-    }
-
     if (key === 'phoneNumber' || key === 'authCode') {
       nextValue = value.replace(/[^0-9]/g, '');
     }
