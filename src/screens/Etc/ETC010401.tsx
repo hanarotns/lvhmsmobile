@@ -318,10 +318,6 @@ const allFilter = {
 
 const restFilter = [
   {
-    HQCODE: 'AC', // @@ 임의로 정함.
-    HQNAME: '급여명세서',
-  },
-  {
     HQCODE: 'PE',
     HQNAME: '재직증명서',
   },
