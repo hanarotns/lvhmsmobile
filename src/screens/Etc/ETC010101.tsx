@@ -112,7 +112,16 @@ const ETC010101 = () => {
             </TouchableOpacity>
             <Divider />
             <TouchableOpacity
-              onPress={() => movingScreen.navigate('LEA020101')}
+              onPress={() => {
+                const isCheckMenuPermi = menuInfo.some(
+                  (item) => item.CODE === 'MMLEA020101',
+                );
+                if (isCheckMenuPermi) {
+                  movingScreen.navigate('LEA020101');
+                } else {
+                  Alert.alert('알림', '서비스 준비중입니다.');
+                }
+              }}
               style={styles.menuButton}
             >
               <Icon name='view-grid-outline' color='#373747' />
