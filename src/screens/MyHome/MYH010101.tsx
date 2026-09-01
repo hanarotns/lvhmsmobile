@@ -159,9 +159,9 @@ const MYH010101 = ({ navigation }) => {
 
     // deviceId 등록 및 동일 여부 판별
     const deviceId = await AsyncStorage.getItem('deviceId');
-    const isPassDeiveId = empInfo?.MOBILE_ID === deviceId;
+    const isPassDeviceId = empInfo?.MOBILE_ID === deviceId;
 
-    if (!isQa && !isPassDeiveId) {
+    if (!isQa && !isPassDeviceId) {
       setIsSecondAuthScreen(true);
     } else {
       setCoverLoading(true);
