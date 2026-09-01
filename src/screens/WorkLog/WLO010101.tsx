@@ -68,6 +68,8 @@ const WLO010101 = () => {
     };
     const res = await Action.getInfoM(payload);
     setCalList(res?.HD);
+    const formattedDate = Util.convertDateTime(yearMonthDay);
+    handleChangeDateInfo(formattedDate, res?.HD);
     //  정상 및 공휴일 스타일 적용
     let obj = {};
     res?.HD?.filter((item) => ['CHECK'].includes(item.M_TYPE))
@@ -123,10 +125,42 @@ const WLO010101 = () => {
   };
 
   const movingToday = async () => {
-    const date = dayjs().format('YYYY-MM-DD');
-    setSelectedInfo({ date });
     setCalendarKey((prev) => prev + 1);
     getInfoM();
+  };
+
+  const handleChangeDateInfo = async (param1: string, param2?: any) => {
+    let list = calList;
+    if (!Util.isEmpty(param2)) {
+      list = param2;
+    }
+    const holidayInfo = list?.find(
+      (e) => param1 === e?.M_DATE && e?.M_TYPE === 'HOLIDAY',
+    );
+    let planInfo = list?.find(
+      (e) => param1 === e?.M_DATE && e?.M_TYPE === 'PLAN',
+    );
+    let workInfo = list?.find(
+      (e) => param1 === e?.M_DATE && e?.M_TYPE === 'WORK',
+    );
+    if (planInfo) {
+      planInfo = {
+        SHIFT_WORK_CODE: planInfo?.SHIFT_WORK_CODE,
+        SHIFT_ON_TIME: planInfo?.SHIFT_ON_TIME,
+        SHIFT_OFF_TIME: planInfo?.SHIFT_OFF_TIME,
+      };
+    } else {
+      planInfo = {
+        SHIFT_WORK_CODE: workInfo?.SHIFT_WORK_CODE,
+        SHIFT_ON_TIME: workInfo?.SHIFT_ON_TIME,
+        SHIFT_OFF_TIME: workInfo?.SHIFT_OFF_TIME,
+      };
+    }
+    setSelectedInfo({
+      date: param1,
+      ...holidayInfo,
+      ...planInfo,
+    });
   };
 
   return (
@@ -138,7 +172,6 @@ const WLO010101 = () => {
           current={selectedInfo?.date}
           onMonthChange={(month: any) => {
             const date = month.dateString;
-            setSelectedInfo({ date });
             const yearMonthDay = date.replace(/-/g, '');
             getInfoM(yearMonthDay);
           }}
@@ -165,35 +198,7 @@ const WLO010101 = () => {
               <View style={{ alignItems: 'center' }}>
                 <TouchableOpacity
                   onPress={() => {
-                    const selectedDate = date.dateString;
-                    const holidayInfo = calList.find(
-                      (e) =>
-                        selectedDate === e?.M_DATE && e?.M_TYPE === 'HOLIDAY',
-                    );
-                    let planInfo = calList.find(
-                      (e) => selectedDate === e?.M_DATE && e?.M_TYPE === 'PLAN',
-                    );
-                    let workInfo = calList.find(
-                      (e) => selectedDate === e?.M_DATE && e?.M_TYPE === 'WORK',
-                    );
-                    if (planInfo) {
-                      planInfo = {
-                        SHIFT_WORK_CODE: planInfo?.SHIFT_WORK_CODE,
-                        SHIFT_ON_TIME: planInfo?.SHIFT_ON_TIME,
-                        SHIFT_OFF_TIME: planInfo?.SHIFT_OFF_TIME,
-                      };
-                    } else {
-                      planInfo = {
-                        SHIFT_WORK_CODE: workInfo?.SHIFT_WORK_CODE,
-                        SHIFT_ON_TIME: workInfo?.SHIFT_ON_TIME,
-                        SHIFT_OFF_TIME: workInfo?.SHIFT_OFF_TIME,
-                      };
-                    }
-                    setSelectedInfo({
-                      date: selectedDate,
-                      ...holidayInfo,
-                      ...planInfo,
-                    });
+                    handleChangeDateInfo(date?.dateString);
                   }}
                   style={[
                     styles.dayView,
