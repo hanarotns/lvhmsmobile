@@ -161,7 +161,10 @@ const MYH010101 = ({ navigation }) => {
     const deviceId = await AsyncStorage.getItem('deviceId');
     const isPassDeviceId = empInfo?.MOBILE_ID === deviceId;
 
-    if (!isQa && !isPassDeviceId) {
+    // testerId 확인
+    const isTesterId = sessionInfo?.USER_ID === 'shpark93.ha'; // @@ 임시로 지정함.
+
+    if (!isQa && !isPassDeviceId && !isTesterId) {
       setIsSecondAuthScreen(true);
     } else {
       setCoverLoading(true);
