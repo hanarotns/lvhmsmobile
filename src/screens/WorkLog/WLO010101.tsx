@@ -146,6 +146,7 @@ const WLO010101 = () => {
           markedDates={{
             ...calDispList,
             [selectedInfo?.date]: {
+              ...calDispList?.[selectedInfo?.date],
               selected: true,
               disableTouchEvent: true,
             },
