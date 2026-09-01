@@ -105,17 +105,8 @@ const ETC010403 = () => {
 
   /** 미리보기 */
   const handlePreView = async () => {
-    const expriredDateTime = dayjs(
-      dt?.EXPR_TO_DATE + dt?.EXPR_TO_TIME,
-      'YYYYMMDDHHmm',
-    );
-    const currnetDateTime = dayjs(
-      dt?.CURRENT_DATE + dt?.CURRENT_TIME,
-      'YYYYMMDDHHmm',
-    );
-
-    if (expriredDateTime <= currnetDateTime) {
-      Util.toastMsg('다운로드기한이 만료되었습니다.', 'info');
+    if (dt?.PRINT_COUNT !== 0) {
+      Util.toastMsg('출력 불가합니다.', 'info');
     } else {
       setIsVisibleAttachModal(true);
     }
@@ -393,20 +384,6 @@ const ETC010403 = () => {
                       >
                         <Icon name='image-album' color='#27A7FF' />
                       </TouchableOpacity>
-                    </View>
-                    <View>
-                      <Text style={{ color: 'gray' }}>
-                        다운로드 기간:{'\n'}
-                        {Util.convertDateTime(
-                          dt?.EXPR_FROM_DATE,
-                          dt?.EXPR_FROM_TIME,
-                        )}{' '}
-                        ~
-                        {Util.convertDateTime(
-                          dt?.EXPR_TO_DATE,
-                          dt?.EXPR_TO_TIME,
-                        )}
-                      </Text>
                     </View>
                   </View>
                 }
