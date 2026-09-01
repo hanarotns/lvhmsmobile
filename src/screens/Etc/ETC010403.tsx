@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -25,7 +25,6 @@ import {
 } from '@/src/components';
 import { Fetch, Util } from '@/src/lib';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import * as COMAction from '../Common/Action'; // API통신 (공통)
 import * as Action from './Action';
@@ -80,14 +79,24 @@ const ETC010403 = () => {
     });
 
     // (첨부파일 관련) 발급 번호 있어야지만 조회
-    if (route?.params?.ISSUE_NO) {
+    if (res?.PE_TYPE === 'PE') {
       const payloadFile = {
-        REF_NO: route?.params?.ISSUE_NO,
+        REF_NO: route?.params?.JOB_NO,
         REF_TYPE: 'PT',
         S_FUNC_CODE: 'PT',
       };
       const resFile = await Fetch.getFileList(payloadFile);
       setFileList(resFile.data);
+    } else {
+      if (route?.params?.ISSUE_NO) {
+        const payloadFile = {
+          REF_NO: route?.params?.ISSUE_NO,
+          REF_TYPE: 'PT',
+          S_FUNC_CODE: 'PT',
+        };
+        const resFile = await Fetch.getFileList(payloadFile);
+        setFileList(resFile.data);
+      }
     }
     setLoading(false);
   };
@@ -109,6 +118,24 @@ const ETC010403 = () => {
       Util.toastMsg('출력 불가합니다.', 'info');
     } else {
       setIsVisibleAttachModal(true);
+    }
+  };
+
+  const handleTest = async () => {
+    const payload = {
+      JOB_NO: dt?.JOB_NO,
+      S_FUNC_CODE: 'PT',
+    };
+    setLoading(true);
+    const result = await Action.testEmploymentCertificate(payload);
+    setLeaveRefresh(true);
+    setLoading(false);
+    if (result.TYPE === 1) {
+      setConfirming(true);
+      setTimeout(() => {
+        setConfirming(false);
+        mount();
+      }, 1200);
     }
   };
 
@@ -345,6 +372,30 @@ const ETC010403 = () => {
                 <Text style={{ fontWeight: '700' }}>{dt?.SUBMIT_PLACE}</Text>
               }
             />
+            {dt?.PE_TYPE === 'PE' && Util.isEmpty(fileList) && (
+              <LVButton
+                title={'재직증명서 생성'}
+                onPress={() => {
+                  Alert.alert(
+                    '주의',
+                    `서버 환경에 따라 시간이 소요될 수 있습니다.\n지금 진행하시겠습니까?`,
+                    [
+                      {
+                        text: '아니오',
+                      },
+                      {
+                        text: '예',
+                        onPress: () => {
+                          handleTest();
+                        },
+                      },
+                    ],
+                  );
+                }}
+                buttonStyle={LVStyles.whiteBgButton}
+                textStyle={LVStyles.whiteBgButtonText}
+              />
+            )}
             {!Util.isEmpty(dt?.AP_STATUS) && (
               <LVFormOfContents
                 title={'결재선'}

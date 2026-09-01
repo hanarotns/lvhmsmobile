@@ -260,6 +260,25 @@ const approveForApprover = async (body1: object, body2: object) => {
   return result;
 };
 
+/**
+ * 재직증명서 발급
+ */
+const testEmploymentCertificate = async (body: object) => {
+  const result = await Fetch.request(
+    'AAAA010101SVC',
+    'testEmploymentCertificate',
+    {
+      body: JSON.stringify({
+        AAAA010101F1: body,
+      }),
+    },
+  );
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result;
+};
+
 export {
   // 결재 (결재자)
   approveForApprover,
@@ -287,4 +306,5 @@ export {
   saveApproval,
   // 계정 사용자 정보 변경
   saveUserInfo,
+  testEmploymentCertificate,
 };
