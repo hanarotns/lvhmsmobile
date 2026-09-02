@@ -106,14 +106,6 @@ const ETC010201 = () => {
   };
 
   const handleSelectImage = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (!permissionResult.granted) {
-      Util.toastMsg('사진을 선택하려면 앨범 접근 권한이 필요합니다.', 'info');
-      return;
-    }
-
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: false,

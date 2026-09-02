@@ -2,7 +2,6 @@ import { Util } from '@/src/lib';
 import * as ImagePicker from 'expo-image-picker';
 import React from 'react';
 import {
-  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -32,13 +31,6 @@ export default function ImageAttachment({
   setFileList,
 }: Props) {
   const onPressPhotoAdd = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (!permission.granted) {
-      Alert.alert('알림', '사진 접근 권한이 필요합니다.');
-      return;
-    }
-
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsMultipleSelection: true,
