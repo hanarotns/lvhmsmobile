@@ -147,7 +147,7 @@ const LEA010101 = () => {
     } else {
       Alert.alert(
         '기초데이터 미설정',
-        '연차부여일이 미설정되었습니다.\n인사팀에 문의하세요.',
+        `${selectedDate.format('YYYY-MM-DD')}\n연차부여일이 미설정되었습니다.\n인사팀에 문의하세요.`,
         [{ text: '확인' }],
       );
     }
