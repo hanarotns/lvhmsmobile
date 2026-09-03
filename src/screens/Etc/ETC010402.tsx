@@ -184,6 +184,7 @@ const ETC010402 = () => {
               title={'결재선'}
               children={
                 <LVApprLineForm
+                  rqType='CT'
                   approvalLine={approvalLine}
                   setApprovalLine={setApprovalLine}
                   isButtonDisabled={true}

@@ -25,6 +25,8 @@ import {
 import 'dayjs/locale/ko';
 
 const LVApprLineForm = (props: any) => {
+  const { approvalLine, setApprovalLine, isButtonDisabled, rqType } = props;
+
   const isFocused = useIsFocused();
   const movingScreen = useNavigation();
   const route = useRoute<DetailScreenRouteProp>();
@@ -38,7 +40,6 @@ const LVApprLineForm = (props: any) => {
 
   const [loading, setLoading] = useState(true);
   const [myApprList, setMyApprList] = useState([]);
-  const { approvalLine, setApprovalLine, isButtonDisabled } = props;
   const approvalLineRef = useRef<any>(null);
   const [approvalInfo, setApprovalInfo] = useState([]);
 
@@ -80,6 +81,7 @@ const LVApprLineForm = (props: any) => {
       SS_USER_ROLE: 'U',
       P_DUTY_CODE: 'XX',
       P_EMP_ID: empInfo?.EMP_ID,
+      RQ_TYPE: rqType,
     };
     const res = await PALAction.getMyApprLine(payload1);
     const updatedRes =
