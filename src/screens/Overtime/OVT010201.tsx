@@ -168,6 +168,10 @@ const OVT010201 = () => {
   };
 
   const handleBothDate = async (value) => {
+    if (Util.isEmpty(selectedType)) {
+      Util.toastMsg('종류를 먼저 선택하세요', 'info');
+      return false;
+    }
     setFromDateTime(value);
     setToDateTime(value);
   };
