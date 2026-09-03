@@ -6,11 +6,9 @@ import { useLoginStore } from '@/src/stores/loginStore';
 import { useSessionStore } from '@/src/stores/sessionStore';
 
 import {
-  KeyboardAwareScrollView,
   LVButton,
   LVLoadingIndicator,
   LVStyles,
-  SafeAreaView,
   Text,
   TextField,
 } from '@/src/components';
@@ -250,116 +248,107 @@ const AuthScreen = (props) => {
   };
 
   return (
-    <SafeAreaView edges={['bottom']} style={styles.safeArea}>
+    <View>
       <View style={{ flex: 1 }}>
         <Text style={styles.subTitle}>
           휴대폰번호 변경을 위한 인증절차가 필요합니다.
         </Text>
-        <KeyboardAwareScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-          }}
-          keyboardShouldPersistTaps='handled'
-          enableOnAndroid
-          extraScrollHeight={180}
-        >
-          <View style={styles.container}>
-            <View style={styles.sectionBox}>
-              <View style={styles.labelRow}>
-                <Text style={styles.label}>휴대폰 번호</Text>
-                {renderLabelMessage('phoneNumber')}
-              </View>
-              <View style={[LVStyles.row, styles.inlineRow]}>
-                <TextField
-                  disabled={isPhoneAuthRequested}
-                  keyboardType='numeric'
-                  placeholder='ex. 01012345678'
-                  maxLength={11}
-                  placeholderTextColor='lightgray'
-                  style={[styles.textFieldSt, styles.inlineInput]}
-                  autoCapitalize='none'
-                  onChangeValue={(value: string) =>
-                    updateMemberInfo('phoneNumber', value)
-                  }
-                  onBlur={() => handleBlurField('phoneNumber')}
-                  value={memberInfo.phoneNumber}
-                />
-                <LVButton
-                  title={isPhoneAuthRequested ? '재전송' : '인증요청'}
-                  disabled={!isPhoneFormatValid || isPhoneAuthVerified}
-                  onPress={requestPhoneAuthCode}
-                  buttonStyle={[
-                    styles.button,
-                    (!isPhoneFormatValid || isPhoneAuthVerified) &&
-                      styles.buttonDisabled,
-                  ]}
-                  textStyle={{
-                    color:
-                      !isPhoneFormatValid || isPhoneAuthVerified
-                        ? '#AEB6BF'
-                        : '#27A7FF',
-                  }}
-                />
-              </View>
-
-              {isPhoneAuthRequested && !isPhoneAuthVerified && (
-                <>
-                  <View style={styles.labelRow}>
-                    <Text style={styles.label}>인증번호</Text>
-                    {renderLabelMessage('authCode')}
-                  </View>
-
-                  <View style={styles.authBox}>
-                    <View style={[LVStyles.row, styles.inlineRow]}>
-                      <TextField
-                        keyboardType='numeric'
-                        placeholder='인증번호 6자리 입력'
-                        maxLength={6}
-                        placeholderTextColor='lightgray'
-                        style={[styles.textFieldSt, styles.inlineInput]}
-                        autoCapitalize='none'
-                        onChangeValue={(value: string) => {
-                          updateMemberInfo('authCode', value);
-                          setPhoneAuthMessage('');
-                        }}
-                        onBlur={() => handleBlurField('authCode')}
-                        value={memberInfo.authCode}
-                      />
-                      <LVButton
-                        title='확인'
-                        onPress={
-                          memberInfo.authCode.length === 6
-                            ? confirmPhoneAuthCode
-                            : undefined
-                        }
-                        buttonStyle={[
-                          styles.button,
-                          memberInfo.authCode.length !== 6 &&
-                            styles.buttonDisabled,
-                        ]}
-                        textStyle={{
-                          color:
-                            memberInfo.authCode.length === 6
-                              ? '#27A7FF'
-                              : '#AEB6BF',
-                        }}
-                      />
-                    </View>
-
-                    <View style={styles.authInfoRow}>
-                      <Text style={[styles.labelErrorText]}>
-                        {phoneAuthMessage}
-                      </Text>
-                    </View>
-                  </View>
-                </>
-              )}
+        <View style={styles.container}>
+          <View style={styles.sectionBox}>
+            <View style={styles.labelRow}>
+              <Text style={styles.label}>휴대폰 번호</Text>
+              {renderLabelMessage('phoneNumber')}
             </View>
+            <View style={[LVStyles.row, styles.inlineRow]}>
+              <TextField
+                disabled={isPhoneAuthRequested}
+                keyboardType='numeric'
+                placeholder='ex. 01012345678'
+                maxLength={11}
+                placeholderTextColor='lightgray'
+                style={[styles.textFieldSt, styles.inlineInput]}
+                autoCapitalize='none'
+                onChangeValue={(value: string) =>
+                  updateMemberInfo('phoneNumber', value)
+                }
+                onBlur={() => handleBlurField('phoneNumber')}
+                value={memberInfo.phoneNumber}
+              />
+              <LVButton
+                title={isPhoneAuthRequested ? '재전송' : '인증요청'}
+                disabled={!isPhoneFormatValid || isPhoneAuthVerified}
+                onPress={requestPhoneAuthCode}
+                buttonStyle={[
+                  styles.button,
+                  (!isPhoneFormatValid || isPhoneAuthVerified) &&
+                    styles.buttonDisabled,
+                ]}
+                textStyle={{
+                  color:
+                    !isPhoneFormatValid || isPhoneAuthVerified
+                      ? '#AEB6BF'
+                      : '#27A7FF',
+                }}
+              />
+            </View>
+
+            {isPhoneAuthRequested && !isPhoneAuthVerified && (
+              <>
+                <View style={styles.labelRow}>
+                  <Text style={styles.label}>인증번호</Text>
+                  {renderLabelMessage('authCode')}
+                </View>
+
+                <View style={styles.authBox}>
+                  <View style={[LVStyles.row, styles.inlineRow]}>
+                    <TextField
+                      keyboardType='numeric'
+                      placeholder='인증번호 6자리 입력'
+                      maxLength={6}
+                      placeholderTextColor='lightgray'
+                      style={[styles.textFieldSt, styles.inlineInput]}
+                      autoCapitalize='none'
+                      onChangeValue={(value: string) => {
+                        updateMemberInfo('authCode', value);
+                        setPhoneAuthMessage('');
+                      }}
+                      onBlur={() => handleBlurField('authCode')}
+                      value={memberInfo.authCode}
+                    />
+                    <LVButton
+                      title='확인'
+                      onPress={
+                        memberInfo.authCode.length === 6
+                          ? confirmPhoneAuthCode
+                          : undefined
+                      }
+                      buttonStyle={[
+                        styles.button,
+                        memberInfo.authCode.length !== 6 &&
+                          styles.buttonDisabled,
+                      ]}
+                      textStyle={{
+                        color:
+                          memberInfo.authCode.length === 6
+                            ? '#27A7FF'
+                            : '#AEB6BF',
+                      }}
+                    />
+                  </View>
+
+                  <View style={styles.authInfoRow}>
+                    <Text style={[styles.labelErrorText]}>
+                      {phoneAuthMessage}
+                    </Text>
+                  </View>
+                </View>
+              </>
+            )}
           </View>
-        </KeyboardAwareScrollView>
+        </View>
       </View>
       {loading && <LVLoadingIndicator />}
-    </SafeAreaView>
+    </View>
   );
 };
 export default AuthScreen;

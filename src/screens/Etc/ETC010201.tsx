@@ -208,8 +208,25 @@ const ETC010201 = () => {
               </View>
             </View>
           </View>
+          {isVisibleModal && (
+            <LVModal
+              title={'휴대폰번호 변경'}
+              contents={<AuthScreen setUserCp={setUserCp} />}
+              onVisible={setIsVisibleModal}
+              onOk={() => {
+                if (!userCp) {
+                  Util.toastMsg('인증이 완료되지 않았습니다.', 'info');
+                  return;
+                }
+                updateUserInfo('F_USER_CP', userCp);
+                setIsVisibleModal(false);
+              }}
+              buttonText={'변경'}
+            />
+          )}
         </KeyboardAwareScrollView>
-        <View style={LVStyles.bottomButtonView}>
+
+        <View style={{ ...LVStyles.bottomButtonView, zIndex: -9 }}>
           <LVButton
             title='저장'
             onPress={handleSave}
@@ -217,22 +234,7 @@ const ETC010201 = () => {
           />
         </View>
       </View>
-      {isVisibleModal && (
-        <LVModal
-          title={'휴대폰번호 변경'}
-          contents={<AuthScreen setUserCp={setUserCp} />}
-          onVisible={setIsVisibleModal}
-          onOk={() => {
-            if (!userCp) {
-              Util.toastMsg('인증이 완료되지 않았습니다.', 'info');
-              return;
-            }
-            updateUserInfo('F_USER_CP', userCp);
-            setIsVisibleModal(false);
-          }}
-          buttonText={'변경'}
-        />
-      )}
+
       {loading && <LVLoadingIndicator />}
     </SafeAreaView>
   );
