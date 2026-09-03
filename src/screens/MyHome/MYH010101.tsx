@@ -85,8 +85,9 @@ const MYH010101 = ({ navigation }) => {
   const notice2 = laborNotice2?.[0];
   const refusal = laborRefusal?.[0];
   const getHomeViewType = () => {
-    if (notice1?.LABOR_CHECK === 'N') return 'NOTICE_1';
-    if (notice2?.LABOR_CHECK === 'N') return 'NOTICE_2';
+    // @@ 연차 촉진 규칙 수정 후 다시 적용
+    // if (notice1?.LABOR_CHECK === 'N') return 'NOTICE_1';
+    // if (notice2?.LABOR_CHECK === 'N') return 'NOTICE_2';
     if (refusal && Util.isEmpty(refusal.CONFIRM_DATE)) return 'REFUSAL';
     return 'HOME';
   };
@@ -232,12 +233,13 @@ const MYH010101 = ({ navigation }) => {
       S_EMP_ID: empInfo?.EMP_ID,
       S_TO_DATE: dayjs(new Date()).format('YYYYMMDD'),
     };
-    const res1 = await Action.LaborRefusalNotice(payload);
-    setLaborNotice1(res1);
-    if (Util.isEmpty(res1)) {
-      const res2 = await Action.LaborRefusalNotice2(payload);
-      setLaborNotice2(res2);
-    }
+    // @@ 연차 촉진 규칙 수정 후 다시 적용
+    // const res1 = await Action.LaborRefusalNotice(payload);
+    // setLaborNotice1(res1);
+    // if (Util.isEmpty(res1)) {
+    //   const res2 = await Action.LaborRefusalNotice2(payload);
+    //   setLaborNotice2(res2);
+    // }
     const res3 = await Action.LaborRefusal_get(payload);
     setLaborRefusal(res3);
     if (Util.isEmpty(loginInfo)) {
