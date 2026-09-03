@@ -58,6 +58,8 @@ const ETC010403 = () => {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [isVisibleAttachModal, setIsVisibleAttachModal] = useState(false);
 
+  const isMyRequest = !!dt?.EMP_ID && dt.EMP_ID === empInfo?.EMP_ID;
+
   useEffect(() => {
     mount();
   }, []);
@@ -372,7 +374,7 @@ const ETC010403 = () => {
                 <Text style={{ fontWeight: '700' }}>{dt?.SUBMIT_PLACE}</Text>
               }
             />
-            {dt?.PE_TYPE === 'PE' && Util.isEmpty(fileList) && (
+            {isMyRequest && dt?.PE_TYPE === 'PE' && Util.isEmpty(fileList) && (
               <LVButton
                 title={'재직증명서 생성'}
                 onPress={() => {
@@ -442,66 +444,62 @@ const ETC010403 = () => {
             )}
           </View>
         </KeyboardAwareScrollView>
-        {dt?.EMP_ID &&
-          dt?.AP_STATUS !== 'A' &&
-          dt?.EMP_ID === empInfo?.EMP_ID && (
-            // 상신자 사용
-            <View style={LVStyles.bottomButtonView}>
-              {dt?.AP_STATUS === 'S' && (
-                <LVButton
-                  title={'회수'}
-                  onPress={handleRecall}
-                  buttonStyle={LVStyles.whiteBgButton}
-                  textStyle={LVStyles.whiteBgButtonText}
-                />
-              )}
-              {dt?.AP_STATUS === 'W' && (
-                <LVButton
-                  title={'삭제'}
-                  onPress={handleDelete}
-                  buttonStyle={LVStyles.grayBgButton}
-                />
-              )}
-              {dt?.AP_STATUS === 'W' && (
-                <LVButton
-                  title={'상신'}
-                  onPress={handleReApprove}
-                  buttonStyle={LVStyles.defaultButton}
-                />
-              )}
-            </View>
-          )}
-        {dt?.EMP_ID &&
-          dt?.AP_STATUS !== 'A' &&
-          dt?.EMP_ID !== empInfo?.EMP_ID && (
-            // 결재자 사용
-            <View style={LVStyles.bottomButtonView}>
-              {dt?.LAST_ID === empInfo?.EMP_ID && (
-                <LVButton
-                  title={'회수'}
-                  onPress={handleRecallForApprover}
-                  buttonStyle={LVStyles.whiteBgButton}
-                  textStyle={LVStyles.whiteBgButtonText}
-                />
-              )}
-              {dt?.NEXT_ID === empInfo?.EMP_ID && (
-                <LVButton
-                  title={'반려'}
-                  onPress={() => {
-                    setIsVisibleModal(true);
-                  }}
-                  buttonStyle={LVStyles.grayBgButton}
-                />
-              )}
-              {dt?.NEXT_ID === empInfo?.EMP_ID && (
-                <LVButton
-                  title={'결재'}
-                  onPress={handleApproveForApprover}
-                  buttonStyle={LVStyles.defaultButton}
-                />
-              )}
-            </View>
-          )}
+        {isMyRequest && dt?.AP_STATUS !== 'A' && (
+          // 상신자 사용
+          <View style={LVStyles.bottomButtonView}>
+            {dt?.AP_STATUS === 'S' && (
+              <LVButton
+                title={'회수'}
+                onPress={handleRecall}
+                buttonStyle={LVStyles.whiteBgButton}
+                textStyle={LVStyles.whiteBgButtonText}
+              />
+            )}
+            {dt?.AP_STATUS === 'W' && (
+              <LVButton
+                title={'삭제'}
+                onPress={handleDelete}
+                buttonStyle={LVStyles.grayBgButton}
+              />
+            )}
+            {dt?.AP_STATUS === 'W' && (
+              <LVButton
+                title={'상신'}
+                onPress={handleReApprove}
+                buttonStyle={LVStyles.defaultButton}
+              />
+            )}
+          </View>
+        )}
+        {!isMyRequest && dt?.AP_STATUS !== 'A' && (
+          // 결재자 사용
+          <View style={LVStyles.bottomButtonView}>
+            {dt?.LAST_ID === empInfo?.EMP_ID && (
+              <LVButton
+                title={'회수'}
+                onPress={handleRecallForApprover}
+                buttonStyle={LVStyles.whiteBgButton}
+                textStyle={LVStyles.whiteBgButtonText}
+              />
+            )}
+            {dt?.NEXT_ID === empInfo?.EMP_ID && (
+              <LVButton
+                title={'반려'}
+                onPress={() => {
+                  setIsVisibleModal(true);
+                }}
+                buttonStyle={LVStyles.grayBgButton}
+              />
+            )}
+            {dt?.NEXT_ID === empInfo?.EMP_ID && (
+              <LVButton
+                title={'결재'}
+                onPress={handleApproveForApprover}
+                buttonStyle={LVStyles.defaultButton}
+              />
+            )}
+          </View>
+        )}
       </View>
       {isVisibleModal && (
         <LVModal
