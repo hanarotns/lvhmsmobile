@@ -375,33 +375,6 @@ const ETC010403 = () => {
                 <Text style={{ fontWeight: '700' }}>{dt?.SUBMIT_PLACE}</Text>
               }
             />
-            {isMyRequest &&
-              dt?.PE_TYPE === 'PE' &&
-              Util.isEmpty(fileList) &&
-              isApprovalCompleted && (
-                <LVButton
-                  title={'재직증명서 생성'}
-                  onPress={() => {
-                    Alert.alert(
-                      '주의',
-                      `서버 환경에 따라 시간이 소요될 수 있습니다.\n지금 진행하시겠습니까?`,
-                      [
-                        {
-                          text: '아니오',
-                        },
-                        {
-                          text: '예',
-                          onPress: () => {
-                            handleTest();
-                          },
-                        },
-                      ],
-                    );
-                  }}
-                  buttonStyle={LVStyles.whiteBgButton}
-                  textStyle={LVStyles.whiteBgButtonText}
-                />
-              )}
             {!Util.isEmpty(dt?.AP_STATUS) && (
               <LVFormOfContents
                 title={'결재선'}
@@ -418,6 +391,35 @@ const ETC010403 = () => {
                 }
               />
             )}
+            {isMyRequest &&
+              dt?.PE_TYPE === 'PE' &&
+              Util.isEmpty(fileList) &&
+              isApprovalCompleted && (
+                <View style={{ paddingTop: 16 }}>
+                  <LVButton
+                    title={'재직증명서 생성'}
+                    onPress={() => {
+                      Alert.alert(
+                        '주의',
+                        `서버 환경에 따라 시간이 소요될 수 있습니다.\n지금 진행하시겠습니까?`,
+                        [
+                          {
+                            text: '아니오',
+                          },
+                          {
+                            text: '예',
+                            onPress: () => {
+                              handleTest();
+                            },
+                          },
+                        ],
+                      );
+                    }}
+                    buttonStyle={LVStyles.whiteBgButton}
+                    textStyle={LVStyles.whiteBgButtonText}
+                  />
+                </View>
+              )}
             {!Util.isEmpty(fileList) && (
               <LVFormOfContents
                 title={'첨부파일'}
