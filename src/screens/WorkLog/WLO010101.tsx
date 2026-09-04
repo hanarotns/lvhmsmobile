@@ -134,6 +134,9 @@ const WLO010101 = () => {
     if (!Util.isEmpty(param2)) {
       list = param2;
     }
+    const weekendInfo = list?.find(
+      (e) => param1 === e?.M_DATE && e?.M_TYPE === 'WEEKEND',
+    );
     const holidayInfo = list?.find(
       (e) => param1 === e?.M_DATE && e?.M_TYPE === 'HOLIDAY',
     );
@@ -158,6 +161,7 @@ const WLO010101 = () => {
     }
     setSelectedInfo({
       date: param1,
+      ...weekendInfo,
       ...holidayInfo,
       ...planInfo,
     });
