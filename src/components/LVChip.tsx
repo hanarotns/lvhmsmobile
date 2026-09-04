@@ -178,8 +178,8 @@ const LVChip = (props: any) => {
         </Text>
       </View>
     );
-  } else if (category === 'otReqType') {
-    const { code, mainColor } = props;
+  } else if (category === 'simple') {
+    const { title, mainColor } = props;
     return (
       <View
         style={[
@@ -202,7 +202,7 @@ const LVChip = (props: any) => {
             color: mainColor,
           }}
         >
-          {code == 'ES' ? `예정` : `확정`}
+          {title}
         </Text>
       </View>
     );

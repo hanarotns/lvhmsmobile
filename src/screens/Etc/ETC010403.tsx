@@ -439,7 +439,7 @@ const ETC010403 = () => {
                         )}
                       </View>
                       {dt?.PRINT_COUNT !== 0 ? (
-                        <Text>출력완료</Text>
+                        <LVChip category='simple' title='출력완료' />
                       ) : (
                         <TouchableOpacity
                           onPress={() => handlePreView()}
