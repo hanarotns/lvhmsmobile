@@ -125,8 +125,8 @@ const WLO010101 = () => {
   };
 
   const movingToday = async () => {
+    await getInfoM();
     setCalendarKey((prev) => prev + 1);
-    getInfoM();
   };
 
   const handleChangeDateInfo = async (param1: string, param2?: any) => {
