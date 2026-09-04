@@ -209,6 +209,14 @@ const ETC010201 = () => {
               </View>
             </View>
           </View>
+          <View style={{ ...LVStyles.bottomButtonView }}>
+            <LVButton
+              title='저장'
+              onPress={handleSave}
+              buttonStyle={LVStyles.defaultButton}
+            />
+          </View>
+
           {isVisibleModal && (
             <LVModal
               title={'휴대폰번호 변경'}
@@ -226,14 +234,6 @@ const ETC010201 = () => {
             />
           )}
         </KeyboardAwareScrollView>
-
-        <View style={{ ...LVStyles.bottomButtonView, zIndex: -9 }}>
-          <LVButton
-            title='저장'
-            onPress={handleSave}
-            buttonStyle={LVStyles.defaultButton}
-          />
-        </View>
       </View>
 
       {loading && <LVLoadingIndicator />}
