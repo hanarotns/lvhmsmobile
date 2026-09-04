@@ -117,10 +117,12 @@ const ETC010403 = () => {
 
   /** 미리보기 */
   const handlePreView = async () => {
-    if (dt?.PRINT_COUNT !== 0) {
-      Util.toastMsg('출력 불가합니다.', 'info');
-    } else {
-      setIsVisibleAttachModal(true);
+    setIsVisibleAttachModal(true);
+    if (dt?.PE_TYPE === 'PE') {
+      Alert.alert(
+        '알림',
+        `재직증명서는 1회만 다운로드 가능하며,\n다운로드 후 재다운로드가 불가합니다`,
+      );
     }
   };
 
@@ -436,13 +438,16 @@ const ETC010403 = () => {
                           <Text> 외 {fileList?.length - 1}건</Text>
                         )}
                       </View>
-
-                      <TouchableOpacity
-                        onPress={() => handlePreView()}
-                        style={LVStyles.iconWrap}
-                      >
-                        <Icon name='image-album' color='#27A7FF' />
-                      </TouchableOpacity>
+                      {dt?.PRINT_COUNT !== 0 ? (
+                        <Text>출력완료</Text>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => handlePreView()}
+                          style={LVStyles.iconWrap}
+                        >
+                          <Icon name='image-album' color='#27A7FF' />
+                        </TouchableOpacity>
+                      )}
                     </View>
                   </View>
                 }
@@ -525,7 +530,14 @@ const ETC010403 = () => {
           category='entire'
           title={'첨부파일 미리보기'}
           isUseSaveButton={false}
-          contents={<ContentsOfAttach fileList={fileList} />}
+          contents={
+            <ContentsOfAttach
+              fileList={fileList}
+              dt={dt}
+              handleRefresh={handleRefresh}
+              setIsVisibleAttachModal={setIsVisibleAttachModal}
+            />
+          }
           onVisible={setIsVisibleAttachModal}
         />
       )}
@@ -556,7 +568,12 @@ const ContentsOfRefusal = (props: any) => {
   );
 };
 
-const ContentsOfAttach = ({ fileList }: any) => {
+const ContentsOfAttach = ({
+  fileList,
+  dt,
+  handleRefresh,
+  setIsVisibleAttachModal,
+}: any) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const currentFile = fileList?.[currentIndex];
@@ -575,9 +592,17 @@ const ContentsOfAttach = ({ fileList }: any) => {
 
   if (!currentFile) return null;
 
+  const handleChange = async () => {
+    if (dt?.PE_TYPE === 'PE') {
+      await Action.savePrintCount([dt]);
+      handleRefresh();
+      setIsVisibleAttachModal(false);
+    }
+  };
+
   return (
     <View>
-      <LVImage currentFile={currentFile} />
+      <LVImage currentFile={currentFile} onChange={handleChange} />
       <View style={styles.moving}>
         <TouchableOpacity onPress={prev} disabled={currentIndex === 0}>
           <Icon name='chevron-left' color='#727283' size={28} />

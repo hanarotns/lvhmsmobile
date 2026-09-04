@@ -21,7 +21,7 @@ const settingUrl = async () => {
 settingUrl();
 
 const LVImage = (props: any) => {
-  const { currentFile, imgStyle } = props;
+  const { currentFile, imgStyle, onChange } = props;
 
   useEffect(() => {
     func();
@@ -77,6 +77,7 @@ const LVImage = (props: any) => {
 
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(downloadedFile.uri);
+        onChange();
       }
     } catch (e) {
       console.log('파일 다운로드 실패', e);
