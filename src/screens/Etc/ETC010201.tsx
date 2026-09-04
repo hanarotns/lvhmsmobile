@@ -1,6 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useEmpStore } from '@/src/stores/empStore';
 import { useLoginStore } from '@/src/stores/loginStore';
@@ -20,6 +20,7 @@ import {
   TextField,
 } from '@/src/components';
 import { Util } from '@/src/lib';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   RouteProp,
   useIsFocused,
@@ -244,6 +245,16 @@ export default ETC010201;
 const Form = (props: any) => {
   const { label, fieldKey, value, editType, onChange, setIsVisibleModal } =
     props;
+
+  const handleChangeUserCp = async () => {
+    const fetchURL = await AsyncStorage.getItem('url');
+    if (fetchURL?.indexOf('qa') !== -1) {
+      Alert.alert('알림', 'QA환경에서는 테스트 불가합니다.');
+    } else {
+      setIsVisibleModal(true);
+    }
+  };
+
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', height: 48 }}>
       <View style={{ width: '20%' }}>
@@ -266,7 +277,7 @@ const Form = (props: any) => {
             <LVButton
               title='수정'
               buttonStyle={styles.button}
-              onPress={() => setIsVisibleModal(true)}
+              onPress={handleChangeUserCp}
               textStyle={{ color: '#27A7FF' }}
             />
           </View>
