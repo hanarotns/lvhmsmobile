@@ -278,16 +278,12 @@ const savePrintCount = async (body: object) => {
 /**
  * 재직증명서 발급
  */
-const testEmploymentCertificate = async (body: object) => {
-  const result = await Fetch.request(
-    'AAAA010101SVC',
-    'testEmploymentCertificate',
-    {
-      body: JSON.stringify({
-        AAAA010101F1: body,
-      }),
-    },
-  );
+const generateCerti = async (body: object) => {
+  const result = await Fetch.request('PORU010203SVC', 'generateCerti', {
+    body: JSON.stringify({
+      PORU010203F1: body,
+    }),
+  });
   if (result.TYPE === -1) {
     Util.toastMsg(result.MSG, 'error');
   }
@@ -302,6 +298,7 @@ export {
   // 계정 비밀번호 동일여부 확인
   checkPw,
   deleteMobile,
+  generateCerti,
   // 증명서 상세 조회
   getDetailMOfCert,
   // 증명서 사용자 정보 조회
@@ -322,5 +319,4 @@ export {
   savePrintCount,
   // 계정 사용자 정보 변경
   saveUserInfo,
-  testEmploymentCertificate,
 };

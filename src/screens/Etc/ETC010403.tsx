@@ -126,13 +126,13 @@ const ETC010403 = () => {
     }
   };
 
-  const handleTest = async () => {
+  const handleGenerate = async () => {
     const payload = {
       JOB_NO: dt?.JOB_NO,
       S_FUNC_CODE: 'PT',
     };
     setLoading(true);
-    const result = await Action.testEmploymentCertificate(payload);
+    const result = await Action.generateCerti(payload);
     setLeaveRefresh(true);
     setLoading(false);
     if (result.TYPE === 1) {
@@ -411,7 +411,7 @@ const ETC010403 = () => {
                           {
                             text: '예',
                             onPress: () => {
-                              handleTest();
+                              handleGenerate();
                             },
                           },
                         ],
