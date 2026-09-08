@@ -361,15 +361,9 @@ const OVT010202 = () => {
           </View>
         </KeyboardAwareScrollView>
         <View style={LVStyles.bottomButtonView}>
-          <LVButton
-            title={'취소'}
-            onPress={movingScreen.goBack}
-            buttonStyle={LVStyles.whiteBgButton}
-            textStyle={LVStyles.whiteBgButtonText}
-          />
           {/* 최초 상신 */}
           <LVButton
-            title={'상신'}
+            title={'신청하기'}
             onPress={handleSubmit}
             buttonStyle={LVStyles.defaultButton}
           />
