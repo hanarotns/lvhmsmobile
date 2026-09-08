@@ -261,7 +261,7 @@ const approveForApprover = async (body1: object, body2: object) => {
 };
 
 /**
- * 재직증명서 발급
+ * 출력 횟수 저장
  */
 const savePrintCount = async (body: object) => {
   const result = await Fetch.request('PORU010203SVC', 'GPrintCount', {
@@ -276,7 +276,7 @@ const savePrintCount = async (body: object) => {
 };
 
 /**
- * 출력 횟수 저장
+ * 재직증명서 발급
  */
 const testEmploymentCertificate = async (body: object) => {
   const result = await Fetch.request(
