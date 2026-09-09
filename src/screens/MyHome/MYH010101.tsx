@@ -47,7 +47,9 @@ import * as Location from 'expo-location';
 import * as WLOAction from '../WorkLog/Action'; // API통신 (공통)
 import * as Action from './Action';
 import LaborNoticeScreen from './LaborNoticeScreen';
+import LaborNoticeScreenNEW from './LaborNoticeScreen_NEW';
 import SecondAuthScreen from './SecondAuthScreen';
+import { noticeData1, noticeData1_re, noticeData2 } from './noticeData';
 dayjs.extend(customParseFormat);
 
 const MYH010101 = ({ navigation }) => {
@@ -85,8 +87,18 @@ const MYH010101 = ({ navigation }) => {
   const notice2 = laborNotice2?.[0];
   const refusal = laborRefusal?.[0];
   const getHomeViewType = () => {
-    if (notice1?.LABOR_CHECK === 'N') return 'NOTICE_1';
-    if (notice2?.LABOR_CHECK === 'N') return 'NOTICE_2';
+    let isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA030101');
+    if (isCheckMenuPermi) {
+      const a = 1;
+      if (a === 1) return 'NOTICE_1_NEW';
+      if (a === 2) return 'NOTICE_1_RE_NEW';
+      if (a === 3) return 'NOTICE_2_NEW';
+    }
+    isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA020101');
+    if (isCheckMenuPermi) {
+      if (notice1?.LABOR_CHECK === 'N') return 'NOTICE_1';
+      if (notice2?.LABOR_CHECK === 'N') return 'NOTICE_2';
+    }
     if (refusal && Util.isEmpty(refusal.CONFIRM_DATE)) return 'REFUSAL';
     return 'HOME';
   };
@@ -838,12 +850,25 @@ const MYH010101 = ({ navigation }) => {
                   onConfirm={handleConfirmNotice2}
                 />
               )}
-              {homeViewType === 'REFUSAL' && (
-                // 노무수령거부통지
-                <LaborNoticeScreen
-                  type='refusal'
-                  data={refusal}
-                  onConfirm={handleConfirmRefusal}
+              {homeViewType === 'NOTICE_1_NEW' && (
+                <LaborNoticeScreenNEW
+                  type='NOTICE_1'
+                  data={noticeData1}
+                  onConfirm={handleConfirmNotice1}
+                />
+              )}
+              {homeViewType === 'NOTICE_1_RE_NEW' && (
+                <LaborNoticeScreenNEW
+                  type='NOTICE_1_RE'
+                  data={noticeData1_re}
+                  onConfirm={handleConfirmNotice1}
+                />
+              )}
+              {homeViewType === 'NOTICE_2_NEW' && (
+                <LaborNoticeScreenNEW
+                  type='NOTICE_2'
+                  data={noticeData2}
+                  onConfirm={handleConfirmNotice2}
                 />
               )}
               {homeViewType === 'HOME' && (

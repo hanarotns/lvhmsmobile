@@ -22,6 +22,7 @@ import LEA010301 from '../screens/AnnualLeave/LEA010301';
 import LEA020101 from '../screens/AnnualLeave/LEA020101';
 import LEA020201 from '../screens/AnnualLeave/LEA020201';
 import LEA020301 from '../screens/AnnualLeave/LEA020301';
+import LEA030101 from '../screens/AnnualLeave/LEA030101';
 // 시간외
 import OVT010101 from '../screens/Overtime/OVT010101';
 import OVT010201 from '../screens/Overtime/OVT010201';
@@ -135,6 +136,11 @@ export const HomeNavigator = (props) => (
       name='LEA020301'
       component={LEA020301}
       options={{ title: '연차사용예정 현황 상세' }}
+    />
+    <Stack.Screen
+      name='LEA030101'
+      component={LEA030101}
+      options={{ title: '연차사용예정 현황(NEW)' }}
     />
     <Stack.Screen
       name='OVT010101'

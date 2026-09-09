@@ -113,14 +113,21 @@ const ETC010101 = () => {
             <Divider />
             <TouchableOpacity
               onPress={() => {
-                const isCheckMenuPermi = menuInfo.some(
+                let isCheckMenuPermi = menuInfo.some(
+                  (item) => item.CODE === 'MMLEA030101',
+                );
+                if (isCheckMenuPermi) {
+                  movingScreen.navigate('LEA030101');
+                  return;
+                }
+                isCheckMenuPermi = menuInfo.some(
                   (item) => item.CODE === 'MMLEA020101',
                 );
                 if (isCheckMenuPermi) {
                   movingScreen.navigate('LEA020101');
-                } else {
-                  Alert.alert('알림', '서비스 준비중입니다.');
+                  return;
                 }
+                Alert.alert('알림', '서비스 준비중입니다.');
               }}
               style={styles.menuButton}
             >

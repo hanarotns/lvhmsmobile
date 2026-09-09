@@ -13,6 +13,7 @@ const LaborNoticeScreen = ({ type, data = {}, onConfirm }) => {
           showsVerticalScrollIndicator={false}
         >
           {type === 'NOTICE_1' && <AnnualLeaveNotice data={data} />}
+          {type === 'NOTICE_1_RE' && <AnnualLeaveNotice data={data} />}
           {type === 'NOTICE_2' && <AnnualLeaveNotice2 data={data} />}
           {type === 'REFUSAL' && <LaborRefusalNotice data={data} />}
         </ScrollView>
@@ -29,13 +30,13 @@ const LaborNoticeScreen = ({ type, data = {}, onConfirm }) => {
 };
 
 /**
- * 연차 촉진 1차
+ * 연차 촉진 1차 / 재알림
  */
 const AnnualLeaveNotice = ({ data }) => {
   return (
     <View style={styles.noticeBox}>
       <Text style={styles.title}>
-        미사용 연차유급휴가 사용촉진 통지{' '}
+        미사용 연차유급휴가 사용촉진 통지 {data?.LABORREFUSAL_TITLE}
         {data?.LABORREFUSAL_GUBUN === '2'
           ? `(${data?.LABORREFUSAL_GUBUN}차)`
           : ''}
