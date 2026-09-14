@@ -144,7 +144,7 @@ const PAL010101 = () => {
               <View style={{ flex: 1 }}>
                 <View style={LVStyles.row}>
                   <View style={styles.apprLineView}>
-                    <LVChip category='apprLineFlag' title='일반' />
+                    <LVChip category='apprLineFlag' title={e?.ADD_TYPE_NAME} />
                     <Text style={styles.apprLineNameText}>{e?.AP_NAME}</Text>
                   </View>
                   <TouchableOpacity

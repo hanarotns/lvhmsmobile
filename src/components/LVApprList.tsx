@@ -38,7 +38,7 @@ const LVApprList = forwardRef((props: any, ref) => {
             <View style={{ flex: 1 }}>
               <View style={styles.myApprListTitleView}>
                 <View style={styles.apprLineView}>
-                  <LVChip category='apprLineFlag' title='일반' />
+                  <LVChip category='apprLineFlag' title={e?.ADD_TYPE_NAME} />
                   <Text style={styles.apprLineNameText}>{e?.AP_NAME}</Text>
                 </View>
                 <Text style={styles.myApprListTitle}>{e?.APPR_LINE_NAME}</Text>
