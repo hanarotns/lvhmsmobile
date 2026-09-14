@@ -198,9 +198,16 @@ const WLO010101 = () => {
           theme={calendarTheme}
           dayComponent={({ date, state, marking }) => {
             const customStyles = marking?.customStyles;
+
+            if (!date) return null;
+            const currentMonth = selectedInfo?.date?.substring(0, 7); // 현재 캘린더에 표시 중인 월
+            const dateMonth = date.dateString.substring(0, 7); // 해당 날짜의 월
+            const isOtherMonth = currentMonth !== dateMonth;
+
             return (
               <View style={{ alignItems: 'center' }}>
                 <TouchableOpacity
+                  disabled={isOtherMonth}
                   onPress={() => {
                     handleChangeDateInfo(date?.dateString);
                   }}
