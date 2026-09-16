@@ -49,7 +49,6 @@ import * as Action from './Action';
 import LaborNoticeScreen from './LaborNoticeScreen';
 import LaborNoticeScreenNEW from './LaborNoticeScreen_NEW';
 import SecondAuthScreen from './SecondAuthScreen';
-import { noticeData1, noticeData1_re, noticeData2 } from './noticeData';
 dayjs.extend(customParseFormat);
 
 const MYH010101 = ({ navigation }) => {
@@ -76,30 +75,44 @@ const MYH010101 = ({ navigation }) => {
   const [checkType, setCheckType] = useState('');
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [isVisible30mModal, setIsVisible30mModal] = useState(false);
-  const [laborNotice1, setLaborNotice1] = useState([]);
-  const [laborNotice2, setLaborNotice2] = useState([]);
-  const [laborRefusal, setLaborRefusal] = useState([]);
+  const [laborNotice1, setLaborNotice1] = useState({});
+  const [laborNotice1R, setLaborNotice1R] = useState({});
+  const [laborNotice2, setLaborNotice2] = useState({});
+  const [laborRefusal, setLaborRefusal] = useState({});
   const [isSecondAuthScreen, setIsSecondAuthScreen] = useState(false);
   const [offsiteInfo, setOffsiteInfo] = useState({});
 
   // 화면 정의하기
-  const notice1 = laborNotice1?.[0];
-  const notice2 = laborNotice2?.[0];
-  const refusal = laborRefusal?.[0];
+  const notice1 = laborNotice1;
+  const notice1R = laborNotice1R;
+  const notice2 = laborNotice2;
+  const refusal = laborRefusal;
   const getHomeViewType = () => {
     let isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA030101');
     if (isCheckMenuPermi) {
-      const a = 1;
-      if (a === 1) return 'NOTICE_1_NEW';
-      if (a === 2) return 'NOTICE_1_RE_NEW';
-      if (a === 3) return 'NOTICE_2_NEW';
+      if (
+        laborNotice1?.LABORREFUSAL_GUBUN === '1' &&
+        laborNotice1?.LABOR_CHECK === 'N'
+      )
+        return 'NOTICE_1_NEW';
+      if (
+        laborNotice1R?.LABORREFUSAL_GUBUN === '1R' &&
+        laborNotice1R?.LABOR_CHECK === 'N'
+      )
+        return 'NOTICE_1_RE_NEW';
+      if (
+        laborNotice2?.LABORREFUSAL_GUBUN === '2' &&
+        laborNotice2?.LABOR_CHECK === 'N'
+      )
+        return 'NOTICE_2_NEW';
     }
     isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA020101');
     if (isCheckMenuPermi) {
       if (notice1?.LABOR_CHECK === 'N') return 'NOTICE_1';
       if (notice2?.LABOR_CHECK === 'N') return 'NOTICE_2';
     }
-    if (refusal && Util.isEmpty(refusal.CONFIRM_DATE)) return 'REFUSAL';
+    if (!Util.isEmpty(refusal) && Util.isEmpty(refusal.CONFIRM_DATE))
+      return 'REFUSAL';
     return 'HOME';
   };
   const homeViewType = getHomeViewType();
@@ -244,14 +257,42 @@ const MYH010101 = ({ navigation }) => {
       S_EMP_ID: empInfo?.EMP_ID,
       S_TO_DATE: dayjs(new Date()).format('YYYYMMDD'),
     };
-    const res1 = await Action.LaborRefusalNotice(payload);
-    setLaborNotice1(res1);
-    if (Util.isEmpty(res1)) {
-      const res2 = await Action.LaborRefusalNotice2(payload);
-      setLaborNotice2(res2);
+    let isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA030101');
+    if (isCheckMenuPermi) {
+      const res1 = await Action.getAnnualLeavePromotionInfo({
+        ...payload,
+        LABORREFUSAL_GUBUN: '1',
+      });
+      setLaborNotice1(res1);
+      if (Util.isEmpty(res1)) {
+        const res1R = await Action.getAnnualLeavePromotionInfo({
+          ...payload,
+          LABORREFUSAL_GUBUN: '1R',
+        });
+        setLaborNotice1R(res1R);
+
+        if (Util.isEmpty(res1R)) {
+          const res2 = await Action.getAnnualLeavePromotionInfo({
+            ...payload,
+            LABORREFUSAL_GUBUN: '2',
+          });
+          setLaborNotice2(res2);
+        }
+      }
+    }
+    if (!isCheckMenuPermi) {
+      isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA020101');
+      if (isCheckMenuPermi) {
+        const res1 = await Action.LaborRefusalNotice(payload);
+        setLaborNotice1(res1?.[0]);
+        if (Util.isEmpty(res1?.[0])) {
+          const res2 = await Action.LaborRefusalNotice2(payload);
+          setLaborNotice2(res2?.[0]);
+        }
+      }
     }
     const res3 = await Action.LaborRefusal_get(payload);
-    setLaborRefusal(res3);
+    setLaborRefusal(res3?.[0]);
     if (Util.isEmpty(loginInfo)) {
     }
   };
@@ -539,14 +580,20 @@ const MYH010101 = ({ navigation }) => {
   };
 
   const handleConfirmNotice1 = async () => {
-    await Action.saveRefusalNotice(notice1);
-    setLaborNotice1([]);
+    await Action.saveRefusalNotice(laborNotice1);
+    setLaborNotice1({});
+    movingScreen.navigate('LEA020101');
+  };
+
+  const handleConfirmNotice1R = async () => {
+    await Action.saveRefusalNotice(laborNotice1R);
+    setLaborNotice1({});
     movingScreen.navigate('LEA020101');
   };
 
   const handleConfirmNotice2 = async () => {
-    await Action.saveRefusalNotice(notice2);
-    setLaborNotice2([]);
+    await Action.saveRefusalNotice(laborNotice2);
+    setLaborNotice2({});
   };
 
   const handleConfirmRefusal = async () => {
@@ -853,22 +900,30 @@ const MYH010101 = ({ navigation }) => {
               {homeViewType === 'NOTICE_1_NEW' && (
                 <LaborNoticeScreenNEW
                   type='NOTICE_1'
-                  data={noticeData1}
+                  data={notice1}
                   onConfirm={handleConfirmNotice1}
                 />
               )}
               {homeViewType === 'NOTICE_1_RE_NEW' && (
                 <LaborNoticeScreenNEW
                   type='NOTICE_1_RE'
-                  data={noticeData1_re}
-                  onConfirm={handleConfirmNotice1}
+                  data={notice1R}
+                  onConfirm={handleConfirmNotice1R}
                 />
               )}
               {homeViewType === 'NOTICE_2_NEW' && (
                 <LaborNoticeScreenNEW
                   type='NOTICE_2'
-                  data={noticeData2}
+                  data={notice2}
                   onConfirm={handleConfirmNotice2}
+                />
+              )}
+              {homeViewType === 'REFUSAL' && (
+                // 노무수령거부통지
+                <LaborNoticeScreen
+                  type='refusal'
+                  data={refusal}
+                  onConfirm={handleConfirmRefusal}
                 />
               )}
               {homeViewType === 'HOME' && (

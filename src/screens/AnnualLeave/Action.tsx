@@ -279,6 +279,18 @@ const getListMOfSchedule = async (body: object) => {
   return result.PORU010304G1;
 };
 
+const getTimelineMOfSchedule = async (body: object) => {
+  const result = await Fetch.request('PORU010304SVC', 'getTimelineM', {
+    body: JSON.stringify({
+      PORU010304F1: body,
+    }),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORU010304G1;
+};
+
 const getDetailMOfSchedule = async (body: object) => {
   const result = await Fetch.request('PORU010304SVC', 'getDetailM', {
     body: JSON.stringify({
@@ -458,6 +470,7 @@ export {
   getListMOfSchedule,
   getOfChange,
   getPTHR_DGMD,
+  getTimelineMOfSchedule,
   recall,
   recallForApprover,
   recallForApproverOfSchedule,

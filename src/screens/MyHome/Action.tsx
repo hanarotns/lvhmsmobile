@@ -148,6 +148,25 @@ const LaborRefusalNotice2 = async (body: object) => {
 };
 
 /**
+ * 연차촉진 공지 (1차, 재알림, 2차)
+ */
+const getAnnualLeavePromotionInfo = async (body: object) => {
+  const result = await Fetch.request(
+    'PORM020113SVC',
+    'getAnnualLeavePromotionInfo',
+    {
+      body: JSON.stringify({
+        PORM020113F1: body,
+      }),
+    },
+  );
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.PORM020113F1;
+};
+
+/**
  * 노무수령거부 공지
  */
 const LaborRefusal_get = async (body: object) => {
@@ -282,6 +301,7 @@ export {
   checkAuthNumber,
   // 파일 삭제
   deleteFile,
+  getAnnualLeavePromotionInfo,
   // 유저정보조회
   getEmpInfoM,
   // 통계 조회(정규출퇴근, 실제출퇴근시간)

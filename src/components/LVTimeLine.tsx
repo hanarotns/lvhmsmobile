@@ -18,8 +18,8 @@ export type LVTimeLineStatus =
   | 'rejected';
 
 export interface LVTimeLineData {
-  FROM_DATE: string;
-  TO_DATE: string;
+  FROM_NOTICE_DATE: string;
+  TO_NOTICE_DATE: string;
 
   ADD_DATE?: string;
   APPROVAL_CHECK?: string;
@@ -51,12 +51,11 @@ export interface LVTimeLineData {
 }
 
 export interface LVTimeLineItem {
-  LEVEL: number;
+  LEVEL_NO: number;
   TITLE: string;
   SUBTITLE?: string;
   CONFIRM_DATE: string;
   CONFIRM_TIME: string;
-  DATA: LVTimeLineData;
 }
 
 interface LVTimeLineProps {
@@ -171,7 +170,7 @@ const defaultGetStatus = (
   item: LVTimeLineItem,
   currentDate: string,
 ): LVTimeLineStatus => {
-  const { FROM_DATE, TO_DATE, AP_STATUS, APPROVAL_CHECK } = item.DATA;
+  const { FROM_NOTICE_DATE, TO_NOTICE_DATE, AP_STATUS, APPROVAL_CHECK } = item;
 
   if (AP_STATUS === 'R') {
     return 'rejected';
@@ -182,10 +181,10 @@ const defaultGetStatus = (
   }
 
   if (
-    FROM_DATE &&
-    TO_DATE &&
-    currentDate >= FROM_DATE &&
-    currentDate <= TO_DATE
+    FROM_NOTICE_DATE &&
+    TO_NOTICE_DATE &&
+    currentDate >= FROM_NOTICE_DATE &&
+    currentDate <= TO_NOTICE_DATE
   ) {
     return 'current';
   }
@@ -228,7 +227,7 @@ const LVTimeLine = ({
       style={style}
       scrollEnabled={scrollEnabled}
       showsVerticalScrollIndicator={false}
-      keyExtractor={(item, index) => `${item.LEVEL}-${item.TITLE}-${index}`}
+      keyExtractor={(item, index) => `${item.LEVEL_NO}-${item.TITLE}-${index}`}
       ListEmptyComponent={emptyComponent ? <>{emptyComponent}</> : null}
       renderItem={({ item, index }) => {
         const status = getStatus(item, currentDate);
@@ -237,14 +236,14 @@ const LVTimeLine = ({
         const isFirst = index === 0;
         const isLast = index === data.length - 1;
 
-        const statusLabel = item.DATA.AP_STATUS_NAME || config.label;
+        const statusLabel = item.AP_STATUS_NAME || config.label;
 
         const cardContent = (
           <>
             <View style={styles.headerRow}>
               <View style={styles.titleArea}>
                 <Text style={[styles.stepText, { color: config.color }]}>
-                  {item.LEVEL}단계
+                  {item.LEVEL_NO}단계
                 </Text>
 
                 <View style={styles.titleRow}>
@@ -280,9 +279,9 @@ const LVTimeLine = ({
                 value={
                   item.CODE !== 4
                     ? `${Util.convertDateTime(
-                        item.DATA.FROM_DATE,
-                      )} ~ ${Util.convertDateTime(item.DATA.TO_DATE)}`
-                    : Util.convertDateTime(item.DATA.FROM_DATE)
+                        item.FROM_NOTICE_DATE,
+                      )} ~ ${Util.convertDateTime(item.TO_NOTICE_DATE)}`
+                    : Util.convertDateTime(item.FROM_NOTICE_DATE)
                 }
               />
 
@@ -294,22 +293,22 @@ const LVTimeLine = ({
                 }
               />
             </View>
-            {item.DATA.PERIOD && (
+            {item.PERIOD && (
               <>
                 <View style={styles.divider} />
                 <View style={styles.infoArea}>
-                  {typeof item.DATA.PERIOD === 'number' && (
+                  {typeof item.PERIOD === 'number' && (
                     <InfoRow
                       label='신청일수'
-                      value={`${item.DATA.PERIOD}일`}
+                      value={`${item.PERIOD}일`}
                       highlight
                     />
                   )}
-                  {!!item.DATA.VA_START && !!item.DATA.VA_END && (
+                  {!!item.VA_START && !!item.VA_END && (
                     <InfoRow
                       label='신청기간'
-                      value={`${Util.convertDateTime(item.DATA.VA_START)} ~ ${Util.convertDateTime(
-                        item.DATA.VA_END,
+                      value={`${Util.convertDateTime(item.VA_START)} ~ ${Util.convertDateTime(
+                        item.VA_END,
                       )}`}
                     />
                   )}
@@ -342,7 +341,7 @@ const LVTimeLine = ({
                     },
                   ]}
                 >
-                  {item.LEVEL}
+                  {item.LEVEL_NO}
                 </Text>
               </View>
 

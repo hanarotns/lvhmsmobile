@@ -32,7 +32,6 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { SlidersHorizontal } from 'lucide-react-native';
 import * as Action from './Action';
-import { noticeList } from './noticeList';
 
 const LEA030101 = () => {
   const isFocused = useIsFocused();
@@ -138,7 +137,7 @@ const LEA030101 = () => {
         S_ADD_DATE_FROM: res1?.APPLY_S_DATE,
         S_ADD_DATE_TO: res1?.APPLY_E_DATE,
       };
-      const res2 = await Action.getListMOfSchedule(payload2);
+      const res2 = await Action.getTimelineMOfSchedule(payload2);
       setStats(res1);
       setList(res2);
       setFilteredList(res2);
@@ -214,7 +213,7 @@ const LEA030101 = () => {
         <View style={styles.timelineSection}>
           {!Util.isEmpty(filteredList) ? (
             <LVTimeline
-              data={noticeList}
+              data={filteredList}
               onPressItem={(item) => {
                 console.log('선택한 항목:', item);
               }}

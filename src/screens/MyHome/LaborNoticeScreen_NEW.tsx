@@ -1,7 +1,7 @@
+import { LVButton, LVStyles } from '@/src/components';
+import { Util } from '@/src/lib';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-
-import { LVButton, LVStyles } from '@/src/components';
 
 const LaborNoticeScreen = ({ type, data = {}, onConfirm }) => {
   return (
@@ -154,10 +154,10 @@ const Cell = (props) => {
  * 연차 촉진 2차
  */
 const AnnualLeaveNotice2 = ({ data }) => {
-  const totalVacationDays = data.vacationSchedules.reduce(
-    (sum, item) => sum + item.days,
-    0,
-  );
+  // const totalVacationDays = data.vacationSchedules.reduce(
+  //   (sum, item) => sum + item.days,
+  //   0,
+  // );
 
   return (
     <View style={styles.document}>
@@ -172,7 +172,7 @@ const AnnualLeaveNotice2 = ({ data }) => {
           <Text style={styles.employeeLabel}>성명/사번:</Text>
 
           <Text style={styles.employeeValue}>
-            {data.employeeName} / {data.employeeId}
+            {data?.EMP_NAME} / {data?.EMP_ID}
           </Text>
         </View>
 
@@ -180,7 +180,7 @@ const AnnualLeaveNotice2 = ({ data }) => {
           <Text style={styles.employeeLabel}>소속/직위:</Text>
 
           <Text style={styles.employeeValue}>
-            {data.department} / {data.position}
+            {data?.DEPT_NAME} / {data?.POSITION_NAME}
           </Text>
         </View>
       </View>
@@ -196,20 +196,20 @@ const AnnualLeaveNotice2 = ({ data }) => {
       <View style={styles.detailContainer}>
         <DetailRow
           label='연차 발생 대상기간'
-          value={`${data.targetStartDate} ~ ${data.targetEndDate}`}
+          value={`${Util.convertDateTime(data?.APPLY_S_DATE)} ~ ${Util.convertDateTime(data?.APPLY_E_DATE)}`}
         />
 
-        <DetailRow label='1차 촉구일' value={data.firstNoticeDate} />
+        <DetailRow
+          label='1차 촉구일'
+          value={Util.convertDateTime(data?.FIRST_NOTICE_DATE)}
+        />
 
         <DetailRow
           label='1차 촉구에 따른 사용계획 회신기한'
-          value={data.responseDeadline}
+          value={Util.convertDateTime(data?.FIRST_NOTICE_DEADLINE)}
         />
 
-        <DetailRow
-          label='미사용 연차 일수'
-          value={`총 ${data.unusedVacationDays}일`}
-        />
+        <DetailRow label='미사용 연차 일수' value={`총 ${data.REM_VC_QTY}일`} />
       </View>
 
       <SectionTitle number='2' title='사용시기 지정 내용' />
@@ -235,25 +235,27 @@ const AnnualLeaveNotice2 = ({ data }) => {
           </View>
         </View>
 
-        {data.vacationSchedules.map((schedule, index) => (
-          <View key={schedule.date} style={styles.tableRow}>
+        {data?.DETAILS?.map((schedule, index) => (
+          <View key={schedule.WORK_DATE} style={styles.tableRow}>
             <View style={[styles.tableCell, styles.sequenceCell]}>
               <Text style={styles.tableText}>{index + 1}</Text>
             </View>
 
             <View style={[styles.tableCell, styles.dateCell]}>
-              <Text style={styles.tableText}>{schedule.date}</Text>
+              <Text style={styles.tableText}>
+                {Util.convertDateTime(schedule.WORK_DATE)}
+              </Text>
             </View>
 
             <View style={[styles.tableCell, styles.daysCell]}>
-              <Text style={styles.tableText}>{schedule.days}일</Text>
+              <Text style={styles.tableText}>{schedule.VC_QTY}일</Text>
             </View>
           </View>
         ))}
       </View>
 
       <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>합계: {totalVacationDays}일</Text>
+        <Text style={styles.totalText}>합계: {data?.REM_VC_QTY}일</Text>
       </View>
 
       <View style={styles.noticeContainer}>
@@ -265,7 +267,7 @@ const AnnualLeaveNotice2 = ({ data }) => {
         </Text>
       </View>
 
-      <Text style={styles.companyName}>{data.companyName}</Text>
+      <Text style={styles.companyName}>{data?.COMPANY_NAME_LC}</Text>
     </View>
   );
 };
