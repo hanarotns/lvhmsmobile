@@ -195,10 +195,10 @@ const MYH010101 = ({ navigation }) => {
       setCoverLoading(true);
       await getInfoM();
       await getLaborInfo();
-      await checkAboutLocation();
-      await getLatLon();
       setIsSecondAuthScreen(false);
       setCoverLoading(false);
+      await checkAboutLocation();
+      await getLatLon();
     }
   };
 
