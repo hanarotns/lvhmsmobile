@@ -860,7 +860,14 @@ const MYH010101 = ({ navigation }) => {
         <SafeAreaView style={{ flex: 1 }}>
           {/* 헤더 */}
           <Layout style={styles.header}>
-            <Image source={icon.ico_logo_htns} style={styles.logo} />
+            {sessionInfo?.COMPANY_CODE?.startsWith('LV') ? (
+              <Image
+                source={icon.ico_logo_logisvalley}
+                style={[styles.logo, styles.logo_logisvalley]}
+              />
+            ) : (
+              <Image source={icon.ico_logo_htns} style={styles.logo} />
+            )}
             <LVHeaderInfo />
             <TouchableOpacity
               onPress={() => movingScreen.navigate('ETC010101')}
@@ -1246,6 +1253,10 @@ const styles = StyleSheet.create({
     marginTop: 8,
     width: 75,
     height: 16,
+  },
+  logo_logisvalley: {
+    width: 111,
+    height: 20,
   },
   accountIcon: {
     marginTop: 8,
