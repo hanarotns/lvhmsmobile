@@ -140,7 +140,7 @@ export const HomeNavigator = (props) => (
     <Stack.Screen
       name='LEA030101'
       component={LEA030101}
-      options={{ title: '연차사용예정 현황(NEW)' }}
+      options={{ title: '연차사용계획 현황' }}
     />
     <Stack.Screen
       name='OVT010101'

@@ -242,10 +242,6 @@ const LVTimeLine = ({
           <>
             <View style={styles.headerRow}>
               <View style={styles.titleArea}>
-                <Text style={[styles.stepText, { color: config.color }]}>
-                  {item.LEVEL_NO}단계
-                </Text>
-
                 <View style={styles.titleRow}>
                   <Text style={styles.title}>{item.TITLE}</Text>
 

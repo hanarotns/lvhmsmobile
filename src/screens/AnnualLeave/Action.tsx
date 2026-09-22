@@ -328,7 +328,7 @@ const getClearInfoOfSchedule = async (body) => {
 };
 
 /**
- * 연차사용예정 시, 상신
+ * 연차사용예정(연차사용계획) 시, 상신
  */
 const saveApprovalOfSchedule = async (
   body1: object,
@@ -349,7 +349,7 @@ const saveApprovalOfSchedule = async (
 };
 
 /**
- * 연차사용예정 시, 회수
+ * 연차사용예정(연차사용계획) 시, 회수
  */
 const recallOfSchedule = async (body: object) => {
   const result = await Fetch.request('PORU010304SVC', 'Collect', {
@@ -364,7 +364,7 @@ const recallOfSchedule = async (body: object) => {
 };
 
 /**
- * 연차사용예정 시, 삭제
+ * 연차사용예정(연차사용계획) 시, 삭제
  */
 const deleteMobileOfSchedule = async (body: object) => {
   const result = await Fetch.request('PORU010304SVC', 'delete', {
@@ -379,7 +379,7 @@ const deleteMobileOfSchedule = async (body: object) => {
 };
 
 /**
- * 연차사용예정 시, 휴가DT 삭제
+ * 연차사용예정(연차사용계획) 시, 휴가DT 삭제
  */
 const deleteRowOfSchedule = async (body: object) => {
   const result = await Fetch.request('PORU010304SVC', 'deleterow', {
@@ -396,7 +396,7 @@ const deleteRowOfSchedule = async (body: object) => {
 };
 
 /**
- * 연차사용예정 시, 회수 (결재자)
+ * 연차사용예정(연차사용계획) 시, 회수 (결재자)
  */
 const recallForApproverOfSchedule = async (body1: object, body2: object) => {
   const result = await Fetch.request('PORU010304SVC', 'GCollect', {
@@ -414,7 +414,7 @@ const recallForApproverOfSchedule = async (body1: object, body2: object) => {
 };
 
 /**
- * 연차사용예정 시, 반려 (결재자)
+ * 연차사용예정(연차사용계획) 시, 반려 (결재자)
  */
 const refusalForApproverOfSchedule = async (body1: object, body2: object) => {
   const result = await Fetch.request('PORU010304SVC', 'GApprovalCancel', {
@@ -432,7 +432,7 @@ const refusalForApproverOfSchedule = async (body1: object, body2: object) => {
 };
 
 /**
- * 연차사용예정 시, 결재 (결재자)
+ * 연차사용예정(연차사용계획) 시, 결재 (결재자)
  */
 const approveForApproverOfSchedule = async (body1: object, body2: object) => {
   const result = await Fetch.request('PORU010304SVC', 'GApproval', {

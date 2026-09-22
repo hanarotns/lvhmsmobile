@@ -15,6 +15,7 @@ import {
   LVMovingDateOfArrow,
   LVNoData,
   LVStyles,
+  LVTooltip,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -22,6 +23,7 @@ import {
 } from '@/src/components';
 import LVTimeline from '@/src/components/LVTimeLine';
 import { Util } from '@/src/lib';
+import { Ionicons } from '@expo/vector-icons';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import {
   useFocusEffect,
@@ -184,7 +186,7 @@ const LEA030101 = () => {
       >
         <View style={LVStyles.header}>
           <Text style={LVStyles.headerText}>
-            {empInfo?.EMP_NAME_LC}님 연차예정 현황입니다.
+            {`${empInfo?.EMP_NAME_LC}님 \n연차사용계획 현황입니다.`}
           </Text>
           <LVMovingDateOfArrow
             selectedDate={selectedDate}
@@ -202,7 +204,7 @@ const LEA030101 = () => {
             }}
           />
           <LVButton
-            title='연차사용예정 신청하기'
+            title='연차사용계획 신청하기'
             onPress={() => {
               movingScreen.navigate('LEA020201', stats);
             }}
@@ -215,7 +217,10 @@ const LEA030101 = () => {
             <LVTimeline
               data={filteredList}
               onPressItem={(item) => {
-                console.log('선택한 항목:', item);
+                console.log('선택한 항목:', item.TITLE);
+                if (item.TITLE === '연차사용계획 신청') {
+                  movingScreen.navigate('LEA020301');
+                }
               }}
             />
           ) : (
@@ -253,27 +258,75 @@ const LayoutOfStats = (props: any) => {
       <View style={{ ...LVStyles.row, gap: 8 }}>
         <LVCard
           category='stat'
-          label={'적용 일수'}
-          value={stats?.VC_QTY}
+          label={
+            <View>
+              <View style={LVStyles.row}>
+                <Text>적용 일수</Text>
+                <LVTooltip
+                  content={`※ 적용일수=법정연차(9일)+약정연차(7일)`}
+                  placement='top'
+                >
+                  <Ionicons
+                    name='information-circle-outline'
+                    size={20}
+                    color='#777'
+                  />
+                </LVTooltip>
+              </View>
+              <Text></Text>
+            </View>
+          }
+          value={`16`}
           cardStyle={{ backgroundColor: '#F7F8FB' }}
           valueStyle={{ color: '#6A727B' }}
         />
         <LVCard
           category='stat'
-          label={'잔여 일수'}
+          label={
+            <View>
+              <View style={LVStyles.row}>
+                <Text>1차촉진</Text>
+                <LVTooltip
+                  content={`※ 촉진일수=법정연차(9일)+약정연차(4.5일)`}
+                  placement='top'
+                >
+                  <Ionicons
+                    name='information-circle-outline'
+                    size={20}
+                    color='#777'
+                  />
+                </LVTooltip>
+              </View>
+              <Text>(촉진/신청)</Text>
+            </View>
+          }
           value={
-            Util.isEmpty(stats?.PERIOD) ? stats?.REM_VC_QTY : stats?.PERIOD
+            `13.5/0`
             // @@ 신청 당시 값을 저장할지 고민해볼 것
           }
           cardStyle={{ backgroundColor: '#EEF8FF' }}
-          valueStyle={{ color: '#27A7FF' }}
+          valueStyle={{ color: '#27A7FF', fontSize: 20 }}
         />
         <LVCard
           category='stat'
-          label={'신청 일수'}
-          value={stats?.PERIOD || 0}
+          label={
+            <View>
+              <View style={LVStyles.row}>
+                <Text>2차촉진</Text>
+                <LVTooltip content={`※ 2차 촉진 전입니다`} placement='top'>
+                  <Ionicons
+                    name='information-circle-outline'
+                    size={20}
+                    color='#777'
+                  />
+                </LVTooltip>
+              </View>
+              <Text>(촉진/신청)</Text>
+            </View>
+          }
+          value={`-`}
           cardStyle={{ backgroundColor: '#F4F6F8' }}
-          valueStyle={{ color: '#939DAA' }}
+          valueStyle={{ color: '#939DAA', fontSize: 16 }}
         />
       </View>
     </View>

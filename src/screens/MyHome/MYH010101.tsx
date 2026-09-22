@@ -582,13 +582,27 @@ const MYH010101 = ({ navigation }) => {
   const handleConfirmNotice1 = async () => {
     await Action.saveRefusalNotice(laborNotice1);
     setLaborNotice1({});
-    movingScreen.navigate('LEA020101');
+    let isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA030101');
+    if (isCheckMenuPermi) {
+      return movingScreen.navigate('LEA030101');
+    }
+    isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA020101');
+    if (isCheckMenuPermi) {
+      return movingScreen.navigate('LEA020101');
+    }
   };
 
   const handleConfirmNotice1R = async () => {
     await Action.saveRefusalNotice(laborNotice1R);
     setLaborNotice1({});
-    movingScreen.navigate('LEA020101');
+    let isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA030101');
+    if (isCheckMenuPermi) {
+      return movingScreen.navigate('LEA030101');
+    }
+    isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA020101');
+    if (isCheckMenuPermi) {
+      return movingScreen.navigate('LEA020101');
+    }
   };
 
   const handleConfirmNotice2 = async () => {

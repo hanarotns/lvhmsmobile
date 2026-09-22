@@ -1,4 +1,4 @@
-import { LVButton, LVStyles } from '@/src/components';
+import { LVButton, LVColors, LVStyles } from '@/src/components';
 import { Util } from '@/src/lib';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -15,7 +15,6 @@ const LaborNoticeScreen = ({ type, data = {}, onConfirm }) => {
           {type === 'NOTICE_1' && <AnnualLeaveNotice data={data} />}
           {type === 'NOTICE_1_RE' && <AnnualLeaveNotice data={data} />}
           {type === 'NOTICE_2' && <AnnualLeaveNotice2 data={data} />}
-          {type === 'REFUSAL' && <LaborRefusalNotice data={data} />}
         </ScrollView>
       </View>
       <View style={LVStyles.bottomButtonView}>
@@ -35,31 +34,46 @@ const LaborNoticeScreen = ({ type, data = {}, onConfirm }) => {
 const AnnualLeaveNotice = ({ data }) => {
   return (
     <View style={styles.noticeBox}>
-      <Text style={styles.title}>
-        미사용 연차유급휴가 사용촉진 통지 {data?.LABORREFUSAL_TITLE}
-        {data?.LABORREFUSAL_GUBUN === '2'
-          ? `(${data?.LABORREFUSAL_GUBUN}차)`
-          : ''}
+      <Text style={styles.title}>미사용 연차휴가 사용시기 지정 촉구서</Text>
+      <Text style={styles.subTitle}>
+        (1차 사용촉진{data?.LABORREFUSAL_GUBUN === '1R' ? ` 재알림` : ''})
       </Text>
+
       <Text style={styles.subTitle}>[ 관련 : 근로기준법 제 61조 ]</Text>
 
-      <View style={styles.infoTable}>
+      <View style={styles.table}>
         <View style={styles.row}>
-          <Cell label text='부서' />
-          <Cell text={data.DEPT_NAME} />
-          <Cell empty />
-          <Cell label text='성명/직책' />
-          <Cell text={data.EMP_NAME} />
-          <Cell text={data.POSITION_NAME} />
+          <View style={{ width: '30%' }}>
+            <Cell label text='성명/사번' />
+          </View>
+          <View style={{ width: '70%' }}>
+            <Cell text={`${data?.EMP_NAME} / ${data?.EMP_ID}`} />
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={{ width: '30%' }}>
+            <Cell label text='소속/직위' />
+          </View>
+          <View style={{ width: '70%' }}>
+            <Cell text={`${data?.DEPT_NAME} / ${data?.POSITION_NAME}`} />
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={{ width: '30%' }}>
+            <Cell label text='입사일' />
+          </View>
+          <View style={{ width: '70%' }}>
+            <Cell text={Util.convertDateTime(data?.ENTER_DATE)} />
+          </View>
         </View>
       </View>
 
       <View style={styles.table}>
         <View style={styles.row}>
-          <Cell label text='구분' flex={1} />
+          <Cell label text='구분' flex={0.2} />
           <Cell
             label
-            text={`${data.S_DATE || ''} 기준\n연차발생 일수`}
+            text={`적용 일수\n(${data.S_DATE || ''} 기준)`}
             flex={1}
           />
           <Cell
@@ -67,11 +81,11 @@ const AnnualLeaveNotice = ({ data }) => {
             text={`사용연차\n(${data.YYYY || ''}.${data.MM || ''} 기준)`}
             flex={1}
           />
-          <Cell label text='미사용연차(연차촉진 대상 연차)' flex={1} />
+          <Cell label text={'미사용연차\n(연차촉진 대상)'} flex={1} />
         </View>
 
         <View style={styles.row}>
-          <Cell text='연차휴가일수' flex={1} />
+          <Cell text='수량' flex={0.2} />
           <Cell text={data.VC_QTY} flex={1} />
           <Cell text={data.VA_PERIOD} flex={1} />
           <Cell text={data.REM_VC_QTY} flex={1} strongBorder />
@@ -86,16 +100,24 @@ const AnnualLeaveNotice = ({ data }) => {
         </Text>
 
         <Text style={styles.paragraph}>
-          <Text style={styles.boldText}>{data.ENROLL_DATE}까지 </Text>
-          미사용 연차유급휴 일수의 사용 시기를 지정하고 nPortal시스템을 통하여
-          사용예정 등록하실 것을 촉구하는 바입니다.
+          근로기준법 제61조에 의거,{' '}
+          <Text style={styles.boldText}>
+            {data?.NOTICE_END.substring(0, 4)}년{' '}
+            {data?.NOTICE_END.substring(4, 6)}월{' '}
+            {data?.NOTICE_END.substring(6, 8)}일
+          </Text>{' '}
+          까지 미사용 연차휴가의 사용계획을 본 App을 통해 등록하실 것을 촉구하는
+          바입니다.
         </Text>
 
         <Text style={styles.paragraph}>
-          동 기한내에 <Text style={styles.boldText}>[연차사용예정]</Text> 등록이
-          안되었을 경우 관련 법규에 의해 추후 회사가 임의 지정할 예정이며,
-          그럼에도 불구하고 사용하지 아니한 연차 유급휴가 일수에 대하여는 향후
-          연차촉진대상이 됨을 알려드리니 유념하시기 바랍니다.
+          동 기한 내에 <Text style={styles.boldText}>연차사용계획</Text> 등록이
+          안 되었을 경우 관련 법규에 의해 추후 회사가 임의 지정할 예정이며,
+          그럼에도 불구하고 사용하지 아니한 연차휴가는 향후 연차촉진대상이 됨을
+          알려드리오니 유념하시기 바랍니다.
+        </Text>
+        <Text style={{ color: LVColors.warning }}>
+          {`※ 적용일수는 법정 및 약정연차를 포함.`}
         </Text>
       </View>
 
@@ -104,31 +126,6 @@ const AnnualLeaveNotice = ({ data }) => {
           {data.YYYY}년 {data.MM}월 {data.DD}일
         </Text>
         <Text style={styles.signText}>{data.COMPANY_NAME_LC}(직인생략)</Text>
-      </View>
-
-      <View style={styles.lawBox}>
-        <Text style={styles.lawTitle}>[ 관련법령 : 근로기준법 제61조 ]</Text>
-        <Text style={styles.lawText}>
-          사용자가 제60조 제1항ᆞ제3항 및 제4항의 규정에 의한 유급휴가의 사용을
-          촉진하기 위하여 다음 각 호의 조치를 하였음에도 불구하고 근로자가
-          휴가를 사용하지 아니하여 제60조 제7항 본문의 규정에 따라 소멸된
-          경우에는 사용자는 그 미사용 휴가에 대하여 보상할 의무가 없으며, 제60조
-          제7항 단서의 규정에 의한 사용자의 귀책사유에 해당하지 아니하는 것으로
-          본다.
-        </Text>
-        <Text style={styles.lawText}>{'<개정2012.02.01,2017.11.28>'}</Text>
-        <Text style={styles.lawText}>
-          1. 제60조 제7항 본문의 규정에 의하여 사용자가 근로자별로 미사용 휴가
-          일수를 알려주고, 근로자가 그 사용시기를 정하여 사용자에게 통보하도록
-          서면으로 촉구할 것.
-        </Text>
-        <Text style={styles.lawText}>
-          2. 제1호의 규정에 의한 촉구에도 불구하고 근로자가 촉구를 받은 때부터
-          10일 이내에 미사용휴가의 전부 또는 일부의 사용 시기를 정하여
-          사용자에게 통보하지 아니한 경우에는 제60조 제7항 본문의 규정에 의한
-          기간이 끝나기 1개월 전까지 사용자가 미사용 휴가의 사용 시기를 정하여
-          근로자에게 서면으로 통보할 것.
-        </Text>
       </View>
     </View>
   );
@@ -142,10 +139,13 @@ const Cell = (props) => {
         { flex },
         label && styles.labelCell,
         empty && styles.emptyCell,
-        strongBorder && styles.strongBorderCell,
       ]}
     >
       {!empty && <Text style={styles.cellText}>{String(text) || ''}</Text>}
+
+      {strongBorder && (
+        <View pointerEvents='none' style={styles.strongBorderCell} />
+      )}
     </View>
   );
 };
@@ -162,9 +162,9 @@ const AnnualLeaveNotice2 = ({ data }) => {
   return (
     <View style={styles.document}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>연차유급휴가 사용시기 지정 통보서</Text>
+        <Text style={styles.title}>미사용 연차휴가 사용시기 지정 통보서</Text>
 
-        <Text style={styles.subTitle}>(2차 연차촉진 통보서)</Text>
+        <Text style={styles.subTitle}>(2차 사용촉진)</Text>
       </View>
 
       <View style={styles.employeeInfo}>
@@ -181,6 +181,14 @@ const AnnualLeaveNotice2 = ({ data }) => {
 
           <Text style={styles.employeeValue}>
             {data?.DEPT_NAME} / {data?.POSITION_NAME}
+          </Text>
+        </View>
+
+        <View style={styles.employeeRow}>
+          <Text style={styles.employeeLabel}>입사일:</Text>
+
+          <Text style={styles.employeeValue}>
+            {Util.convertDateTime(data?.ENTER_DATE)}
           </Text>
         </View>
       </View>
@@ -206,7 +214,7 @@ const AnnualLeaveNotice2 = ({ data }) => {
 
         <DetailRow
           label='1차 촉구에 따른 사용계획 회신기한'
-          value={Util.convertDateTime(data?.FIRST_NOTICE_DEADLINE)}
+          value={Util.convertDateTime(data?.FIRST_RE_NOTICE_DEADLINE)}
         />
 
         <DetailRow label='미사용 연차 일수' value={`총 ${data.REM_VC_QTY}일`} />
@@ -258,12 +266,14 @@ const AnnualLeaveNotice2 = ({ data }) => {
         <Text style={styles.totalText}>합계: {data?.REM_VC_QTY}일</Text>
       </View>
 
+      <Text style={{ color: LVColors.warning }}>
+        {`※ 해당연차는 법정 및 약정연차를 포함.`}
+      </Text>
+
       <View style={styles.noticeContainer}>
         <Text style={styles.noticeText}>
-          ※ 단, 상기 지정 휴가일은 본 통보 시점의 근무 스케줄을 기준으로 지정된
-          것이며, 향후 스케줄 변경에 따라 해당 근무일정이 변경되는 경우 위 연차
-          지정은 무효가 되고, 변경 후 첫 번째로 돌아오는 근무일을 사용시기로
-          지정합니다.
+          ※ 단, 지정 휴가일이 근무 스케줄에 따른 휴무일인 경우, 그 다음 첫
+          근무일을 사용시기로 지정합니다.
         </Text>
       </View>
 
@@ -288,43 +298,6 @@ const DetailRow = ({ label, value }: { label: string; value: string }) => {
       <Text style={styles.detailLabel}>{label}:</Text>
 
       <Text style={styles.detailValue}>{value}</Text>
-    </View>
-  );
-};
-
-/**
- * 노무 수령 거부
- */
-const LaborRefusalNotice = ({ data }) => {
-  return (
-    <View style={styles.noticeBox}>
-      <Text style={styles.title}>노무수령거부통지서</Text>
-
-      <View style={styles.simpleInfoBox}>
-        <View style={styles.simpleRow}>
-          <Text style={styles.simpleLabel}>성명</Text>
-          <Text style={styles.simpleValue}>
-            [{data.EMP_ID}] {data.EMP_NAME}
-          </Text>
-        </View>
-
-        <View style={styles.simpleRow}>
-          <Text style={styles.simpleLabel}>일자</Text>
-          <Text style={styles.simpleValue}>{data.PLAN_DATE}</Text>
-        </View>
-      </View>
-
-      <View style={styles.messageBox}>
-        <Text style={styles.messageText}>
-          귀하는 근로기준법 제61조(연차 유급휴가 사용촉진)에 의거 회사에 제출한
-          {`\n`}[ 미사용 연차유급휴가 사용시기 지정 통보서 ]에 통보일 당일
-          연차휴가임을 회사에 통보한 바, 귀하는 당일 회사에 노무제공 할 의무가
-          없고, 회사에서는 귀하의 노무수령을 거부하니, 즉시 퇴근하기 바랍니다.
-          {`\n\n`}본 통지서를 수령하고도 귀하가 노무를 제공할지라도 회사는
-          동법에 의거 귀하의 연차일수에서 하루를 공제하니 이점 유념하기
-          바랍니다.
-        </Text>
-      </View>
     </View>
   );
 };
@@ -364,11 +337,13 @@ const styles = StyleSheet.create({
   },
   cell: {
     minHeight: 48,
-    borderWidth: 1,
-    borderColor: '#444',
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#777777',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 6,
+    position: 'relative',
   },
   labelCell: {
     backgroundColor: '#F0F2F6',
@@ -378,7 +353,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   strongBorderCell: {
-    borderWidth: 2,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderWidth: 1,
+    borderColor: '#777777',
   },
   cellText: {
     fontSize: 12,
@@ -407,22 +388,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginTop: 8,
     letterSpacing: 2,
-  },
-  lawBox: {
-    borderWidth: 1,
-    borderColor: '#444',
-    padding: 12,
-  },
-  lawTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 12,
-  },
-  lawText: {
-    fontSize: 12,
-    lineHeight: 20,
-    marginBottom: 8,
   },
   simpleInfoBox: {
     marginTop: 20,
