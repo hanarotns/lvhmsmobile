@@ -91,6 +91,17 @@ const resetPassword = async (body: object) => {
   return result;
 };
 
+// 회원가입 승인상태 확인
+const checkPendingSignupRequestM = async (body: object) => {
+  const result = await Fetch.request('apicall', 'checkPendingSignupRequestM', {
+    body: JSON.stringify(body),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.DATA;
+};
+
 export {
   // 회원가입 신청
   applyOfSignUp,
@@ -98,6 +109,8 @@ export {
   checkAuthNumber,
   // ID 중복체크
   checkDuplicateId,
+  // 회원가입 승인상태 확인
+  checkPendingSignupRequestM,
   // 비밀번호 변경
   resetPassword,
   // 인증요청

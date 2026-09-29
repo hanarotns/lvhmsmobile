@@ -1,9 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-
-import { useEmpStore } from '@/src/stores/empStore';
-import { useLoginStore } from '@/src/stores/loginStore';
-import { useSessionStore } from '@/src/stores/sessionStore';
+import React, { useState } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 
 import {
   KeyboardAwareScrollView,
@@ -16,21 +12,10 @@ import {
   TextField,
 } from '@/src/components';
 import { Util } from '@/src/lib';
-import {
-  RouteProp,
-  useIsFocused,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import * as Action from './Action';
 
-type RootStackParamList = {
-  DetailScreen: undefined;
-};
-type DetailScreenRouteProp = RouteProp<RootStackParamList, 'DetailScreen'>;
-
 type MemberInfo = {
-  id: string;
   pw: string;
   pwChk: string;
   name: string;
@@ -42,72 +27,49 @@ type MemberInfo = {
 
 type ValidationErrors = Partial<Record<keyof MemberInfo, string>>;
 type TouchedFields = Partial<Record<keyof MemberInfo, boolean>>;
-type LabelMessageType = 'error' | 'success' | '';
+type LabelMessage = {
+  text: string;
+  type: 'error' | 'success' | '';
+};
 
 const FIELD_LIST: {
-  key: number;
   checkId: keyof MemberInfo;
   label: string;
 }[] = [
-  { key: 1, checkId: 'id', label: '아이디' },
-  { key: 2, checkId: 'pw', label: '비밀번호' },
-  { key: 3, checkId: 'pwChk', label: '비밀번호 확인' },
-  { key: 4, checkId: 'name', label: '이름' },
-  { key: 5, checkId: 'birthday', label: '생년월일' },
-  { key: 6, checkId: 'gender', label: '성별' },
-  { key: 7, checkId: 'phoneNumber', label: '휴대폰 번호' },
-  { key: 8, checkId: 'email', label: '개인 이메일' },
+  { checkId: 'phoneNumber', label: '휴대폰 번호(아이디)' },
+  { checkId: 'pw', label: '비밀번호' },
+  { checkId: 'pwChk', label: '비밀번호 확인' },
+  { checkId: 'name', label: '이름' },
+  { checkId: 'birthday', label: '생년월일' },
+  { checkId: 'gender', label: '성별' },
+  { checkId: 'email', label: '개인 이메일' },
 ];
 
-const idRegex = /^[a-z][a-z0-9]{4,19}$/;
 const birthdayRegex = /^\d{6}$/;
 const phoneRegex = /^01[0-9]\d{7,8}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,16}$/;
 
+const initialMemberInfo: MemberInfo = {
+  pw: '',
+  pwChk: '',
+  name: '',
+  birthday: '',
+  gender: '',
+  phoneNumber: '',
+  email: '',
+};
+
 const SGN010201 = () => {
-  const route = useRoute<DetailScreenRouteProp>();
-  const isFocused = useIsFocused();
   const movingScreen = useNavigation();
-  const loginInfo = useLoginStore((state) => state.loginInfo);
-  const setLoginInfo = useLoginStore((state) => state.setLoginInfo);
-  const sessionInfo = useSessionStore((state) => state.sessionInfo);
-  const setSessionInfo = useSessionStore((state) => state.setSessionInfo);
-  const empInfo = useEmpStore((state) => state.empInfo);
-  const setEmpInfo = useEmpStore((state) => state.setEmpInfo);
-
-  const [loading, setLoading] = useState(true);
-
-  const [memberInfo, setMemberInfo] = useState<MemberInfo>({
-    id: '',
-    pw: '',
-    pwChk: '',
-    name: '',
-    birthday: '',
-    gender: '',
-    phoneNumber: '',
-    email: '',
-  });
+  const [loading, setLoading] = useState(false);
+  const [memberInfo, setMemberInfo] = useState<MemberInfo>(initialMemberInfo);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [touched, setTouched] = useState<TouchedFields>({});
-  const [visiblePwd, setVisiblePwd] = useState(false);
-  const [isIdChecked, setIsIdChecked] = useState(false);
-  const [isIdAvailable, setIsIdAvailable] = useState(false);
-  // 휴대폰 인증 UI용 state (레이아웃용)
   const [isPhoneAuthRequested, setIsPhoneAuthRequested] = useState(false);
   const [isPhoneAuthVerified, setIsPhoneAuthVerified] = useState(false);
   const [phoneAuthCode, setPhoneAuthCode] = useState('');
   const [phoneAuthMessage, setPhoneAuthMessage] = useState('');
-
-  useEffect(() => {
-    if (isFocused) {
-      mount();
-    }
-  }, [isFocused]);
-
-  const mount = async () => {
-    setLoading(false);
-  };
 
   const isValidBirthday = (value: string) => {
     if (!birthdayRegex.test(value)) {
@@ -128,23 +90,6 @@ const SGN010201 = () => {
     return dd >= 1 && dd <= lastDay;
   };
 
-  const getPwStrength = (value: string) => {
-    if (!value) {
-      return '';
-    }
-
-    let score = 0;
-    if (value.length >= 8) score += 1;
-    if (/[a-z]/.test(value)) score += 1;
-    if (/[A-Z]/.test(value)) score += 1;
-    if (/\d/.test(value)) score += 1;
-    if (/[^A-Za-z0-9]/.test(value)) score += 1;
-
-    if (score <= 2) return '약함';
-    if (score <= 4) return '보통';
-    return '강함';
-  };
-
   const validateField = (
     key: keyof MemberInfo,
     value: string,
@@ -153,16 +98,6 @@ const SGN010201 = () => {
     const target = nextMemberInfo ?? memberInfo;
 
     switch (key) {
-      case 'id':
-        if (!value) return '아이디를 입력하세요.';
-        if (!idRegex.test(value)) {
-          return '영문 소문자로 시작하는 5~20자의 영문/숫자만 가능합니다.';
-        }
-        if (!isIdChecked || !isIdAvailable) {
-          return '아이디 중복확인을 해주세요.';
-        }
-        return '';
-
       case 'pw':
         if (!value) return '비밀번호를 입력하세요.';
         if (!pwRegex.test(value)) {
@@ -194,6 +129,9 @@ const SGN010201 = () => {
         if (!phoneRegex.test(value)) {
           return '휴대폰 번호 형식이 올바르지 않습니다.';
         }
+        if (!isPhoneAuthVerified) {
+          return '휴대폰 인증을 완료해주세요.';
+        }
         return '';
 
       case 'email':
@@ -208,15 +146,10 @@ const SGN010201 = () => {
     }
   };
 
-  const isIdFormatValid = idRegex.test(memberInfo.id);
   const isPhoneFormatValid = phoneRegex.test(memberInfo.phoneNumber);
 
   const updateMemberInfo = (key: keyof MemberInfo, value: string) => {
     let nextValue = value;
-
-    if (key === 'id') {
-      nextValue = value.trim().toLowerCase();
-    }
 
     if (key === 'birthday' || key === 'phoneNumber') {
       nextValue = value.replace(/[^0-9]/g, '');
@@ -226,11 +159,6 @@ const SGN010201 = () => {
       ...memberInfo,
       [key]: nextValue,
     };
-
-    if (key === 'id') {
-      setIsIdChecked(false);
-      setIsIdAvailable(false);
-    }
 
     if (key === 'phoneNumber') {
       setIsPhoneAuthRequested(false);
@@ -263,12 +191,6 @@ const SGN010201 = () => {
         );
       }
 
-      if (key === 'id' && touched.id) {
-        nextErrors.id = idRegex.test(nextValue)
-          ? '아이디 중복확인을 해주세요.'
-          : validateField('id', nextValue, nextMemberInfo);
-      }
-
       return nextErrors;
     });
   };
@@ -285,9 +207,7 @@ const SGN010201 = () => {
     }));
   };
 
-  const getLabelMessage = (
-    key: keyof MemberInfo,
-  ): { text: string; type: LabelMessageType } => {
+  const getLabelMessage = (key: keyof MemberInfo): LabelMessage => {
     if (!touched[key]) {
       return { text: '', type: '' };
     }
@@ -297,18 +217,9 @@ const SGN010201 = () => {
     }
 
     switch (key) {
-      case 'id':
-        if (memberInfo.id && isIdChecked && isIdAvailable) {
-          return { text: '사용 가능한 아이디', type: 'success' };
-        }
-        return { text: '', type: '' };
-
       case 'pw':
         if (memberInfo.pw && pwRegex.test(memberInfo.pw)) {
-          return {
-            text: `비밀번호 강도: ${getPwStrength(memberInfo.pw)}`,
-            type: 'success',
-          };
+          return { text: '사용 가능한 비밀번호입니다.', type: 'success' };
         }
         return { text: '', type: '' };
 
@@ -326,7 +237,7 @@ const SGN010201 = () => {
 
       case 'gender':
         if (memberInfo.gender) {
-          return { text: '확인되었습니다.', type: 'success' };
+          return { text: '선택되었습니다.', type: 'success' };
         }
         return { text: '', type: '' };
 
@@ -352,7 +263,6 @@ const SGN010201 = () => {
 
   const validateForm = () => {
     const nextTouched: TouchedFields = {
-      id: true,
       pw: true,
       pwChk: true,
       name: true,
@@ -363,7 +273,6 @@ const SGN010201 = () => {
     };
 
     const nextErrors: ValidationErrors = {
-      id: validateField('id', memberInfo.id),
       pw: validateField('pw', memberInfo.pw),
       pwChk: validateField('pwChk', memberInfo.pwChk),
       name: validateField('name', memberInfo.name),
@@ -379,48 +288,6 @@ const SGN010201 = () => {
     return !Object.values(nextErrors).some(Boolean);
   };
 
-  const checkDuplicateId = async () => {
-    if (!isIdFormatValid) {
-      return;
-    }
-
-    const id = memberInfo.id.trim().toLowerCase();
-
-    setTouched((prev) => ({
-      ...prev,
-      id: true,
-    }));
-
-    const payload = {
-      OPEN_API_YN: 'Y',
-      USER_ID: id,
-    };
-
-    try {
-      const result = await Action.checkDuplicateId(payload);
-
-      if (result?.CNT !== 0) {
-        setIsIdChecked(true);
-        setIsIdAvailable(false);
-        setErrors((prev) => ({
-          ...prev,
-          id: '이미 사용 중인 아이디입니다.',
-        }));
-        return;
-      }
-
-      setIsIdChecked(true);
-      setIsIdAvailable(true);
-      setErrors((prev) => ({
-        ...prev,
-        id: '',
-      }));
-    } catch (error) {
-      Util.toastMsg('아이디 중복확인 중 오류가 발생했습니다.', 'error');
-    }
-  };
-
-  // 휴대폰 인증 레이아웃용 핸들러
   const requestPhoneAuthCode = async () => {
     if (!isPhoneFormatValid) {
       return;
@@ -430,37 +297,84 @@ const SGN010201 = () => {
       ...prev,
       phoneNumber: true,
     }));
-    setIsPhoneAuthRequested(true);
     try {
+      setLoading(true);
+
+      const duplicateResult = await Action.checkDuplicateId({
+        OPEN_API_YN: 'Y',
+        USER_ID: memberInfo.phoneNumber,
+      });
+
+      if (duplicateResult?.CNT !== 0) {
+        setIsPhoneAuthRequested(false);
+        setIsPhoneAuthVerified(false);
+        setErrors((prev) => ({
+          ...prev,
+          phoneNumber: '이미 사용중인 휴대폰 번호입니다.',
+        }));
+        Alert.alert(
+          '알림',
+          '이미 사용중인 휴대폰 번호입니다.\n관리자에게 문의하세요.',
+        );
+        return;
+      }
+
       const payload = {
         OPEN_API_YN: 'Y',
-        USER_CP: memberInfo?.phoneNumber,
+        USER_CP: memberInfo.phoneNumber,
         REQ_SCREEN: 'SIGNUP',
       };
       const result = await Action.sendSMSForCP(payload);
+
       if (result.TYPE === 1) {
+        setPhoneAuthCode('');
+        setPhoneAuthMessage('');
+        setIsPhoneAuthRequested(true);
+        setIsPhoneAuthVerified(false);
         Util.toastMsg('인증번호가 발송되었습니다.', 'info');
+      } else {
+        Util.toastMsg(
+          result?.MSG || '인증번호를 발송하지 못했습니다.',
+          'error',
+        );
       }
     } catch (error) {
       Util.toastMsg('인증번호 발송 중 오류가 발생했습니다.', 'error');
+    } finally {
+      setLoading(false);
     }
-    setIsPhoneAuthVerified(false);
   };
 
   const confirmPhoneAuthCode = async () => {
-    const payload = {
-      OPEN_API_YN: 'Y',
-      USER_CP: memberInfo?.phoneNumber,
-      AUTH_CODE: phoneAuthCode,
-    };
+    if (phoneAuthCode.length !== 6) {
+      return;
+    }
 
-    const result = await Action.checkAuthNumber(payload);
-    if (result?.AUTH_YN === 'Y') {
-      setIsPhoneAuthVerified(true);
-      setIsPhoneAuthRequested(false);
-    } else {
+    try {
+      setLoading(true);
+
+      const payload = {
+        OPEN_API_YN: 'Y',
+        USER_CP: memberInfo.phoneNumber,
+        AUTH_CODE: phoneAuthCode,
+      };
+      const result = await Action.checkAuthNumber(payload);
+
+      if (result?.AUTH_YN === 'Y') {
+        setIsPhoneAuthVerified(true);
+        setPhoneAuthMessage('');
+        setErrors((prev) => ({ ...prev, phoneNumber: '' }));
+        Util.toastMsg('인증번호가 확인되었습니다.', 'success');
+        return;
+      }
+
       setIsPhoneAuthVerified(false);
       setPhoneAuthMessage('인증번호를 정확하게 다시 입력해 주세요.');
+    } catch (error) {
+      setIsPhoneAuthVerified(false);
+      Util.toastMsg('인증번호 확인 중 오류가 발생했습니다.', 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -477,22 +391,25 @@ const SGN010201 = () => {
 
       const payload = {
         OPEN_API_YN: 'Y',
-        USER_ID: memberInfo?.id,
-        PW: memberInfo?.pwChk,
-        USER_NAME: memberInfo?.name,
-        BIRTHDAY: memberInfo?.birthday,
-        GENDER: memberInfo?.gender,
-        USER_CP: memberInfo?.phoneNumber,
-        EMAIL: memberInfo?.email,
+        USER_ID: memberInfo.phoneNumber,
+        PW: memberInfo.pw,
+        USER_NAME: memberInfo.name,
+        BIRTHDAY: memberInfo.birthday,
+        GENDER: memberInfo.gender,
+        USER_CP: memberInfo.phoneNumber,
+        EMAIL: memberInfo.email,
       };
 
       const result = await Action.applyOfSignUp(payload);
       if (result.TYPE === 1) {
-        Util.toastMsg('회원가입 신청이 완료되었습니다.', 'info');
+        Alert.alert(
+          '알림',
+          '회원가입 신청이 완료되었습니다.\n관리자 승인 후 로그인 가능합니다.',
+        );
         movingScreen.goBack();
         movingScreen.goBack();
       } else {
-        Util.toastMsg(result.MSG, 'error');
+        Util.toastMsg(result?.MSG || '회원가입 신청에 실패했습니다.', 'error');
       }
     } catch (error) {
       Util.toastMsg('회원가입 신청 중 오류가 발생했습니다.', 'error');
@@ -536,16 +453,16 @@ const SGN010201 = () => {
               { marginBottom: 0, flex: 1, marginRight: 8 },
             ]}
             autoCapitalize='none'
-            onChangeValue={(value: string) =>
-              setPhoneAuthCode(value.replace(/[^0-9]/g, ''))
-            }
+            onChangeValue={(value: string) => {
+              setPhoneAuthCode(value.replace(/[^0-9]/g, ''));
+              setPhoneAuthMessage('');
+            }}
             value={phoneAuthCode}
           />
           <LVButton
             title='확인'
-            onPress={
-              phoneAuthCode.length === 6 ? confirmPhoneAuthCode : undefined
-            }
+            disabled={phoneAuthCode.length !== 6}
+            onPress={confirmPhoneAuthCode}
             buttonStyle={[
               styles.button,
               phoneAuthCode.length !== 6 && styles.buttonDisabled,
@@ -560,7 +477,6 @@ const SGN010201 = () => {
           <Text style={styles.phoneAuthInfoText}>
             {phoneAuthMessage || '인증번호를 입력하고 확인 버튼을 눌러주세요.'}
           </Text>
-          {/* <Text style={styles.phoneAuthSubText}>남은 시간 03:00</Text> */}
         </View>
       </View>
     );
@@ -568,35 +484,6 @@ const SGN010201 = () => {
 
   const renderTextField = (field: keyof MemberInfo) => {
     switch (field) {
-      case 'id':
-        return (
-          <View style={[LVStyles.row, { marginBottom: 10 }]}>
-            <TextField
-              placeholderTextColor='#999FA8'
-              style={[
-                styles.textFieldSt,
-                { marginBottom: 0, flex: 1, marginRight: 8 },
-              ]}
-              autoCapitalize='none'
-              onChangeValue={(value: string) => updateMemberInfo('id', value)}
-              onBlur={() => handleBlurField('id')}
-              value={memberInfo.id}
-            />
-            <LVButton
-              title='중복확인'
-              disabled={!isIdFormatValid}
-              onPress={checkDuplicateId}
-              buttonStyle={[
-                styles.button,
-                !isIdFormatValid && styles.buttonDisabled,
-              ]}
-              textStyle={{
-                color: isIdFormatValid ? '#27A7FF' : '#AEB6BF',
-              }}
-            />
-          </View>
-        );
-
       case 'pw':
         return (
           <TextField
@@ -608,7 +495,7 @@ const SGN010201 = () => {
             onChangeValue={(value: string) => updateMemberInfo('pw', value)}
             onBlur={() => handleBlurField('pw')}
             value={memberInfo.pw}
-            secureTextEntry={!visiblePwd}
+            secureTextEntry
           />
         );
 
@@ -623,7 +510,7 @@ const SGN010201 = () => {
             onChangeValue={(value: string) => updateMemberInfo('pwChk', value)}
             onBlur={() => handleBlurField('pwChk')}
             value={memberInfo.pwChk}
-            secureTextEntry={!visiblePwd}
+            secureTextEntry
           />
         );
 
@@ -659,29 +546,16 @@ const SGN010201 = () => {
 
       case 'gender':
         return (
-          <View
-            style={[
-              LVStyles.row,
-              { justifyContent: 'flex-start', marginBottom: 20 },
-            ]}
-          >
+          <View style={[LVStyles.row, styles.genderRow]}>
             <LVRadioButton
               title='남성'
               gubun={memberInfo.gender === 'M'}
-              onPress={() => {
-                updateMemberInfo('gender', 'M');
-                setTouched((prev) => ({ ...prev, gender: true }));
-                setErrors((prev) => ({ ...prev, gender: '' }));
-              }}
+              onPress={() => updateMemberInfo('gender', 'M')}
             />
             <LVRadioButton
               title='여성'
               gubun={memberInfo.gender === 'F'}
-              onPress={() => {
-                updateMemberInfo('gender', 'F');
-                setTouched((prev) => ({ ...prev, gender: true }));
-                setErrors((prev) => ({ ...prev, gender: '' }));
-              }}
+              onPress={() => updateMemberInfo('gender', 'F')}
             />
           </View>
         );
@@ -707,20 +581,42 @@ const SGN010201 = () => {
                 value={memberInfo.phoneNumber}
               />
               <LVButton
-                title={isPhoneAuthRequested ? '재전송' : '인증요청'}
-                disabled={!isPhoneFormatValid}
+                title={
+                  isPhoneAuthVerified
+                    ? '인증완료'
+                    : isPhoneAuthRequested
+                      ? '재전송'
+                      : '인증요청'
+                }
+                disabled={!isPhoneFormatValid || isPhoneAuthVerified}
                 onPress={requestPhoneAuthCode}
                 buttonStyle={[
                   styles.button,
-                  !isPhoneFormatValid && styles.buttonDisabled,
+                  (!isPhoneFormatValid || isPhoneAuthVerified) &&
+                    styles.buttonDisabled,
                 ]}
                 textStyle={{
-                  color: isPhoneFormatValid ? '#27A7FF' : '#AEB6BF',
+                  color:
+                    isPhoneFormatValid && !isPhoneAuthVerified
+                      ? '#27A7FF'
+                      : '#AEB6BF',
                 }}
               />
             </View>
+            <View style={styles.phoneIdGuideBox}>
+              <Text style={styles.phoneIdGuideIcon}>ⓘ</Text>
 
-            {isPhoneAuthRequested && renderPhoneVerificationSection()}
+              <Text style={styles.phoneIdGuideText}>
+                휴대폰 번호가{' '}
+                <Text style={styles.phoneIdGuideHighlight}>
+                  로그인 아이디로 사용됩니다.
+                </Text>
+              </Text>
+            </View>
+
+            {isPhoneAuthRequested &&
+              !isPhoneAuthVerified &&
+              renderPhoneVerificationSection()}
           </>
         );
 
@@ -743,7 +639,13 @@ const SGN010201 = () => {
     }
   };
 
-  const isFormFilled = Object.values(memberInfo).every(Boolean);
+  const isRegisterEnabled =
+    Object.values(memberInfo).every(Boolean) &&
+    isPhoneAuthVerified &&
+    pwRegex.test(memberInfo.pw) &&
+    memberInfo.pw === memberInfo.pwChk &&
+    isValidBirthday(memberInfo.birthday) &&
+    emailRegex.test(memberInfo.email);
 
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
@@ -759,7 +661,7 @@ const SGN010201 = () => {
           <View style={styles.container}>
             <View style={{ padding: 8 }}>
               {FIELD_LIST.map((field) => (
-                <React.Fragment key={field.key}>
+                <React.Fragment key={field.checkId}>
                   <View style={styles.labelRow}>
                     <Text style={styles.label}>{field.label}</Text>
                     {renderLabelMessage(field.checkId)}
@@ -773,10 +675,10 @@ const SGN010201 = () => {
         <View style={[LVStyles.bottomButtonView]}>
           <LVButton
             title='회원가입 신청'
+            disabled={!isRegisterEnabled}
             onPress={handleRegister}
             buttonStyle={{
               flex: 1,
-              backgroundColor: isFormFilled ? '#27A7FF' : 'lightgrey',
             }}
           />
         </View>
@@ -785,6 +687,7 @@ const SGN010201 = () => {
     </SafeAreaView>
   );
 };
+
 export default SGN010201;
 
 const styles = StyleSheet.create({
@@ -812,6 +715,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderColor: 'lightgray',
     borderRadius: 8,
+  },
+  genderRow: {
+    justifyContent: 'flex-start',
+    marginBottom: 20,
   },
   labelRow: {
     flexDirection: 'row',
@@ -851,18 +758,39 @@ const styles = StyleSheet.create({
   },
   phoneAuthInfoBox: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   phoneAuthInfoText: {
     flex: 1,
     fontSize: 12,
     color: '#6B7280',
-    marginRight: 8,
   },
-  phoneAuthSubText: {
-    fontSize: 12,
+  phoneIdGuideBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: -2,
+    marginBottom: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: '#B9E2FF',
+    borderRadius: 8,
+    backgroundColor: '#F0F9FF',
+  },
+  phoneIdGuideIcon: {
+    marginRight: 8,
     color: '#27A7FF',
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  phoneIdGuideText: {
+    flex: 1,
+    color: '#5D6673',
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  phoneIdGuideHighlight: {
+    color: '#168EDB',
+    fontWeight: '700',
   },
 });

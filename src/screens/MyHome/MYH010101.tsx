@@ -36,7 +36,7 @@ import {
   TopNavigationAction,
   withPreventDoubleClick,
 } from '@/src/components';
-import { Util } from '@/src/lib';
+import { Fetch, Util } from '@/src/lib';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { Input } from '@ui-kitten/components';
 import dayjs from 'dayjs';
@@ -46,6 +46,7 @@ import * as IntentLauncher from 'expo-intent-launcher';
 import * as Location from 'expo-location';
 import * as WLOAction from '../WorkLog/Action'; // API통신 (공통)
 import * as Action from './Action';
+import DayLaborerScreen from './DayLaborerScreen';
 import LaborNoticeScreen from './LaborNoticeScreen';
 import LaborNoticeScreenNEW from './LaborNoticeScreen_NEW';
 import SecondAuthScreen from './SecondAuthScreen';
@@ -113,6 +114,9 @@ const MYH010101 = ({ navigation }) => {
     }
     if (!Util.isEmpty(refusal) && Util.isEmpty(refusal.CONFIRM_DATE))
       return 'REFUSAL';
+    if (empInfo?.EMPLOY_TYPE === 'DAY') {
+      return 'DAYLABORER';
+    }
     return 'HOME';
   };
   const homeViewType = getHomeViewType();
@@ -622,6 +626,16 @@ const MYH010101 = ({ navigation }) => {
     setLaborRefusal([]);
   };
 
+  const logout = async () => {
+    Fetch.logout().then((result) => {
+      if (result) {
+        setSessionInfo(null);
+        setEmpInfo(null);
+        Util.toastMsg('정상적으로 로그아웃 되었습니다.');
+      }
+    });
+  };
+
   const handleRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -883,11 +897,13 @@ const MYH010101 = ({ navigation }) => {
               <Image source={icon.ico_logo_htns} style={styles.logo} />
             )}
             <LVHeaderInfo />
-            <TouchableOpacity
-              onPress={() => movingScreen.navigate('ETC010101')}
-            >
-              <Image source={icon.ico_account} style={styles.accountIcon} />
-            </TouchableOpacity>
+            {homeViewType !== 'DAYLABORER' && (
+              <TouchableOpacity
+                onPress={() => movingScreen.navigate('ETC010101')}
+              >
+                <Image source={icon.ico_account} style={styles.accountIcon} />
+              </TouchableOpacity>
+            )}
           </Layout>
           {/* 본문 */}
           <Layout style={{ flex: 1 }}>
@@ -946,6 +962,26 @@ const MYH010101 = ({ navigation }) => {
                   data={refusal}
                   onConfirm={handleConfirmRefusal}
                 />
+              )}
+              {homeViewType === 'DAYLABORER' && (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <DayLaborerScreen empInfo={empInfo} />
+                  <View style={styles.floatingButton}>
+                    <TouchableOpacity
+                      onPress={logout}
+                      style={styles.menuButton}
+                    >
+                      <Icon name='power-standby' color='#373747' />
+                      <Text style={styles.menuText}>로그아웃</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               )}
               {homeViewType === 'HOME' && (
                 <>
@@ -1288,5 +1324,22 @@ const styles = StyleSheet.create({
     color: '#373747',
     minHeight: 100,
     textAlignVertical: 'top', // Android에서 상단 정렬
+  },
+  menuButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginVertical: 12,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  menuText: {
+    fontWeight: '600',
+    fontSize: 16,
+    marginLeft: 4,
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 0,
+    right: 32,
   },
 });

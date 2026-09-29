@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   Image,
   Platform,
   StyleSheet,
@@ -85,7 +86,7 @@ const SignIn = ({ navigation }) => {
     await AsyncStorage.setItem('deviceId', deviceInfo?.deviceId);
   };
 
-  const signIn = () => {
+  const signIn = async () => {
     // 비즈니스 체크로직
     if (!loginInfo.loginId) {
       Util.toastMsg('아이디를 입력해주세요.', 'info');
@@ -97,7 +98,14 @@ const SignIn = ({ navigation }) => {
     }
 
     setLoading(true);
-
+    const result = await Action.checkPendingSignupRequestM({
+      OPEN_API_YN: 'Y',
+      USER_ID: loginInfo.loginId,
+    });
+    if (result?.CNT >= 1) {
+      setLoading(false);
+      return Alert.alert('알림', '승인 대기중인 계정입니다.');
+    }
     Action.signIn(loginInfo).then((data) => {
       if (data) {
         setSessionInfo(data.session);
@@ -208,7 +216,7 @@ const SignIn = ({ navigation }) => {
               onPress={signIn}
               buttonStyle={{ backgroundColor: '#27A7FF' }}
             />
-            <View style={{ ...LVStyles.row, justifyContent: 'flex-end' }}>
+            <View style={{ ...LVStyles.row }}>
               <LVButton
                 title={'비밀번호 찾기'}
                 onPress={() => {
@@ -220,7 +228,7 @@ const SignIn = ({ navigation }) => {
                   paddingHorizontal: 0,
                 }}
               />
-              {/* <LVButton
+              <LVButton
                 title={'회원가입'}
                 onPress={() => {
                   movingScreen.navigate('SGN010101');
@@ -230,7 +238,7 @@ const SignIn = ({ navigation }) => {
                   backgroundColor: 'transparent',
                   paddingHorizontal: 0,
                 }}
-              /> */}
+              />
             </View>
             <Text style={[styles.errorText]}>{loginError}</Text>
             <View
