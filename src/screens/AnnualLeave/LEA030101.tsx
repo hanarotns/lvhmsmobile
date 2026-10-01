@@ -121,12 +121,10 @@ const LEA030101 = () => {
 
     const payload1 = {
       ...commonInfo,
-      DATE_GUBUN: 'VA_DATE',
-      S_ADD_DATE_FROM: selectedDate.format('YYYYMMDD'),
-      S_ADD_DATE_TO: selectedDate.format('YYYYMMDD'),
+      YYYYMMDD: selectedDate.format('YYYYMMDD'),
       TO_YEAR: selectedDate.format('YYYY'), // @@
     };
-    const res1 = await Action.getInfoM(payload1);
+    const res1 = await Action.getInfoMOfSchedule(payload1);
     if (res1) {
       const dateS = dayjs(res1?.APPLY_S_DATE, 'YYYYMMDD').toDate();
       const dateE = dayjs(res1?.APPLY_E_DATE, 'YYYYMMDD').toDate();
@@ -200,7 +198,9 @@ const LEA030101 = () => {
           <LayoutOfStats
             stats={{
               ...stats,
-              PERIOD: list?.[0]?.PERIOD,
+              PERIOD:
+                list?.find((item) => item.TITLE === '연차사용계획 신청')
+                  ?.PERIOD ?? 0,
             }}
           />
           <LVButton
@@ -262,21 +262,23 @@ const LayoutOfStats = (props: any) => {
             <View>
               <View style={LVStyles.row}>
                 <Text>적용 일수</Text>
-                <LVTooltip
-                  content={`※ 적용일수=법정연차(9일)+약정연차(7일)`}
-                  placement='top'
-                >
-                  <Ionicons
-                    name='information-circle-outline'
-                    size={20}
-                    color='#777'
-                  />
-                </LVTooltip>
+                {!!stats?.GT_CONT_AL_CNT && (
+                  <LVTooltip
+                    content={`※ 적용일수=법정연차(${stats?.GT_STAT_AL_CNT}일)+약정연차(${stats?.GT_CONT_AL_CNT}일)`}
+                    placement='top'
+                  >
+                    <Ionicons
+                      name='information-circle-outline'
+                      size={20}
+                      color='#777'
+                    />
+                  </LVTooltip>
+                )}
               </View>
               <Text></Text>
             </View>
           }
-          value={`16`}
+          value={stats?.GT_NC_QTY}
           cardStyle={{ backgroundColor: '#F7F8FB' }}
           valueStyle={{ color: '#6A727B' }}
         />
@@ -286,22 +288,26 @@ const LayoutOfStats = (props: any) => {
             <View>
               <View style={LVStyles.row}>
                 <Text>1차촉진</Text>
-                <LVTooltip
-                  content={`※ 촉진일수=법정연차(9일)+약정연차(4.5일)`}
-                  placement='top'
-                >
-                  <Ionicons
-                    name='information-circle-outline'
-                    size={20}
-                    color='#777'
-                  />
-                </LVTooltip>
+                {!!stats?.P1_CONT_AL_CNT && (
+                  <LVTooltip
+                    content={`※ 촉진일수=법정연차(${stats?.P1_STAT_AL_CNT}일)+약정연차(${stats?.P1_CONT_AL_CNT}일)`}
+                    placement='top'
+                  >
+                    <Ionicons
+                      name='information-circle-outline'
+                      size={20}
+                      color='#777'
+                    />
+                  </LVTooltip>
+                )}
               </View>
               <Text>(촉진/신청)</Text>
             </View>
           }
           value={
-            `13.5/0`
+            !!stats?.P1_REM_VC_QTY
+              ? `${stats?.P1_REM_VC_QTY || 0}/${stats?.PERIOD || 0}`
+              : '-'
             // @@ 신청 당시 값을 저장할지 고민해볼 것
           }
           cardStyle={{ backgroundColor: '#EEF8FF' }}
@@ -313,18 +319,27 @@ const LayoutOfStats = (props: any) => {
             <View>
               <View style={LVStyles.row}>
                 <Text>2차촉진</Text>
-                <LVTooltip content={`※ 2차 촉진 전입니다`} placement='top'>
-                  <Ionicons
-                    name='information-circle-outline'
-                    size={20}
-                    color='#777'
-                  />
-                </LVTooltip>
+                {!!stats?.P2_CONT_AL_CNT && (
+                  <LVTooltip
+                    content={`※ 촉진일수=법정연차(${stats?.P2_STAT_AL_CNT}일)+약정연차(${stats?.P2_CONT_AL_CNT}일)`}
+                    placement='top'
+                  >
+                    <Ionicons
+                      name='information-circle-outline'
+                      size={20}
+                      color='#777'
+                    />
+                  </LVTooltip>
+                )}
               </View>
               <Text>(촉진/신청)</Text>
             </View>
           }
-          value={`-`}
+          value={
+            !!stats?.P2_REM_VC_QTY
+              ? `${stats?.P2_REM_VC_QTY || 0}/${stats?.PERIOD || 0}`
+              : '-'
+          }
           cardStyle={{ backgroundColor: '#F4F6F8' }}
           valueStyle={{ color: '#939DAA', fontSize: 16 }}
         />
