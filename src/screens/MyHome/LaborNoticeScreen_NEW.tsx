@@ -116,9 +116,11 @@ const AnnualLeaveNotice = ({ data }) => {
           그럼에도 불구하고 사용하지 아니한 연차휴가는 향후 연차촉진대상이 됨을
           알려드리오니 유념하시기 바랍니다.
         </Text>
-        <Text style={{ color: LVColors.warning }}>
-          {`※ 적용일수는 법정 및 약정연차를 포함.`}
-        </Text>
+        {!!data?.CONT_AL_CNT && (
+          <Text style={{ color: LVColors.warning }}>
+            {`※ 적용일수는 법정 및 약정연차를 포함.`}
+          </Text>
+        )}
       </View>
 
       <View style={styles.signBox}>
@@ -265,10 +267,11 @@ const AnnualLeaveNotice2 = ({ data }) => {
       <View style={styles.totalContainer}>
         <Text style={styles.totalText}>합계: {data?.REM_VC_QTY}일</Text>
       </View>
-
-      <Text style={{ color: LVColors.warning }}>
-        {`※ 해당연차는 법정 및 약정연차를 포함.`}
-      </Text>
+      {!!data?.CONT_AL_CNT && (
+        <Text style={{ color: LVColors.warning }}>
+          {`※ 해당연차는 법정 및 약정연차를 포함.`}
+        </Text>
+      )}
 
       <View style={styles.noticeContainer}>
         <Text style={styles.noticeText}>
