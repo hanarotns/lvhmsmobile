@@ -93,24 +93,29 @@ const MYH010101 = ({ navigation }) => {
     if (isCheckMenuPermi) {
       if (
         laborNotice1?.LABORREFUSAL_GUBUN === '1' &&
-        laborNotice1?.LABOR_CHECK === 'N'
+        laborNotice1?.LABOR_CHECK === 'N' &&
+        laborNotice1?.REM_VC_QTY > 0
       )
         return 'NOTICE_1_NEW';
       if (
         laborNotice1R?.LABORREFUSAL_GUBUN === '1R' &&
-        laborNotice1R?.LABOR_CHECK === 'N'
+        laborNotice1R?.LABOR_CHECK === 'N' &&
+        laborNotice1R?.REM_VC_QTY > 0
       )
         return 'NOTICE_1_RE_NEW';
       if (
         laborNotice2?.LABORREFUSAL_GUBUN === '2' &&
-        laborNotice2?.LABOR_CHECK === 'N'
+        laborNotice2?.LABOR_CHECK === 'N' &&
+        laborNotice2?.REM_VC_QTY > 0
       )
         return 'NOTICE_2_NEW';
     }
     isCheckMenuPermi = menuInfo.some((item) => item.CODE === 'MMLEA020101');
     if (isCheckMenuPermi) {
-      if (notice1?.LABOR_CHECK === 'N') return 'NOTICE_1';
-      if (notice2?.LABOR_CHECK === 'N') return 'NOTICE_2';
+      if (notice1?.LABOR_CHECK === 'N' && notice1?.REM_VC_QTY > 0)
+        return 'NOTICE_1';
+      if (notice2?.LABOR_CHECK === 'N' && notice2?.REM_VC_QTY > 0)
+        return 'NOTICE_2';
     }
     if (!Util.isEmpty(refusal) && Util.isEmpty(refusal.CONFIRM_DATE))
       return 'REFUSAL';
