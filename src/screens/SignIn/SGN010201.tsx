@@ -35,13 +35,14 @@ type LabelMessage = {
 const FIELD_LIST: {
   checkId: keyof MemberInfo;
   label: string;
+  required?: boolean;
 }[] = [
-  { checkId: 'phoneNumber', label: '휴대폰 번호(아이디)' },
-  { checkId: 'pw', label: '비밀번호' },
-  { checkId: 'pwChk', label: '비밀번호 확인' },
-  { checkId: 'name', label: '이름' },
-  { checkId: 'birthday', label: '생년월일' },
-  { checkId: 'gender', label: '성별' },
+  { checkId: 'phoneNumber', label: '휴대폰 번호(아이디)', required: true },
+  { checkId: 'pw', label: '비밀번호', required: true },
+  { checkId: 'pwChk', label: '비밀번호 확인', required: true },
+  { checkId: 'name', label: '이름', required: true },
+  { checkId: 'birthday', label: '생년월일', required: true },
+  { checkId: 'gender', label: '성별', required: true },
   { checkId: 'email', label: '개인 이메일' },
 ];
 
@@ -135,7 +136,10 @@ const SGN010201 = () => {
         return '';
 
       case 'email':
-        if (!value) return '이메일을 입력하세요.';
+        // 입력하지 않은 경우 허용
+        if (!value) return '';
+
+        // 입력한 경우에만 이메일 형식 검사
         if (!emailRegex.test(value)) {
           return '이메일 형식이 올바르지 않습니다.';
         }
@@ -640,12 +644,19 @@ const SGN010201 = () => {
   };
 
   const isRegisterEnabled =
-    Object.values(memberInfo).every(Boolean) &&
+    Boolean(
+      memberInfo.phoneNumber &&
+      memberInfo.pw &&
+      memberInfo.pwChk &&
+      memberInfo.name &&
+      memberInfo.birthday &&
+      memberInfo.gender,
+    ) &&
     isPhoneAuthVerified &&
     pwRegex.test(memberInfo.pw) &&
     memberInfo.pw === memberInfo.pwChk &&
     isValidBirthday(memberInfo.birthday) &&
-    emailRegex.test(memberInfo.email);
+    (!memberInfo.email || emailRegex.test(memberInfo.email));
 
   return (
     <SafeAreaView edges={['bottom']} style={LVStyles.safeAreaView}>
@@ -663,9 +674,15 @@ const SGN010201 = () => {
               {FIELD_LIST.map((field) => (
                 <React.Fragment key={field.checkId}>
                   <View style={styles.labelRow}>
-                    <Text style={styles.label}>{field.label}</Text>
+                    <Text style={styles.label}>
+                      {field.label}
+                      {field.required && (
+                        <Text style={styles.required}> *</Text>
+                      )}
+                    </Text>
+
                     {renderLabelMessage(field.checkId)}
-                  </View>
+                  </View>{' '}
                   {renderTextField(field.checkId)}
                 </React.Fragment>
               ))}
@@ -791,6 +808,10 @@ const styles = StyleSheet.create({
   },
   phoneIdGuideHighlight: {
     color: '#168EDB',
+    fontWeight: '700',
+  },
+  required: {
+    color: '#FF4D4F',
     fontWeight: '700',
   },
 });
