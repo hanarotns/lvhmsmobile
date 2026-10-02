@@ -44,9 +44,9 @@ import 'dayjs/locale/ko';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as Location from 'expo-location';
-import * as WLOAction from '../WorkLog/Action'; // API통신 (공통)
+import * as WLOAction from '../WorkLog/Action';
 import * as Action from './Action';
-import DayLaborerScreen from './DayLaborerScreen';
+import BeaconAttendanceScreen from './BeaconAttendanceScreen';
 import LaborNoticeScreen from './LaborNoticeScreen';
 import LaborNoticeScreenNEW from './LaborNoticeScreen_NEW';
 import SecondAuthScreen from './SecondAuthScreen';
@@ -649,7 +649,7 @@ const MYH010101 = ({ navigation }) => {
     }, 1000);
   };
 
-  const LayoutOfGreeting = () => {
+  const LayoutOfGreeting = (profileType?: string) => {
     const now = dayjs(new Date()).locale('ko');
     const nowOfKo = now.format('MM월 DD일 ddd요일');
     return (
@@ -658,10 +658,16 @@ const MYH010101 = ({ navigation }) => {
           <Text style={styles.greetingText}>
             {`${empInfo?.EMP_NAME_LC}님\n안녕하세요.`}
           </Text>
-          <LVProfileImage
-            imgStyle={styles.profileImg}
-            path={empInfo?.PICTURE_PATH}
-          />
+          {profileType === 'sec' ? (
+            <View style={{ ...styles.profileImg, ...styles.securityIconBack }}>
+              <Icon name='shield-check' size={50} color='#27A7FFCC' />
+            </View>
+          ) : (
+            <LVProfileImage
+              imgStyle={styles.profileImg}
+              path={empInfo?.PICTURE_PATH}
+            />
+          )}
         </View>
         <View style={{ height: 12 }} />
         <Text style={styles.greetingSubText}>오늘은 {nowOfKo}</Text>
@@ -902,11 +908,18 @@ const MYH010101 = ({ navigation }) => {
               <Image source={icon.ico_logo_htns} style={styles.logo} />
             )}
             <LVHeaderInfo />
-            {homeViewType !== 'DAYLABORER' && (
+            {homeViewType !== 'DAYLABORER' ? (
               <TouchableOpacity
                 onPress={() => movingScreen.navigate('ETC010101')}
               >
                 <Image source={icon.ico_account} style={styles.accountIcon} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={logout}
+                style={{ ...styles.accountIcon, ...styles.menuButton }}
+              >
+                <Icon name='power-standby' color='#373747' />
               </TouchableOpacity>
             )}
           </Layout>
@@ -969,23 +982,12 @@ const MYH010101 = ({ navigation }) => {
                 />
               )}
               {homeViewType === 'DAYLABORER' && (
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <DayLaborerScreen empInfo={empInfo} />
-                  <View style={styles.floatingButton}>
-                    <TouchableOpacity
-                      onPress={logout}
-                      style={styles.menuButton}
-                    >
-                      <Icon name='power-standby' color='#373747' />
-                      <Text style={styles.menuText}>로그아웃</Text>
-                    </TouchableOpacity>
-                  </View>
+                <View style={styles.layout}>
+                  {LayoutOfGreeting('sec')}
+                  <BeaconAttendanceScreen
+                    empInfo={empInfo}
+                    setLoading={setLoading}
+                  />
                 </View>
               )}
               {homeViewType === 'HOME' && (
@@ -1346,5 +1348,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: 32,
+  },
+  securityIconBack: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#27A7FF17',
   },
 });
