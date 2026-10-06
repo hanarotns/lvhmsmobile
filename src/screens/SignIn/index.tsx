@@ -218,9 +218,9 @@ const SignIn = ({ navigation }) => {
             />
             <View style={{ ...LVStyles.row }}>
               <LVButton
-                title={'비밀번호 찾기'}
+                title={'회원가입'}
                 onPress={() => {
-                  movingScreen.navigate('SGN030101');
+                  movingScreen.navigate('SGN010101');
                 }}
                 textStyle={{ color: 'gray', fontWeight: '400' }}
                 buttonStyle={{
@@ -229,9 +229,9 @@ const SignIn = ({ navigation }) => {
                 }}
               />
               <LVButton
-                title={'회원가입'}
+                title={'비밀번호 찾기'}
                 onPress={() => {
-                  movingScreen.navigate('SGN010101');
+                  movingScreen.navigate('SGN030101');
                 }}
                 textStyle={{ color: 'gray', fontWeight: '400' }}
                 buttonStyle={{
