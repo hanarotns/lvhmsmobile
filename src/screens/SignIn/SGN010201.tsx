@@ -46,7 +46,7 @@ const FIELD_LIST: {
   { checkId: 'email', label: '개인 이메일' },
 ];
 
-const birthdayRegex = /^\d{6}$/;
+const birthdayRegex = /^\d{8}$/;
 const phoneRegex = /^01[0-9]\d{7,8}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,16}$/;
@@ -77,16 +77,15 @@ const SGN010201 = () => {
       return false;
     }
 
-    const yy = Number(value.slice(0, 2));
-    const mm = Number(value.slice(2, 4));
-    const dd = Number(value.slice(4, 6));
+    const yyyy = Number(value.slice(0, 4));
+    const mm = Number(value.slice(4, 6));
+    const dd = Number(value.slice(6, 8));
 
     if (mm < 1 || mm > 12) {
       return false;
     }
 
-    const fullYear = 2000 + yy;
-    const lastDay = new Date(fullYear, mm, 0).getDate();
+    const lastDay = new Date(yyyy, mm, 0).getDate();
 
     return dd >= 1 && dd <= lastDay;
   };
@@ -117,7 +116,7 @@ const SGN010201 = () => {
 
       case 'birthday':
         if (!value) return '생년월일을 입력하세요.';
-        if (!birthdayRegex.test(value)) return '생년월일 6자리를 입력하세요.';
+        if (!birthdayRegex.test(value)) return '생년월일 8자리를 입력하세요.';
         if (!isValidBirthday(value)) return '올바른 생년월일이 아닙니다.';
         return '';
 
@@ -535,11 +534,11 @@ const SGN010201 = () => {
         return (
           <TextField
             keyboardType='numeric'
-            placeholder='ex. 900101'
+            placeholder='ex. 19900101'
             placeholderTextColor='lightgray'
             style={styles.textFieldSt}
             autoCapitalize='none'
-            maxLength={6}
+            maxLength={8}
             onChangeValue={(value: string) =>
               updateMemberInfo('birthday', value)
             }
