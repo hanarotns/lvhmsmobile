@@ -14,6 +14,7 @@ import {
   LVConfirmIndicator,
   LVFormOfContents,
   LVLoadingIndicator,
+  LVRadioButton,
   LVStyles,
   LVTooltip,
   RefreshControl,
@@ -218,6 +219,30 @@ const ETC010402 = () => {
                 </View>
               }
             />
+            {!!(selectedType?.HQCODE === 'PE') && (
+              <LVFormOfContents
+                title={'개인정보 표시 여부'}
+                children={
+                  <View style={[LVStyles.row, styles.genderRow]}>
+                    <LVRadioButton
+                      title='표시'
+                      gubun={certiInfo?.INFO_OPEN_YN === 'Y'}
+                      onPress={() =>
+                        setCertiInfo({ ...certiInfo, INFO_OPEN_YN: 'Y' })
+                      }
+                    />
+                    <LVRadioButton
+                      title='미표시'
+                      gubun={certiInfo?.INFO_OPEN_YN === 'N'}
+                      onPress={() =>
+                        setCertiInfo({ ...certiInfo, INFO_OPEN_YN: 'N' })
+                      }
+                    />
+                  </View>
+                }
+              />
+            )}
+
             <LVFormOfContents
               title={'용도'}
               children={
@@ -286,5 +311,8 @@ const styles = StyleSheet.create({
   },
   addressText: {
     flexShrink: 1,
+  },
+  genderRow: {
+    justifyContent: 'flex-start',
   },
 });

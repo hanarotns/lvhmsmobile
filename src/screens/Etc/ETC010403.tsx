@@ -377,6 +377,16 @@ const ETC010403 = () => {
                 <Text style={{ fontWeight: '700' }}>{dt?.SUBMIT_PLACE}</Text>
               }
             />
+            {dt?.PE_TYPE === 'PE' && (
+              <LVFormOfContents
+                title={'개인정보 표시 여부'}
+                children={
+                  <Text style={{ fontWeight: '700' }}>
+                    {dt?.INFO_OPEN_YN === 'Y' ? '표시' : '미표시'}
+                  </Text>
+                }
+              />
+            )}
             {!Util.isEmpty(dt?.AP_STATUS) && (
               <LVFormOfContents
                 title={'결재선'}
