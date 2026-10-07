@@ -102,6 +102,17 @@ const checkPendingSignupRequestM = async (body: object) => {
   return result.DATA;
 };
 
+// 일용직 사용 법인코드 가져오기
+const getCompanyList = async (body: object) => {
+  const result = await Fetch.request('apicall', 'getCompanyList', {
+    body: JSON.stringify(body),
+  });
+  if (result.TYPE === -1) {
+    Util.toastMsg(result.MSG, 'error');
+  }
+  return result.DATA;
+};
+
 export {
   // 회원가입 신청
   applyOfSignUp,
@@ -111,6 +122,7 @@ export {
   checkDuplicateId,
   // 회원가입 승인상태 확인
   checkPendingSignupRequestM,
+  getCompanyList,
   // 비밀번호 변경
   resetPassword,
   // 인증요청

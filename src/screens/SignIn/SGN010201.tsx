@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 
 import {
@@ -6,6 +6,7 @@ import {
   LVButton,
   LVLoadingIndicator,
   LVRadioButton,
+  LVSelectBox,
   LVStyles,
   SafeAreaView,
   Text,
@@ -16,6 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Action from './Action';
 
 type MemberInfo = {
+  companyCode: string;
   pw: string;
   pwChk: string;
   name: string;
@@ -37,6 +39,7 @@ const FIELD_LIST: {
   label: string;
   required?: boolean;
 }[] = [
+  { checkId: 'companyCode', label: '법인', required: true },
   { checkId: 'phoneNumber', label: '휴대폰 번호(아이디)', required: true },
   { checkId: 'pw', label: '비밀번호', required: true },
   { checkId: 'pwChk', label: '비밀번호 확인', required: true },
@@ -52,6 +55,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,16}$/;
 
 const initialMemberInfo: MemberInfo = {
+  companyCode: '',
   pw: '',
   pwChk: '',
   name: '',
@@ -71,6 +75,23 @@ const SGN010201 = () => {
   const [isPhoneAuthVerified, setIsPhoneAuthVerified] = useState(false);
   const [phoneAuthCode, setPhoneAuthCode] = useState('');
   const [phoneAuthMessage, setPhoneAuthMessage] = useState('');
+  const [companyList, setCompanyList] = useState([]);
+
+  useEffect(() => {
+    mount();
+  }, []);
+
+  const mount = async () => {
+    setLoading(true);
+
+    const res = await Action.getCompanyList({
+      OPEN_API_YN: 'Y',
+      GCODE: 'DAY_USE_COMPANY_CODE',
+    });
+    setCompanyList(res);
+
+    setLoading(false);
+  };
 
   const isValidBirthday = (value: string) => {
     if (!birthdayRegex.test(value)) {
@@ -98,6 +119,10 @@ const SGN010201 = () => {
     const target = nextMemberInfo ?? memberInfo;
 
     switch (key) {
+      case 'companyCode':
+        if (!value) return '법인을 선택하세요.';
+        return '';
+
       case 'pw':
         if (!value) return '비밀번호를 입력하세요.';
         if (!pwRegex.test(value)) {
@@ -220,6 +245,12 @@ const SGN010201 = () => {
     }
 
     switch (key) {
+      case 'companyCode':
+        if (memberInfo.companyCode) {
+          return { text: '선택되었습니다.', type: 'success' };
+        }
+        return { text: '', type: '' };
+
       case 'pw':
         if (memberInfo.pw && pwRegex.test(memberInfo.pw)) {
           return { text: '사용 가능한 비밀번호입니다.', type: 'success' };
@@ -266,6 +297,7 @@ const SGN010201 = () => {
 
   const validateForm = () => {
     const nextTouched: TouchedFields = {
+      companyCode: true,
       pw: true,
       pwChk: true,
       name: true,
@@ -276,6 +308,7 @@ const SGN010201 = () => {
     };
 
     const nextErrors: ValidationErrors = {
+      companyCode: validateField('companyCode', memberInfo.companyCode),
       pw: validateField('pw', memberInfo.pw),
       pwChk: validateField('pwChk', memberInfo.pwChk),
       name: validateField('name', memberInfo.name),
@@ -394,6 +427,7 @@ const SGN010201 = () => {
 
       const payload = {
         OPEN_API_YN: 'Y',
+        COMPANY_CODE: memberInfo.companyCode,
         USER_ID: memberInfo.phoneNumber,
         PW: memberInfo.pw,
         USER_NAME: memberInfo.name,
@@ -487,6 +521,20 @@ const SGN010201 = () => {
 
   const renderTextField = (field: keyof MemberInfo) => {
     switch (field) {
+      case 'companyCode':
+        return (
+          <LVSelectBox
+            data={companyList}
+            value={memberInfo.companyCode}
+            displayField='COMPANY_NAME'
+            valueField='COMPANY_CODE'
+            placeholder='법인을 선택하세요.'
+            onChange={(value: string) => updateMemberInfo('companyCode', value)}
+            onBlur={() => handleBlurField('companyCode')}
+            style={styles.textFieldSt}
+          />
+        );
+
       case 'pw':
         return (
           <TextField
@@ -644,6 +692,7 @@ const SGN010201 = () => {
 
   const isRegisterEnabled =
     Boolean(
+      memberInfo.companyCode &&
       memberInfo.phoneNumber &&
       memberInfo.pw &&
       memberInfo.pwChk &&
