@@ -1,0 +1,8 @@
+{
+  "name": "expo-beacon",
+  "version": "0.1.0",
+  "description": "iOS CoreLocation iBeacon ranging (local Expo module)",
+  "main": "index.ts",
+  "private": true,
+  "license": "UNLICENSED"
+}
