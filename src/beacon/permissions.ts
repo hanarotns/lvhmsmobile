@@ -1,6 +1,8 @@
 import type { Permission } from 'react-native';
 import { PermissionsAndroid, Platform } from 'react-native';
 
+import ExpoBeacon from '@/modules/expo-beacon';
+
 // 사람이 다이얼로그를 보고 누르는 데 이보다 짧게 걸릴 수는 없다.
 // 이보다 빨리 거부로 반환됐다면 UI가 뜨지 않았다는 뜻이다.
 const HUMAN_RESPONSE_FLOOR_MS = 1000;
@@ -20,15 +22,25 @@ const getRequiredPermissions = (): Permission[] =>
 let inFlight: Promise<boolean> | null = null;
 
 export async function requestBlePermissions(): Promise<boolean> {
-  if (Platform.OS !== 'android') {
+  if (Platform.OS !== 'android' && Platform.OS !== 'ios') {
     return true;
   }
   if (!inFlight) {
-    inFlight = resolvePermissions().finally(() => {
+    const resolve =
+      Platform.OS === 'ios' ? resolveIosPermissions : resolvePermissions;
+    inFlight = resolve().finally(() => {
       inFlight = null;
     });
   }
   return inFlight;
+}
+
+// iOS는 iBeacon을 CoreLocation으로 받으므로 블루투스가 아니라 위치 권한이 필요하다.
+async function resolveIosPermissions(): Promise<boolean> {
+  if (!ExpoBeacon) {
+    return false;
+  }
+  return (await ExpoBeacon.requestAuthorization()) === 'granted';
 }
 
 async function resolvePermissions(): Promise<boolean> {
